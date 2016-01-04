@@ -124,7 +124,9 @@ echo "Installing webpack."
 eval $NPM_CMD install webpack -g
 
 # 4. Run build
-eval $NPM_CMD run build:prod
+echo "Building."
+export NODE_ENV=production
+eval $NODE_EXE webpack --config ./webpack/config.prod.js --progress --colors -p
 
 ##################################################################################################################################
 
