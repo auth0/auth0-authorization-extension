@@ -25,7 +25,8 @@ exitWithMessageOnError "Missing node.js executable, please install node.js, if a
 
 # Setup
 # -----
-
+echo "OSTYPE is \"$OSTYPE\"."
+echo "NODE_ENV is \"$NODE_ENV\"."
 SCRIPT_DIR="../${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
@@ -102,29 +103,21 @@ selectNodeVersion () {
 
 echo Handling node.js deployment.
 
-# 1. KuduSync
-if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
-  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
-  exitWithMessageOnError "Kudu Sync failed"
-fi
-
-# 2. Select node version
+# 1. Select node version
 selectNodeVersion
 
-# 3. Install npm packages
-if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
-  cd "$DEPLOYMENT_TARGET"
-  echo installing npm packages in $DEPLOYMENT_TARGET
+# 2. Install npm packages
+if [ -e "$DEPLOYMENT_SOURCE/package.json" ]; then
+  cd "$DEPLOYMENT_SOURCE"
+  echo Installing npm packages in $DEPLOYMENT_SOURCE
   eval $NPM_CMD install
-  exitWithMessageOnError "npm failed"
+  exitWithMessageOnError "npm install failed"
   cd - > /dev/null
 fi
 
-# 4. Build the webclient
+# 3. Build the webclient
 echo Proceeding with Webpack build
-
-cd "$DEPLOYMENT_TARGET"
-
+cd "$DEPLOYMENT_SOURCE"
 echo Building web site using Webpack
 eval $NPM_CMD install webpack -g
 exitWithMessageOnError "webpack install failed"
@@ -133,6 +126,12 @@ exitWithMessageOnError "rimraf install failed"
 eval $NPM_CMD run build:prod
 exitWithMessageOnError "webpack run failed"
 cd - > /dev/null
+
+# 4. KuduSync
+if [[ "$IN_PLACE_DEPLOYMENT" -ne "1" ]]; then
+  "$KUDU_SYNC_CMD" -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i ".git;.hg;.deployment;deploy.sh"
+  exitWithMessageOnError "Kudu Sync failed"
+fi
 
 ##################################################################################################################################
 
