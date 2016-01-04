@@ -1,4 +1,4 @@
 node_modules
 .DS_Store
-assets/bundle
+assets/app
 npm-debug.log

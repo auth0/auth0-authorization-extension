@@ -7,9 +7,10 @@
   },
   "main": "server.js",
   "scripts": {
-    "clean": "rimraf build",
+    "clean": "rimraf assets/app",
+    "postinstall": "npm run build:prod",
     "build:dev": "NODE_ENV=development node ./webpack/server.js",
-    "build:prod": "NODE_ENV=production webpack --config ./webpack/config.prod.js --progress --colors -p",
+    "build:prod": "npm run clean && NODE_ENV=production webpack --config ./webpack/config.prod.js --progress --colors -p",
     "serve:dev": "NODE_ENV=development nodemon --ignore server/data/ --ignore client/ --ignore node_modules/ index.js",
     "serve:prod": "NODE_ENV=production node index.js"
   },
@@ -34,7 +35,6 @@
     "bluebird": "^3.1.1",
     "body-parser": "^1.14.2",
     "classnames": "^2.2.2",
-    "clean-webpack-plugin": "^0.1.5",
     "css-loader": "^0.23.1",
     "ejs": "^2.3.4",
     "exports-loader": "^0.6.2",
@@ -68,6 +68,7 @@
     "redux-simple-router": "^1.0.2",
     "redux-thunk": "^1.0.3",
     "request": "^2.67.0",
+    "rimraf": "^2.5.0",
     "style-loader": "^0.13.0",
     "url-loader": "^0.5.7",
     "validate.js": "^0.9.0",

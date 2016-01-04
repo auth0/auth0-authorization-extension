@@ -12,7 +12,7 @@ config.profile = false;
 
 // Build output, which includes the hash.
 config.output.hash = true;
-config.output.filename = '[name].[chunkhash].js';
+config.output.filename = 'bundle.[chunkhash].js';
 
 // Development modules.
 config.module.loaders.push({
@@ -22,7 +22,6 @@ config.module.loaders.push({
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([
-  new Clean([ path.join(__dirname, '../build') ]),
   new webpack.optimize.OccurenceOrderPlugin(true),
   new webpack.optimize.DedupePlugin(),
 

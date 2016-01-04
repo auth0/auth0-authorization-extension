@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import Express from 'express';
 import bodyParser from 'body-parser';
@@ -34,9 +35,27 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Configure routes.
 
 app.use('/api', api());
-app.use(Express.static(path.join(__dirname, 'assets')));
+app.use(Express.static(path.join(__dirname, '../assets')));
 app.get('*', (req, res) => {
-  res.render('index');
+  fs.readFile(path.join(__dirname, '../assets/app/manifest.json'), 'utf8', (err, data) => {
+    let locals = {
+      config: {
+        AUTH0_DOMAIN: nconf.get('AUTH0_DOMAIN'),
+        AUTH0_CLIENT_ID: nconf.get('AUTH0_CLIENT_ID')
+      },
+      assets: {
+        app: 'bundle.js',
+        style: 'bundle.css',
+        vendors: 'vendor.js'
+      }
+    };
+
+    if (!err && data) {
+      locals.assets = JSON.parse(data);
+    }
+
+    return res.render('index', locals);
+  });
 });
 
 console.log(`Starting server...`);
