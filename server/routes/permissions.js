@@ -8,7 +8,7 @@ const validate = (permission) => {
     name: {
       presence: true,
       format: {
-        pattern: /^[a-z0-9_\-]+$/,
+        pattern: /^[a-z0-9_\-\:]+$/,
         message: 'Only lowercase characters, numbers and "-", "_" are allowed.'
       },
       length: {
