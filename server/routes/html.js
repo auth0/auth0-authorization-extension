@@ -8,7 +8,7 @@ export default () => {
   return (req, res) => {
     logger.debug('Reading JSON file:', path.join(__dirname, '../assets/app/manifest.json'));
 
-    fs.readFile(path.join(__dirname, '../assets/app/manifest.json'), 'utf8', (err, data) => {
+    fs.readFile(path.join(__dirname, '../../assets/app/manifest.json'), 'utf8', (err, data) => {
       let locals = {
         config: {
           AUTH0_DOMAIN: nconf.get('AUTH0_DOMAIN'),
