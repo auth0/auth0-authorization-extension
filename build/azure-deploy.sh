@@ -121,11 +121,17 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
 fi
 
 # 4. Build the webclient
+echo Proceeding with Webpack build
+
+cd "$DEPLOYMENT_TARGET"
+eval $NODE_EXE --version
+eval $NPM_CMD --version
+
 echo Building web site using Webpack
-eval $NPM_CMD install rimraf -g
-exitWithMessageOnError "rimraf install failed"
 eval $NPM_CMD install webpack -g
 exitWithMessageOnError "webpack install failed"
+eval $NPM_CMD install rimraf -g
+exitWithMessageOnError "rimraf install failed"
 eval $NPM_CMD run build:prod
 exitWithMessageOnError "webpack run failed"
 cd - > /dev/null
