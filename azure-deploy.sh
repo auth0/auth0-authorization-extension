@@ -128,7 +128,8 @@ eval $NPM_CMD run clean
 
 # 4. Run build
 echo "Building."
-eval $NPM_CMD run build:prod
+NODE_ENV=production
+webpack --config ./webpack/config.prod.js --progress --colors -p
 
 ##################################################################################################################################
 
