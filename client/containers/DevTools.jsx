@@ -1,11 +1,11 @@
 import React from 'react';
-import { createDevTools } from 'redux-devtools';
-import LogMonitor from 'redux-devtools-log-monitor';
-import DockMonitor from 'redux-devtools-dock-monitor';
 
 let DevTools;
 if (process.env.NODE_ENV !== 'production') {
-  DevTools = createDevTools(
+  const devTools = require('redux-devtools');
+  const LogMonitor = require('redux-devtools-log-monitor');
+  const DockMonitor = require('redux-devtools-dock-monitor');
+  DevTools = devTools.createDevTools(
     <DockMonitor toggleVisibilityKey={'ctrl-h'}
                  changePositionKey={'ctrl-q'}>
       <LogMonitor theme={'tomorrow'} />
