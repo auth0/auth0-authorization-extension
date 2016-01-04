@@ -123,10 +123,12 @@ eval $NPM_CMD install rimraf -g
 echo "Installing webpack."
 eval $NPM_CMD install webpack -g
 
+echo "Cleaning build folder"
+eval $NPM_CMD run clean
+
 # 4. Run build
 echo "Building."
-export NODE_ENV=production
-eval $NODE_EXE webpack --config ./webpack/config.prod.js --progress --colors -p
+eval $NPM_CMD run build:prod
 
 ##################################################################################################################################
 
