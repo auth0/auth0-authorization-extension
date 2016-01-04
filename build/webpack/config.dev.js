@@ -1,15 +1,14 @@
 'use strict';
 
 const webpack = require('webpack');
-const winston = require('winston');
-winston.info('Running development configuration...\r\n');
+const logger = require('../../server/lib/logger');
+logger.info('Running development configuration...');
 
 const WEBPACK_HOST = 'localhost';
 const WEBPACK_PORT = 3001;
 
-let config = require('./config.base.js');
-
 // Override base configuration.
+let config = require('./config.base.js');
 config.devtool = 'eval';
 config.debug = true;
 config.entry.app = [

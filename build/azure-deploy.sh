@@ -26,10 +26,12 @@ exitWithMessageOnError "Missing node.js executable, please install node.js, if a
 # Setup
 # -----
 
-SCRIPT_DIR="${BASH_SOURCE[0]%\\*}"
+SCRIPT_DIR="../${BASH_SOURCE[0]%\\*}"
 SCRIPT_DIR="${SCRIPT_DIR%/*}"
 ARTIFACTS=$SCRIPT_DIR/../artifacts
 KUDU_SYNC_CMD=${KUDU_SYNC_CMD//\"}
+
+echo Script directory: $SCRIPT_DIR
 
 if [[ ! -n "$DEPLOYMENT_SOURCE" ]]; then
   DEPLOYMENT_SOURCE=$SCRIPT_DIR
@@ -112,6 +114,7 @@ selectNodeVersion
 # 3. Install npm packages
 if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd "$DEPLOYMENT_TARGET"
+  echo installing npm packages in $DEPLOYMENT_TARGET
   eval $NPM_CMD install
   exitWithMessageOnError "npm failed"
   cd - > /dev/null
@@ -123,7 +126,7 @@ eval $NPM_CMD install rimraf -g
 exitWithMessageOnError "rimraf install failed"
 eval $NPM_CMD install webpack -g
 exitWithMessageOnError "webpack install failed"
-eval webpack --config ./webpack/config.prod.js --progress --colors -p
+eval $NPM_CMD run build:prod
 exitWithMessageOnError "webpack run failed"
 cd - > /dev/null
 

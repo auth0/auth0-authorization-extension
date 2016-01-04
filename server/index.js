@@ -1,11 +1,13 @@
-import fs from 'fs';
 import path from 'path';
 import Express from 'express';
+import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import nconf from 'nconf';
 import validator from 'validate.js';
 
 import api from './routes/api';
+import htmlRoute from './routes/html';
+import logger from './lib/logger';
 
 // Initialize configuration.
 nconf
@@ -33,39 +35,23 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 // Configure routes.
-
 app.use('/api', api());
 app.use(Express.static(path.join(__dirname, '../assets')));
-app.get('*', (req, res) => {
-  fs.readFile(path.join(__dirname, '../assets/app/manifest.json'), 'utf8', (err, data) => {
-    let locals = {
-      config: {
-        AUTH0_DOMAIN: nconf.get('AUTH0_DOMAIN'),
-        AUTH0_CLIENT_ID: nconf.get('AUTH0_CLIENT_ID')
-      },
-      assets: {
-        app: 'bundle.js',
-        style: 'bundle.css',
-        vendors: 'vendors.js'
-      }
-    };
+app.get('*', htmlRoute());
 
-    if (!err && data) {
-      locals.assets = JSON.parse(data);
-    }
+// Request logging.
+app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
+  stream: logger.stream
+}));
 
-    return res.render('index', locals);
-  });
-});
-
-console.log(`Starting server...`);
+logger.info(`Starting server...`);
 
 // Start the server.
 const port = nconf.get('PORT');
 app.listen(port, (error) => {
   if (error) {
-    console.error(error);
+    logger.error(error);
   } else {
-    console.log(`Listening on http://localhost:${port}.`);
+    logger.info(`Listening on http://localhost:${port}.`);
   }
 });

@@ -1,11 +1,11 @@
 'use strict';
 
-const winston = require('winston');
 const webpack = require('webpack');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-winston.info('Running production configuration...\r\n');
+const logger = require('../../server/lib/logger');
+logger.info('Running production configuration...');
 
 const config = require('./config.base.js');
 config.profile = false;

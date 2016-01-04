@@ -1,4 +1,3 @@
-
 const path = require('path');
 const webpack = require('webpack');
 
@@ -9,7 +8,7 @@ module.exports = {
 
   // The application and the vendor libraries.
   entry: {
-    app: path.resolve(__dirname, '../client/app.js'),
+    app: path.resolve(__dirname, '../../client/app.js'),
     vendors: [
       'axios',
       'bluebird',
@@ -36,7 +35,7 @@ module.exports = {
 
   // Output directory.
   output: {
-    path: path.join(__dirname, '../assets/app'),
+    path: path.join(__dirname, '../../assets/app'),
     filename: 'bundle.js',
     publicPath: '/app/'
   },
@@ -58,7 +57,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         loader: 'babel',
-        exclude: path.join(__dirname, '../node_modules/')
+        exclude: path.join(__dirname, '../../node_modules/')
       },
       {
         test: /\.(png|ttf|svg|jpg|gif)/,
