@@ -2,7 +2,7 @@
 
 # ----------------------
 # KUDU Deployment Script
-# Version: 0.2.2
+# Version: 1.0.3
 # ----------------------
 
 # Helpers
@@ -78,7 +78,7 @@ selectNodeVersion () {
       exitWithMessageOnError "getting node version failed"
     fi
 
-    if [[ -e "$DEPLOYMENT_TEMP/.tmp" ]]; then
+    if [[ -e "$DEPLOYMENT_TEMP/__npmVersion.tmp" ]]; then
       NPM_JS_PATH=`cat "$DEPLOYMENT_TEMP/__npmVersion.tmp"`
       exitWithMessageOnError "getting npm version failed"
     fi
@@ -112,24 +112,20 @@ selectNodeVersion
 # 3. Install npm packages
 if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
   cd "$DEPLOYMENT_TARGET"
-  eval $NPM_CMD install --production
+  eval $NPM_CMD install
   exitWithMessageOnError "npm failed"
   cd - > /dev/null
 fi
 
-echo "Installing rimraf."
+# 4. Build the webclient
+echo Building web site using Webpack
 eval $NPM_CMD install rimraf -g
-
-echo "Installing webpack."
+exitWithMessageOnError "rimraf install failed"
 eval $NPM_CMD install webpack -g
-
-echo "Cleaning build folder"
-eval $NPM_CMD run clean
-
-# 4. Run build
-echo "Building."
-NODE_ENV=production
-webpack --config ./webpack/config.prod.js --progress --colors -p
+exitWithMessageOnError "webpack install failed"
+eval webpack --config ./webpack/config.prod.js --progress --colors -p
+exitWithMessageOnError "webpack run failed"
+cd - > /dev/null
 
 ##################################################################################################################################
 
