@@ -118,10 +118,10 @@ if [ -e "$DEPLOYMENT_TARGET/package.json" ]; then
 fi
 
 echo "Installing rimraf."
-npm install rimraf -g
+eval $NPM_CMD install rimraf -g
 
 echo "Installing webpack."
-npm install webpack -g
+eval $NPM_CMD install webpack -g
 
 # 4. Run build
 eval $NPM_CMD run build:prod
