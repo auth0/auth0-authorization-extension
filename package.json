@@ -8,6 +8,7 @@
   "main": "server.js",
   "scripts": {
     "clean": "rimraf assets/app",
+    "postinstall": "npm run build:prod",
     "build:dev": "node ./build/exec.js development \"node ./build/webpack/server.js\"",
     "build:prod": "npm run clean && node ./build/exec.js production \"webpack --config ./build/webpack/config.prod.js --progress --colors -p\"",
     "serve:dev": "node ./build/exec.js development \"nodemon --ignore assets/app/ --ignore build/webpack/ --ignore server/data/ --ignore client/ --ignore node_modules/ index.js\"",
