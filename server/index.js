@@ -11,9 +11,9 @@ import logger from './lib/logger';
 
 // Initialize configuration.
 nconf
-  .file(path.join(__dirname, 'config.json'))
   .argv()
   .env()
+  .file(path.join(__dirname, 'config.json'))
   .defaults({
     NODE_ENV: 'development',
     PORT: 3000
