@@ -1,6 +1,5 @@
 'use strict';
 
-const path = require('path');
 const webpack = require('webpack');
 const winston = require('winston');
 winston.info('Running development configuration...\r\n');
