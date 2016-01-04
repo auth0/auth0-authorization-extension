@@ -3,7 +3,7 @@ import path from 'path';
 import Low from 'lowdb';
 import storage from 'lowdb/file-async';
 
-const low = new Low(path.resolve(__dirname, '../data/db.json'), { storage, autosave: true });
+const low = new Low(path.resolve(__dirname, '../db.json'), { storage, autosave: true });
 low('config').cloneDeep();
 
 class Database {
