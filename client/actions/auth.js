@@ -3,13 +3,15 @@ import { pushPath } from 'redux-simple-router';
 
 import * as constants from '../constants';
 
-const lock = new Auth0Lock('6H7zPf1rXmATxqYU9S4ixGV3Fbmoe5u0', 'sandrino.auth0.com');
+const lock = new Auth0Lock(window.config.AUTH0_CLIENT_ID, window.config.AUTH0_DOMAIN);
 
 export function login(returnUrl) {
+  const origin = window.location.origin || window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+
   lock.show({
     closable: false,
     responseType: 'token',
-    callbackURL: 'http://localhost:3001/login',
+    callbackURL: `${origin}/login`,
     callbackOnLocationHash: true,
     authParams: {
       state: returnUrl
