@@ -118,6 +118,7 @@ fi
 # 3. Build the webclient
 echo Proceeding with Webpack build
 cd "$DEPLOYMENT_SOURCE"
+eval $NPM_CMD dedupe
 echo Building web site using Webpack
 eval $NPM_CMD install webpack -g
 exitWithMessageOnError "webpack install failed"
