@@ -2,8 +2,12 @@ import fs from 'fs';
 import path from 'path';
 import nconf from 'nconf';
 
+import logger from '../lib/logger';
+
 export default () => {
   return (req, res) => {
+    logger.debug('Reading JSON file:', path.join(__dirname, '../assets/app/manifest.json'));
+
     fs.readFile(path.join(__dirname, '../assets/app/manifest.json'), 'utf8', (err, data) => {
       let locals = {
         config: {
@@ -19,6 +23,8 @@ export default () => {
 
       if (!err && data) {
         locals.assets = JSON.parse(data);
+      } else if (err) {
+        logger.error(err);
       }
 
       return res.render('index', locals);
