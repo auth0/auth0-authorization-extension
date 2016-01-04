@@ -46,7 +46,7 @@ app.get('*', (req, res) => {
       assets: {
         app: 'bundle.js',
         style: 'bundle.css',
-        vendors: 'vendor.js'
+        vendors: 'vendors.js'
       }
     };
 

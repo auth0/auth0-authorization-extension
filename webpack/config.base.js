@@ -38,7 +38,7 @@ module.exports = {
   output: {
     path: path.join(__dirname, '../assets/app'),
     filename: 'bundle.js',
-    publicPath: '/assets/app/'
+    publicPath: '/app/'
   },
 
   // Module configuration.

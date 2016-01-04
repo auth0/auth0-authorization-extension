@@ -4,7 +4,7 @@ const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
 const options = {
-  publicPath: 'http://localhost:3001/assets/app/',
+  publicPath: 'http://localhost:3001/app/',
   hot: true,
   inline: true,
   historyApiFallback: true,
