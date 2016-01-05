@@ -1,5 +1,6 @@
 import { Router } from 'express';
 
+import logger from '../lib/logger';
 import applications from './applications';
 import logs from './logs';
 import users from './users';
@@ -18,6 +19,8 @@ export default () => {
 
   // Generic error handler.
   api.use((err, req, res, next) => {
+    logger.error(err);
+    
     if (err && err.notFoundError) {
       res.status(404);
       return res.json({ error: err.notFoundError });

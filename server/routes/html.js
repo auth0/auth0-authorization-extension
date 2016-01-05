@@ -16,7 +16,6 @@ export default () => {
         },
         assets: {
           app: 'bundle.js',
-          style: 'bundle.css',
           vendors: 'vendors.js'
         }
       };

@@ -2,22 +2,31 @@ import path from 'path';
 import Express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
-import nconf from 'nconf';
 import validator from 'validate.js';
+import { init as initProvider } from './lib/providers';
 
-import api from './routes/api';
-import htmlRoute from './routes/html';
-import logger from './lib/logger';
+logger.info(`Starting server...`);
 
-// Initialize configuration.
+// Initialize before running custom modules.
+import nconf from 'nconf';
 nconf
   .argv()
   .env()
   .file(path.join(__dirname, 'config.json'))
   .defaults({
+    DATA_PROVIDER: 'jsondb',
+    JSONDB_PATH: path.join(__dirname, '/db.json'),
     NODE_ENV: 'development',
     PORT: 3000
   });
+
+// Initialize data provider.
+initProvider(nconf.get('DATA_PROVIDER'));
+
+// Load routes.
+import api from './routes/api';
+import htmlRoute from './routes/html';
+import logger from './lib/logger';
 
 // Configure validator.
 validator.options = { fullMessages: false };
@@ -43,8 +52,6 @@ app.get('*', htmlRoute());
 app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
   stream: logger.stream
 }));
-
-logger.info(`Starting server...`);
 
 // Start the server.
 const port = nconf.get('PORT');

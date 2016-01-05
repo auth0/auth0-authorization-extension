@@ -1,64 +1,79 @@
-import db from './db';
+import { getProvider } from './providers';
 
 class DashboardData {
   getPermissions() {
-    return db.getRecords('permissions');
+    return getProvider()
+      .getRecords('permissions');
   }
 
   getPermission(name) {
-    return db.getRecord('permissions', { name });
+    return getProvider()
+      .getRecord('permissions', { name });
   }
 
   createPermission(permission) {
-    return db.createRecord('permissions', { name: permission.name }, permission);
+    return getProvider()
+      .createRecord('permissions', { name: permission.name }, permission);
   }
 
   updatePermission(name, permission) {
-    return db.updateRecord('permissions', { name }, permission);
+    return getProvider()
+      .updateRecord('permissions', { name }, permission);
   }
 
   deletePermission(name) {
-    return db.deleteRecord('permissions', { name });
+    return getProvider()
+      .deleteRecord('permissions', { name });
   }
 
   getRoles() {
-    return db.getRecords('roles');
+    return getProvider()
+      .getRecords('roles');
   }
 
   getRole(name) {
-    return db.getRecord('roles', { name });
+    return getProvider()
+      .getRecord('roles', { name });
   }
 
   createRole(role) {
-    return db.createRecord('roles', { name: role.name }, role);
+    return getProvider()
+      .createRecord('roles', { name: role.name }, role);
   }
 
   updateRole(name, role) {
-    return db.updateRecord('roles', { name }, role);
+    return getProvider()
+      .updateRecord('roles', { name }, role);
   }
 
   deleteRole(name) {
-    return db.deleteRecord('roles', { name });
+    return getProvider()
+      .deleteRecord('roles', { name });
   }
 
   getGroups() {
-    return db.getRecords('groups');
+    return getProvider()
+      .getRecords('groups');
   }
 
   getGroup(name) {
-    return db.getRecord('groups', { name });
+    return getProvider()
+      .getRecord('groups', { name });
   }
 
   createGroup(group) {
-    return db.createRecord('groups', { name: group.name }, group);
+    return getProvider()
+      .createRecord('groups', { name: group.name }, group);
   }
 
   updateGroup(name, group) {
-    return db.updateRecord('groups', { name }, group);
+    return getProvider()
+      .updateRecord('groups', { name }, group);
   }
 
   deleteGroup(name) {
-    return db.deleteRecord('groups', { name });
+    return getProvider()
+      .deleteRecord('groups', { name });
   }
 }
 
