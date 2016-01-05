@@ -13,13 +13,17 @@ class LoadingPanel extends Component {
 
     // Default styles.
     this.backgroundStyle = {
-      padding: '5px', backgroundColor: 'rgba(255,255,255,0.4)', minHeight: '50px'
+      padding: '5px',
+      backgroundColor: 'rgba(255,255,255,0.4)',
+      minHeight: '50px',
+      ...this.props.spinnerStyle
     };
     this.spinnerStyle = {
       display: 'inline-block',
       height: '64px',
       width: '64px',
-      margin: '0px auto'
+      margin: '0px auto',
+      ...this.props.spinnerStyle
     };
     this.animationStyle = {
       backgroundColor: 'transparent',
@@ -41,7 +45,9 @@ class LoadingPanel extends Component {
         <img style={this.spinnerStyle} src={Spinner} />
       </div>;
 
-    return <Loader show={this.state.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>{this.props.children}</Loader>;
+    return <Loader show={this.state.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>
+      {this.props.children}
+    </Loader>;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -52,7 +58,7 @@ class LoadingPanel extends Component {
       });
     }
 
-    this.showTimer = setTimeout(() => { this.setState({ show: true }); }, this.props.delay || 250);
+    this.showTimer = setTimeout(() => { this.setState({ show: true }); }, this.props.delay || 100);
   }
 
   componentWillUnmount() {
