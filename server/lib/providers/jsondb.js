@@ -2,6 +2,8 @@ import _ from 'lodash';
 import Low from 'lowdb';
 import storage from 'lowdb/file-async';
 
+import { NotFoundError, ValidationError } from '../errors';
+
 export default class JsonDbProvider {
   init(path) {
     this.low = new Low(path, { storage, autosave: true });
@@ -18,7 +20,7 @@ export default class JsonDbProvider {
     return new Promise((resolve, reject) => {
       let record = this.low(collection).find(query);
       if (!record) {
-        return reject({ notFoundError: 'A record with this identifier was not found.' });
+        return reject(new NotFoundError('A record with this identifier was not found.'));
       }
 
       resolve(_.cloneDeep(record));
@@ -29,7 +31,7 @@ export default class JsonDbProvider {
     return new Promise((resolve, reject) => {
       let existingRecord = this.low(collection).find(identifier);
       if (existingRecord) {
-        return reject({ validationError: 'A record with this identifier already exists.' });
+        return reject(new ValidationError('A record with this identifier already exists.'));
       }
 
       this.low(collection)
@@ -43,7 +45,7 @@ export default class JsonDbProvider {
     return new Promise((resolve, reject) => {
       let existingRecord = this.low(collection).find(identifier);
       if (!existingRecord) {
-        return reject({ validationError: 'A record with this identifier does not exist.' });
+        return reject(new ValidationError('A record with this identifier does not exist.'));
       }
 
       const update = this.low(collection)

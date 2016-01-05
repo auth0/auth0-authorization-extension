@@ -1,4 +1,5 @@
 import getDb from 'mongo-getdb';
+import { NotFoundError, ValidationError } from '../errors';
 
 export default class MongoDbProvider {
   init(connectionString) {
@@ -30,7 +31,7 @@ export default class MongoDbProvider {
             }
 
             if (!record) {
-              return reject({ notFoundError: 'A record with this identifier was not found.' });
+              return reject(new NotFoundError('A record with this identifier was not found.'));
             }
 
             resolve(record);
@@ -48,7 +49,7 @@ export default class MongoDbProvider {
             }
 
             if (existingRecord) {
-              return reject({ validationError: 'A record with this identifier already exists.' });
+              return reject(new ValidationError('A record with this identifier already exists.'));
             }
 
             db.collection(collection).insert(record, { w: 1 }, (err) => {
@@ -72,7 +73,7 @@ export default class MongoDbProvider {
             }
 
             if (!existingRecord) {
-              return reject({ validationError: 'A record with this identifier does not exist.' });
+              return reject(new ValidationError('A record with this identifier does not exist.'));
             }
 
             db.collection(collection).update(identifier, record, { w: 1 }, (err) => {
@@ -96,7 +97,7 @@ export default class MongoDbProvider {
             }
 
             if (!existingRecord) {
-              return reject({ validationError: 'A record with this identifier does not exist.' });
+              return resolve();
             }
 
             db.collection(collection).deleteOne(identifier, (err) => {

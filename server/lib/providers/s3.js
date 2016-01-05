@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import nconf from 'nconf';
 import AWS from 'aws-sdk';
+import { NotFoundError, ValidationError } from '../errors';
 
 export class S3Provider {
   init(options) {
@@ -31,7 +32,7 @@ export class S3Provider {
         return new Promise((resolve, reject) => {
           let record = _.find(records, query);
           if (!record) {
-            return reject({ notFoundError: 'A record with this identifier was not found.' });
+            return reject(new NotFoundError('A record with this identifier was not found.'));
           }
 
           resolve(_.cloneDeep(record));
@@ -45,7 +46,7 @@ export class S3Provider {
         return new Promise((resolve, reject) => {
           let index = _.findIndex(records, identifierQuery);
           if (index >= 0) {
-            return reject({ validationError: 'A record with this identifier already exists.' });
+            return reject(new ValidationError('A record with this identifier already exists.'));
           }
 
           records.push(record);
@@ -69,7 +70,7 @@ export class S3Provider {
         return new Promise((resolve, reject) => {
           let index = _.findIndex(records, identifierQuery);
           if (index < 0) {
-            return reject({ validationError: 'A record with this identifier does not exist.' });
+            return reject(new ValidationError('A record with this identifier does not exist.'));
           }
 
           records[index] = record;

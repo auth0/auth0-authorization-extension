@@ -40,6 +40,9 @@ validator.validators.presence.options = {
 const app = new Express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
+app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
+  stream: logger.stream
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -47,11 +50,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use('/api', api());
 app.use(Express.static(path.join(__dirname, '../assets')));
 app.get('*', htmlRoute());
-
-// Request logging.
-app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
-  stream: logger.stream
-}));
 
 // Start the server.
 const port = nconf.get('PORT');

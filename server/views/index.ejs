@@ -19,7 +19,9 @@
   <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.973/components/ZeroClipboard/ZeroClipboard.js"></script>
   <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.973/js/bundle.js"></script>
   <script type="text/javascript">window.config = <%- JSON.stringify(config) %>;</script>
+  <% if (assets.vendors) { %>
   <script type="text/javascript" src="/app/<%= assets.vendors %>"></script>
+  <% } %>
   <script type="text/javascript" src="/app/<%= assets.app %>"></script>
 </body>
 </html>

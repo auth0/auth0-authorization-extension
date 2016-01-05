@@ -21,14 +21,14 @@ export default () => {
   api.use((err, req, res, next) => {
     logger.error(err);
     
-    if (err && err.notFoundError) {
+    if (err && err.name === 'NotFoundError') {
       res.status(404);
-      return res.json({ error: err.notFoundError });
+      return res.json({ error: err.message });
     }
 
-    if (err && err.validationError) {
+    if (err && err.name === 'ValidationError') {
       res.status(400);
-      return res.json({ error: err.validationError });
+      return res.json({ error: err.message });
     }
 
     res.status(err.status || 500);

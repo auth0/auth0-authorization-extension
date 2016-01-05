@@ -15,8 +15,7 @@ export default () => {
           AUTH0_CLIENT_ID: nconf.get('AUTH0_CLIENT_ID')
         },
         assets: {
-          app: 'bundle.js',
-          vendors: 'vendors.js'
+          app: 'bundle.js'
         }
       };
 
