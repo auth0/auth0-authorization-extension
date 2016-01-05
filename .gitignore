@@ -1,5 +1,5 @@
-node_modules
 .DS_Store
+assets/app/*
+node_modules
 npm-debug.log
 server/db.json
-assets/app/*.map
