@@ -9,9 +9,9 @@ const WEBPACK_PORT = 3001;
 
 // Override base configuration.
 let config = require('./config.base.js');
-config.devtool = 'eval';
+config.devtool = 'eval-source-map';
 config.debug = true;
-config.entry.app = [
+config.entry = [
   'webpack-dev-server/client?http://' + WEBPACK_HOST + ':' + WEBPACK_PORT,
   'webpack/hot/only-dev-server',
   config.entry.app
@@ -32,10 +32,7 @@ config.module.loaders.push({
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([
-  new webpack.HotModuleReplacementPlugin(),
-
-  // Separate the vender in a different file.
-  new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js')
+  new webpack.HotModuleReplacementPlugin()
 ]);
 
 module.exports = config;
