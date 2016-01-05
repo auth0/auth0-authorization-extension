@@ -3,6 +3,10 @@ import Express from 'express';
 import morgan from 'morgan';
 import bodyParser from 'body-parser';
 import validator from 'validate.js';
+
+import api from './routes/api';
+import htmlRoute from './routes/html';
+import logger from './lib/logger';
 import { init as initProvider } from './lib/providers';
 
 logger.info(`Starting server...`);
@@ -22,11 +26,6 @@ nconf
 
 // Initialize data provider.
 initProvider(nconf.get('DATA_PROVIDER'));
-
-// Load routes.
-import api from './routes/api';
-import htmlRoute from './routes/html';
-import logger from './lib/logger';
 
 // Configure validator.
 validator.options = { fullMessages: false };
