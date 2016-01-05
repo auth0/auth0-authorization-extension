@@ -8,6 +8,34 @@ Use Cases:
  - Fine Grained Authorization: Permissions and roles can be exposed to applications
  - Helpdesk: Search for users, block users, unblock users, remove MFA, view user activity, ...
 
+ Supports:
+
+ - [x] Heroku deployments
+ - [x] Docker deployments
+ - [x] Different storage providers:
+  - [x] S3
+  - [x] MongoDB
+  - [x] Simple json file
+
+ Todos:
+
+ - [ ] Use `uuid` as unique identifier for permissions/roles/groups
+ - [ ] Assign permissions to roles
+ - [ ] Assign roles to groups
+ - [ ] Assign groups or roles to applications
+ - [ ] Calculate effective permissions for a user
+ - [ ] Calculate effective permissions for a role
+ - [ ] Calculate effective permissions for a group
+ - [ ] Calculate effective permissions for an application
+ - [ ] Push to Auth0 (1 big rule that contains authz/permissions/roles/groups)
+ - [ ] Secure all endpoints with permissions
+ - [ ] Export logs button
+ - [ ] Delete device credentials
+ - [ ] Impersonation + application configuration (SAML/WSFed/OIDC + scopes)
+ - [ ] Use Auth0 OAuth2-as-a-service
+ - [ ] Webtaskify
+
+
 ## Configuration
 
 Configure you settings in `/server/config.json` or as environment variables:
