@@ -35,7 +35,9 @@ Todos:
  - [ ] Impersonation + application configuration (SAML/WSFed/OIDC + scopes)
  - [ ] Use Auth0 OAuth2-as-a-service
  - [ ] Webtaskify
-
+ - [ ] Reset passwords
+ - [ ] Create users (with group memberships)
+ - [ ] "Session Expired" if JWT is expired or server returns not authenticated
 
 ## Configuration
 
