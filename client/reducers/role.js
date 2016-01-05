@@ -34,7 +34,8 @@ export const role = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_ROLE_PENDING]: (state) =>
     state.merge({
-      loading: true
+      loading: true,
+      validationErrors: Map()
     }),
   [constants.SAVE_ROLE_REJECTED]: (state, action) => {
     const validationErrors = action.payload.data && action.payload.data.errors && Map(action.payload.data.errors) || Map();

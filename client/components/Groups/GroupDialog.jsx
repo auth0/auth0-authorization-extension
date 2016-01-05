@@ -18,7 +18,7 @@ class GroupDialog extends Component {
       <Modal.Header closeButton={!group.loading}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <GroupForm initialValues={group.record} validationErrors={group.validationErrors}
+      <GroupForm loading={group.loading} initialValues={group.record} validationErrors={group.validationErrors}
           onClose={this.props.onClose} onSubmit={(perm) => this.props.onSave(perm)}>
           <Error message={group.error} />
       </GroupForm>

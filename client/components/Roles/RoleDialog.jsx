@@ -19,7 +19,7 @@ class RoleDialog extends Component {
       <Modal.Header closeButton={!role.loading}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <RoleForm initialValues={role.record} validationErrors={role.validationErrors}
+      <RoleForm loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
           onClose={this.props.onClose} onSubmit={(perm) => this.props.onSave(perm)}>
           <Error message={role.error} />
       </RoleForm>

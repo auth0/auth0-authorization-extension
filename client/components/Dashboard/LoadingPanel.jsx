@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import Loader from 'react-loader-advanced';
 import Spinner from './svg/Spinner.svg';
 
@@ -7,6 +7,9 @@ import './LoadingPanel.css';
 class LoadingPanel extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      show: false
+    };
 
     // Default styles.
     this.backgroundStyle = {
@@ -30,7 +33,7 @@ class LoadingPanel extends Component {
   }
 
   render() {
-    if (!this.props.show) {
+    if (!this.state.show) {
       return <div >{this.props.children}</div>;
     }
 
@@ -38,9 +41,33 @@ class LoadingPanel extends Component {
         <img style={this.spinnerStyle} src={Spinner} />
       </div>;
 
-    return <Loader show={this.props.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>{this.props.children}</Loader>;
+    return <Loader show={this.state.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>{this.props.children}</Loader>;
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!nextProps.show) {
+      clearTimeout(this.showTimer);
+      return this.setState({
+        show: false
+      });
+    }
+
+    this.showTimer = setTimeout(() => { this.setState({ show: true }); }, this.props.delay || 250);
+  }
+
+  componentWillUnmount() {
+    if (this.showTimer) {
+      clearTimeout(this.showTimer);
+    }
   }
 }
 
+LoadingPanel.propTypes = {
+  backgroundStyle: React.PropTypes.object,
+  spinnerStyle: React.PropTypes.object,
+  animationStyle: React.PropTypes.object,
+  show: React.PropTypes.bool,
+  delay: React.PropTypes.numeric
+};
 
 export default LoadingPanel;

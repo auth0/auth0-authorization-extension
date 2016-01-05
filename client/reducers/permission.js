@@ -34,7 +34,8 @@ export const permission = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_PERMISSION_PENDING]: (state) =>
     state.merge({
-      loading: true
+      loading: true,
+      validationErrors: Map()
     }),
   [constants.SAVE_PERMISSION_REJECTED]: (state, action) => {
     const validationErrors = action.payload.data && action.payload.data.errors && Map(action.payload.data.errors) || Map();

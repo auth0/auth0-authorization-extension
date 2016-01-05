@@ -34,7 +34,8 @@ export const group = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_GROUP_PENDING]: (state) =>
     state.merge({
-      loading: true
+      loading: true,
+      validationErrors: Map()
     }),
   [constants.SAVE_GROUP_REJECTED]: (state, action) => {
     const validationErrors = action.payload.data && action.payload.data.errors && Map(action.payload.data.errors) || Map();

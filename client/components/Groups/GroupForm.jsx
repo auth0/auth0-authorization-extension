@@ -33,7 +33,7 @@ class GroupForm extends Component {
 
 GroupForm.propTypes = {
   validationErrors: React.PropTypes.object,
-  loading: React.PropTypes.bool,
+  loading: React.PropTypes.bool.isRequired,
   submitting: React.PropTypes.bool,
   handleSubmit: React.PropTypes.func.isRequired,
   onClose: React.PropTypes.func.isRequired

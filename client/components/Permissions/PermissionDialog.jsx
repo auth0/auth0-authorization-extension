@@ -20,7 +20,7 @@ class PermissionDialog extends Component {
       <Modal.Header closeButton={!permission.loading}>
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
-      <PermissionForm applications={applications} initialValues={permission.record} validationErrors={permission.validationErrors}
+      <PermissionForm loading={permission.loading} applications={applications} initialValues={permission.record} validationErrors={permission.validationErrors}
           onClose={this.props.onClose} onSubmit={(perm) => this.props.onSave(perm)}>
           <Error message={permission.error} />
       </PermissionForm>
