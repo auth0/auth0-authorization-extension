@@ -8,7 +8,7 @@ Use Cases:
  - Fine Grained Authorization: Permissions and roles can be exposed to applications
  - Helpdesk: Search for users, block users, unblock users, remove MFA, view user activity, ...
 
- Supports:
+Supports:
 
  - [x] Heroku deployments
  - [x] Docker deployments
@@ -17,7 +17,7 @@ Use Cases:
   - [x] MongoDB
   - [x] Simple json file
 
- Todos:
+Todos:
 
  - [ ] Use `uuid` as unique identifier for permissions/roles/groups
  - [ ] Assign permissions to roles
