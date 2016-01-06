@@ -38,6 +38,8 @@ Todos:
  - [ ] Reset passwords
  - [ ] Create users (with group memberships)
  - [ ] "Session Expired" if JWT is expired or server returns not authenticated
+ - [ ] Handle login errors (eg: user blocked)
+ - [ ] Store permissions/roles/groups in the user profile also (in addition to having it in the token)
 
 ## Configuration
 
