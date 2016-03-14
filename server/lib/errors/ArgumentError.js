@@ -1,13 +1,13 @@
-export default class NotFoundError extends Error {
+export default class ArgumentError extends Error {
   constructor(message) {
     super(message);
     Error.captureStackTrace(this, this.constructor);
     
     this.message = message;
-    this.name = 'NotFoundError';
+    this.name = 'ArgumentError';
   }
 
   toString () {
-    return 'NotFoundError';
+    return 'ArgumentError';
   }
 }

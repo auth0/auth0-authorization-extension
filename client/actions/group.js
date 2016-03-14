@@ -24,6 +24,7 @@ export function createGroup() {
 }
 
 export function editGroup(group) {
+  console.log('Edit:', group);
   return {
     type: constants.EDIT_GROUP,
     payload: {
@@ -70,21 +71,19 @@ export function cancelDeleteGroup() {
   };
 }
 
-export function deleteGroup() {
+export function deleteGroup(group) {
   return (dispatch, getState) => {
-    const group = getState().group.get('group');
-    const groupId = getState().group.get('groupId');
     dispatch({
       type: constants.DELETE_GROUP,
       payload: {
-        promise: axios.delete(`/api/groups/${groupId}`, {
+        promise: axios.delete(`/api/groups/${group._id}`, {
           timeout: 5000,
           responseType: 'json'
         })
       },
       meta: {
         group,
-        groupId
+        groupId: group._id
       }
     });
   };

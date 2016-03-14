@@ -11,10 +11,11 @@ class GroupForm extends Component {
     return <div>
       <Modal.Body>
         {this.props.children}
-        <LoadingPanel show={ loading } spinnerStyle={{ height: '16px', width: '16px' }}
-            animationStyle={{ paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '10px' }}>
-          <InputText field={name} fieldName="name" label="Name" validationErrors={validationErrors} />
-          <InputText field={description} fieldName="description" label="Description" validationErrors={validationErrors} />
+        <LoadingPanel show={loading}>
+          <InputText field={name} fieldName="name" label="Name" 
+            validationErrors={validationErrors} />
+          <InputText field={description} fieldName="description" label="Description" 
+            validationErrors={validationErrors} />
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>
@@ -39,5 +40,4 @@ GroupForm.propTypes = {
   onClose: React.PropTypes.func.isRequired
 };
 
-GroupForm = reduxForm({ form: 'group', fields: [ 'name', 'description' ] })(GroupForm);
-export default GroupForm;
+export default reduxForm({ form: 'group', fields: [ 'name', 'description' ] })(GroupForm);

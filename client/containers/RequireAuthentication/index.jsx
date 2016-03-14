@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { pushPath } from 'redux-simple-router';
+import { push } from 'react-router-redux';
 
 export function RequireAuthentication(InnerComponent) {
   class RequireAuthenticationContainer extends React.Component {
@@ -14,7 +14,7 @@ export function RequireAuthentication(InnerComponent) {
 
     requireAuthentication() {
       if (!this.props.auth.isAuthenticated && !this.props.auth.isAuthenticating) {
-        this.props.pushPath(`/login?returnUrl=${this.props.location.pathname}`);
+        this.props.push(`/login?returnUrl=${this.props.location.pathname}`);
       }
     }
 
@@ -27,5 +27,5 @@ export function RequireAuthentication(InnerComponent) {
     }
   }
 
-  return connect((state) => ({ auth: state.auth.toJS() }), { pushPath })(RequireAuthenticationContainer);
+  return connect((state) => ({ auth: state.auth.toJS() }), { push })(RequireAuthenticationContainer);
 }

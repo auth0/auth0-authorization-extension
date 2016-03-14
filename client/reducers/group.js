@@ -30,7 +30,7 @@ export const group = createReducer(fromJS(initialState), {
       ...initialState,
       isEdit: true,
       record: action.payload.group,
-      groupId: action.payload.group.name
+      groupId: action.payload.group._id
     }),
   [constants.SAVE_GROUP_PENDING]: (state) =>
     state.merge({
@@ -54,7 +54,8 @@ export const group = createReducer(fromJS(initialState), {
   [constants.REQUESTING_DELETE_GROUP]: (state, action) =>
     state.merge({
       isDelete: true,
-      groupId: action.payload.group.name,
+      record: action.payload.group,
+      groupId: action.payload.group._id,
       requesting: true
     }),
   [constants.CANCEL_DELETE_GROUP]: (state) =>

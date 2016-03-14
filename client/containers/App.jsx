@@ -12,7 +12,6 @@ class App extends Component {
     return (
       <div>
         <Header user={this.props.user} onLogout={this.props.logout} />
-        <DevTools />
         <div className="container">
           <div className="row">
             <Sidebar>

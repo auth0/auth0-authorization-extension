@@ -7,19 +7,25 @@ import rootReducer from '../reducers';
 import normalizeErrorMiddleware from '../middlewares/normalizeErrorMiddleware';
 import DevTools from '../containers/DevTools';
 
-const pipeline = [
-  applyMiddleware(promiseMiddleware(), thunkMiddleware, normalizeErrorMiddleware(), createLogger({
-    predicate: () => process.env.NODE_ENV !== 'production'
-  }))
-];
 
-if (process.env.NODE_ENV !== 'production') {
-  pipeline.push(DevTools.instrument());
-}
+export default function configureStore(middlewares, initialState = { }) {
+  const pipeline = [
+    applyMiddleware(
+      promiseMiddleware(), 
+      thunkMiddleware, 
+      normalizeErrorMiddleware(), 
+      createLogger({
+        predicate: () => process.env.NODE_ENV !== 'production'
+      }),
+      ...middlewares
+    )
+  ];
 
-const finalCreateStore = compose(...pipeline)(createStore);
+  if (process.env.NODE_ENV !== 'production') {
+    pipeline.push(DevTools.instrument());
+  }
 
-export default function configureStore(initialState) {
+  const finalCreateStore = compose(...pipeline)(createStore);
   const store = finalCreateStore(rootReducer, initialState);
 
   // Enable Webpack hot module replacement for reducers.

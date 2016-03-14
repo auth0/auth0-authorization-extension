@@ -5,7 +5,7 @@ import classNames from 'classnames';
 class TabPane extends Component {
   render() {
     const linkClass = classNames({
-      'active': this.context.history.isActive(this.props.route)
+      'active': this.context.router.isActive(this.props.route)
     });
     return (
       <li className={linkClass}>
@@ -22,7 +22,7 @@ TabPane.propTypes = {
 };
 
 TabPane.contextTypes = {
-  history: React.PropTypes.object.isRequired
+  router: React.PropTypes.object.isRequired
 };
 
 export default TabPane;

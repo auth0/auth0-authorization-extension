@@ -7,6 +7,8 @@ import './LoadingPanel.css';
 class LoadingPanel extends Component {
   constructor(props) {
     super(props);
+    
+    this.setLoading = this.setLoading.bind(this);
     this.state = {
       show: false
     };
@@ -51,6 +53,8 @@ class LoadingPanel extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('nextProps:', nextProps);
+    
     if (!nextProps.show) {
       clearTimeout(this.showTimer);
       return this.setState({
@@ -58,13 +62,17 @@ class LoadingPanel extends Component {
       });
     }
 
-    this.showTimer = setTimeout(() => { this.setState({ show: true }); }, this.props.delay || 100);
+    this.showTimer = setTimeout(this.setLoading, this.props.delay || 100);
   }
 
   componentWillUnmount() {
     if (this.showTimer) {
       clearTimeout(this.showTimer);
     }
+  }
+  
+  setLoading() {
+    this.setState({ show: true });
   }
 }
 
@@ -73,7 +81,7 @@ LoadingPanel.propTypes = {
   spinnerStyle: React.PropTypes.object,
   animationStyle: React.PropTypes.object,
   show: React.PropTypes.bool,
-  delay: React.PropTypes.numeric
+  delay: React.PropTypes.number
 };
 
 export default LoadingPanel;

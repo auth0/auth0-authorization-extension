@@ -2,16 +2,54 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import * as GroupActions from '../../actions/group';
-
+import * as actions from '../../actions/group';
 import { Error, LoadingPanel } from '../../components/Dashboard';
-import GroupsTable from '../../components/Groups/GroupsTable';
-import GroupDialog from '../../components/Groups/GroupDialog';
-import DeleteGroupDialog from '../../components/Groups/DeleteGroupDialog';
+import { GroupDeleteDialog, GroupDialog, GroupForm, GroupsTable } from '../../components/Groups';
 
 class GroupsContainer extends Component {
+  constructor() {
+    super();
+    
+    this.refresh = this.refresh.bind(this);
+    this.create = this.create.bind(this);
+    this.edit = this.edit.bind(this);
+    this.save = this.save.bind(this);
+    this.clear = this.clear.bind(this);
+    this.requestDelete = this.requestDelete.bind(this);
+    this.confirmDelete = this.confirmDelete.bind(this);
+    this.cancelDelete = this.cancelDelete.bind(this);
+  }
+  
   componentWillMount() {
     this.props.fetchGroups();
+  }
+  
+  create() {
+    this.props.createGroup();
+  }
+  
+  edit(group) {
+    this.props.editGroup(group);
+  }
+  
+  save(group) {
+    this.props.saveGroup(group);
+  }
+  
+  clear(group) {
+    this.props.clearGroup(group);
+  }
+  
+  requestDelete(group) {
+    this.props.requestingDeleteGroup(group);
+  }
+  
+  confirmDelete(group) {
+    this.props.deleteGroup(group);
+  }
+  
+  cancelDelete(group) {
+    this.props.cancelDeleteGroup(group);
   }
 
   refresh() {
@@ -19,23 +57,23 @@ class GroupsContainer extends Component {
   }
 
   render() {
+    if (this.props.children) {
+      return this.props.children;
+    }
+
     return (
       <div>
-        <GroupDialog group={this.props.group}
-          onSave={this.props.saveGroup} onClose={this.props.clearGroup} />
-        <DeleteGroupDialog group={this.props.group}
-          onCancel={this.props.cancelDeleteGroup} onConfirm={this.props.deleteGroup} />
+        <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
+        <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
 
         <div className="row">
           <div className="col-xs-12 wrapper">
             <ButtonToolbar className="pull-right">
-              <Button bsSize="xsmall" onClick={() => this.refresh()} disabled={this.props.groups.loading}>
-                <i className="icon icon-budicon-257"></i>
-                Refresh
+              <Button bsSize="xsmall" onClick={this.refresh} disabled={this.props.groups.loading}>
+                <i className="icon icon-budicon-257"></i> Refresh
               </Button>
-              <Button bsStyle="primary" bsSize="xsmall" disabled={this.props.groups.loading} onClick={() => this.props.createGroup()}>
-                <i className="icon icon-budicon-337"></i>
-                Create
+              <Button bsStyle="primary" bsSize="xsmall" onClick={this.create} disabled={this.props.groups.loading}>
+                <i className="icon icon-budicon-337"></i> Create
               </Button>
             </ButtonToolbar>
           </div>
@@ -44,8 +82,8 @@ class GroupsContainer extends Component {
           <div className="col-xs-12 wrapper">
             <Error message={this.props.groups.error} />
             <LoadingPanel show={this.props.groups.loading}>
-              <GroupsTable loading={this.props.groups.loading} groups={this.props.groups.records}
-                onEdit={this.props.editGroup} onDelete={this.props.requestingDeleteGroup} />
+              <GroupsTable groups={this.props.groups.records} loading={this.props.groups.loading}
+                onEdit={this.edit} onDelete={this.requestDelete} />
             </LoadingPanel>
           </div>
         </div>
@@ -65,4 +103,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...GroupActions })(GroupsContainer);
+export default connect(mapStateToProps, { ...actions })(GroupsContainer);

@@ -1,5 +1,5 @@
 import jwtDecode from 'jwt-decode';
-import { pushPath } from 'redux-simple-router';
+import { push } from 'react-router-redux';
 
 import * as constants from '../constants';
 
@@ -71,7 +71,7 @@ export function loadCredentials() {
           });
 
           if (hash.state) {
-            dispatch(pushPath(hash.state));
+            dispatch(push(hash.state));
           }
         });
 

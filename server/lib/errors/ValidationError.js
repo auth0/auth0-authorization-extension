@@ -1,10 +1,13 @@
-function ValidationError(message) {
-  const err = Error.call(this, message);
-  err.name = 'ValidationError';
-  err.message = message;
-  return err;
-}
+export default class ValidationError extends Error {
+  constructor(message) {
+    super(message);
+    Error.captureStackTrace(this, this.constructor);
+    
+    this.message = message;
+    this.name = 'ValidationError';
+  }
 
-ValidationError.prototype = Object.create(Error.prototype);
-ValidationError.prototype.constructor = ValidationError;
-export default ValidationError;
+  toString () {
+    return 'ValidationError';
+  }
+}

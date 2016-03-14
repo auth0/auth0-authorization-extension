@@ -1,8 +1,6 @@
 import { Router } from 'express';
 import validator from 'validate.js';
 
-import data from '../lib/data';
-
 const validate = (group) => {
   return validator(group, {
     name: {
@@ -15,16 +13,16 @@ const validate = (group) => {
   });
 };
 
-export default () => {
+export default (db) => {
   const api = Router();
   api.get('/', (req, res, next) => {
-    data.getGroups()
+    db.getGroups()
       .then(groups => res.json(groups))
       .catch(next);
   });
 
-  api.get('/:name', (req, res, next) => {
-    data.getGroup(req.params.name)
+  api.get('/:id', (req, res, next) => {
+    db.getGroup(req.params.id)
       .then(group => res.json(group))
       .catch(next);
   });
@@ -37,12 +35,13 @@ export default () => {
     }
 
     let group = req.body;
-    data.createGroup(group)
-      .then(() => res.sendStatus(201))
+    db.createGroup(group)
+      .then(() => res.json(group))
       .catch(next);
   });
 
-  api.put('/:name', (req, res, next) => {
+  api.put('/:id', (req, res, next) => {
+    console.log(req.params, req.body);
     const errors = validate(req.body);
     if (errors) {
       res.status(400);
@@ -50,15 +49,18 @@ export default () => {
     }
 
     let group = req.body;
-    data.updateGroup(req.params.name, group)
-      .then(() => res.sendStatus(204))
+    db.updateGroup(req.params.id, group)
+      .then((group) => res.json(group))
       .catch(next);
   });
 
-  api.delete('/:name', (req, res, next) => {
-    data.deleteGroup(req.params.name)
-      .then(() => res.sendStatus(204))
-      .catch(next);
+  api.delete('/:id', (req, res, next) => {
+    setTimeout(() => {
+      db.deleteGroup(req.params.id)
+        .then(() => res.sendStatus(204))
+        .catch(next);
+      
+    }, 3000);
   });
 
   return api;

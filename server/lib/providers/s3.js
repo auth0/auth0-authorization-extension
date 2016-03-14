@@ -10,6 +10,7 @@ export class S3Provider {
       nconf.get(options.AWS_ACCESS_KEY_ID),
       nconf.get(options.AWS_SECRET_ACCESS_KEY)
     );
+    return Promise.resolve();
   }
 
   getRecords(collection) {

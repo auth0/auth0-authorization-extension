@@ -1,11 +1,26 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { ButtonToolbar } from 'react-bootstrap';
-import { Table, TableCell, TableAction, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+
+import GroupRow from './GroupRow';
+import { Table, TableBody, TableHeader, TableColumn } from '../Dashboard';
 
 class GroupsTable extends Component {
+  constructor() {
+    super();
+    this.edit = this.edit.bind(this);
+    this.delete = this.delete.bind(this);    
+  }
+
   shouldComponentUpdate(nextProps) {
     return nextProps.groups !== this.props.groups || nextProps.applications !== this.props.applications;
+  }
+  
+  edit(group) {
+    this.props.onEdit(group);
+  }
+  
+  delete(group) {
+    this.props.onDelete(group);
   }
 
   render() {
@@ -19,22 +34,9 @@ class GroupsTable extends Component {
         <TableColumn width="15%"></TableColumn>
       </TableHeader>
       <TableBody>
-        {_.sortBy(groups, 'name').map((group, index) => {
-          return <TableRow key={index}>
-              <TableIconCell icon="322" />
-              <TableTextCell>{ group.name || 'N/A' }</TableTextCell>
-              <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
-              <TableCell>
-                <ButtonToolbar style={{ marginBottom: '0px' }}>
-                  <TableAction id={`edit-${index}`} type="default" title="Edit Group" icon="266"
-                    onClick={() => this.props.onEdit(group)} disabled={this.props.loading || false} />
-                  <TableAction id={`delete-${index}`} type="success" title="Delete Group" icon="263"
-                    onClick={() => this.props.onDelete(group)} disabled={this.props.loading || false} />
-                </ButtonToolbar>
-              </TableCell>
-            </TableRow>;
-        })
-      }
+        {_.sortBy(groups, 'name').map((group, index) => 
+          <GroupRow key={index} group={group} onEdit={this.edit} onDelete={this.delete} />
+        )}
       </TableBody>
     </Table>;
   }

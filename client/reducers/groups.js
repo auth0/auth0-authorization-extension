@@ -24,13 +24,13 @@ export const groups = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUPS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, app => app.name))
+      records: fromJS(_.sortBy(action.payload.data, app => app.id))
     }),
 
   [constants.SAVE_GROUP_FULFILLED]: (state, action) => {
     let records = state.get('records');
-    const record = fromJS(action.meta.group);
-    const index = records.findIndex((perm) => perm.get('name') === action.meta.groupId);
+    const record = fromJS(action.payload.data);
+    const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
     if (index >= 0) {
       records = records.splice(index, 1, record);
     }
@@ -45,7 +45,7 @@ export const groups = createReducer(fromJS(initialState), {
 
   [constants.DELETE_GROUP_FULFILLED]: (state, action) => {
     const records = state.get('records');
-    const index = records.findIndex((perm) => perm.get('name') === action.meta.groupId);
+    const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
     return state.merge({
       loading: false,
       records: records.delete(index)
