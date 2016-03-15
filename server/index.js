@@ -50,6 +50,31 @@ app.use('/api', api());
 app.use(Express.static(path.join(__dirname, '../assets')));
 app.get('*', htmlRoute());
 
+// Generic error handler.
+app.use((err, req, res, next) => {
+  logger.error(err);
+  
+  if (err && err.name === 'NotFoundError') {
+    res.status(404);
+    return res.json({ error: err.message });
+  }
+
+  if (err && err.name === 'ValidationError') {
+    res.status(400);
+    return res.json({ error: err.message });
+  }
+
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    error: {
+      message: err.message,
+      status: err.status,
+      stack: err.stack
+    }
+  });
+});
+
 // Start the server.
 const port = nconf.get('PORT');
 app.listen(port, (error) => {

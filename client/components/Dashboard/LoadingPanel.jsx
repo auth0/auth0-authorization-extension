@@ -18,7 +18,7 @@ class LoadingPanel extends Component {
       padding: '5px',
       backgroundColor: 'rgba(255,255,255,0.4)',
       minHeight: '50px',
-      ...this.props.spinnerStyle
+      ...this.props.backgroundStyle
     };
     this.spinnerStyle = {
       display: 'inline-block',
@@ -43,8 +43,8 @@ class LoadingPanel extends Component {
       return <div >{this.props.children}</div>;
     }
 
-    const animation = <div className="loadingAnimation" style={this.animationStyle}>
-        <img style={this.spinnerStyle} src={Spinner} />
+    const animation = <div style={this.animationStyle}>
+        <img className="loadingAnimation" style={this.spinnerStyle} src={Spinner} />
       </div>;
 
     return <Loader show={this.state.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>
@@ -53,8 +53,6 @@ class LoadingPanel extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('nextProps:', nextProps);
-    
     if (!nextProps.show) {
       clearTimeout(this.showTimer);
       return this.setState({

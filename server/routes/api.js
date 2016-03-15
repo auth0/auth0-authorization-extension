@@ -30,31 +30,5 @@ export default () => {
   api.use('/roles', roles(db));
   api.use('/groups', groups(db));
   api.use('/permissions', permissions(db));
-
-  // Generic error handler.
-  api.use((err, req, res, next) => {
-    logger.error(err);
-    
-    if (err && err.name === 'NotFoundError') {
-      res.status(404);
-      return res.json({ error: err.message });
-    }
-
-    if (err && err.name === 'ValidationError') {
-      res.status(400);
-      return res.json({ error: err.message });
-    }
-
-    res.status(err.status || 500);
-    res.json({
-      message: err.message,
-      error: {
-        message: err.message,
-        status: err.status,
-        stack: err.stack
-      }
-    });
-  });
-
   return api;
 };

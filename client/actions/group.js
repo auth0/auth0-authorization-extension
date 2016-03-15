@@ -17,6 +17,36 @@ export function fetchGroups(reload = false) {
   };
 }
 
+export function fetchGroup(groupId) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.FETCH_GROUP,
+      meta: {
+        groupId
+      },
+      payload: {
+        promise: axios.get(`/api/groups/${groupId}`, {
+          timeout: 5000,
+          responseType: 'json'
+        })
+      }
+    });
+
+    dispatch({
+      type: constants.FETCH_GROUP_MEMBERS,
+      meta: {
+        groupId
+      },
+      payload: {
+        promise: axios.get(`/api/groups/${groupId}/members`, {
+          timeout: 5000,
+          responseType: 'json'
+        })
+      }
+    });
+  };
+}
+
 export function createGroup() {
   return {
     type: constants.CREATE_GROUP

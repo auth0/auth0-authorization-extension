@@ -6,16 +6,48 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  record: Map(),
+  record: { },
   groupId: null,
   isNew: false,
   isEdit: false,
   isDelete: false,
   requesting: false,
-  validationErrors: Map()
+  validationErrors: { },
+  members: {
+    loading: false,
+    error: null,
+    records: []
+  },
+  mappings: {
+    loading: false,
+    error: null,
+    records: []
+  }
 };
 
 export const group = createReducer(fromJS(initialState), {
+  [constants.FETCH_GROUP_PENDING]: (state, action) =>
+    state.merge({
+      loading: true,
+      groupId: action.meta.groupId
+    }),
+  [constants.FETCH_GROUP_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while loading the user: ${action.errorMessage}`
+    }),
+  [constants.FETCH_GROUP_FULFILLED]: (state, action) => {
+    const { data } = action.payload;
+    if (data._id !== state.get('groupId')) {
+      return state;
+    }
+
+    return state.merge({
+      loading: false,
+      record: fromJS(data)
+    });
+  },
+
   [constants.CLEAR_GROUP]: (state) =>
     state.merge({
       ...initialState
@@ -74,5 +106,36 @@ export const group = createReducer(fromJS(initialState), {
   [constants.DELETE_GROUP_FULFILLED]: (state) =>
     state.merge({
       ...initialState
+    }),
+  [constants.FETCH_GROUP_MEMBERS_PENDING]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
     })
+});
+
+const groupMembers = createReducer(fromJS(initialState.members), {
+  [constants.FETCH_GROUP_MEMBERS_PENDING]: (state) =>
+    state.merge({
+      ...initialState.members,
+      loading: true
+    }),
+  [constants.FETCH_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.members,
+      error: `An error occured while loading the members: ${action.errorMessage}`
+    }),
+  [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) => {
+    return state.merge({
+      loading: false,
+      records: fromJS(action.payload.data)
+    });
+  }
 });

@@ -5,7 +5,9 @@ import nconf from 'nconf';
 import logger from '../lib/logger';
 
 export default () => {
-  return (req, res) => {
+  return (req, res, next) => {
+    if (req.url.indexOf('/api') === 0) return next();
+
     logger.debug('Reading JSON file:', path.join(__dirname, '../assets/app/manifest.json'));
 
     fs.readFile(path.join(__dirname, '../../assets/app/manifest.json'), 'utf8', (err, data) => {

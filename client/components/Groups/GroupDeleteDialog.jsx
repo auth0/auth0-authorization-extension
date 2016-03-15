@@ -28,7 +28,7 @@ class GroupDeleteDialog extends Component {
       <Confirm title={ title } show={ group.requesting && group.isDelete } loading={ group.loading } 
         onCancel={ this.clear } onConfirm={ this.confirm }>
         <LoadingPanel show={ group.loading } spinnerStyle={{ height: '40px', width: '40px' }}
-            animationStyle={{ paddingTop: '15px', paddingBottom: '15px' }}>
+            animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <Error message={ group.error } />
           <p>
             Do you really want to delete "<strong>{ group.record.name }</strong>"? 
