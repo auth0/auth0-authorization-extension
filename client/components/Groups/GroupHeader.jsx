@@ -8,25 +8,25 @@ class GroupHeader extends Component {
   }
 
   getPicture(group) {
-    if (group && group.name) {
-      return `https://cdn.auth0.com/avatars/${group.name.slice(0, 2).toLowerCase()}.png`;
+    if (group && group.get('record').get('name')) {
+      return `https://cdn.auth0.com/avatars/${group.get('record').get('name').slice(0, 2).toLowerCase()}.png`;
     }
 
     return 'https://cdn.auth0.com/avatars/gr.png';
   }
 
   getDescription(group) {
-    if (!group.description) {
+    if (!group.get('record').get('description')) {
       return <div></div>;
     }
 
-    return <span className="group-label group-head-description">{ group.description }</span>;
+    return <span className="group-label group-head-description">{group.get('record').get('description')}</span>;
   }
 
   render() {
-    const { group, loading, error } = this.props;
+    const { group, members } = this.props;
 
-    if (!group || loading || error) {
+    if (!group || group.get('loading') || group.get('error')) {
       return <div></div>;
     }
 
@@ -37,13 +37,13 @@ class GroupHeader extends Component {
             <img className="group-bg" src={this.getPicture(group)} />
             <div className="box-content">
               <div className="login-count">
-                <span className="lined-text">Logins Count:</span>
-                <strong>{group.logins_count || 0}</strong>
+                <span className="lined-text">Member Count: </span>
+                <strong>{members.get('records').size || 0}</strong>
               </div>
               <div className="name-area">
                 <h4>
                   <span className="name group-head-name">
-                    { group.name || group.id }
+                    { group.get('record').get('name') || group.get('record').get('_id') }
                   </span>
                   {this.getDescription(group)}
                 </h4>
@@ -57,8 +57,7 @@ class GroupHeader extends Component {
 
 GroupHeader.propTypes = {
   group: React.PropTypes.object.isRequired,
-  loading: React.PropTypes.bool.isRequired,
-  error: React.PropTypes.object
+  members: React.PropTypes.object.isRequired
 };
 
 export default GroupHeader;

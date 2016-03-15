@@ -1,30 +1,69 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { findDOMNode } from 'react-dom';
-import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import * as actions from '../../actions/user';
 
-import { Error, LoadingPanel, TableTotals } from '../../components/Dashboard';
-import UsersTable from '../../components/Users/UsersTable';
+import { TableAction } from '../../components/Dashboard';
+import UserOverview from '../../components/Users/UserOverview';
 import BlockUserDialog from '../../components/Users/BlockUserDialog';
 import UnblockUserDialog from '../../components/Users/UnblockUserDialog';
 import RemoveMultiFactorDialog from '../../components/Users/RemoveMultiFactorDialog';
 
 class Users extends React.Component {
+  constructor() {
+    super();
+
+    this.onReset = this.onReset.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+    this.renderUserActions = this.renderUserActions.bind(this);
+  }
+
   componentWillMount() {
     this.props.fetchUsers();
   }
 
-  onKeyPress(e) {
-    if (e.key === 'Enter') {
-      this.props.fetchUsers(findDOMNode(this.refs.search).value);
-    }
+  onSearch(query) {
+    this.props.fetchUsers(query);
   }
 
   onReset() {
     this.props.fetchUsers('', true);
   }
+
+  getMultifactorAction(user, index) {
+    if (!user.multifactor || !user.multifactor.length) {
+      return <div></div>;
+    }
+
+    return <TableAction id={`remove-mfa-${index}`} type="success" title={`Remove MFA (${user.multifactor[0]})`} icon="243"
+      onClick={() => this.props.requestingRemoveMultiFactor(user)} disabled={this.props.loading || false} />;
+  }
+
+  getBlockedAction(user, index) {
+    if (user.blocked) {
+      return <TableAction id={`unblock-${index}`}  title="Unblock User" icon="284"
+        onClick={() => this.props.requestingUnblockUser(user)} disabled={this.props.loading || false} />;
+    }
+
+    return <TableAction id={`block-${index}`} type="success" title="Block User" icon="284"
+      onClick={() => this.props.requestingBlockUser(user)} disabled={this.props.loading || false} />;
+  }
+
+  renderUserActions(user, index) {
+    return (
+      <div>
+        {this.getMultifactorAction(user, index)} {this.getBlockedAction(user, index)}
+      </div>
+    );
+  }
+    /*
+    onReset: React.PropTypes.func.isRequired,
+    onSearch: React.PropTypes.func.isRequired,
+    error: React.PropTypes.object,
+    users: React.PropTypes.array.isRequired,
+    total: React.PropTypes.number.isRequired,
+    loading: React.PropTypes.bool.isRequired,
+    renderActions: React.PropTypes.func.isRequired*/
 
   render() {
     if (this.props.children) {
@@ -43,47 +82,8 @@ class Users extends React.Component {
         <RemoveMultiFactorDialog error={mfa.get('error')} loading={mfa.get('loading')} userName={mfa.get('userName')} requesting={mfa.get('requesting')}
           onCancel={this.props.cancelRemoveMultiFactor} onConfirm={this.props.removeMultiFactor} />
 
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <Error message={error} />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-10">
-            <div className="advanced-search-control">
-              <span className="search-area">
-                <i className="icon-budicon-489"></i>
-                <input className="user-input" type="text" ref="search" placeholder="Search for users" spellCheck="false"
-                  style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress.bind(this)} />
-              </span>
-            </div>
-          </div>
-          <div className="col-xs-2">
-            <ButtonToolbar className="pull-right">
-              <Button bsSize="xsmall" onClick={this.onReset.bind(this)} disabled={loading}>
-                <i className="icon icon-budicon-257"></i> Reset
-              </Button>
-            </ButtonToolbar>
-          </div>
-          <div className="col-xs-12">
-            <div className="help-block">To perform your search, press <span className="keyboard-button">enter</span>. You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.</div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
-            <LoadingPanel show={loading}>
-              <UsersTable loading={loading} users={users}
-                removeMultiFactor={(user) => this.props.requestingRemoveMultiFactor(user)}
-                blockUser={(user) => this.props.requestingBlockUser(user)}
-                unblockUser={(user) => this.props.requestingUnblockUser(user)} />
-            </LoadingPanel>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
-            <TableTotals currentCount={users.length} totalCount={total} />
-          </div>
-        </div>
+        <UserOverview onReset={this.onReset} onSearch={this.onSearch}
+          error={error} users={users} total={total} loading={loading} renderActions={this.renderUserActions} />
       </div>
     );
   }

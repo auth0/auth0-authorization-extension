@@ -17,6 +17,21 @@ export function fetchGroups(reload = false) {
   };
 }
 
+export function fetchGroupMembers(groupId) {
+  return {
+    type: constants.FETCH_GROUP_MEMBERS,
+    meta: {
+      groupId
+    },
+    payload: {
+      promise: axios.get(`/api/groups/${groupId}/members`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
 export function fetchGroup(groupId) {
   return (dispatch) => {
     dispatch({
@@ -32,18 +47,7 @@ export function fetchGroup(groupId) {
       }
     });
 
-    dispatch({
-      type: constants.FETCH_GROUP_MEMBERS,
-      meta: {
-        groupId
-      },
-      payload: {
-        promise: axios.get(`/api/groups/${groupId}/members`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      }
-    });
+    dispatch(fetchGroupMembers(groupId));
   };
 }
 
@@ -54,7 +58,6 @@ export function createGroup() {
 }
 
 export function editGroup(group) {
-  console.log('Edit:', group);
   return {
     type: constants.EDIT_GROUP,
     payload: {
@@ -122,5 +125,60 @@ export function deleteGroup(group) {
 export function clearGroup() {
   return {
     type: constants.CLEAR_GROUP
+  };
+}
+
+export function addGroupMembers() {
+  return (dispatch, getState) => {
+    const groupId = getState().group.get('groupId');
+    const selection = getState().userPicker.get('selection').toJS();
+
+    dispatch({
+      type: constants.CANCEL_USER_PICKER
+    });
+
+    dispatch({
+      type: constants.ADD_GROUP_MEMBERS,
+      payload: {
+        promise: axios({
+          method: 'patch',
+          url: `/api/groups/${groupId}/members`,
+          data: selection,
+          timeout: 5000,
+          responseType: 'json'
+        })
+      },
+      meta: {
+        groupId,
+        onSuccess: () => {
+          setTimeout(() => {
+            dispatch(fetchGroupMembers(groupId));
+          }, 100);
+        }
+      }
+    });
+  };
+}
+
+export function removeGroupMember(group, user) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.REMOVE_GROUP_MEMBER,
+      payload: {
+        promise: axios({
+          method: 'delete',
+          url: `/api/groups/${group._id}/members`,
+          data: {
+            userId: user.user_id
+          },
+          timeout: 5000,
+          responseType: 'json'
+        })
+      },
+      meta: {
+        userId: user.user_id,
+        groupId: group._id
+      }
+    });
   };
 }

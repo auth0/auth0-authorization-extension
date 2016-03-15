@@ -10,6 +10,7 @@ import { unblock } from './unblock';
 import { log } from './log';
 import { logs } from './logs';
 import { user } from './user';
+import { userPicker } from './userPicker';
 import { users } from './users';
 import { role } from './role';
 import { roles } from './roles';
@@ -29,6 +30,7 @@ export default combineReducers({
   logs,
   user,
   users,
+  userPicker,
   role,
   roles,
   group,

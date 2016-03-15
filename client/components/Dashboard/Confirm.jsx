@@ -3,7 +3,7 @@ import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
 
 class Confirm extends Component {
   render() {
-    return <Modal show={this.props.show} onHide={() => this.props.onCancel()}>
+    return <Modal dialogClassName={this.props.dialogClassName} show={this.props.show} onHide={() => this.props.onCancel()}>
       <Modal.Header closeButton={!this.props.loading}>
         <Modal.Title>{this.props.title}</Modal.Title>
       </Modal.Header>
@@ -16,7 +16,7 @@ class Confirm extends Component {
             Cancel
           </Button>
           <Button bsStyle="success" bsSize="small" disabled={this.props.loading} onClick={() => this.props.onConfirm()}>
-            Confirm
+            {this.props.confirmMessage || 'Confirm'}
           </Button>
         </ButtonToolbar>
       </Modal.Footer>
@@ -25,6 +25,8 @@ class Confirm extends Component {
 }
 
 Confirm.propTypes = {
+  dialogClassName: React.PropTypes.string,
+  confirmMessage: React.PropTypes.string,
   title: React.PropTypes.string.isRequired,
   show: React.PropTypes.bool.isRequired,
   onCancel: React.PropTypes.func.isRequired,

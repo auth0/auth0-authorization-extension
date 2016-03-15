@@ -11,8 +11,8 @@
   },
   "parser": "babel-eslint",
   "rules": {
-
-    "react/display-name": 0, 
+    "max-len": 0,
+    "react/display-name": 0,
     "array-bracket-spacing": [2, "always"],
     "comma-dangle": [2, "never"],
     "eol-last": 2,

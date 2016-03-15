@@ -1,3 +1,4 @@
+import async from 'async';
 import nconf from 'nconf';
 import moment from 'moment';
 import request from 'request';
@@ -155,6 +156,27 @@ class Auth0ApiClient {
         }
 
         resolve(body);
+      });
+    });
+  }
+
+  getUsersById(users, options) {
+    return new Promise((resolve, reject) => {
+      const userRecords = [];
+
+      async.eachLimit(users, 10, (userId, cb) => {
+        this.getUser(userId, options)
+          .then((user) => {
+            userRecords.push(user);
+            cb();
+          })
+          .catch(cb);
+      }, (err) => {
+        if (err) {
+          return reject(err);
+        }
+
+        return resolve(userRecords);
       });
     });
   }

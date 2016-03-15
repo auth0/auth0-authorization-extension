@@ -7,7 +7,7 @@ export default () => {
       sort: 'last_login:-1',
       search_engine: 'v2',
       q: req.query.search,
-      per_page: 100,
+      per_page: req.query.per_page || 100,
       page: req.query.page || 0,
       include_totals: true,
       fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked'

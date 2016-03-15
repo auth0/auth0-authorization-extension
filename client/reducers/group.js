@@ -1,4 +1,6 @@
+import moment from 'moment';
 import { fromJS, Map } from 'immutable';
+import { combineReducers } from 'redux'
 
 import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
@@ -118,6 +120,18 @@ export const group = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) =>
     state.merge({
       members: groupMembers(state.get('members'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_PENDING]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
     })
 });
 
@@ -135,7 +149,43 @@ const groupMembers = createReducer(fromJS(initialState.members), {
   [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) => {
     return state.merge({
       loading: false,
-      records: fromJS(action.payload.data)
+      records: fromJS(action.payload.data.map(user => {
+        user.last_login_relative = moment(user.last_login).fromNow();
+        return user;
+      }))
+    });
+  },
+  [constants.ADD_GROUP_MEMBERS_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      error: null
+    }),
+  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while adding the members: ${action.errorMessage}`
+    }),
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state) => {
+    return state.merge({
+      loading: false
+    });
+  },
+  [constants.REMOVE_GROUP_MEMBERS_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      error: null
+    }),
+  [constants.REMOVE_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while adding the members: ${action.errorMessage}`
+    }),
+  [constants.REMOVE_GROUP_MEMBERS_FULFILLED]: (state, action) => {
+    const records = state.get('records');
+    const index = records.findIndex((user) => user.get('user_id') === action.meta.userId);
+    return state.merge({
+      loading: false,
+      records: records.delete(index)
     });
   }
 });

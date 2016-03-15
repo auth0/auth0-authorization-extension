@@ -14,6 +14,7 @@ import UserProfile from '../../components/Users/UserProfile';
 import UserDevices from '../../components/Users/UserDevices';
 
 export default class UserContainer extends Component {
+
   componentWillMount() {
     this.props.fetchUser(this.props.params.id);
   }

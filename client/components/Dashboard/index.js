@@ -15,6 +15,7 @@ import TableHeader from './TableHeader';
 import TableColumn from './TableColumn';
 import TableRow from './TableRow';
 import TableRouteCell from './TableRouteCell';
+import TableActionCell from './TableActionCell';
 import TableTotals from './TableTotals';
 import TableAction from './TableAction';
 
@@ -35,6 +36,7 @@ export {
   TableColumn,
   TableRow,
   TableRouteCell,
+  TableActionCell,
   TableCell,
   TableTotals,
   TableAction
