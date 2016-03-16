@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "async": "^1.5.2",
+    "auth0": "^2.0.0",
     "aws-sdk": "^2.2.26",
     "axios": "^0.9.1",
     "babel": "^6.3.26",
