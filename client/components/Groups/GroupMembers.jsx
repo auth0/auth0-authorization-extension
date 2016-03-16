@@ -31,7 +31,8 @@ class GroupMembers extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-12 wrapper">
+            <div className="col-xs-12">
+              <span className="pull-left">Add members to or remove them from the group.</span>
               <ButtonToolbar className="pull-right">
                 <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.addMember} disabled={loading}>
                   <i className="icon icon-budicon-337"></i> Add

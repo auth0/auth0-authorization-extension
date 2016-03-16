@@ -133,18 +133,25 @@ export const group = createReducer(fromJS(initialState), {
     state.merge({
       members: groupMembers(state.get('members'), action)
     }),
-  [constants.REMOVE_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
     state.merge({
       members: groupMembers(state.get('members'), action)
     })
 });
 
 const groupMembers = createReducer(fromJS(initialState.members), {
-  [constants.FETCH_GROUP_MEMBERS_PENDING]: (state) =>
-    state.merge({
+  [constants.FETCH_GROUP_MEMBERS_PENDING]: (state, action) => {
+    if (action.meta && action.meta.reload) {
+      return state.merge({
+        loading: true
+      });
+    }
+
+    return state.merge({
       ...initialState.members,
       loading: true
-    }),
+    });
+  },
   [constants.FETCH_GROUP_MEMBERS_REJECTED]: (state, action) =>
     state.merge({
       ...initialState.members,
@@ -174,7 +181,7 @@ const groupMembers = createReducer(fromJS(initialState.members), {
       loading: false
     });
   },
-  [constants.REMOVE_GROUP_MEMBERS_FULFILLED]: (state, action) => {
+  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) => {
     const records = state.get('records');
     const index = records.findIndex((user) => user.get('user_id') === action.meta.userId);
     return state.merge({

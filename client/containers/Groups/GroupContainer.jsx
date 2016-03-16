@@ -5,7 +5,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 import * as groupActions from '../../actions/group';
 import * as userPickerActions from '../../actions/userPicker';
-import { GroupHeader, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
+import { GroupHeader, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
 import { TableAction } from '../../components/Dashboard';
 import UserPickerDialog from '../../components/Users/UserPickerDialog';
 
@@ -25,6 +25,14 @@ export default class GroupContainer extends Component {
 
   shouldComponentUpdate(nextProps) {
     return nextProps.group !== this.props.group || nextProps.groupMember !== this.props.groupMember || nextProps.userPicker !== this.props.userPicker;
+  }
+
+  addMapping() {
+
+  }
+
+  requestRemoveMapping(mapping) {
+
   }
 
   addMember() {
@@ -75,9 +83,7 @@ export default class GroupContainer extends Component {
                 <GroupMembers members={group.get('members')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Mappings">
-                <div>
-                  Mappings
-                </div>
+                <GroupMappings mappings={group.get('mappings')} addMember={this.addMapping} removeMember={this.requestRemoveMapping} />
               </Tab>
             </Tabs>
           </div>

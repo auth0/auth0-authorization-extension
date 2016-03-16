@@ -17,11 +17,12 @@ export function fetchGroups(reload = false) {
   };
 }
 
-export function fetchGroupMembers(groupId) {
+export function fetchGroupMembers(groupId, reload) {
   return {
     type: constants.FETCH_GROUP_MEMBERS,
     meta: {
-      groupId
+      groupId,
+      reload
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members`, {
@@ -151,7 +152,7 @@ export function addGroupMembers() {
       meta: {
         groupId,
         onSuccess: () => {
-          dispatch(fetchGroupMembers(groupId));
+          dispatch(fetchGroupMembers(groupId, true));
         }
       }
     });

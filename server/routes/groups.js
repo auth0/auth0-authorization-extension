@@ -44,7 +44,7 @@ export default (db) => {
     const errors = validate(req.body);
     if (errors) {
       res.status(400);
-      res.json({ errors });
+      return res.json({ errors });
     }
 
     const group = req.body;
@@ -67,9 +67,26 @@ export default (db) => {
   });
 
   api.patch('/:id/members', (req, res, next) => {
+    if (!Array.isArray(req.body)) {
+      res.status(400);
+      return res.json({
+        code: 'invalid_request',
+        message: 'The members must be an array.'
+      });
+    }
+
     db.getGroup(req.params.id)
       .then(group => {
-        group.members = (group.members || []).concat(req.body);
+        req.body.forEach((member) => {
+          if (!group.members) {
+            group.members = [];
+          }
+
+          if (group.members.indexOf(member) === -1) {
+            group.members.push(member);
+          }
+        });
+
         return db.updateGroup(req.params.id, group);
       })
       .then(() => res.sendStatus(202))

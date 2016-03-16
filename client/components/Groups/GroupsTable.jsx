@@ -8,17 +8,17 @@ class GroupsTable extends Component {
   constructor() {
     super();
     this.edit = this.edit.bind(this);
-    this.delete = this.delete.bind(this);    
+    this.delete = this.delete.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.groups !== this.props.groups || nextProps.applications !== this.props.applications;
+    return nextProps.groups !== this.props.groups;
   }
-  
+
   edit(group) {
     this.props.onEdit(group);
   }
-  
+
   delete(group) {
     this.props.onDelete(group);
   }
@@ -26,19 +26,21 @@ class GroupsTable extends Component {
   render() {
     const groups = this.props.groups.toJS();
 
-    return <Table>
-      <TableHeader>
-        <TableColumn width="3%"></TableColumn>
-        <TableColumn width="27%">Name</TableColumn>
-        <TableColumn width="55%">Description</TableColumn>
-        <TableColumn width="15%"></TableColumn>
-      </TableHeader>
-      <TableBody>
-        {_.sortBy(groups, 'name').map((group, index) => 
-          <GroupRow key={index} group={group} onEdit={this.edit} onDelete={this.delete} />
-        )}
-      </TableBody>
-    </Table>;
+    return (
+      <Table>
+        <TableHeader>
+          <TableColumn width="3%" />
+          <TableColumn width="27%">Name</TableColumn>
+          <TableColumn width="55%">Description</TableColumn>
+          <TableColumn width="15%" />
+        </TableHeader>
+        <TableBody>
+          {_.sortBy(groups, 'name').map((group, index) =>
+            <GroupRow key={index} group={group} onEdit={this.edit} onDelete={this.delete} />
+          )}
+        </TableBody>
+      </Table>
+    );
   }
 }
 
