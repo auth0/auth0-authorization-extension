@@ -5,7 +5,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 import * as groupActions from '../../actions/group';
 import * as userPickerActions from '../../actions/userPicker';
-import { GroupHeader, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
+import { GroupHeader, GroupMappingDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
 import { TableAction } from '../../components/Dashboard';
 import UserPickerDialog from '../../components/Users/UserPickerDialog';
 
@@ -27,9 +27,13 @@ export default class GroupContainer extends Component {
     return nextProps.group !== this.props.group || nextProps.groupMember !== this.props.groupMember || nextProps.userPicker !== this.props.userPicker;
   }
 
-  addMapping() {
+  saveMapping() {
 
   }
+    cancelEditMapping() {
+
+    }
+
 
   requestRemoveMapping(mapping) {
 
@@ -56,10 +60,11 @@ export default class GroupContainer extends Component {
   }
 
   render() {
-    const { group, groupMember, userPicker } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker } = this.props;
 
     return (
       <div>
+        <GroupMappingDialog connections={connections} groupMapping={groupMapping} onSave={this.saveMapping} onCancel={this.cancelEditMapping} />
         <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
         <UserPickerDialog userPicker={userPicker} onSelectUser={this.props.selectUser} onUnselectUser={this.props.unselectUser}
           onConfirm={this.addMembers} onCancel={this.props.cancelUserPicker} onReset={this.props.resetUserPicker} onSearch={this.props.searchUserPicker}
@@ -103,8 +108,10 @@ GroupContainer.propTypes = {
 
 function mapStateToProps(state) {
   return {
+    connections: state.connections,
     group: state.group,
     groupMember: state.groupMember,
+    groupMapping: state.groupMapping,
     userPicker: state.userPicker
   };
 }

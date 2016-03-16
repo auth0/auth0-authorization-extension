@@ -4,6 +4,7 @@ import { routerReducer } from 'react-router-redux';
 
 import { auth } from './auth';
 import { applications } from './applications';
+import { connections } from './connections';
 import { mfa } from './mfa';
 import { block } from './block';
 import { unblock } from './unblock';
@@ -16,6 +17,7 @@ import { role } from './role';
 import { roles } from './roles';
 import { group } from './group';
 import { groupMember } from './groupMember';
+import { groupMapping } from './groupMapping';
 import { groups } from './groups';
 import { permission } from './permission';
 import { permissions } from './permissions';
@@ -23,6 +25,7 @@ import { permissions } from './permissions';
 export default combineReducers({
   routing: routerReducer,
   applications,
+  connections,
   auth,
   mfa,
   block,
@@ -36,6 +39,7 @@ export default combineReducers({
   roles,
   group,
   groupMember,
+  groupMapping,
   groups,
   permission,
   permissions,

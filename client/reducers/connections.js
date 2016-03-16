@@ -9,18 +9,18 @@ const initialState = {
   records: []
 };
 
-export const applications = createReducer(fromJS(initialState), {
-  [constants.FETCH_APPLICATIONS_PENDING]: (state) =>
+export const connections = createReducer(fromJS(initialState), {
+  [constants.FETCH_CONNECTIONS_PENDING]: (state) =>
     state.merge({
       loading: true,
       error: null
     }),
-  [constants.FETCH_APPLICATIONS_REJECTED]: (state, action) =>
+  [constants.FETCH_CONNECTIONS_REJECTED]: (state, action) =>
     state.merge({
       loading: false,
-      error: `An error occured while loading the applications: ${action.errorMessage}`
+      error: `An error occured while loading the connections: ${action.errorMessage}`
     }),
-  [constants.FETCH_APPLICATIONS_FULFILLED]: (state, action) =>
+  [constants.FETCH_CONNECTIONS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
       error: null,
