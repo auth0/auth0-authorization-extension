@@ -17,6 +17,21 @@ export function fetchGroups(reload = false) {
   };
 }
 
+export function fetchGroupMappings(groupId) {
+  return {
+    type: constants.FETCH_GROUP_MAPPINGS,
+    meta: {
+      groupId
+    },
+    payload: {
+      promise: axios.get(`/api/groups/${groupId}/mappings`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
 export function fetchGroupMembers(groupId, reload) {
   return {
     type: constants.FETCH_GROUP_MEMBERS,
@@ -48,6 +63,7 @@ export function fetchGroup(groupId) {
       }
     });
 
+    dispatch(fetchGroupMappings(groupId));
     dispatch(fetchGroupMembers(groupId));
   };
 }

@@ -25,8 +25,8 @@ class GroupMappings extends Component {
             </div>
             <div className="col-xs-2">
               <ButtonToolbar className="pull-right">
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.addMapping} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Add
+                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.createMapping} disabled={loading}>
+                  <i className="icon icon-budicon-337"></i> Create
                 </Button>
               </ButtonToolbar>
             </div>
@@ -42,7 +42,7 @@ class GroupMappings extends Component {
 }
 
 GroupMappings.propTypes = {
-  addMapping: React.PropTypes.func.isRequired,
+  createMapping: React.PropTypes.func.isRequired,
   removeMapping: React.PropTypes.func.isRequired,
   mappings: React.PropTypes.object.isRequired
 };

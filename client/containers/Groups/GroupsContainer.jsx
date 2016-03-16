@@ -2,6 +2,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import { connectionActions } from '../../actions';
 import * as actions from '../../actions/group';
 import { Error, LoadingPanel } from '../../components/Dashboard';
 import { GroupDeleteDialog, GroupDialog, GroupForm, GroupsTable } from '../../components/Groups';
@@ -9,7 +10,7 @@ import { GroupDeleteDialog, GroupDialog, GroupForm, GroupsTable } from '../../co
 class GroupsContainer extends Component {
   constructor() {
     super();
-    
+
     this.refresh = this.refresh.bind(this);
     this.create = this.create.bind(this);
     this.edit = this.edit.bind(this);
@@ -19,35 +20,36 @@ class GroupsContainer extends Component {
     this.confirmDelete = this.confirmDelete.bind(this);
     this.cancelDelete = this.cancelDelete.bind(this);
   }
-  
+
   componentWillMount() {
     this.props.fetchGroups();
+    this.props.fetchConnections();
   }
-  
+
   create() {
     this.props.createGroup();
   }
-  
+
   edit(group) {
     this.props.editGroup(group);
   }
-  
+
   save(group) {
     this.props.saveGroup(group);
   }
-  
+
   clear(group) {
     this.props.clearGroup(group);
   }
-  
+
   requestDelete(group) {
     this.props.requestingDeleteGroup(group);
   }
-  
+
   confirmDelete(group) {
     this.props.deleteGroup(group);
   }
-  
+
   cancelDelete(group) {
     this.props.cancelDeleteGroup(group);
   }
@@ -103,4 +105,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...actions })(GroupsContainer);
+export default connect(mapStateToProps, { ...actions, ...connectionActions })(GroupsContainer);

@@ -1,14 +1,28 @@
 import { Router } from 'express';
+import uuid from 'node-uuid';
 import validator from 'validate.js';
 
 import auth0 from '../lib/auth0';
 
-const validate = (group) => validator(group, {
+const validateGroup = (group) => validator(group, {
   name: {
     presence: true,
     length: {
       minimum: 3,
       tooShort: 'Please enter a name with at least 3 characters.'
+    }
+  }
+});
+
+const validateGroupMapping = (groupMapping) => validator(groupMapping, {
+  connectionId: {
+    presence: true
+  },
+  groupName: {
+    presence: true,
+    length: {
+      minimum: 3,
+      tooShort: 'Please enter a group name with at least 3 characters.'
     }
   }
 });
@@ -28,7 +42,7 @@ export default (db) => {
   });
 
   api.post('/', (req, res, next) => {
-    const errors = validate(req.body);
+    const errors = validateGroup(req.body);
     if (errors) {
       res.status(400);
       return res.json({ errors });
@@ -41,7 +55,7 @@ export default (db) => {
   });
 
   api.put('/:id', (req, res, next) => {
-    const errors = validate(req.body);
+    const errors = validateGroup(req.body);
     if (errors) {
       res.status(400);
       return res.json({ errors });
@@ -56,6 +70,40 @@ export default (db) => {
   api.delete('/:id', (req, res, next) => {
     db.deleteGroup(req.params.id)
       .then(() => res.sendStatus(204))
+      .catch(next);
+  });
+
+  api.get('/:id/mappings', (req, res, next) => {
+    db.getGroup(req.params.id)
+      .then(group => res.json(group.mappings || []))
+      .catch(next);
+  });
+
+  api.post('/:id/mappings', (req, res, next) => {
+    const errors = validateGroupMapping(req.body);
+    if (errors) {
+      res.status(400);
+      return res.json({ errors });
+    }
+
+    return db.getGroup(req.params.id)
+      .then(group => {
+        if (!group.mappings) {
+          group.mappings = [];
+        }
+
+        // Add the new mapping.
+        const { _id, groupName, connectionId } = req.body;
+        group.mappings.push({
+          _id: _id || uuid.v4(),
+          groupName,
+          connectionId
+        });
+
+        // Save the group.
+        return db.updateGroup(req.params.id, group);
+      })
+      .then(() => res.sendStatus(202))
       .catch(next);
   });
 

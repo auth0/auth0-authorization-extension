@@ -38,7 +38,7 @@ class GroupMappingForm extends Component {
 }
 
 GroupMappingForm.propTypes = {
-  children: React.PropTypes.array,
+  children: React.PropTypes.object,
   fields: React.PropTypes.object,
   connections: React.PropTypes.array,
   validationErrors: React.PropTypes.object,

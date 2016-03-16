@@ -19,7 +19,7 @@ Supports:
 
 Todos:
 
- - [ ] Use `uuid` as unique identifier for permissions/roles/groups
+ - [x] Use `uuid` as unique identifier for permissions/roles/groups
  - [ ] Contextual groups/roles/permissions (only for application X)
  - [ ] Assign permissions to roles
  - [ ] Assign roles to groups
