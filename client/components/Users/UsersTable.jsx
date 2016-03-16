@@ -22,13 +22,13 @@ class UsersTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="6%"/>
+          <TableColumn width="6%" />
           <TableColumn width="22%">Name</TableColumn>
           <TableColumn width="29%">Email</TableColumn>
           <TableColumn width="15%">Latest Login</TableColumn>
           <TableColumn width="10%">Logins</TableColumn>
           <TableColumn width="17%">Connection</TableColumn>
-          <TableColumn width="5%" />
+          <TableColumn width="15%" />
         </TableHeader>
         <TableBody>
         {users.map((user, index) => {

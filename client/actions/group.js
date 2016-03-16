@@ -151,33 +151,47 @@ export function addGroupMembers() {
       meta: {
         groupId,
         onSuccess: () => {
-          setTimeout(() => {
-            dispatch(fetchGroupMembers(groupId));
-          }, 100);
+          dispatch(fetchGroupMembers(groupId));
         }
       }
     });
   };
 }
 
-export function removeGroupMember(group, user) {
+export function requestRemoveGroupMember(group, user) {
+  return {
+    type: constants.REQUESTING_REMOVE_GROUP_MEMBER,
+    meta: {
+      group,
+      user
+    }
+  };
+}
+
+export function cancelRemoveGroupMember() {
+  return {
+    type: constants.CANCEL_REMOVE_GROUP_MEMBER
+  };
+}
+
+export function removeGroupMember(groupId, userId) {
   return (dispatch) => {
     dispatch({
       type: constants.REMOVE_GROUP_MEMBER,
       payload: {
         promise: axios({
           method: 'delete',
-          url: `/api/groups/${group._id}/members`,
+          url: `/api/groups/${groupId}/members`,
           data: {
-            userId: user.user_id
+            userId
           },
           timeout: 5000,
           responseType: 'json'
         })
       },
       meta: {
-        userId: user.user_id,
-        groupId: group._id
+        userId,
+        groupId
       }
     });
   };

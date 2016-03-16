@@ -15,6 +15,7 @@ import { users } from './users';
 import { role } from './role';
 import { roles } from './roles';
 import { group } from './group';
+import { groupMember } from './groupMember';
 import { groups } from './groups';
 import { permission } from './permission';
 import { permissions } from './permissions';
@@ -34,6 +35,7 @@ export default combineReducers({
   role,
   roles,
   group,
+  groupMember,
   groups,
   permission,
   permissions,

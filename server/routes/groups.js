@@ -70,7 +70,7 @@ export default (db) => {
     db.getGroup(req.params.id)
       .then(group => {
         group.members = (group.members || []).concat(req.body);
-        db.updateGroup(req.params.id, group);
+        return db.updateGroup(req.params.id, group);
       })
       .then(() => res.sendStatus(202))
       .catch(next);
@@ -84,7 +84,7 @@ export default (db) => {
           group.members.splice(index, 1);
         }
 
-        db.updateGroup(req.params.id, group);
+        return db.updateGroup(req.params.id, group);
       })
       .then(() => res.sendStatus(202))
       .catch(next);

@@ -132,6 +132,10 @@ export const group = createReducer(fromJS(initialState), {
   [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state, action) =>
     state.merge({
       members: groupMembers(state.get('members'), action)
+    }),
+  [constants.REMOVE_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
     })
 });
 
@@ -170,16 +174,6 @@ const groupMembers = createReducer(fromJS(initialState.members), {
       loading: false
     });
   },
-  [constants.REMOVE_GROUP_MEMBERS_PENDING]: (state) =>
-    state.merge({
-      loading: true,
-      error: null
-    }),
-  [constants.REMOVE_GROUP_MEMBERS_REJECTED]: (state, action) =>
-    state.merge({
-      loading: false,
-      error: `An error occured while adding the members: ${action.errorMessage}`
-    }),
   [constants.REMOVE_GROUP_MEMBERS_FULFILLED]: (state, action) => {
     const records = state.get('records');
     const index = records.findIndex((user) => user.get('user_id') === action.meta.userId);
