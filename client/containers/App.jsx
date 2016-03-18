@@ -16,8 +16,6 @@ class App extends Component {
           <div className="row">
             <Sidebar>
               <SidebarItem title="Applications" route="/applications" icon="icon icon-budicon-375" />
-              <SidebarItem title="Permissions" route="/permissions" icon="icon icon-budicon-384" />
-              <SidebarItem title="Roles" route="/roles" icon="icon icon-budicon-549" />
               <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
               <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
               <SidebarItem title="Logs" route="/logs" icon="icon icon-budicon-754" />
