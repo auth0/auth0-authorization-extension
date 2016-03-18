@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import UserGroupRemoveAction from './UserGroupRemoveAction';
-import { Error, LoadingPanel, Table, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
 class UserGroups extends Component {
   constructor() {
@@ -49,7 +49,7 @@ class UserGroups extends Component {
         {groups.map((group, index) =>
           <TableRow key={index}>
             <TableIconCell color="green" icon="322" />
-            <TableTextCell>{group.name}</TableTextCell>
+            <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
             <TableTextCell>{group.description}</TableTextCell>
             <TableCell>
               <ButtonToolbar style={{ marginBottom: '0px' }}>
