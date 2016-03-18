@@ -50,7 +50,7 @@ export default (db, managementClient) => {
         }
 
         const currentMapping = mapping;
-        currentMapping.connectionName = connection.name;
+        currentMapping.connectionName = `${connection.name} (${connection.strategy})`;
         existingMappings.push(currentMapping);
         return cb();
       });
