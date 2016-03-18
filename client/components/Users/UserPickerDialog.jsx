@@ -25,7 +25,7 @@ class UserPickerDialog extends Component {
   renderActions(user, index) {
     if (this.props.userPicker.get('selection').findIndex((userId) => userId === user.user_id) > -1) {
       return (
-        <UserPickerUnselectAction index={index} user={user} loading={this.props.userPicker.get('loading')} onSelect={this.props.onUnselectUser} />
+        <UserPickerUnselectAction index={index} user={user} loading={this.props.userPicker.get('loading')} onUnselect={this.props.onUnselectUser} />
       );
     }
 

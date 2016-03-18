@@ -6,13 +6,13 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  record: Map(),
+  record: { },
   groupMappingId: null,
   isNew: false,
   isEdit: false,
   isDelete: false,
   requesting: false,
-  validationErrors: Map()
+  validationErrors: { }
 };
 
 export const groupMapping = createReducer(fromJS(initialState), {
@@ -54,7 +54,8 @@ export const groupMapping = createReducer(fromJS(initialState), {
   [constants.REQUEST_DELETE_GROUP_MAPPING]: (state, action) =>
     state.merge({
       isDelete: true,
-      permissionId: action.payload.groupMapping.name,
+      record: action.payload.groupMapping,
+      groupMappingId: action.payload.groupMapping._id,
       requesting: true
     }),
   [constants.CANCEL_DELETE_GROUP_MAPPING]: (state) =>

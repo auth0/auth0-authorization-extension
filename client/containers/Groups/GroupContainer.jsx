@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { groupActions, groupMemberActions, groupMappingActions, userPickerActions } from '../../actions';
 
 import UserPickerDialog from '../../components/Users/UserPickerDialog';
-import { GroupHeader, GroupMappingDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
+import { GroupHeader, GroupMappingDialog, GroupMappingRemoveDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
 
 export default class GroupContainer extends Component {
   constructor() {
@@ -17,6 +17,7 @@ export default class GroupContainer extends Component {
     this.removeMember = this.removeMember.bind(this);
     this.requestRemoveMember = this.requestRemoveMember.bind(this);
     this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
+    this.saveGroupMapping = this.saveGroupMapping.bind(this);
 
         this.saveMapping = this.saveMapping.bind(this);
   }
@@ -32,9 +33,6 @@ export default class GroupContainer extends Component {
     }
 
 
-  requestRemoveMapping(mapping) {
-
-  }
 
   addMember() {
     this.props.openUserPicker(`Add members to "${this.props.group.get('record').get('name')}"`);
@@ -53,9 +51,17 @@ export default class GroupContainer extends Component {
   }
 
   addMembers(users) {
+    const groupId = this.props.group.get('groupId');
     this.props.cancelUserPicker();
-    this.props.addGroupMembers(this.props.group.get('groupId'), users, () => {
+    this.props.addGroupMembers(groupId, users, () => {
       this.props.fetchGroupMembers(groupId, true);
+    });
+  }
+
+  // Create or update a group mapping.
+  saveGroupMapping(group, groupMapping) {
+    this.props.saveGroupMapping(group, groupMapping, this.props.groupMapping.get('isNew'), () => {
+      this.props.fetchGroupMappings(group._id, true);
     });
   }
 
@@ -65,7 +71,8 @@ export default class GroupContainer extends Component {
     return (
       <div>
         <div>
-          <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.props.saveGroupMapping} onClose={this.props.clearGroupMapping} />
+          <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.saveGroupMapping} onClose={this.props.clearGroupMapping} />
+          <GroupMappingRemoveDialog group={group} groupMapping={groupMapping} onConfirm={this.props.deleteGroupMapping} onCancel={this.props.cancelDeleteGroupMapping} />
           <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
           <UserPickerDialog userPicker={userPicker} onSelectUser={this.props.selectUser} onUnselectUser={this.props.unselectUser}
             onConfirm={this.addMembers} onCancel={this.props.cancelUserPicker} onReset={this.props.resetUserPicker} onSearch={this.props.searchUserPicker}
@@ -90,7 +97,7 @@ export default class GroupContainer extends Component {
                 <GroupMembers members={group.get('members')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Mappings">
-                <GroupMappings mappings={group.get('mappings')} createMapping={this.props.createGroupMapping} removeMapping={this.requestRemoveMapping} />
+                <GroupMappings mappings={group.get('mappings')} createMapping={this.props.createGroupMapping} removeMapping={this.props.requestDeleteGroupMapping} />
               </Tab>
             </Tabs>
           </div>
@@ -102,13 +109,17 @@ export default class GroupContainer extends Component {
 
 GroupContainer.propTypes = {
   group: React.PropTypes.object,
+  groupMapping: React.PropTypes.object,
   groupMember: React.PropTypes.object,
   userPicker: React.PropTypes.object,
   params: React.PropTypes.object.isRequired,
   fetchGroup: React.PropTypes.func.isRequired,
+  fetchGroupMappings: React.PropTypes.func.isRequired,
   createGroupMapping: React.PropTypes.func.isRequired,
-  saveGroupMapping: React.PropTypes.func.isRequired,
-  clearGroupMapping: React.PropTypes.func.isRequired
+  requestDeleteGroupMapping: PropTypes.func.isRequired,
+  deleteGroupMapping: PropTypes.func.isRequired,
+  saveGroupMapping: PropTypes.func.isRequired,
+  clearGroupMapping: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

@@ -151,6 +151,20 @@ export default (db, managementClient) => {
       .catch(next);
   });
 
+  api.delete('/:id/mappings', (req, res, next) => {
+    db.getGroup(req.params.id)
+      .then(group => {
+        const groupMapping = _.find(group.mappings, { _id: req.body.groupMappingId });
+        if (groupMapping) {
+          group.mappings.splice(group.mappings.indexOf(groupMapping), 1);
+        }
+
+        return db.updateGroup(req.params.id, group);
+      })
+      .then(() => res.sendStatus(202))
+      .catch(next);
+  });
+
   api.get('/:id/members', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => auth0.getUsersById(group.members || []))

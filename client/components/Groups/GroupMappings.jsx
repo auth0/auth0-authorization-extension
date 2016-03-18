@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import { Error, LoadingPanel, Table, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Error, LoadingPanel, Table, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
+import { GroupMappingRemoveAction } from './';
 
 class GroupMappings extends Component {
   shouldComponentUpdate(nextProps) {
@@ -35,20 +36,24 @@ class GroupMappings extends Component {
             <div className="col-xs-12">
               <Table>
                 <TableHeader>
-                  <TableColumn width="3%"/>
+                  <TableColumn width="3%" />
                   <TableColumn width="40%">Connection</TableColumn>
-                  <TableColumn width="57%">Group</TableColumn>
+                  <TableColumn width="47%">Group</TableColumn>
+                  <TableColumn width="10%" />
                 </TableHeader>
                 <TableBody>
-                {records.map((mapping, index) => {
-                  return (
-                    <TableRow key={index}>
-                      <TableIconCell color="green" icon="573" />
-                      <TableTextCell>{mapping.connectionName}</TableTextCell>
-                      <TableTextCell>{mapping.groupName}</TableTextCell>
-                    </TableRow>
-                  );
-                })}
+                {records.map((mapping, index) => (
+                  <TableRow key={index}>
+                    <TableIconCell color="green" icon="573" />
+                    <TableTextCell>{mapping.connectionName}</TableTextCell>
+                    <TableTextCell>{mapping.groupName}</TableTextCell>
+                    <TableCell>
+                      <ButtonToolbar style={{ marginBottom: '0px' }}>
+                        <GroupMappingRemoveAction index={index} groupMapping={mapping} loading={loading} onRemove={this.props.removeMapping} />
+                      </ButtonToolbar>
+                    </TableCell>
+                  </TableRow>
+                ))}
                 </TableBody>
               </Table>
             </div>

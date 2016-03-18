@@ -148,6 +148,10 @@ export const group = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUP_MAPPINGS_FULFILLED]: (state, action) =>
     state.merge({
       mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.DELETE_GROUP_MAPPING_FULFILLED]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
     })
 });
 
@@ -173,6 +177,14 @@ const groupMappings = createReducer(fromJS(initialState.mappings), {
     return state.merge({
       loading: false,
       records: fromJS(action.payload.data)
+    });
+  },
+  [constants.DELETE_GROUP_MAPPING_FULFILLED]: (state, action) => {
+    const records = state.get('records');
+    const index = records.findIndex((groupMapping) => groupMapping.get('_id') === action.meta.groupMappingId);
+    return state.merge({
+      loading: false,
+      records: records.delete(index)
     });
   }
 });

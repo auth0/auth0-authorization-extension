@@ -64,7 +64,7 @@ export const userPicker = createReducer(fromJS(initialState), {
     const selection = state.get('selection');
     const index = selection.findIndex((userId) => userId === action.payload.user.user_id);
     return state.merge({
-      records: selection.delete(index)
+      selection: selection.delete(index)
     });
   }
 });

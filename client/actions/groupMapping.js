@@ -4,11 +4,12 @@ import * as constants from '../constants';
 /*
  * Load the mappings of a single group.
  */
-export function fetchGroupMappings(groupId) {
+export function fetchGroupMappings(groupId, reload) {
   return {
     type: constants.FETCH_GROUP_MAPPINGS,
     meta: {
-      groupId
+      groupId,
+      reload
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/mappings`, {
@@ -43,26 +44,24 @@ export function editGroupMapping(groupMapping) {
 /*
  * Save a new or modified group mapping.
  */
-export function saveGroupMapping(group, groupMapping) {
-  return (dispatch, getState) => {
-    const state = getState().groupMapping.toJS();
-    dispatch({
-      type: constants.SAVE_GROUP_MAPPING,
-      payload: {
-        promise: axios({
-          method: state.isNew ? 'post' : 'put',
-          url: state.isNew ? `/api/groups/${group._id}/mappings` : `/api/groups/${group._id}/mappings/${groupMapping._id}`,
-          data: groupMapping,
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        isNew: state.isNew,
-        groupMapping,
-        groupMappingId: groupMapping._id
-      }
-    });
+export function saveGroupMapping(group, groupMapping, isNew, callback) {
+  return {
+    type: constants.SAVE_GROUP_MAPPING,
+    payload: {
+      promise: axios({
+        method: isNew ? 'post' : 'put',
+        url: isNew ? `/api/groups/${group._id}/mappings` : `/api/groups/${group._id}/mappings/${groupMapping._id}`,
+        data: groupMapping,
+        timeout: 5000,
+        responseType: 'json'
+      })
+    },
+    meta: {
+      isNew,
+      onSuccess: callback,
+      groupMapping,
+      groupMappingId: groupMapping._id
+    }
   };
 }
 
@@ -90,21 +89,21 @@ export function cancelDeleteGroupMapping() {
 /*
  * Delete a group mapping.
  */
-export function deleteGroupMapping(group) {
-  return (dispatch, getState) => {
-    const groupMappingId = getState().groupMapping.get('groupMappingId');
-    dispatch({
-      type: constants.DELETE_GROUP_MAPPING,
-      payload: {
-        promise: axios.delete(`/api/groups/${group._id}/mappings/${groupMappingId}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        groupMappingId
-      }
-    });
+export function deleteGroupMapping(groupId, groupMappingId) {
+  return {
+    type: constants.DELETE_GROUP_MAPPING,
+    payload: {
+      promise: axios.delete(`/api/groups/${groupId}/mappings`, {
+        timeout: 5000,
+        responseType: 'json',
+        data: {
+          groupMappingId
+        }
+      })
+    },
+    meta: {
+      groupMappingId
+    }
   };
 }
 
