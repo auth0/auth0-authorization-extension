@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Identity and Access Management Dashboard for Auth0",
   "engines": {
-    "node": "~5.8.0"
+    "node": "5.9.0"
   },
   "main": "server.js",
   "scripts": {
