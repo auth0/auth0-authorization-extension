@@ -30,14 +30,16 @@ class GroupRow extends Component {
         <TableIconCell icon="322" />
         <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
-        <TableTextCell>{ group.members.length || '0' }</TableTextCell>
-        <TableTextCell>{ group.mappings.length || '0' }</TableTextCell>
+        <TableTextCell>{ (group.members && group.members.length) || '0' }</TableTextCell>
+        <TableTextCell>{ (group.mappings && group.mappings.length) || '0' }</TableTextCell>
         <TableCell>
           <ButtonToolbar style={{ marginBottom: '0px' }}>
             <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="266"
-              onClick={this.edit} disabled={this.props.loading || false} />
+              onClick={this.edit} disabled={this.props.loading || false}
+            />
             <TableAction id={`delete-${group._id}`} type="success" title="Delete Group" icon="263"
-              onClick={this.delete} disabled={this.props.loading || false} />
+              onClick={this.delete} disabled={this.props.loading || false}
+            />
           </ButtonToolbar>
         </TableCell>
       </TableRow>
@@ -46,6 +48,7 @@ class GroupRow extends Component {
 }
 
 GroupRow.propTypes = {
+  loading: React.PropTypes.bool,
   group: React.PropTypes.object.isRequired,
   onEdit: React.PropTypes.func.isRequired,
   onDelete: React.PropTypes.func.isRequired
