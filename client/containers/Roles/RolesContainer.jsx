@@ -45,7 +45,7 @@ class RolesContainer extends Component {
             <Error message={this.props.roles.error} />
             <LoadingPanel show={this.props.roles.loading}>
               <RolesTable loading={this.props.roles.loading} roles={this.props.roles.records}
-                onEdit={this.props.editRole} onDelete={this.props.requestingDeleteRole} />
+                onEdit={this.props.editRole} onDelete={this.props.requestDeleteRole} />
             </LoadingPanel>
           </div>
         </div>

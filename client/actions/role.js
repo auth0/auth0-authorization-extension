@@ -17,12 +17,18 @@ export function fetchRoles(reload = false) {
   };
 }
 
+/*
+ * Create a role.
+ */
 export function createRole() {
   return {
     type: constants.CREATE_ROLE
   };
 }
 
+/*
+ * Edit a role.
+ */
 export function editRole(role) {
   return {
     type: constants.EDIT_ROLE,
@@ -55,7 +61,10 @@ export function saveRole(role) {
   };
 }
 
-export function requestingDeleteRole(role) {
+/*
+ * Get confirmation to delete a role.
+ */
+export function requestDeleteRole(role) {
   return {
     type: constants.REQUEST_DELETE_ROLE,
     payload: {
@@ -64,12 +73,18 @@ export function requestingDeleteRole(role) {
   };
 }
 
+/*
+ * Cancel deleting a role.
+ */
 export function cancelDeleteRole() {
   return {
     type: constants.CANCEL_DELETE_ROLE
   };
 }
 
+/*
+ * Delete a role.
+ */
 export function deleteRole() {
   return (dispatch, getState) => {
     const role = getState().role.get('role');
@@ -90,6 +105,9 @@ export function deleteRole() {
   };
 }
 
+/*
+ * Clear the current role.
+ */
 export function clearRole() {
   return {
     type: constants.CLEAR_ROLE

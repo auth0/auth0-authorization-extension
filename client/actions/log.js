@@ -1,6 +1,9 @@
-import * as constants from '../constants';
 import axios from 'axios';
+import * as constants from '../constants';
 
+/*
+ * Load logs.
+ */
 export function fetchLogs(page = 0) {
   return {
     type: constants.FETCH_LOGS,
@@ -19,23 +22,27 @@ export function fetchLogs(page = 0) {
   };
 }
 
+/*
+ * Get the details for a single log.
+ */
 export function fetchLog(logId) {
-  return (dispatch) => {
-    dispatch({
-      type: constants.FETCH_LOG,
-      meta: {
-        logId
-      },
-      payload: {
-        promise: axios.get(`/api/logs/${logId}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      }
-    });
+  return {
+    type: constants.FETCH_LOG,
+    meta: {
+      logId
+    },
+    payload: {
+      promise: axios.get(`/api/logs/${logId}`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
   };
 }
 
+/*
+ * Remove the current log.
+ */
 export function clearLog() {
   return {
     type: constants.CLEAR_LOG

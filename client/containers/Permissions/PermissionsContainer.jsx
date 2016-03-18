@@ -47,7 +47,7 @@ class PermissionsContainer extends Component {
             <Error message={this.props.permissions.error || this.props.applications.error} />
             <LoadingPanel show={this.props.applications.loading || this.props.permissions.loading}>
               <PermissionsTable loading={this.props.permissions.loading} permissions={this.props.permissions.records} applications={this.props.applications.records}
-                onEdit={this.props.editPermission} onDelete={this.props.requestingDeletePermission} />
+                onEdit={this.props.editPermission} onDelete={this.props.requestDeletePermission} />
             </LoadingPanel>
           </div>
         </div>

@@ -55,7 +55,7 @@ export function savePermission(permission) {
   };
 }
 
-export function requestingDeletePermission(permission) {
+export function requestDeletePermission(permission) {
   return {
     type: constants.REQUEST_DELETE_PERMISSION,
     payload: {
