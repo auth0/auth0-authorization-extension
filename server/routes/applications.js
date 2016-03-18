@@ -13,5 +13,11 @@ export default (auth0) => {
       .catch(next);
   });
 
+  api.get('/:id', (req, res, next) => {
+    auth0.clients.get({ client_id: req.params.id })
+      .then(client => res.json(client))
+      .catch(next);
+  });
+
   return api;
 };

@@ -22,19 +22,19 @@ class ApplicationHeader extends Component {
   render() {
     const { application } = this.props;
 
-    if (!application || application.get('loading') || application.get('error')) {
+    if (!application || application.get('loading')) {
       return <div></div>;
     }
 
     return (
-      <div className="group-header">
+      <div className="application-header">
         <img className="img-polaroid" src={this.getPicture(application)} />
-          <div className="group-bg-box" style={{ position: 'relative', height: '120px', overflow: 'hidden' }}>
-            <img className="group-bg" src={this.getPicture(application)} />
+          <div className="application-bg-box" style={{ position: 'relative', height: '120px', overflow: 'hidden' }}>
+            <img className="application-bg" src={this.getPicture(application)} />
             <div className="box-content">
               <div className="name-area">
                 <h4>
-                  <span className="name group-head-name">
+                  <span className="name application-head-name">
                     { application.get('record').get('name') || application.get('record').get('client_id') }
                   </span>
                   {this.getDescription(application)}

@@ -4,7 +4,9 @@ import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
 import { applicationActions } from '../../actions';
-import ApplicationHeader from '../../components/Applications/ApplicationHeader'
+
+import ApplicationDetail from '../../components/Applications/ApplicationDetail';
+import ApplicationHeader from '../../components/Applications/ApplicationHeader';
 
 export default class ApplicationContainer extends Component {
   componentWillMount() {
@@ -32,7 +34,7 @@ export default class ApplicationContainer extends Component {
           <div className="col-xs-12">
             <Tabs defaultActiveKey={1} animation={false}>
               <Tab eventKey={1} title="Details">
-                <p>Details</p>
+                <ApplicationDetail application={application} />
               </Tab>
               <Tab eventKey={2} title="Groups">
                 <p>Groups</p>
@@ -48,7 +50,7 @@ export default class ApplicationContainer extends Component {
 ApplicationContainer.propTypes = {
   application: React.PropTypes.object,
   params: React.PropTypes.object.isRequired,
-  fetchApplication: React.PropTypes.func.isRequired,
+  fetchApplication: React.PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

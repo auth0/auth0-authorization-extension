@@ -7,7 +7,7 @@ const initialState = {
   loading: false,
   error: null,
   record: { },
-  clientId: null,
+  applicationId: null,
   groups: {
     loading: false,
     error: null,
@@ -66,7 +66,7 @@ export const application = createReducer(fromJS(initialState), {
   [constants.FETCH_APPLICATION_PENDING]: (state, action) =>
     state.merge({
       loading: true,
-      clientId: action.meta.client_id
+      applicationId: action.meta.applicationId
     }),
   [constants.FETCH_APPLICATION_REJECTED]: (state, action) =>
     state.merge({
@@ -75,7 +75,8 @@ export const application = createReducer(fromJS(initialState), {
     }),
   [constants.FETCH_APPLICATION_FULFILLED]: (state, action) => {
     const { data } = action.payload;
-    if (data.client_id !== state.get('clientId')) {
+    console.log(data, state.toJS());
+    if (data.client_id !== state.get('applicationId')) {
       return state;
     }
 
