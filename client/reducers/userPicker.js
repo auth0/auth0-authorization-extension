@@ -21,17 +21,17 @@ export const userPicker = createReducer(fromJS(initialState), {
       open: true,
       title: action.payload.title
     }),
-  [constants.OPEN_USER_PICKER_PENDING]: (state, action) =>
+  [constants.SEARCH_USER_PICKER_PENDING]: (state, action) =>
     state.merge({
       loading: true,
       records: action.meta.page === 0 ? [] : state.get('records')
     }),
-  [constants.OPEN_USER_PICKER_REJECTED]: (state, action) =>
+  [constants.SEARCH_USER_PICKER_REJECTED]: (state, action) =>
     state.merge({
       loading: false,
       error: `An error occured while loading the users: ${action.errorMessage}`
     }),
-  [constants.OPEN_USER_PICKER_FULFILLED]: (state, action) =>
+  [constants.SEARCH_USER_PICKER_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
       total: action.payload.data.total,
