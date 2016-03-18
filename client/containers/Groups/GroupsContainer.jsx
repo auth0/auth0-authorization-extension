@@ -92,10 +92,6 @@ class GroupsContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12 wrapper">
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12 wrapper">
             <Error message={this.props.groups.error} />
             <LoadingPanel show={this.props.groups.loading}>
               <GroupsTable groups={this.props.groups.records} loading={this.props.groups.loading}

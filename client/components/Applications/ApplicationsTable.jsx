@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Table, TableIconCell, TableBody, TableTextCell, TableRouteCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
 class ApplicationsTable extends Component {
   shouldComponentUpdate(nextProps) {
@@ -8,30 +8,32 @@ class ApplicationsTable extends Component {
 
   render() {
     const applications = this.props.applications.toJS();
-    return <Table>
-      <TableHeader>
-        <TableColumn width="3%"></TableColumn>
-        <TableColumn width="30%">Name</TableColumn>
-        <TableColumn width="30%">Client Id</TableColumn>
-        <TableColumn width="37%">Callback</TableColumn>
-      </TableHeader>
-      <TableBody>
-        {applications.map((application, index) => {
-          const callback = (application.callbacks && application.callbacks.length)
-            ? application.callbacks[0] : 'N/A';
+    return (
+      <Table>
+        <TableHeader>
+          <TableColumn width="3%" />
+          <TableColumn width="40%">Name</TableColumn>
+          <TableColumn width="37%">Callback</TableColumn>
+          <TableColumn width="15%">Authorization</TableColumn>
+        </TableHeader>
+        <TableBody>
+          {applications.map((application, index) => {
+            const callback = (application.callbacks && application.callbacks.length)
+              ? application.callbacks[0] : 'N/A';
 
-          return(
-            <TableRow key={index}>
-              <TableIconCell color="#5d676f" icon="374" />
-              <TableTextCell>{application.name || 'N/A'}</TableTextCell>
-              <TableTextCell>{application.client_id || 'N/A'}</TableTextCell>
-              <TableTextCell>{callback || 'N/A'}</TableTextCell>
-            </TableRow>
-          );
-        })
-      }
-      </TableBody>
-    </Table>;
+            return (
+              <TableRow key={index}>
+                <TableIconCell color="#5d676f" icon="374" />
+                <TableRouteCell route={`/applications/${application.client_id}`}>{ application.name || 'N/A' }</TableRouteCell>
+                <TableTextCell>{callback || 'N/A'}</TableTextCell>
+                <TableTextCell><strong>5</strong> Groups</TableTextCell>
+              </TableRow>
+            );
+          })
+        }
+        </TableBody>
+      </Table>
+    );
   }
 }
 

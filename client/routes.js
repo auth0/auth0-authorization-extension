@@ -4,6 +4,7 @@ import { Router, Route, IndexRedirect } from 'react-router';
 import { RequireAuthentication } from './containers/RequireAuthentication';
 
 import App from './containers/App.jsx';
+import ApplicationContainer from './containers/Applications/ApplicationContainer';
 import ApplicationsContainer from './containers/Applications/ApplicationsContainer';
 import LogsContainer from './containers/Logs/LogsContainer';
 import LoginContainer from './containers/Login/LoginContainer';
@@ -18,7 +19,9 @@ export default (history) =>
   <Router history={history}>
     <Route path="/" component={RequireAuthentication(App)}>
       <IndexRedirect to="/users" />
-      <Route path="applications" component={ApplicationsContainer} />
+      <Route path="applications" component={ApplicationsContainer}>
+        <Route path=":id" component={ApplicationContainer} />
+      </Route>
       <Route path="roles" component={RolesContainer} />
       <Route path="groups" component={GroupsContainer}>
         <Route path=":id" component={GroupContainer} />

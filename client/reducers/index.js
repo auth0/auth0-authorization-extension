@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form';
 import { routerReducer } from 'react-router-redux';
 
 import { auth } from './auth';
+import { application } from './application';
 import { applications } from './applications';
 import { connections } from './connections';
 import { mfa } from './mfa';
@@ -24,6 +25,7 @@ import { permissions } from './permissions';
 
 export default combineReducers({
   routing: routerReducer,
+  application,
   applications,
   connections,
   auth,

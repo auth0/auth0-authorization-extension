@@ -1,6 +1,5 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import * as actions from '../../actions/application';
 import { Error, LoadingPanel } from '../../components/Dashboard';
@@ -11,21 +10,27 @@ class ApplicationsContainer extends Component {
     this.props.fetchApplications();
   }
 
-  refresh() {
-    this.props.fetchApplications(true);
-  }
-
   render() {
+    if (this.props.children) {
+      return this.props.children;
+    }
+
     const { applications, error, loading } = this.props;
+
     return (
       <div>
         <div className="row">
           <div className="col-xs-12 wrapper">
-            <ButtonToolbar className="pull-right">
-              <Button bsSize="xsmall" onClick={this.refresh.bind(this)} disabled={loading}>
-                <i className="icon icon-budicon-257"></i> Refresh
-              </Button>
-            </ButtonToolbar>
+            <div className="content-header">
+              <h1>Applications</h1>
+              <div className="cues-container">
+                <div className="use-case-box is-active">
+                  <div className="explainer-text">
+                    <span className="explainer-text-content">For applications you are able to decide if all users have access or if access is restricted to users that belong to specific groups.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div className="row">
