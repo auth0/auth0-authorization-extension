@@ -1,5 +1,5 @@
 import moment from 'moment';
-import { fromJS, Map } from 'immutable';
+import { fromJS } from 'immutable';
 
 import * as constants from '../constants';
 import logTypes from '../utils/logTypes';
@@ -9,7 +9,12 @@ const initialState = {
   loading: false,
   error: null,
   userId: null,
-  record: Map(),
+  record: { },
+  groups: {
+    loading: false,
+    error: null,
+    records: []
+  },
   logs: {
     loading: false,
     error: null,
@@ -18,7 +23,7 @@ const initialState = {
   devices: {
     loading: false,
     error: null,
-    records: Map()
+    records: { }
   }
 };
 
@@ -69,6 +74,18 @@ export const user = createReducer(fromJS(initialState), {
   [constants.FETCH_USER_DEVICES_FULFILLED]: (state, action) =>
     state.merge({
       devices: userDevices(state.get('devices'), action)
+    }),
+  [constants.FETCH_USER_GROUPS_PENDING]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
+    }),
+  [constants.FETCH_USER_GROUPS_REJECTED]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
+    }),
+  [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
     })
 });
 
@@ -102,6 +119,26 @@ const userLogs = createReducer(fromJS(initialState.logs), {
       }))
     })
 });
+
+const userGroups = createReducer(fromJS(initialState.groups), {
+  [constants.FETCH_USER_GROUPS_PENDING]: (state) =>
+    state.merge({
+      ...initialState.groups,
+      loading: true
+    }),
+  [constants.FETCH_USER_GROUPS_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.groups,
+      error: `An error occured while loading the groups: ${action.errorMessage}`
+    }),
+  [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) => {
+    return state.merge({
+      loading: false,
+      records: fromJS(action.payload.data)
+    });
+  }
+});
+
 
 const userDevices = createReducer(fromJS(initialState.devices), {
   [constants.FETCH_USER_DEVICES_PENDING]: (state) =>

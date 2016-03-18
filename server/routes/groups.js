@@ -33,9 +33,10 @@ export default (db) => {
   api.get('/', (req, res, next) => {
     db.getGroups()
       .then(groups => groups.map(group => {
-        group.mappings = group.mappings || [];
-        group.members = group.members || [];
-        return group;
+        const currentGroup = group;
+        currentGroup.mappings = currentGroup.mappings || [];
+        currentGroup.members = currentGroup.members || [];
+        return currentGroup;
       }))
       .then(groups => res.json(groups))
       .catch(next);
@@ -94,20 +95,21 @@ export default (db) => {
 
     return db.getGroup(req.params.id)
       .then(group => {
-        if (!group.mappings) {
-          group.mappings = [];
+        const currentGroup = group;
+        if (!currentGroup.mappings) {
+          currentGroup.mappings = [];
         }
 
         // Add the new mapping.
         const { _id, groupName, connectionId } = req.body;
-        group.mappings.push({
+        currentGroup.mappings.push({
           _id: _id || uuid.v4(),
           groupName,
           connectionId
         });
 
         // Save the group.
-        return db.updateGroup(req.params.id, group);
+        return db.updateGroup(req.params.id, currentGroup);
       })
       .then(() => res.sendStatus(202))
       .catch(next);
@@ -130,19 +132,21 @@ export default (db) => {
       });
     }
 
-    db.getGroup(req.params.id)
+    return db.getGroup(req.params.id)
       .then(group => {
-        req.body.forEach((member) => {
-          if (!group.members) {
-            group.members = [];
-          }
+        const currentGroup = group;
+        if (!currentGroup.members) {
+          currentGroup.members = [];
+        }
 
-          if (group.members.indexOf(member) === -1) {
-            group.members.push(member);
+        // Add each member.
+        req.body.forEach((member) => {
+          if (currentGroup.members.indexOf(member) === -1) {
+            currentGroup.members.push(member);
           }
         });
 
-        return db.updateGroup(req.params.id, group);
+        return db.updateGroup(req.params.id, currentGroup);
       })
       .then(() => res.sendStatus(202))
       .catch(next);

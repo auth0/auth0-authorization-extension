@@ -1,6 +1,9 @@
+import _ from 'lodash';
 import { Router } from 'express';
 import auth0 from '../lib/auth0';
-export default () => {
+
+
+export default (db) => {
   const api = Router();
   api.get('/', (req, res, next) => {
     const options = {
@@ -27,6 +30,18 @@ export default () => {
   api.get('/:id/devices', (req, res, next) => {
     auth0.getDevices(req.params.id)
       .then(devices => res.json({ devices }))
+      .catch(next);
+  });
+
+  api.get('/:id/groups', (req, res, next) => {
+    db.getGroups()
+      .then(groups => _.filter(groups, (group) => _.includes(group.members, req.params.id)))
+      .then(groups => groups.map((group) => ({
+        _id: group._id,
+        name: group.name,
+        description: group.description
+      })))
+      .then(groups => res.json(groups))
       .catch(next);
   });
 

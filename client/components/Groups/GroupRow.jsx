@@ -24,7 +24,7 @@ class GroupRow extends Component {
 
   render() {
     const { group } = this.props;
-console.log(group);
+
     return (
       <TableRow>
         <TableIconCell icon="322" />

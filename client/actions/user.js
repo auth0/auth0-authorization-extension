@@ -2,6 +2,7 @@ import * as constants from '../constants';
 import axios from 'axios';
 
 import { fetchUserLogs } from './userLog';
+import { fetchUserGroups } from './userGroup';
 import { fetchUserDevices } from './userDevice';
 
 /*
@@ -56,6 +57,7 @@ export function fetchUser(userId) {
   return (dispatch) => {
     dispatch(fetchUserDetail(userId));
     dispatch(fetchUserLogs(userId));
+    dispatch(fetchUserGroups(userId));
     dispatch(fetchUserDevices(userId));
   };
 }
