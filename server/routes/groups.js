@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import _ from 'lodash';
 import uuid from 'node-uuid';
 import validator from 'validate.js';
 
@@ -115,6 +116,7 @@ export default (db) => {
   api.get('/:id/members', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => auth0.getUsersById(group.members || []))
+      .then(users => _.orderBy(users, [ 'last_login' ], [ 'desc' ]))
       .then(users => res.json(users))
       .catch(next);
   });

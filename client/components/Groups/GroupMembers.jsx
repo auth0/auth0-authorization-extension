@@ -26,7 +26,7 @@ class GroupMembers extends Component {
       <div>
         <LoadingPanel show={loading}>
           <div className="row">
-            <div className="col-xs-12 wrapper">
+            <div className="col-xs-12">
               <Error message={error} />
             </div>
           </div>
@@ -42,7 +42,7 @@ class GroupMembers extends Component {
           </div>
           <div className="row">
             <div className="col-xs-12">
-                <UsersTable loading={loading} users={records} renderActions={this.renderActions} />
+              <UsersTable loading={loading} users={records} renderActions={this.renderActions} />
             </div>
           </div>
         </LoadingPanel>

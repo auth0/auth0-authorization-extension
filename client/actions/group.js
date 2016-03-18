@@ -1,5 +1,8 @@
 import axios from 'axios';
+
 import * as constants from '../constants';
+import { fetchGroupMembers } from './groupMember';
+import { fetchGroupMappings } from './groupMapping';
 
 /*
  * Load all available groups.
@@ -27,43 +30,6 @@ export function fetchGroupDetails(groupId) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}`, {
-        timeout: 5000,
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
- * Load the members of a single group.
- */
-export function fetchGroupMembers(groupId, reload) {
-  return {
-    type: constants.FETCH_GROUP_MEMBERS,
-    meta: {
-      groupId,
-      reload
-    },
-    payload: {
-      promise: axios.get(`/api/groups/${groupId}/members`, {
-        timeout: 5000,
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
- * Load the mappings of a single group.
- */
-export function fetchGroupMappings(groupId) {
-  return {
-    type: constants.FETCH_GROUP_MAPPINGS,
-    meta: {
-      groupId
-    },
-    payload: {
-      promise: axios.get(`/api/groups/${groupId}/mappings`, {
         timeout: 5000,
         responseType: 'json'
       })
@@ -175,74 +141,5 @@ export function deleteGroup(group) {
 export function clearGroup() {
   return {
     type: constants.CLEAR_GROUP
-  };
-}
-
-export function addGroupMembers() {
-  return (dispatch, getState) => {
-    const groupId = getState().group.get('groupId');
-    const selection = getState().userPicker.get('selection').toJS();
-
-    dispatch({
-      type: constants.CANCEL_USER_PICKER
-    });
-
-    dispatch({
-      type: constants.ADD_GROUP_MEMBERS,
-      payload: {
-        promise: axios({
-          method: 'patch',
-          url: `/api/groups/${groupId}/members`,
-          data: selection,
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        groupId,
-        onSuccess: () => {
-          dispatch(fetchGroupMembers(groupId, true));
-        }
-      }
-    });
-  };
-}
-
-export function requestRemoveGroupMember(group, user) {
-  return {
-    type: constants.REQUEST_REMOVE_GROUP_MEMBER,
-    meta: {
-      group,
-      user
-    }
-  };
-}
-
-export function cancelRemoveGroupMember() {
-  return {
-    type: constants.CANCEL_REMOVE_GROUP_MEMBER
-  };
-}
-
-export function removeGroupMember(groupId, userId) {
-  return (dispatch) => {
-    dispatch({
-      type: constants.REMOVE_GROUP_MEMBER,
-      payload: {
-        promise: axios({
-          method: 'delete',
-          url: `/api/groups/${groupId}/members`,
-          data: {
-            userId
-          },
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        userId,
-        groupId
-      }
-    });
   };
 }

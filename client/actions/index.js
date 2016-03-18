@@ -3,6 +3,7 @@ export * as authActions from './auth';
 export * as connectionActions from './connection';
 export * as groupActions from './group';
 export * as groupMappingActions from './groupMapping';
+export * as groupMemberActions from './groupMember';
 export * as logActions from './log';
 export * as permissionActions from './permission';
 export * as roleActions from './role';

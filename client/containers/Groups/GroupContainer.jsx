@@ -3,12 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-/*
-import * as groupActions from '../../actions/group';
-import * as groupMappingActions from '../../actions/groupMapping';
-import * as userPickerActions from '../../actions/userPicker'; */
-
-import { groupActions, groupMappingActions, userPickerActions } from '../../actions';
+import { groupActions, groupMemberActions, groupMappingActions, userPickerActions } from '../../actions';
 
 import UserPickerDialog from '../../components/Users/UserPickerDialog';
 import { GroupHeader, GroupMappingDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
@@ -57,8 +52,9 @@ export default class GroupContainer extends Component {
     this.props.removeGroupMember(groupId, userId);
   }
 
-  addMembers() {
-    this.props.addGroupMembers();
+  addMembers(users) {
+    this.props.cancelUserPicker();
+    this.props.addGroupMembers(this.props.group.get('groupId'), users);
   }
 
   render() {
@@ -123,4 +119,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMappingActions, ...userPickerActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupMappingActions, ...userPickerActions })(GroupContainer);
