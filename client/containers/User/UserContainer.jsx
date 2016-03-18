@@ -3,8 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import * as LogActions from '../../actions/log';
-import * as UserActions from '../../actions/user';
+import { groupMemberActions, logActions, userActions } from '../../actions';
 
 import './UserContainer.css';
 import LogDialog from '../../components/Logs/LogDialog';
@@ -14,14 +13,38 @@ import UserHeader from '../../components/Users/UserHeader';
 import UserProfile from '../../components/Users/UserProfile';
 import UserDevices from '../../components/Users/UserDevices';
 
-export default class UserContainer extends Component {
+import { GroupMemberRemoveDialog } from '../../components/Groups';
 
+export default class UserContainer extends Component {
+  constructor() {
+    super();
+
+    this.requestRemoveMember = this.requestRemoveMember.bind(this);
+    this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
+    this.removeMember = this.removeMember.bind(this);
+  }
   componentWillMount() {
     this.props.fetchUser(this.props.params.id);
   }
 
+  add(user) {
+    console.log('Add', userId);
+  }
+
+  requestRemoveMember(user, group) {
+    this.props.requestRemoveGroupMember(group, user);
+  }
+
+  cancelRemoveMember() {
+    this.props.cancelRemoveGroupMember();
+  }
+
+  removeMember(groupId, userId) {
+    this.props.removeGroupMember(groupId, userId);
+  }
+
   render() {
-    const { user, groups, log, logs, devices } = this.props;
+    const { user, groups, groupMember, log, logs, devices } = this.props;
     return (
       <div>
         <div className="row">
@@ -41,7 +64,7 @@ export default class UserContainer extends Component {
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
               <Tab eventKey={2} title="Groups">
-                <UserGroups user={user} groups={groups} />
+                <UserGroups user={user.record} groups={groups} addToGroup={this.add} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Devices">
                 <UserDevices loading={devices.loading} devices={devices.records} error={devices.error} />
@@ -53,17 +76,15 @@ export default class UserContainer extends Component {
             </Tabs>
           </div>
         </div>
+        <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
       </div>
     );
   }
 }
 
-UserContainer.contextTypes = {
-  history: React.PropTypes.object.isRequired
-};
-
 function mapStateToProps(state) {
   return {
+    groupMember: state.groupMember,
     user: {
       record: state.user.get('record'),
       error: state.user.get('error'),
@@ -89,4 +110,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...UserActions, ...LogActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupMemberActions, ...logActions, ...userActions })(UserContainer);

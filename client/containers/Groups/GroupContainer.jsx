@@ -54,7 +54,9 @@ export default class GroupContainer extends Component {
 
   addMembers(users) {
     this.props.cancelUserPicker();
-    this.props.addGroupMembers(this.props.group.get('groupId'), users);
+    this.props.addGroupMembers(this.props.group.get('groupId'), users, () => {
+      this.props.fetchGroupMembers(groupId, true);
+    });
   }
 
   render() {

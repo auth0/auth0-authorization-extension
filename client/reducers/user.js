@@ -86,6 +86,10 @@ export const user = createReducer(fromJS(initialState), {
   [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) =>
     state.merge({
       groups: userGroups(state.get('groups'), action)
+    }),
+  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
     })
 });
 
@@ -135,6 +139,14 @@ const userGroups = createReducer(fromJS(initialState.groups), {
     return state.merge({
       loading: false,
       records: fromJS(action.payload.data)
+    });
+  },
+  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) => {
+    const records = state.get('records');
+    const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
+    return state.merge({
+      loading: false,
+      records: records.delete(index)
     });
   }
 });

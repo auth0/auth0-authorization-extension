@@ -23,7 +23,7 @@ export function fetchGroupMembers(groupId, reload) {
 /*
  * Add the selected users members to a group.
  */
-export function addGroupMembers(groupId, members) {
+export function addGroupMembers(groupId, members, callback) {
   return (dispatch) => {
     dispatch({
       type: constants.ADD_GROUP_MEMBERS,
@@ -38,10 +38,7 @@ export function addGroupMembers(groupId, members) {
       },
       meta: {
         groupId,
-        onSuccess: () => {
-          // Reload group memberships.
-          dispatch(fetchGroupMembers(groupId, true));
-        }
+        onSuccess: callback
       }
     });
   };

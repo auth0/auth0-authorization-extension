@@ -136,7 +136,45 @@ export const group = createReducer(fromJS(initialState), {
   [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
     state.merge({
       members: groupMembers(state.get('members'), action)
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_PENDING]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_REJECTED]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_FULFILLED]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
     })
+});
+
+const groupMappings = createReducer(fromJS(initialState.mappings), {
+  [constants.FETCH_GROUP_MAPPINGS_PENDING]: (state, action) => {
+    if (action.meta && action.meta.reload) {
+      return state.merge({
+        loading: true
+      });
+    }
+
+    return state.merge({
+      ...initialState.mappings,
+      loading: true
+    });
+  },
+  [constants.FETCH_GROUP_MAPPINGS_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.mappings,
+      error: `An error occured while loading the mappings: ${action.errorMessage}`
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_FULFILLED]: (state, action) => {
+    return state.merge({
+      loading: false,
+      records: fromJS(action.payload.data)
+    });
+  }
 });
 
 const groupMembers = createReducer(fromJS(initialState.members), {

@@ -34,7 +34,7 @@ export default () => {
   api.use('/users', users(db));
   api.use('/logs', logs(db));
   api.use('/roles', roles(db));
-  api.use('/groups', groups(db));
+  api.use('/groups', groups(db, managementClient));
   api.use('/permissions', permissions(db));
   return api;
 };

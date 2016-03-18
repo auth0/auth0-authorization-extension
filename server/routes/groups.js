@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import _ from 'lodash';
+import async from 'async';
 import uuid from 'node-uuid';
 import validator from 'validate.js';
+import memoizer from 'lru-memoizer';
 
 import auth0 from '../lib/auth0';
 
@@ -28,7 +30,39 @@ const validateGroupMapping = (groupMapping) => validator(groupMapping, {
   }
 });
 
-export default (db) => {
+export default (db, managementClient) => {
+  const getConnection = memoizer({
+    load: (connectionId, callback) => managementClient.connections.get({ id: connectionId }, callback),
+    hash: (connectionId) => connectionId,
+    max: 100,
+    maxAge: 1000 * 600
+  });
+
+  const getMappingNames = (mappings) => new Promise((resolve, reject) => {
+    const existingMappings = [];
+    async.eachLimit(mappings, 10, (mapping, cb) => {
+      getConnection(mapping.connectionId, (err, connection) => {
+        if (err) {
+          if (err.statusCode === 404) {
+            return cb();
+          }
+          return cb(err);
+        }
+
+        const currentMapping = mapping;
+        currentMapping.connectionName = connection.name;
+        existingMappings.push(currentMapping);
+        return cb();
+      });
+    }, (err) => {
+      if (err) {
+        return reject(err);
+      }
+
+      return resolve(existingMappings);
+    });
+  });
+
   const api = Router();
   api.get('/', (req, res, next) => {
     db.getGroups()
@@ -82,7 +116,9 @@ export default (db) => {
 
   api.get('/:id/mappings', (req, res, next) => {
     db.getGroup(req.params.id)
-      .then(group => res.json(group.mappings || []))
+      .then(group => group.mappings || [])
+      .then(mappings => getMappingNames(mappings))
+      .then(mappings => res.json(mappings))
       .catch(next);
   });
 

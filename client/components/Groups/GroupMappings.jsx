@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Error, LoadingPanel, Table, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
-import { LoadingPanel, Error } from '../Dashboard';
 
 class GroupMappings extends Component {
   shouldComponentUpdate(nextProps) {
@@ -33,6 +33,24 @@ class GroupMappings extends Component {
           </div>
           <div className="row">
             <div className="col-xs-12">
+              <Table>
+                <TableHeader>
+                  <TableColumn width="3%"/>
+                  <TableColumn width="40%">Connection</TableColumn>
+                  <TableColumn width="57%">Group</TableColumn>
+                </TableHeader>
+                <TableBody>
+                {records.map((mapping, index) => {
+                  return (
+                    <TableRow key={index}>
+                      <TableIconCell color="green" icon="573" />
+                      <TableTextCell>{mapping.connectionName}</TableTextCell>
+                      <TableTextCell>{mapping.groupName}</TableTextCell>
+                    </TableRow>
+                  );
+                })}
+                </TableBody>
+              </Table>
             </div>
           </div>
         </LoadingPanel>
