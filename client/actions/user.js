@@ -70,7 +70,7 @@ export function fetchUser(userId) {
 
 export function requestingRemoveMultiFactor(user) {
   return {
-    type: constants.REQUESTING_REMOVE_MULTIFACTOR,
+    type: constants.REQUEST_REMOVE_MULTIFACTOR,
     user
   };
 }
@@ -101,7 +101,7 @@ export function removeMultiFactor(userId, provider) {
 
 export function requestingBlockUser(user) {
   return {
-    type: constants.REQUESTING_BLOCK_USER,
+    type: constants.REQUEST_BLOCK_USER,
     user
   };
 }
@@ -132,7 +132,7 @@ export function blockUser() {
 
 export function requestingUnblockUser(user) {
   return {
-    type: constants.REQUESTING_UNBLOCK_USER,
+    type: constants.REQUEST_UNBLOCK_USER,
     user
   };
 }

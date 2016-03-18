@@ -15,7 +15,7 @@ const initialState = {
 };
 
 export const groupMember = createReducer(fromJS(initialState), {
-  [constants.REQUESTING_REMOVE_GROUP_MEMBER]: (state, action) =>
+  [constants.REQUEST_REMOVE_GROUP_MEMBER]: (state, action) =>
     state.merge({
       isRemove: true,
       groupId: action.meta.group._id,

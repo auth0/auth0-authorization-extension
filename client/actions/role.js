@@ -57,7 +57,7 @@ export function saveRole(role) {
 
 export function requestingDeleteRole(role) {
   return {
-    type: constants.REQUESTING_DELETE_ROLE,
+    type: constants.REQUEST_DELETE_ROLE,
     payload: {
       role
     }

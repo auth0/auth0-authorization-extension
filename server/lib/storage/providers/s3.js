@@ -14,7 +14,7 @@ export default class S3Provider {
     if (!keySecret || keySecret === 0) {
       throw new ArgumentError('The \'keySecret\' property is required when configuring the S3Provider.');
     }
-    
+
     this.path = path;
     this.s3 = new AWS.S3({ params: { Bucket: bucket } });
     this.s3.config.credentials = new AWS.Credentials(
@@ -22,51 +22,56 @@ export default class S3Provider {
       keySecret
     );
   }
-  
+
   _readObject(collection) {
     return new Promise((resolve, reject) => {
       const params = {
         Key: this.path
       };
       this.s3.getObject(params, (err, response) => {
-        if (err) { 
+        if (err) {
           if (err.code === 'NoSuchKey') {
             const defaultData = { };
             defaultData[collection] = [];
             return resolve({ data: defaultData, etag: null });
           }
-          return reject(err); 
+          return reject(err);
         }
-        const data = JSON.parse(response.Body.toString()) || { };
-        data[collection] = data[collection] || [];
-        resolve({ data, etag: response.ETag });
+
+        const data = JSON.parse(response.Body.toString()) || { };
+        data[collection] = data[collection] || [];
+        return resolve({ data, etag: response.ETag });
       });
     });
   }
 
   _writeObject(data) {
     return new Promise((resolve, reject) => {
-      let params = {
+      const params = {
         Key: this.path,
         Body: JSON.stringify(data, null, 2),
         ContentType: 'application/json'
       };
+
       this.s3.putObject(params, (err) => {
-        if (err) { return reject(err); }
-        resolve();
+        if (err) {
+          return reject(err);
+        }
+
+        return resolve();
       });
     });
   }
 
   getRecords(collection) {
     return this._readObject(collection)
-      .then(({ data, etag }) => data[collection]);
+      .then(({ data }) => data[collection]);
   }
 
   getRecord(collection, identifier) {
     return this._readObject(collection)
-      .then(({ data, etag }) => {
-        let record = _.find(data[collection], (r) => r._id === identifier);
+      .then(({ data }) => {
+        const record = _.find(data[collection], (r) => r._id === identifier);
         if (!record) {
           throw new NotFoundError(`The record '${identifier}' in '${collection}' does not exist.`);
         }
@@ -77,19 +82,19 @@ export default class S3Provider {
 
   createRecord(collection, record) {
     return this._readObject(collection)
-      .then(({ data, etag }) => {
+      .then(({ data }) => {
         if (!record._id) {
           record._id = uuid.v4();
         }
-        
-        let index = _.findIndex(data[collection], (r) => r._id === record._id);
+
+        const index = _.findIndex(data[collection], (r) => r._id === record._id);
         if (index > -1) {
           throw new ValidationError(`The record '${record._id}' in '${collection}' already exists.`);
         }
 
         // Add to dataset.
         data[collection].push(record);
-        
+
         // Save.
         return this._writeObject(data)
           .then(() => record);
@@ -98,8 +103,8 @@ export default class S3Provider {
 
   updateRecord(collection, identifier, record = { }) {
     return this._readObject(collection)
-      .then(({ data, etag }) => {
-        let index = _.findIndex(data[collection], (r) => r._id === identifier);
+      .then(({ data }) => {
+        const index = _.findIndex(data[collection], (r) => r._id === identifier);
         if (index < 0) {
           throw new ValidationError(`The record '${identifier}' in '${collection}' does not exist.`);
         }
@@ -115,12 +120,12 @@ export default class S3Provider {
 
   deleteRecord(collection, identifier) {
     return this._readObject(collection)
-      .then(({ data, etag }) => {
-        let index = _.findIndex(data[collection], (r) => r._id === identifier);
+      .then(({ data }) => {
+        const index = _.findIndex(data[collection], (r) => r._id === identifier);
         if (index < 0) {
           return;
         }
-        
+
         // Remove the record.
         data[collection].splice(index, 1);
 

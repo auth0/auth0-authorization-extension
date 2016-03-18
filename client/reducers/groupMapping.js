@@ -51,7 +51,7 @@ export const groupMapping = createReducer(fromJS(initialState), {
     state.merge({
       ...initialState
     }),
-  [constants.REQUESTING_DELETE_GROUP_MAPPING]: (state, action) =>
+  [constants.REQUEST_DELETE_GROUP_MAPPING]: (state, action) =>
     state.merge({
       isDelete: true,
       permissionId: action.payload.groupMapping.name,

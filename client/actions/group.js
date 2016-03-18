@@ -1,30 +1,14 @@
-import * as constants from '../constants';
 import axios from 'axios';
+import * as constants from '../constants';
 
-export function fetchGroups(reload = false) {
-  return (dispatch, getState) => {
-    if (reload || !getState().groups.get('records').size) {
-      dispatch({
-        type: constants.FETCH_GROUPS,
-        payload: {
-          promise: axios.get('/api/groups', {
-            timeout: 5000,
-            responseType: 'json'
-          })
-        }
-      });
-    }
-  };
-}
-
-export function fetchGroupMappings(groupId) {
+/*
+ * Load all available groups.
+ */
+export function fetchGroups() {
   return {
-    type: constants.FETCH_GROUP_MAPPINGS,
-    meta: {
-      groupId
-    },
+    type: constants.FETCH_GROUPS,
     payload: {
-      promise: axios.get(`/api/groups/${groupId}/mappings`, {
+      promise: axios.get('/api/groups', {
         timeout: 5000,
         responseType: 'json'
       })
@@ -32,6 +16,27 @@ export function fetchGroupMappings(groupId) {
   };
 }
 
+/*
+ * Load the details of a single group.
+ */
+export function fetchGroupDetails(groupId) {
+  return {
+    type: constants.FETCH_GROUP,
+    meta: {
+      groupId
+    },
+    payload: {
+      promise: axios.get(`/api/groups/${groupId}`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
+ * Load the members of a single group.
+ */
 export function fetchGroupMembers(groupId, reload) {
   return {
     type: constants.FETCH_GROUP_MEMBERS,
@@ -48,32 +53,47 @@ export function fetchGroupMembers(groupId, reload) {
   };
 }
 
-export function fetchGroup(groupId) {
-  return (dispatch) => {
-    dispatch({
-      type: constants.FETCH_GROUP,
-      meta: {
-        groupId
-      },
-      payload: {
-        promise: axios.get(`/api/groups/${groupId}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      }
-    });
-
-    dispatch(fetchGroupMappings(groupId));
-    dispatch(fetchGroupMembers(groupId));
+/*
+ * Load the mappings of a single group.
+ */
+export function fetchGroupMappings(groupId) {
+  return {
+    type: constants.FETCH_GROUP_MAPPINGS,
+    meta: {
+      groupId
+    },
+    payload: {
+      promise: axios.get(`/api/groups/${groupId}/mappings`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
   };
 }
 
+/*
+ * Load a single group.
+ */
+export function fetchGroup(groupId) {
+  return (dispatch) => {
+    dispatch(fetchGroupDetails(groupId));
+    dispatch(fetchGroupMembers(groupId));
+    dispatch(fetchGroupMappings(groupId));
+  };
+}
+
+/*
+ * Create a new group.
+ */
 export function createGroup() {
   return {
     type: constants.CREATE_GROUP
   };
 }
 
+/*
+ * Edit a specific group.
+ */
 export function editGroup(group) {
   return {
     type: constants.EDIT_GROUP,
@@ -83,6 +103,9 @@ export function editGroup(group) {
   };
 }
 
+/*
+ * Save the details of a group (name, descripton)
+ */
 export function saveGroup(group) {
   return (dispatch, getState) => {
     const state = getState().group.toJS();
@@ -99,46 +122,56 @@ export function saveGroup(group) {
       },
       meta: {
         isNew: state.isNew,
-        group: group,
+        group,
         groupId: state.groupId || group.name
       }
     });
   };
 }
 
-export function requestingDeleteGroup(group) {
+/*
+ * Request if we can delete the current group?
+ */
+export function requestDeleteGroup(group) {
   return {
-    type: constants.REQUESTING_DELETE_GROUP,
+    type: constants.REQUEST_DELETE_GROUP,
     payload: {
       group
     }
   };
 }
 
+/*
+ * Cancel the delete process.
+ */
 export function cancelDeleteGroup() {
   return {
     type: constants.CANCEL_DELETE_GROUP
   };
 }
 
+/*
+ * Delete the group.
+ */
 export function deleteGroup(group) {
-  return (dispatch, getState) => {
-    dispatch({
-      type: constants.DELETE_GROUP,
-      payload: {
-        promise: axios.delete(`/api/groups/${group._id}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        group,
-        groupId: group._id
-      }
-    });
+  return {
+    type: constants.DELETE_GROUP,
+    payload: {
+      promise: axios.delete(`/api/groups/${group._id}`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    },
+    meta: {
+      group,
+      groupId: group._id
+    }
   };
 }
 
+/*
+ * Clear the selected group.
+ */
 export function clearGroup() {
   return {
     type: constants.CLEAR_GROUP
@@ -177,7 +210,7 @@ export function addGroupMembers() {
 
 export function requestRemoveGroupMember(group, user) {
   return {
-    type: constants.REQUESTING_REMOVE_GROUP_MEMBER,
+    type: constants.REQUEST_REMOVE_GROUP_MEMBER,
     meta: {
       group,
       user

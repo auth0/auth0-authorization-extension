@@ -51,7 +51,7 @@ export const role = createReducer(fromJS(initialState), {
     state.merge({
       ...initialState
     }),
-  [constants.REQUESTING_DELETE_ROLE]: (state, action) =>
+  [constants.REQUEST_DELETE_ROLE]: (state, action) =>
     state.merge({
       isDelete: true,
       roleId: action.payload.role.name,

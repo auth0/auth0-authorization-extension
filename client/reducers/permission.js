@@ -51,7 +51,7 @@ export const permission = createReducer(fromJS(initialState), {
     state.merge({
       ...initialState
     }),
-  [constants.REQUESTING_DELETE_PERMISSION]: (state, action) =>
+  [constants.REQUEST_DELETE_PERMISSION]: (state, action) =>
     state.merge({
       isDelete: true,
       permissionId: action.payload.permission.name,

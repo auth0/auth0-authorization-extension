@@ -30,8 +30,10 @@ class GroupsTable extends Component {
       <Table>
         <TableHeader>
           <TableColumn width="3%" />
-          <TableColumn width="27%">Name</TableColumn>
-          <TableColumn width="55%">Description</TableColumn>
+          <TableColumn width="20%">Name</TableColumn>
+          <TableColumn width="23%">Description</TableColumn>
+          <TableColumn width="15%">Members</TableColumn>
+          <TableColumn width="15%">Mappings</TableColumn>
           <TableColumn width="15%" />
         </TableHeader>
         <TableBody>

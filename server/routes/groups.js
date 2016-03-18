@@ -31,6 +31,11 @@ export default (db) => {
   const api = Router();
   api.get('/', (req, res, next) => {
     db.getGroups()
+      .then(groups => groups.map(group => {
+        group.mappings = group.mappings || [];
+        group.members = group.members || [];
+        return group;
+      }))
       .then(groups => res.json(groups))
       .catch(next);
   });

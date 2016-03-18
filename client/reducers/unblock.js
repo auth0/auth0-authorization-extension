@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const unblock = createReducer(fromJS(initialState), {
-  [constants.REQUESTING_UNBLOCK_USER]: (state, action) =>
+  [constants.REQUEST_UNBLOCK_USER]: (state, action) =>
     state.merge({
       userId: action.user.user_id,
       userName: action.user.user_name || action.user.email,

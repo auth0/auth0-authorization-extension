@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
@@ -43,7 +43,7 @@ class GroupsContainer extends Component {
   }
 
   requestDelete(group) {
-    this.props.requestingDeleteGroup(group);
+    this.props.requestDeleteGroup(group);
   }
 
   confirmDelete(group) {
@@ -70,14 +70,28 @@ class GroupsContainer extends Component {
 
         <div className="row">
           <div className="col-xs-12 wrapper">
-            <ButtonToolbar className="pull-right">
-              <Button bsSize="xsmall" onClick={this.refresh} disabled={this.props.groups.loading}>
-                <i className="icon icon-budicon-257"></i> Refresh
-              </Button>
-              <Button bsStyle="primary" bsSize="xsmall" onClick={this.create} disabled={this.props.groups.loading}>
-                <i className="icon icon-budicon-337"></i> Create
-              </Button>
-            </ButtonToolbar>
+            <div className="content-header video-template">
+              <ButtonToolbar className="pull-right">
+                <Button bsSize="xsmall" onClick={this.refresh} disabled={this.props.groups.loading}>
+                  <i className="icon icon-budicon-257"></i> Refresh
+                </Button>
+                <Button bsStyle="primary" bsSize="xsmall" onClick={this.create} disabled={this.props.groups.loading}>
+                  <i className="icon icon-budicon-337"></i> Create
+                </Button>
+              </ButtonToolbar>
+              <h1>Groups</h1>
+              <div className="cues-container">
+                <div className="use-case-box is-active">
+                  <div className="explainer-text">
+                    <span className="explainer-text-content">Create and manage groups in which you can add users and define dynamic group memberships.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-xs-12 wrapper">
           </div>
         </div>
         <div className="row">

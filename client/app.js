@@ -22,7 +22,7 @@ import ApplicationsContainer from './containers/Applications/ApplicationsContain
 
 import configureStore from './store/configureStore';
 
-const store = configureStore([routerMiddleware(browserHistory)], { });
+const store = configureStore([ routerMiddleware(browserHistory) ], { });
 const history = syncHistoryWithStore(browserHistory, store);
 
 // Fire first events.

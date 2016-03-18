@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const block = createReducer(fromJS(initialState), {
-  [constants.REQUESTING_BLOCK_USER]: (state, action) =>
+  [constants.REQUEST_BLOCK_USER]: (state, action) =>
     state.merge({
       userId: action.user.user_id,
       userName: action.user.user_name || action.user.email,

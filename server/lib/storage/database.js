@@ -1,14 +1,14 @@
-import { ArgumentError, NotFoundError, ValidationError } from '../errors';
+import { ArgumentError } from '../errors';
 
 export default class Database {
   constructor(options = { }) {
     if (!options.provider) {
       throw new ArgumentError('The \'provider\' has to be set when initializing the database.');
     }
-    
+
     this.provider = options.provider;
   }
-  
+
   getPermissions() {
     return this.provider
       .getRecords('permissions');
