@@ -36,17 +36,17 @@ class Users extends React.Component {
     }
 
     return <TableAction id={`remove-mfa-${index}`} type="success" title={`Remove MFA (${user.multifactor[0]})`} icon="243"
-      onClick={() => this.props.requestingRemoveMultiFactor(user)} disabled={this.props.loading || false} />;
+      onClick={() => this.props.requestRemoveMultiFactor(user)} disabled={this.props.loading || false} />;
   }
 
   getBlockedAction(user, index) {
     if (user.blocked) {
       return <TableAction id={`unblock-${index}`}  title="Unblock User" icon="284"
-        onClick={() => this.props.requestingUnblockUser(user)} disabled={this.props.loading || false} />;
+        onClick={() => this.props.requestUnblockUser(user)} disabled={this.props.loading || false} />;
     }
 
     return <TableAction id={`block-${index}`} type="success" title="Block User" icon="284"
-      onClick={() => this.props.requestingBlockUser(user)} disabled={this.props.loading || false} />;
+      onClick={() => this.props.requestBlockUser(user)} disabled={this.props.loading || false} />;
   }
 
   renderUserActions(user, index) {

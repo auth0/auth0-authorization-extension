@@ -1,10 +1,16 @@
 import * as constants from '../constants';
 import axios from 'axios';
 
+import { fetchUserLogs } from './userLog';
+import { fetchUserDevices } from './userDevice';
+
+/*
+ * Search for users.
+ */
 export function fetchUsers(search = '', reset = false, page = 0) {
   return (dispatch, getState) => {
     const users = getState().users.get('records');
-    if (reset || search != '' || !users.size) {
+    if (reset || search !== '' || !users.size) {
       dispatch({
         type: constants.FETCH_USERS,
         payload: {
@@ -25,62 +31,57 @@ export function fetchUsers(search = '', reset = false, page = 0) {
   };
 }
 
-export function fetchUser(userId) {
-  return (dispatch) => {
-    dispatch({
-      type: constants.FETCH_USER,
-      meta: {
-        userId
-      },
-      payload: {
-        promise: axios.get(`/api/users/${userId}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      }
-    });
-
-    dispatch({
-      type: constants.FETCH_USER_LOGS,
-      meta: {
-        userId
-      },
-      payload: {
-        promise: axios.get(`/api/users/${userId}/logs`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      }
-    });
-
-    dispatch({
-      type: constants.FETCH_USER_DEVICES,
-      meta: {
-        userId
-      },
-      payload: {
-        promise: axios.get(`/api/users/${userId}/devices`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      }
-    });
+/*
+ * Fetch the user details.
+ */
+export function fetchUserDetail(userId) {
+  return {
+    type: constants.FETCH_USER,
+    meta: {
+      userId
+    },
+    payload: {
+      promise: axios.get(`/api/users/${userId}`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
   };
 }
 
-export function requestingRemoveMultiFactor(user) {
+/*
+ * Fetch the complete user object.
+ */
+export function fetchUser(userId) {
+  return (dispatch) => {
+    dispatch(fetchUserDetail(userId));
+    dispatch(fetchUserLogs(userId));
+    dispatch(fetchUserDevices(userId));
+  };
+}
+
+/*
+ * Get confirmation to remove MFA from a user.
+ */
+export function requestRemoveMultiFactor(user) {
   return {
     type: constants.REQUEST_REMOVE_MULTIFACTOR,
     user
   };
 }
 
+/*
+ * Cancel the removal process.
+ */
 export function cancelRemoveMultiFactor() {
   return {
     type: constants.CANCEL_REMOVE_MULTIFACTOR
   };
 }
 
+/*
+ * Remove multi factor from a user.
+ */
 export function removeMultiFactor(userId, provider) {
   return (dispatch, getState) => {
     const userId = getState().mfa.get('userId');
@@ -99,19 +100,28 @@ export function removeMultiFactor(userId, provider) {
   };
 }
 
-export function requestingBlockUser(user) {
+/*
+ * Get confirmation to block a user.
+ */
+export function requestBlockUser(user) {
   return {
     type: constants.REQUEST_BLOCK_USER,
     user
   };
 }
 
+/*
+ * Cancel blocking a user.
+ */
 export function cancelBlockUser() {
   return {
     type: constants.CANCEL_BLOCK_USER
   };
 }
 
+/*
+ * Block a user.
+ */
 export function blockUser() {
   return (dispatch, getState) => {
     const userId = getState().block.get('userId');
@@ -130,19 +140,28 @@ export function blockUser() {
   };
 }
 
-export function requestingUnblockUser(user) {
+/*
+ * Get confirmation to unblock a user.
+ */
+export function requestUnblockUser(user) {
   return {
     type: constants.REQUEST_UNBLOCK_USER,
     user
   };
 }
 
+/*
+ * Cancel unblocking a user.
+ */
 export function cancelUnblockUser() {
   return {
     type: constants.CANCEL_UNBLOCK_USER
   };
 }
 
+/*
+ * Unblock a user.
+ */
 export function unblockUser() {
   return (dispatch, getState) => {
     const userId = getState().unblock.get('userId');

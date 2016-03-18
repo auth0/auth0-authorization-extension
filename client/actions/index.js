@@ -8,4 +8,7 @@ export * as logActions from './log';
 export * as permissionActions from './permission';
 export * as roleActions from './role';
 export * as userActions from './user';
+export * as userGroupActions from './userGroup';
+export * as userLogActions from './userLog';
+export * as userDeviceActions from './userDevice';
 export * as userPickerActions from './userPicker';
