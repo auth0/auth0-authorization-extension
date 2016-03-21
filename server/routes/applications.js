@@ -27,6 +27,7 @@ export default (db, auth0) => {
           return client;
         })
       )
+      .then(clients => _.orderBy(clients, [ 'groups.length' ], [ 'desc' ]))
       .then(clients => res.json(clients))
       .catch(next);
   });
