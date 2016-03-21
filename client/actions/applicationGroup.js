@@ -23,7 +23,7 @@ export function fetchApplicationGroups(applicationId, reload) {
 /*
  * Add the selected groups to a application.
  */
-export function addApplicationGroups(applicationId, groups, callback) {
+export function addApplicationGroups(applicationId, groupId, callback) {
   return (dispatch) => {
     dispatch({
       type: constants.ADD_APPLICATION_GROUPS,
@@ -31,7 +31,9 @@ export function addApplicationGroups(applicationId, groups, callback) {
         promise: axios({
           method: 'patch',
           url: `/api/applications/${applicationId}/groups`,
-          data: groups,
+          data: {
+            groupId
+          },
           timeout: 5000,
           responseType: 'json'
         })
@@ -47,12 +49,12 @@ export function addApplicationGroups(applicationId, groups, callback) {
 /*
  * Request if it's ok to remove a group.
  */
-export function requestRemoveApplicationGroup(application, user) {
+export function requestRemoveApplicationGroup(application, group) {
   return {
     type: constants.REQUEST_REMOVE_APPLICATION_GROUP,
     meta: {
       application,
-      user
+      group
     }
   };
 }
@@ -69,7 +71,7 @@ export function cancelRemoveApplicationGroup() {
 /*
  * Remove a group from the application.
  */
-export function removeApplicationGroup(applicationId, userId) {
+export function removeApplicationGroup(applicationId, groupId) {
   return {
     type: constants.REMOVE_APPLICATION_GROUP,
     payload: {
@@ -77,14 +79,14 @@ export function removeApplicationGroup(applicationId, userId) {
         method: 'delete',
         url: `/api/applications/${applicationId}/groups`,
         data: {
-          userId
+          groupId
         },
         timeout: 5000,
         responseType: 'json'
       })
     },
     meta: {
-      userId,
+      groupId,
       applicationId
     }
   };

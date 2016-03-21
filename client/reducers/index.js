@@ -4,6 +4,7 @@ import { routerReducer } from 'react-router-redux';
 
 import { auth } from './auth';
 import { application } from './application';
+import { applicationGroup } from './applicationGroup';
 import { applications } from './applications';
 import { connections } from './connections';
 import { mfa } from './mfa';
@@ -26,6 +27,7 @@ import { permissions } from './permissions';
 export default combineReducers({
   routing: routerReducer,
   application,
+  applicationGroup,
   applications,
   connections,
   auth,

@@ -26,7 +26,8 @@ export default (db, auth0) => {
         app.groups = app.groups || [];
         return app;
       })
-      .then(app => db.getGroups().then(groups => _.filter(groups, (group) => app.groups.indexOf(group._id) > -1)))
+      .then(app => db.getGroups()
+        .then(groups => _.filter(groups, (group) => app.groups.indexOf(group._id) > -1)))
       .then(groups => groups.map((group) => ({
         _id: group._id,
         name: group.name,

@@ -1,4 +1,5 @@
 export * as applicationActions from './application';
+export * as applicationGroupActions from './applicationGroup';
 export * as authActions from './auth';
 export * as connectionActions from './connection';
 export * as groupActions from './group';
