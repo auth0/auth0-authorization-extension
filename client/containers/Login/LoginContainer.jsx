@@ -7,7 +7,6 @@ import { LoadingPanel } from '../../components/Dashboard';
 
 class LoginContainer extends Component {
   componentWillMount() {
-    console.log(this.props);
     if (this.props.auth.isAuthenticated) {
       this.props.push(`/users`);
     } else if (!this.props.auth.isAuthenticating) {

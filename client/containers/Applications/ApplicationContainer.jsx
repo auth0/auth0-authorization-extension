@@ -45,7 +45,9 @@ export default class ApplicationContainer extends Component {
           </div>
         </div>
         <div>
-          <ApplicationGroupRemoveDialog applicationGroup={this.props.applicationGroup} />
+          <ApplicationGroupRemoveDialog applicationGroup={this.props.applicationGroup}
+            onConfirm={this.props.removeApplicationGroup} onCancel={this.props.cancelRemoveApplicationGroup}
+          />
         </div>
       </div>
     );
@@ -57,7 +59,9 @@ ApplicationContainer.propTypes = {
   applicationGroup: PropTypes.object,
   params: PropTypes.object.isRequired,
   fetchApplication: PropTypes.func.isRequired,
-  requestRemoveApplicationGroup: PropTypes.func.isRequired
+  requestRemoveApplicationGroup: PropTypes.func.isRequired,
+  cancelRemoveApplicationGroup: PropTypes.func.isRequired,
+  removeApplicationGroup: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

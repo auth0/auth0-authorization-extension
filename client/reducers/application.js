@@ -75,7 +75,6 @@ export const application = createReducer(fromJS(initialState), {
     }),
   [constants.FETCH_APPLICATION_FULFILLED]: (state, action) => {
     const { data } = action.payload;
-    console.log(data, state.toJS());
     if (data.client_id !== state.get('applicationId')) {
       return state;
     }
