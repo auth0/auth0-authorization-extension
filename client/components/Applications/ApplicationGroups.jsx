@@ -18,7 +18,7 @@ class ApplicationGroups extends Component {
 
   getHelpText(groups) {
     if (groups.length === 0) {
-      return <span>This application can be accessed by all users.</span>;
+      return <span>This application can be accessed by all users.<br /> By adding groups here you will restrict application access to the users in these groups.</span>;
     }
 
     return <span>This application can only be accessed by users in these <strong>{groups.length}</strong> groups.</span>;
