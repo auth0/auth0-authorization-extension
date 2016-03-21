@@ -8,4 +8,5 @@ export GroupMappingRemoveAction from './GroupMappingRemoveAction';
 export GroupMappingRemoveDialog from './GroupMappingRemoveDialog';
 export GroupMembers from './GroupMembers';
 export GroupMemberRemoveDialog from './GroupMemberRemoveDialog';
+export GroupPickerDialog from './GroupPickerDialog';
 export GroupsTable from './GroupsTable';

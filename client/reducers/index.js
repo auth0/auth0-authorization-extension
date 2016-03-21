@@ -18,6 +18,7 @@ import { users } from './users';
 import { role } from './role';
 import { roles } from './roles';
 import { group } from './group';
+import { groupPicker } from './groupPicker';
 import { groupMember } from './groupMember';
 import { groupMapping } from './groupMapping';
 import { groups } from './groups';
@@ -42,6 +43,7 @@ export default combineReducers({
   role,
   roles,
   group,
+  groupPicker,
   groupMember,
   groupMapping,
   groups,

@@ -1,24 +1,22 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import { connectionActions } from '../../actions';
 import * as actions from '../../actions/group';
-import { Error, LoadingPanel } from '../../components/Dashboard';
-import { GroupDeleteDialog, GroupDialog, GroupForm, GroupsTable } from '../../components/Groups';
+import { Error, LoadingPanel, TableAction } from '../../components/Dashboard';
+import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../../components/Groups';
 
 class GroupsContainer extends Component {
   constructor() {
     super();
 
     this.refresh = this.refresh.bind(this);
-    this.create = this.create.bind(this);
-    this.edit = this.edit.bind(this);
     this.save = this.save.bind(this);
     this.clear = this.clear.bind(this);
-    this.requestDelete = this.requestDelete.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
     this.cancelDelete = this.cancelDelete.bind(this);
+    this.renderGroupActions = this.renderGroupActions.bind(this);
   }
 
   componentWillMount() {
@@ -26,12 +24,8 @@ class GroupsContainer extends Component {
     this.props.fetchConnections();
   }
 
-  create() {
-    this.props.createGroup();
-  }
-
-  edit(group) {
-    this.props.editGroup(group);
+  refresh() {
+    this.props.fetchGroups(true);
   }
 
   save(group) {
@@ -42,10 +36,6 @@ class GroupsContainer extends Component {
     this.props.clearGroup(group);
   }
 
-  requestDelete(group) {
-    this.props.requestDeleteGroup(group);
-  }
-
   confirmDelete(group) {
     this.props.deleteGroup(group);
   }
@@ -54,8 +44,18 @@ class GroupsContainer extends Component {
     this.props.cancelDeleteGroup(group);
   }
 
-  refresh() {
-    this.props.fetchGroups(true);
+  renderGroupActions(group) {
+    return (
+      <div>
+        <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="266"
+          onClick={this.props.editGroup} args={[ group ]} d disabled={this.props.groups.loading || false}
+        />
+        <span> </span>
+        <TableAction id={`delete-${group._id}`} type="success" title="Delete Group" icon="263"
+          onClick={this.props.requestDeleteGroup} args={[ group ]} disabled={this.props.groups.loading || false}
+        />
+      </div>
+    );
   }
 
   render() {
@@ -75,7 +75,7 @@ class GroupsContainer extends Component {
                 <Button bsSize="xsmall" onClick={this.refresh} disabled={this.props.groups.loading}>
                   <i className="icon icon-budicon-257"></i> Refresh
                 </Button>
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.create} disabled={this.props.groups.loading}>
+                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
                   <i className="icon icon-budicon-337"></i> Create
                 </Button>
               </ButtonToolbar>
@@ -94,8 +94,7 @@ class GroupsContainer extends Component {
           <div className="col-xs-12 wrapper">
             <Error message={this.props.groups.error} />
             <LoadingPanel show={this.props.groups.loading}>
-              <GroupsTable groups={this.props.groups.records} loading={this.props.groups.loading}
-                onEdit={this.edit} onDelete={this.requestDelete} />
+              <GroupsTable canOpenGroup={true} groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
             </LoadingPanel>
           </div>
         </div>
@@ -103,6 +102,17 @@ class GroupsContainer extends Component {
     );
   }
 }
+
+GroupsContainer.propTypes = {
+  children: React.PropTypes.object,
+  group: React.PropTypes.object.isRequired,
+  groups: React.PropTypes.object.isRequired,
+  fetchConnections: PropTypes.func.isRequired,
+  fetchGroups: PropTypes.func.isRequired,
+  createGroup: PropTypes.func.isRequired,
+  editGroup: PropTypes.func.isRequired,
+  requestDeleteGroup: PropTypes.func.isRequired
+};
 
 function mapStateToProps(state) {
   return {

@@ -1,45 +1,34 @@
 import React, { Component } from 'react';
-import { Modal, ButtonToolbar } from 'react-bootstrap';
+import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableCell, TableAction, TableIconCell, TableRouteCell, TableTextCell, TableRow } from '../Dashboard';
+import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from '../Dashboard';
 
 class GroupRow extends Component {
-  constructor() {
-    super();
-    this.edit = this.edit.bind(this);
-    this.delete = this.delete.bind(this);
-  }
-
   shouldComponentUpdate(nextProps) {
     return nextProps.group !== this.props.group;
   }
 
-  edit() {
-    this.props.onEdit(this.props.group);
-  }
+  renderGroupName(group) {
+    if (this.props.canOpenGroup) {
+      return <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>;
+    }
 
-  delete() {
-    this.props.onDelete(this.props.group);
+    return <TableTextCell>{ group.name || 'N/A' }</TableTextCell>;
   }
 
   render() {
-    const { group } = this.props;
+    const { group, index } = this.props;
 
     return (
       <TableRow>
         <TableIconCell icon="322" />
-        <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
+        {this.renderGroupName(group)}
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
         <TableTextCell>{ (group.members && group.members.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.mappings && group.mappings.length) || '0' }</TableTextCell>
         <TableCell>
           <ButtonToolbar style={{ marginBottom: '0px' }}>
-            <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="266"
-              onClick={this.edit} disabled={this.props.loading || false}
-            />
-            <TableAction id={`delete-${group._id}`} type="success" title="Delete Group" icon="263"
-              onClick={this.delete} disabled={this.props.loading || false}
-            />
+            {this.props.renderActions(group, index)}
           </ButtonToolbar>
         </TableCell>
       </TableRow>
@@ -49,9 +38,10 @@ class GroupRow extends Component {
 
 GroupRow.propTypes = {
   loading: React.PropTypes.bool,
+  index: React.PropTypes.number.isRequired,
+  canOpenGroup: React.PropTypes.bool,
   group: React.PropTypes.object.isRequired,
-  onEdit: React.PropTypes.func.isRequired,
-  onDelete: React.PropTypes.func.isRequired
+  renderActions: React.PropTypes.func.isRequired
 };
 
 export default GroupRow;

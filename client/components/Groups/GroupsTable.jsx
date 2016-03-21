@@ -5,22 +5,8 @@ import GroupRow from './GroupRow';
 import { Table, TableBody, TableHeader, TableColumn } from '../Dashboard';
 
 class GroupsTable extends Component {
-  constructor() {
-    super();
-    this.edit = this.edit.bind(this);
-    this.delete = this.delete.bind(this);
-  }
-
   shouldComponentUpdate(nextProps) {
     return nextProps.groups !== this.props.groups;
-  }
-
-  edit(group) {
-    this.props.onEdit(group);
-  }
-
-  delete(group) {
-    this.props.onDelete(group);
   }
 
   render() {
@@ -38,7 +24,7 @@ class GroupsTable extends Component {
         </TableHeader>
         <TableBody>
           {_.sortBy(groups, 'name').map((group, index) =>
-            <GroupRow key={index} group={group} onEdit={this.edit} onDelete={this.delete} />
+            <GroupRow key={index} canOpenGroup={this.props.canOpenGroup} index={index} group={group} renderActions={this.props.renderActions} />
           )}
         </TableBody>
       </Table>
@@ -47,10 +33,10 @@ class GroupsTable extends Component {
 }
 
 GroupsTable.propTypes = {
-  onEdit: React.PropTypes.func.isRequired,
-  onDelete: React.PropTypes.func.isRequired,
   groups: React.PropTypes.object.isRequired,
-  loading: React.PropTypes.bool.isRequired
+  canOpenGroup: React.PropTypes.bool,
+  loading: React.PropTypes.bool.isRequired,
+  renderActions: React.PropTypes.func.isRequired
 };
 
 export default GroupsTable;

@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupMemberActions, logActions, userActions } from '../../actions';
+import { groupPickerActions, groupMemberActions, logActions, userActions } from '../../actions';
 
 import './UserContainer.css';
 import LogDialog from '../../components/Logs/LogDialog';
@@ -13,12 +13,14 @@ import UserHeader from '../../components/Users/UserHeader';
 import UserProfile from '../../components/Users/UserProfile';
 import UserDevices from '../../components/Users/UserDevices';
 
-import { GroupMemberRemoveDialog } from '../../components/Groups';
+import { GroupPickerDialog, GroupMemberRemoveDialog } from '../../components/Groups';
 
 export default class UserContainer extends Component {
   constructor() {
     super();
 
+    this.requestAddToGroup = this.requestAddToGroup.bind(this);
+    this.addToGroup = this.addToGroup.bind(this);
     this.requestRemoveMember = this.requestRemoveMember.bind(this);
     this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
     this.removeMember = this.removeMember.bind(this);
@@ -29,6 +31,14 @@ export default class UserContainer extends Component {
 
   add(user) {
     console.log('Add', userId);
+  }
+
+  requestAddToGroup(user) {
+    this.props.openGroupPicker(`Add "${user.email || user.nickname || 'user'}" to a group`);
+  }
+
+  addToGroup(group) {
+    console.log(group);
   }
 
   requestRemoveMember(user, group) {
@@ -44,7 +54,8 @@ export default class UserContainer extends Component {
   }
 
   render() {
-    const { user, groups, groupMember, log, logs, devices } = this.props;
+    const { user, groups, groupPicker, groupMember, log, logs, devices } = this.props;
+
     return (
       <div>
         <div className="row">
@@ -64,7 +75,7 @@ export default class UserContainer extends Component {
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
               <Tab eventKey={2} title="Groups">
-                <UserGroups user={user.record} groups={groups} addToGroup={this.add} removeFromGroup={this.requestRemoveMember} />
+                <UserGroups user={user.record} groups={groups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Devices">
                 <UserDevices loading={devices.loading} devices={devices.records} error={devices.error} />
@@ -76,6 +87,7 @@ export default class UserContainer extends Component {
             </Tabs>
           </div>
         </div>
+        <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addToGroup} onCancel={this.props.cancelGroupPicker} />
         <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
       </div>
     );
@@ -84,6 +96,7 @@ export default class UserContainer extends Component {
 
 function mapStateToProps(state) {
   return {
+    groupPicker: state.groupPicker,
     groupMember: state.groupMember,
     user: {
       record: state.user.get('record'),
@@ -110,4 +123,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...groupMemberActions, ...logActions, ...userActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions })(UserContainer);

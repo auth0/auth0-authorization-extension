@@ -23,5 +23,8 @@ ReactDOM.render(
   document.getElementById('app')
 );
 
+// Show the developer tools.
+if (process.env.NODE_ENV !== 'production') {
   const showDevTools = require('./showDevTools');
   showDevTools(store);
+}
