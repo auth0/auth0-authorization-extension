@@ -23,13 +23,13 @@ export function fetchApplicationGroups(applicationId, reload) {
 /*
  * Add the selected groups to a application.
  */
-export function addApplicationGroups(applicationId, groupId, callback) {
+export function addApplicationGroup(applicationId, groupId, callback) {
   return (dispatch) => {
     dispatch({
-      type: constants.ADD_APPLICATION_GROUPS,
+      type: constants.ADD_APPLICATION_GROUP,
       payload: {
         promise: axios({
-          method: 'patch',
+          method: 'post',
           url: `/api/applications/${applicationId}/groups`,
           data: {
             groupId

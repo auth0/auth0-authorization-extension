@@ -21,17 +21,10 @@ export default class UserContainer extends Component {
 
     this.requestAddToGroup = this.requestAddToGroup.bind(this);
     this.addToGroup = this.addToGroup.bind(this);
-    this.requestRemoveMember = this.requestRemoveMember.bind(this);
-    this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
-    this.removeMember = this.removeMember.bind(this);
   }
 
   componentWillMount() {
     this.props.fetchUser(this.props.params.id);
-  }
-
-  add(user) {
-    console.log('Add', userId);
   }
 
   requestAddToGroup(user) {
@@ -43,18 +36,6 @@ export default class UserContainer extends Component {
     this.props.addGroupMembers(group._id, [ this.props.user.record.get('user_id') ], () => {
       this.props.fetchUserGroups(this.props.user.record.get('user_id'));
     });
-  }
-
-  requestRemoveMember(user, group) {
-    this.props.requestRemoveGroupMember(group, user);
-  }
-
-  cancelRemoveMember() {
-    this.props.cancelRemoveGroupMember();
-  }
-
-  removeMember(groupId, userId) {
-    this.props.removeGroupMember(groupId, userId);
   }
 
   render() {
@@ -79,7 +60,7 @@ export default class UserContainer extends Component {
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
               <Tab eventKey={2} title="Groups">
-                <UserGroups user={user.record} groups={groups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
+                <UserGroups user={user.record} groups={groups} addToGroup={this.requestAddToGroup} removeFromGroup={this.props.requestRemoveGroupMember} />
               </Tab>
               <Tab eventKey={3} title="Devices">
                 <UserDevices loading={devices.loading} devices={devices.records} error={devices.error} />
@@ -92,7 +73,7 @@ export default class UserContainer extends Component {
           </div>
         </div>
         <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addToGroup} onCancel={this.props.cancelGroupPicker} />
-        <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
+        <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.props.removeGroupMember} onCancel={this.props.cancelRemoveMember} />
       </div>
     );
   }

@@ -68,6 +68,9 @@ class ApplicationGroups extends Component {
 
     return (
       <div>
+        <div className="bg-warning">
+          Heads up! By adding or removing groups here you are changing the authorization behavior of your application.
+        </div>
         <div className="row">
           <div className="col-xs-12">
             <span className="pull-left">{this.getHelpText(records)}</span>

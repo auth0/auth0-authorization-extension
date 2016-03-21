@@ -38,17 +38,17 @@ const applicationGroups = createReducer(fromJS(initialState.groups), {
       loading: false,
       records: fromJS(action.payload.data)
     }),
-  [constants.ADD_APPLICATION_GROUPS_PENDING]: (state) =>
+  [constants.ADD_APPLICATION_GROUP_PENDING]: (state) =>
     state.merge({
       loading: true,
       error: null
     }),
-  [constants.ADD_APPLICATION_GROUPS_REJECTED]: (state, action) =>
+  [constants.ADD_APPLICATION_GROUP_REJECTED]: (state, action) =>
     state.merge({
       loading: false,
       error: `An error occured while adding the groups: ${action.errorMessage}`
     }),
-  [constants.ADD_APPLICATION_GROUPS_FULFILLED]: (state) =>
+  [constants.ADD_APPLICATION_GROUP_FULFILLED]: (state) =>
     state.merge({
       loading: false
     }),
@@ -96,15 +96,15 @@ export const application = createReducer(fromJS(initialState), {
     state.merge({
       groups: applicationGroups(state.get('groups'), action)
     }),
-  [constants.ADD_APPLICATION_GROUPS_PENDING]: (state, action) =>
+  [constants.ADD_APPLICATION_GROUP_PENDING]: (state, action) =>
     state.merge({
       groups: applicationGroups(state.get('groups'), action)
     }),
-  [constants.ADD_APPLICATION_GROUPS_REJECTED]: (state, action) =>
+  [constants.ADD_APPLICATION_GROUP_REJECTED]: (state, action) =>
     state.merge({
       groups: applicationGroups(state.get('groups'), action)
     }),
-  [constants.ADD_APPLICATION_GROUPS_FULFILLED]: (state, action) =>
+  [constants.ADD_APPLICATION_GROUP_FULFILLED]: (state, action) =>
     state.merge({
       groups: applicationGroups(state.get('groups'), action)
     }),
