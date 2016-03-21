@@ -101,20 +101,25 @@ export default class S3Provider {
       });
   }
 
-  updateRecord(collection, identifier, record = { }) {
+  updateRecord(collection, identifier, record = { }, upsert = false) {
     return this._readObject(collection)
       .then(({ data }) => {
         const index = _.findIndex(data[collection], (r) => r._id === identifier);
-        if (index < 0) {
+        if (index < 0 && !upsert) {
           throw new ValidationError(`The record '${identifier}' in '${collection}' does not exist.`);
         }
 
         // Update record.
-        data[collection][index] = Object.assign({ _id: identifier }, data[collection][index], record);
+        const updatedRecord = Object.assign({ _id: identifier }, index < 0 ? { } : data[collection][index], record);
+        if (index < 0) {
+          data[collection].push(updatedRecord);
+        } else {
+          data[collection][index] = updatedRecord;
+        }
 
         // Save.
         return this._writeObject(data)
-          .then(() => data[collection][index]);
+          .then(() => updatedRecord);
       });
   }
 
@@ -123,7 +128,7 @@ export default class S3Provider {
       .then(({ data }) => {
         const index = _.findIndex(data[collection], (r) => r._id === identifier);
         if (index < 0) {
-          return;
+          return false;
         }
 
         // Remove the record.

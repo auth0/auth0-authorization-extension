@@ -1,6 +1,5 @@
-
 import { expect } from 'chai';
-import Database from '../../server/lib/storage/database'
+import Database from '../../server/lib/storage/database';
 
 describe('Database', () => {
   describe('#constructor', () => {
@@ -12,7 +11,7 @@ describe('Database', () => {
         .to.throw('The \'provider\' has to be set when initializing the database.');
       done();
     });
-    
+
     it('should initialize correctly', (done) => {
       const database = new Database({
         provider: { }
@@ -20,4 +19,4 @@ describe('Database', () => {
       done();
     });
   });
-});    
+});

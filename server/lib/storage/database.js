@@ -83,4 +83,19 @@ export default class Database {
     return this.provider
       .deleteRecord('groups', id);
   }
+
+  getApplications() {
+    return this.provider
+      .getRecords('applications');
+  }
+
+  getApplication(clientId) {
+    return this.provider
+      .getRecord('applications', clientId);
+  }
+
+  updateApplication(clientId, application) {
+    return this.provider
+      .updateRecord('applications', clientId, application, true);
+  }
 }

@@ -2,19 +2,19 @@ import AWS from 'aws-sdk';
 import nconf from 'nconf';
 import { expect } from 'chai';
 
-import S3Provider from '../../server/lib/storage/providers/s3'
+import S3Provider from '../../server/lib/storage/providers/s3';
 
 describe('S3Provider (Storage Provider)', () => {
-  var s3;
-  var provider;
-  
+  let s3;
+  let provider;
+
   before(() => {
     s3 = new AWS.S3({ params: { Bucket: nconf.get('AWS_S3_BUCKET') } });
     s3.config.credentials = new AWS.Credentials(
       nconf.get('AWS_ACCESS_KEY_ID'),
       nconf.get('AWS_SECRET_ACCESS_KEY')
     );
-    
+
     provider = new S3Provider({
       path: 'test-db.json',
       bucket: nconf.get('AWS_S3_BUCKET'),
@@ -22,7 +22,7 @@ describe('S3Provider (Storage Provider)', () => {
       keySecret: nconf.get('AWS_SECRET_ACCESS_KEY')
     });
   });
-  
+
   describe('#constructor', () => {
     it('should require a bucket', (done) => {
       const run = () => {
@@ -32,7 +32,7 @@ describe('S3Provider (Storage Provider)', () => {
         .to.throw('The \'bucket\' property is required when configuring the S3Provider.');
       done();
     });
-    
+
     it('should require a keyId', (done) => {
       const run = () => {
         const s3 = new S3Provider({
@@ -43,7 +43,7 @@ describe('S3Provider (Storage Provider)', () => {
         .to.throw('The \'keyId\' property is required when configuring the S3Provider.');
       done();
     });
-    
+
     it('should require a keySecret', (done) => {
       const run = () => {
         const s3 = new S3Provider({
@@ -55,7 +55,7 @@ describe('S3Provider (Storage Provider)', () => {
         .to.throw('The \'keySecret\' property is required when configuring the S3Provider.');
       done();
     });
-    
+
     it('should initialize correctly', (done) => {
       const s3 = new S3Provider({
         bucket: 'mybucket',
@@ -65,7 +65,7 @@ describe('S3Provider (Storage Provider)', () => {
       done();
     });
   });
-  
+
   describe('#getRecords', () => {
     beforeEach((done) => {
       s3.deleteObject({ Key: 'test-db.json' }, (err, data) => {
@@ -86,7 +86,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should return the complete collection', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: '1', name: 'group 1' },
             { _id: '2', name: 'group 2' },
@@ -106,7 +106,7 @@ describe('S3Provider (Storage Provider)', () => {
       });
     });
   });
-  
+
   describe('#getRecord', () => {
     beforeEach((done) => {
       s3.deleteObject({ Key: 'test-db.json' }, (err, data) => {
@@ -126,7 +126,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should return the record if it exists', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
             { _id: 'abc2', name: 'group 2' },
@@ -146,7 +146,7 @@ describe('S3Provider (Storage Provider)', () => {
       });
     });
   });
-  
+
   describe('#createRecord', () => {
     beforeEach((done) => {
       s3.deleteObject({ Key: 'test-db.json' }, (err, data) => {
@@ -187,7 +187,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should throw if record already exists', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
             { _id: 'abc2', name: 'group 2' },
@@ -206,7 +206,7 @@ describe('S3Provider (Storage Provider)', () => {
       });
     });
   });
-  
+
   describe('#updateRecord', () => {
     beforeEach((done) => {
       s3.deleteObject({ Key: 'test-db.json' }, (err, data) => {
@@ -217,7 +217,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should update the record if it exist', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
             { _id: 'abc2', name: 'group 2' },
@@ -244,7 +244,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should support patching', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1', description: 'aaa', users: ['a', 'b', 'c'] },
             { _id: 'abc2', name: 'group 2', description: 'bbb', users: ['d', 'e', 'f'] },
@@ -273,7 +273,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should throw if record does not exist', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
             { _id: 'abc2', name: 'group 2' },
@@ -291,8 +291,33 @@ describe('S3Provider (Storage Provider)', () => {
           });
       });
     });
+
+    it('should support upserts', (done) => {
+      let params = {
+        Key: 'test-db.json',
+        Body: JSON.stringify({
+          groups: [
+            { _id: 'abc1', name: 'group 1' },
+            { _id: 'abc2', name: 'group 2' }
+          ]
+        }),
+        ContentType: 'application/json'
+      };
+
+      s3.putObject(params, () => {
+        provider.updateRecord('groups', 'abc3', { name: 'my upsert group' }, true)
+          .then(() => provider.getRecord('groups', 'abc3')
+            .then((record) => {
+              expect(record._id).to.equal('abc3');
+              expect(record.name).to.equal('my upsert group');
+              expect(record.description).to.be.undefined;
+              done();
+            })
+            .catch(err => done(err)));
+      });
+    });
   });
-  
+
   describe('#deleteRecord', () => {
     beforeEach((done) => {
       s3.deleteObject({ Key: 'test-db.json' }, (err, data) => {
@@ -303,7 +328,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should delete the record if it exist', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
             { _id: 'abc2', name: 'group 2' },
@@ -329,7 +354,7 @@ describe('S3Provider (Storage Provider)', () => {
     it('should fake delete the record if it does not exist', (done) => {
       let params = {
         Key: 'test-db.json',
-        Body: JSON.stringify({ 
+        Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
             { _id: 'abc2', name: 'group 2' },
@@ -351,4 +376,4 @@ describe('S3Provider (Storage Provider)', () => {
       });
     });
   });
-});    
+});

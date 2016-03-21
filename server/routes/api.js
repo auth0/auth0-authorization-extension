@@ -29,7 +29,7 @@ export default () => {
   });
 
   const api = Router();
-  api.use('/applications', applications(managementClient));
+  api.use('/applications', applications(db, managementClient));
   api.use('/connections', connections(managementClient));
   api.use('/users', users(db));
   api.use('/logs', logs(db));
