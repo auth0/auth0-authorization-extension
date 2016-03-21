@@ -1,4 +1,5 @@
 import nconf from 'nconf';
+import jwt from 'express-jwt';
 import { ManagementClient } from 'auth0';
 import { Router } from 'express';
 
@@ -28,7 +29,13 @@ export default () => {
     domain: nconf.get('AUTH0_DOMAIN')
   });
 
+  const authenticate = jwt({
+    secret: new Buffer(nconf.get('AUTH0_CLIENT_SECRET'), 'base64'),
+    audience: nconf.get('AUTH0_CLIENT_ID')
+  });
+
   const api = Router();
+  api.use(authenticate);
   api.use('/applications', applications(db, managementClient));
   api.use('/connections', connections(managementClient));
   api.use('/users', users(db));

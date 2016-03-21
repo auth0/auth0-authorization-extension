@@ -53,7 +53,7 @@ app.get('*', htmlRoute());
 // Generic error handler.
 app.use((err, req, res, next) => {
   logger.error(err);
-  
+
   if (err && err.name === 'NotFoundError') {
     res.status(404);
     return res.json({ error: err.message });
@@ -65,14 +65,20 @@ app.use((err, req, res, next) => {
   }
 
   res.status(err.status || 500);
-  res.json({
-    message: err.message,
-    error: {
+  if (process.env.NODE_ENV === 'production') {
+    res.json({
+      message: err.message
+    });
+  } else {
+    res.json({
       message: err.message,
-      status: err.status,
-      stack: err.stack
-    }
-  });
+      error: {
+        message: err.message,
+        status: err.status,
+        stack: err.stack
+      }
+    });
+  }
 });
 
 // Start the server.

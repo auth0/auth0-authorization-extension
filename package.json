@@ -39,6 +39,7 @@
     "body-parser": "^1.14.2",
     "ejs": "^2.3.4",
     "express": "^4.13.3",
+    "express-jwt": "^3.3.0",
     "lodash": "^4.6.1",
     "lowdb": "^0.12.5",
     "lru-memoizer": "^1.1.0",
