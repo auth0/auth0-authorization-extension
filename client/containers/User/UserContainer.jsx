@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions } from '../../actions';
+import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../../actions';
 
 import './UserContainer.css';
 import LogDialog from '../../components/Logs/LogDialog';
@@ -25,6 +25,7 @@ export default class UserContainer extends Component {
     this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
     this.removeMember = this.removeMember.bind(this);
   }
+
   componentWillMount() {
     this.props.fetchUser(this.props.params.id);
   }
@@ -38,7 +39,10 @@ export default class UserContainer extends Component {
   }
 
   addToGroup(group) {
-    console.log(group);
+    this.props.cancelGroupPicker();
+    this.props.addGroupMembers(group._id, [ this.props.user.record.get('user_id') ], () => {
+      this.props.fetchUserGroups(this.props.user.record.get('user_id'));
+    });
   }
 
   requestRemoveMember(user, group) {
@@ -123,4 +127,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions })(UserContainer);

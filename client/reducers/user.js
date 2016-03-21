@@ -87,6 +87,18 @@ export const user = createReducer(fromJS(initialState), {
     state.merge({
       groups: userGroups(state.get('groups'), action)
     }),
+  [constants.ADD_GROUP_MEMBERS_PENDING]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
+      groups: userGroups(state.get('groups'), action)
+    }),
   [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
     state.merge({
       groups: userGroups(state.get('groups'), action)
@@ -139,6 +151,21 @@ const userGroups = createReducer(fromJS(initialState.groups), {
     return state.merge({
       loading: false,
       records: fromJS(action.payload.data)
+    });
+  },
+  [constants.ADD_GROUP_MEMBERS_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      error: null
+    }),
+  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while adding the user: ${action.errorMessage}`
+    }),
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state) => {
+    return state.merge({
+      loading: false
     });
   },
   [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) => {

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './GroupPickerDialog.css';
 import GroupsTable from './GroupsTable';
-import { Error, Confirm, TableAction } from '../Dashboard';
+import { Error, Confirm, TableAction, LoadingPanel } from '../Dashboard';
 
 class GroupPickerDialog extends Component {
   constructor() {
@@ -30,7 +30,11 @@ class GroupPickerDialog extends Component {
     return (
       <Confirm dialogClassName="group-picker-dialog" size="large" title={title} show={open} loading={loading} onCancel={onCancel}>
         <Error message={error} />
-        <GroupsTable canOpenGroup={false} groups={this.props.groupPicker.get('records')} loading={loading} renderActions={this.renderActions} />
+        <LoadingPanel show={ loading }>
+          <GroupsTable canOpenGroup={false} groups={this.props.groupPicker.get('records')}
+            loading={loading} renderActions={this.renderActions}
+          />
+        </LoadingPanel>
       </Confirm>
     );
   }
