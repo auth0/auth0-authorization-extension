@@ -1,3 +1,4 @@
+import axios from 'axios';
 import jwtDecode from 'jwt-decode';
 import { push } from 'react-router-redux';
 
@@ -101,6 +102,8 @@ export function loadCredentials() {
           user: JSON.parse(profile)
         }
       });
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${id_token}`;
       return;
     }
   };
