@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import Promise from 'bluebird';
 import { Router } from 'express';
 
 export default (db, auth0) => {
@@ -9,6 +10,23 @@ export default (db, auth0) => {
         .filter([ 'global', false ])
         .sortBy((client) => client.name.toLowerCase())
         .value())
+      .then(clients => Promise.all([ clients, db.getApplications(), db.getGroups() ]))
+      .spread((clients, apps, groups) =>
+        clients.map(client => {
+          const app = _.find(apps, { _id: client.client_id });
+          if (app && app.groups) {
+            client.groups = _.filter(groups, (group) => app.groups.indexOf(group._id) > -1)
+              .map((group) => ({
+                _id: group._id,
+                name: group.name,
+                description: group.description
+              }));
+          } else {
+            client.groups = [];
+          }
+          return client;
+        })
+      )
       .then(clients => res.json(clients))
       .catch(next);
   });

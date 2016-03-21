@@ -6,6 +6,14 @@ class ApplicationsTable extends Component {
     return nextProps.applications !== this.props.applications;
   }
 
+  getGroupCount(groups) {
+    if (groups && groups.length) {
+      return <span><strong>{groups.length}</strong> groups</span>;
+    }
+
+    return <span>All users</span>;
+  }
+
   render() {
     const applications = this.props.applications.toJS();
     return (
@@ -26,7 +34,7 @@ class ApplicationsTable extends Component {
                 <TableIconCell color="#5d676f" icon="374" />
                 <TableRouteCell route={`/applications/${application.client_id}`}>{ application.name || 'N/A' }</TableRouteCell>
                 <TableTextCell>{callback || 'N/A'}</TableTextCell>
-                <TableTextCell><strong>5</strong> Groups</TableTextCell>
+                <TableTextCell>{this.getGroupCount(application.groups)}</TableTextCell>
               </TableRow>
             );
           })
