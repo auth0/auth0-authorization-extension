@@ -6,5 +6,6 @@ nconf
   .env()
   .file(path.join(__dirname, '../server/config.json'))
   .defaults({
-    NODE_ENV: 'test'
+    NODE_ENV: 'test',
+    DATA_CACHE_MAX_AGE: 0
   });

@@ -3,6 +3,7 @@ import jwt from 'express-jwt';
 import { ManagementClient } from 'auth0';
 import { Router } from 'express';
 
+import authorize from './authorize';
 import applications from './applications';
 import connections from './connections';
 import logs from './logs';
@@ -34,14 +35,26 @@ export default () => {
     audience: nconf.get('AUTH0_CLIENT_ID')
   });
 
+  const authenticateOrApiKey = (req, res, next) => {
+    const header = req.headers['x-api-key'];
+    if (header && header === nconf.get('AUTHORIZE_API_KEY')) {
+      req.user = {
+        name: 'auth0-rules'
+      };
+      return next();
+    }
+
+    return authenticate(req, res, next);
+  };
+
   const api = Router();
-  api.use(authenticate);
-  api.use('/applications', applications(db, managementClient));
-  api.use('/connections', connections(managementClient));
-  api.use('/users', users(db));
-  api.use('/logs', logs(db));
-  api.use('/roles', roles(db));
-  api.use('/groups', groups(db, managementClient));
-  api.use('/permissions', permissions(db));
+  api.use('/authorize', authenticateOrApiKey, authorize(db));
+  api.use('/applications', authenticate, applications(db, managementClient));
+  api.use('/connections', authenticate, connections(managementClient));
+  api.use('/users', authenticate, users(db));
+  api.use('/logs', authenticate, logs(db));
+  api.use('/roles', authenticate, roles(db));
+  api.use('/groups', authenticate, groups(db, managementClient));
+  api.use('/permissions', authenticate, permissions(db));
   return api;
 };

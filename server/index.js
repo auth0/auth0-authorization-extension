@@ -18,6 +18,7 @@ nconf
   .env()
   .file(path.join(__dirname, 'config.json'))
   .defaults({
+    DATA_CACHE_MAX_AGE: 1000 * 10,
     DATA_PROVIDER: 'jsondb',
     JSONDB_PATH: path.join(__dirname, '/db.json'),
     NODE_ENV: 'development',
