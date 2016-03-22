@@ -14,7 +14,7 @@
     "server:prod": "node ./build/exec.js production \"node index.js\"",
     "test": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --timeout 5000 $(find ./tests -name *.tests.js) tests/runner.js",
     "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
-    "postinstall": "npm run build:prod"
+    "postinstall": "npm run client:prod"
   },
   "keywords": [
     "auth0"
