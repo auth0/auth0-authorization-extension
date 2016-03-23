@@ -39,7 +39,7 @@ export default class UserContainer extends Component {
   }
 
   render() {
-    const { user, groups, groupPicker, groupMember, log, logs, devices } = this.props;
+    const { user, groups, allGroups, groupPicker, groupMember, log, logs, devices } = this.props;
 
     return (
       <div>
@@ -60,7 +60,7 @@ export default class UserContainer extends Component {
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
               <Tab eventKey={2} title="Groups">
-                <UserGroups user={user.record} groups={groups} addToGroup={this.requestAddToGroup} removeFromGroup={this.props.requestRemoveGroupMember} />
+                <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.props.requestRemoveGroupMember} />
               </Tab>
               <Tab eventKey={3} title="Devices">
                 <UserDevices loading={devices.loading} devices={devices.records} error={devices.error} />
@@ -88,6 +88,7 @@ function mapStateToProps(state) {
       error: state.user.get('error'),
       loading: state.user.get('loading')
     },
+    allGroups: state.user.get('allGroups'),
     groups: state.user.get('groups'),
     log: {
       id: state.log.get('logId'),

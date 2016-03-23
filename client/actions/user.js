@@ -35,14 +35,39 @@ export function fetchUsers(search = '', reset = false, page = 0) {
 /*
  * Fetch the user details.
  */
-export function fetchUserDetail(userId) {
+export function fetchUserDetail(userId, onSuccess) {
   return {
     type: constants.FETCH_USER,
     meta: {
-      userId
+      userId,
+      onSuccess
     },
     payload: {
       promise: axios.get(`/api/users/${userId}`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
+ * Fetch user authorization.
+ */
+export function fetchUserAuthorization(user) {
+  return {
+    type: constants.FETCH_USER_AUTHORIZATION,
+    meta: {
+      userId: user.user_id
+    },
+    payload: {
+      promise: axios({
+        method: 'post',
+        url: `/api/authorize/${user.user_id}`,
+        data: {
+          connectionName: user.identities[0].connection,
+          groups: user.groups
+        },
         timeout: 5000,
         responseType: 'json'
       })
@@ -55,7 +80,9 @@ export function fetchUserDetail(userId) {
  */
 export function fetchUser(userId) {
   return (dispatch) => {
-    dispatch(fetchUserDetail(userId));
+    dispatch(fetchUserDetail(userId, (payload) => {
+      dispatch(fetchUserAuthorization(payload.data.user));
+    }));
     dispatch(fetchUserLogs(userId));
     dispatch(fetchUserGroups(userId));
     dispatch(fetchUserDevices(userId));

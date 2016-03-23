@@ -18,6 +18,23 @@ export const getApplicationsCached = memoizer({
 });
 
 /*
+ * Cache connections.
+ */
+export const getConnectionsCached = memoizer({
+  load: (auth0, callback) => {
+    auth0.connections.getAll({ fields: 'id,name,strategy' })
+      .then(connections => _.chain(connections)
+        .sortBy((conn) => conn.name.toLowerCase())
+        .value())
+      .then(connections => callback(null, connections))
+      .catch(err => callback(err));
+  },
+  hash: (auth0) => auth0.hash || 'connections',
+  max: 100,
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+});
+
+/*
  * Cache groups.
  */
 export const getGroupsCached = memoizer({
@@ -89,9 +106,9 @@ const matchMappings = (mappings, connectionId, groupMemberships) => {
 /*
  * Calculate dynamic group memberships.
  */
-export function getDynamicUserGroups(db, connectionId, groupMemberships) {
+export function getDynamicUserGroups(auth0, db, connectionName, groupMemberships) {
   return new Promise((resolve, reject) => {
-    if (!connectionId) {
+    if (!connectionName) {
       return resolve([]);
     }
 
@@ -104,8 +121,15 @@ export function getDynamicUserGroups(db, connectionId, groupMemberships) {
         return reject(err);
       }
 
-      const userGroups = _.filter(groups, (group) => matchMappings(group.mappings, connectionId, groupMemberships));
-      return resolve(userGroups.map(group => group.name));
+      return getConnectionsCached(auth0, (connectionsError, connections) => {
+        if (connectionsError) {
+          return reject(connectionsError);
+        }
+
+        const connection = _.find(connections, { name: connectionName }) || { };
+        const userGroups = _.filter(groups, (group) => matchMappings(group.mappings, connection.id, groupMemberships));
+        return resolve(userGroups.map(group => group.name));
+      });
     });
   });
 }

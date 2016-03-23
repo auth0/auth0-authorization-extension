@@ -48,7 +48,7 @@ export default () => {
   };
 
   const api = Router();
-  api.use('/authorize', authenticateOrApiKey, authorize(db));
+  api.use('/authorize', authenticateOrApiKey, authorize(db, managementClient));
   api.use('/applications', authenticate, applications(db, managementClient));
   api.use('/connections', authenticate, connections(managementClient));
   api.use('/users', authenticate, users(db));

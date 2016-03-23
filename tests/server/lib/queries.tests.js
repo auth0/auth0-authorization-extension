@@ -18,6 +18,15 @@ const mockApplications = (applications) => ({
   })
 });
 
+const mockConnections = (connections) => ({
+  hash: uuid.v4(),
+  connections: {
+    getAll: () => new Promise((resolve) => {
+      resolve(connections);
+    })
+  }
+});
+
 describe('Queries', () => {
   describe('#isApplicationAccessAllowed', () => {
     it('should return true if no groups have been configured', (done) => {
@@ -146,6 +155,11 @@ describe('Queries', () => {
     });
 
     it('should return empty if the current transaction does not match any groups', (done) => {
+      const auth0 = mockConnections([
+          { id: 'abc', name: 'my-ad' },
+          { id: 'def', name: 'other-ad' }
+      ]);
+
       const db = mockGroups([
         { _id: '123', name: 'Group 1', mappings:
           [ { _id: '12345', groupName: 'Domain Users', connectionId: 'abc' } ]
@@ -155,7 +169,28 @@ describe('Queries', () => {
         }
       ]);
 
-      getDynamicUserGroups(db, 'abc', [ 'Domain Admins' ])
+      getDynamicUserGroups(auth0, db, 'abc', [ 'Domain Admins' ])
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(0);
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should return empty if the connection no longer exists', (done) => {
+      const auth0 = mockConnections([ ]);
+
+      const db = mockGroups([
+        { _id: '123', name: 'Group 1', mappings:
+          [ { _id: '12345', groupName: 'Domain Admins', connectionId: 'abc' } ]
+        },
+        { _id: '456', name: 'Group 2', mappings:
+          [ { _id: '67890', groupName: 'Domain Users', connectionId: 'abc' } ]
+        }
+      ]);
+
+      getDynamicUserGroups(auth0, db, 'abc', [ 'Domain Admins' ])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(0);
@@ -165,6 +200,11 @@ describe('Queries', () => {
     });
 
     it('should return empty if the current transaction does not match any groups', (done) => {
+      const auth0 = mockConnections([
+          { id: 'abc', name: 'my-ad' },
+          { id: 'def', name: 'other-ad' }
+      ]);
+
       const db = mockGroups([
         { _id: '123', name: 'Group 1', mappings:
           [ { _id: '12345', groupName: 'Domain Users', connectionId: 'abc' } ]
@@ -174,7 +214,7 @@ describe('Queries', () => {
         }
       ]);
 
-      getDynamicUserGroups(db, 'abc', [ 'Domain Admins' ])
+      getDynamicUserGroups(auth0, db, 'my-ad', [ 'Domain Admins' ])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(0);
@@ -184,6 +224,11 @@ describe('Queries', () => {
     });
 
     it('should mappings that match the current transaction', (done) => {
+      const auth0 = mockConnections([
+          { id: 'abc', name: 'my-ad' },
+          { id: 'def', name: 'other-ad' }
+      ]);
+
       const db = mockGroups([
         { _id: '123', name: 'Group 1', mappings:
           [ { _id: '12345', groupName: 'Domain Users', connectionId: 'abc' } ]
@@ -202,7 +247,7 @@ describe('Queries', () => {
         }
       ]);
 
-      getDynamicUserGroups(db, 'abc', [ 'Domain Admins' ])
+      getDynamicUserGroups(auth0, db, 'my-ad', [ 'Domain Admins' ])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(2);

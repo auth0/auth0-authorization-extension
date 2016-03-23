@@ -10,6 +10,11 @@ const initialState = {
   error: null,
   userId: null,
   record: { },
+  allGroups: {
+    loading: false,
+    error: null,
+    records: []
+  },
   groups: {
     loading: false,
     error: null,
@@ -102,6 +107,18 @@ export const user = createReducer(fromJS(initialState), {
   [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
     state.merge({
       groups: userGroups(state.get('groups'), action)
+    }),
+  [constants.FETCH_USER_AUTHORIZATION_PENDING]: (state, action) =>
+    state.merge({
+      allGroups: userAllGroups(state.get('allGroups'), action)
+    }),
+  [constants.FETCH_USER_AUTHORIZATION_REJECTED]: (state, action) =>
+    state.merge({
+      allGroups: userAllGroups(state.get('allGroups'), action)
+    }),
+  [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) =>
+    state.merge({
+      allGroups: userAllGroups(state.get('allGroups'), action)
     })
 });
 
@@ -178,6 +195,24 @@ const userGroups = createReducer(fromJS(initialState.groups), {
   }
 });
 
+const userAllGroups = createReducer(fromJS(initialState.allGroups), {
+  [constants.FETCH_USER_AUTHORIZATION_PENDING]: (state) =>
+    state.merge({
+      ...initialState.allGroups,
+      loading: true
+    }),
+  [constants.FETCH_USER_AUTHORIZATION_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.allGroups,
+      error: `An error occured while loading all groups (authorization): ${action.errorMessage}`
+    }),
+  [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) => {
+    return state.merge({
+      loading: false,
+      records: fromJS(action.payload.data.groups || [])
+    });
+  }
+});
 
 const userDevices = createReducer(fromJS(initialState.devices), {
   [constants.FETCH_USER_DEVICES_PENDING]: (state) =>
