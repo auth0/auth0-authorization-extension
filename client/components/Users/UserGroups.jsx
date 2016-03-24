@@ -70,7 +70,7 @@ class UserGroups extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h3>All Group Memberships</h3>
+            <h5>All Group Memberships</h5>
             <span className="pull-left">The following table lists <strong>all</strong> group memberships for the user. This includes both explicit memberships and dynamic group memberships as the result of a mapping. <strong>Heads up:</strong> This list is cached for performance reasons and it could take a few seconds before changes are visible here.</span>
           </div>
         </div>
@@ -103,7 +103,7 @@ class UserGroups extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h3>Explicit Group Memberships</h3>
+            <h5>Explicit Group Memberships</h5>
             <span className="pull-left">{this.getHelpText(groups.records)}</span>
             <ButtonToolbar className="pull-right">
               <Button bsStyle="primary" bsSize="xsmall" onClick={this.addToGroup} disabled={groups.loading}>
