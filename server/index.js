@@ -13,7 +13,7 @@ import { init as initProvider } from './lib/providers';
 logger.info('Starting server...');
 
 // Initialize data provider.
-initProvider(nconf.get('DATA_PROVIDER'));
+// initProvider(nconf.get('DATA_PROVIDER'));
 
 // Configure validator.
 validator.options = { fullMessages: false };
