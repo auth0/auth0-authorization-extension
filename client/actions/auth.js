@@ -39,7 +39,7 @@ export function loadCredentials() {
     if (window.location.hash) {
       const hash = lock.parseHash(window.location.hash);
       if (hash && hash.id_token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${id_token}`;
+        axios.defaults.headers.common['Authorization'] = `Bearer ${hash.id_token}`;
 
         dispatch({
           type: constants.RECIEVED_TOKEN,
