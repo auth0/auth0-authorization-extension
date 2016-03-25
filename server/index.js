@@ -8,11 +8,11 @@ import validator from 'validate.js';
 import api from './routes/api';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
-import { init as initProvider } from './lib/providers';
 
 logger.info('Starting server...');
 
 // Initialize data provider.
+// import { init as initProvider } from './lib/providers';
 // initProvider(nconf.get('DATA_PROVIDER'));
 
 // Configure validator.

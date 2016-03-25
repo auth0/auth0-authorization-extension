@@ -8,9 +8,9 @@ import applications from './applications';
 import connections from './connections';
 import logs from './logs';
 import users from './users';
-import roles from './roles';
+// import roles from './roles';
 import groups from './groups';
-import permissions from './permissions';
+// import permissions from './permissions';
 
 import Database from '../lib/storage/database';
 import S3Provider from '../lib/storage/providers/s3';
@@ -53,8 +53,8 @@ export default () => {
   api.use('/connections', authenticate, connections(managementClient));
   api.use('/users', authenticate, users(db));
   api.use('/logs', authenticate, logs(db));
-  api.use('/roles', authenticate, roles(db));
+  // api.use('/roles', authenticate, roles(db));
+  // api.use('/permissions', authenticate, permissions(db));
   api.use('/groups', authenticate, groups(db, managementClient));
-  api.use('/permissions', authenticate, permissions(db));
   return api;
 };
