@@ -39,6 +39,8 @@ export function loadCredentials() {
     if (window.location.hash) {
       const hash = lock.parseHash(window.location.hash);
       if (hash && hash.id_token) {
+        axios.defaults.headers.common['Authorization'] = `Bearer ${id_token}`;
+
         dispatch({
           type: constants.RECIEVED_TOKEN,
           payload: {
@@ -88,6 +90,8 @@ export function loadCredentials() {
         return;
       }
 
+      axios.defaults.headers.common['Authorization'] = `Bearer ${id_token}`;
+
       dispatch({
         type: constants.LOADED_TOKEN,
         payload: {
@@ -102,8 +106,6 @@ export function loadCredentials() {
           user: JSON.parse(profile)
         }
       });
-
-      axios.defaults.headers.common['Authorization'] = `Bearer ${id_token}`;
       return;
     }
   };
