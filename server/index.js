@@ -1,9 +1,10 @@
 import path from 'path';
-import nconf from 'nconf';
 import Express from 'express';
 import morgan from 'morgan';
+import nconf from 'nconf';
 import bodyParser from 'body-parser';
 import validator from 'validate.js';
+import auth0 from 'auth0-oauth2-express';
 
 import api from './routes/api';
 import htmlRoute from './routes/html';
@@ -18,24 +19,27 @@ logger.info('Starting server...');
 // Configure validator.
 validator.options = { fullMessages: false };
 validator.validators.presence.options = {
-  message: (value, attribute) => {
-    return `The ${attribute} is required.`;
-  }
+  message: (value, attribute) => `The ${attribute} is required.`
 };
 
 // Initialize the app.
 const app = new Express();
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
 app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
   stream: logger.stream
 }));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+if (nconf.get('HOSTING_ENV') === 'webtask') {
+  app.use(auth0({
+    clientName: 'IAM Dashboard Extension',
+    scopes: 'read:connections read:users read:clients'
+  }));
+}
+
 // Configure routes.
 app.use('/api', api());
-app.use(Express.static(path.join(__dirname, '../assets')));
+app.use('/app', Express.static(path.join(__dirname, '../dist')));
 app.get('*', htmlRoute());
 
 // Generic error handler.

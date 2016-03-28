@@ -35,7 +35,7 @@ module.exports = {
 
   // Output directory.
   output: {
-    path: path.join(__dirname, '../../assets/app'),
+    path: path.join(__dirname, '../../dist'),
     filename: 'bundle.js',
     publicPath: '/app/'
   },
@@ -43,7 +43,7 @@ module.exports = {
   // Module configuration.
   resolve: {
     alias: {
-      'React': require('react')
+      React: require('react')
     },
     modulesDirectories: [
       'node_modules'

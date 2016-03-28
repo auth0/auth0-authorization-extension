@@ -7,15 +7,16 @@
   },
   "main": "server.js",
   "scripts": {
-    "clean": "rimraf assets/app",
-    "client:dev": "node ./build/exec.js development \"node ./build/webpack/server.js\"",
-    "client:prod": "npm run clean && node ./build/exec.js production \"webpack --config ./build/webpack/config.prod.js --colors -p\"",
-    "server:dev": "node ./build/exec.js development \"nodemon --ignore assets/app/ --ignore build/webpack/ --ignore server/db.json --ignore client/ --ignore node_modules/ index.js\"",
-    "server:prod": "node ./build/exec.js production \"node index.js\"",
+    "clean": "rimraf dist",
+    "client:dev": "NODE_ENV=development node ./build/webpack/server.js",
+    "client:build": "npm run clean && NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
+    "server:dev": "NODE_ENV=development nodemon --ignore assets/app/ --ignore build/webpack/ --ignore server/db.json --ignore client/ --ignore node_modules/ index.js",
+    "server:prod": "NODE_ENV=production node index.js",
     "test": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --timeout 5000 $(find ./tests -name *.tests.js) tests/runner.js",
     "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
     "postinstall": "npm run client:prod",
-    "extension:build": "webpack -p --config ./build/extension/webpack.config.js"
+    "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
+    "build": "npm run clean && npm run client:build && npm run extension:build"
   },
   "keywords": [
     "auth0"
@@ -25,6 +26,7 @@
   "dependencies": {
     "async": "~1.5.2",
     "auth0": "^2.1.0",
+    "auth0-oauth2-express": "^1.1.0",
     "aws-sdk": "^2.2.47",
     "axios": "^0.9.1",
     "babel": "^6.5.2",

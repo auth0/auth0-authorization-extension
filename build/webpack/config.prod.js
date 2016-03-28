@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+const project = require('../../package.json');
 const logger = require('../../server/lib/logger');
 logger.info('Running production configuration...');
 
@@ -12,7 +13,7 @@ config.profile = false;
 
 // Build output, which includes the hash.
 config.output.hash = true;
-config.output.filename = 'bundle.[chunkhash].js';
+config.output.filename = 'iam-dashboard.ui.' + project.version + '.js';
 
 // Development modules.
 config.module.loaders.push({
@@ -26,12 +27,12 @@ config.plugins = config.plugins.concat([
   new webpack.optimize.DedupePlugin(),
 
   // Extract CSS to a different file, will require additional configuration.
-  new ExtractTextPlugin('bundle.[chunkhash].css', {
+  new ExtractTextPlugin('iam-dashboard.ui.' + project.version + '.css', {
     allChunks: true
   }),
 
   // Separate the vender in a different file.
-  new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.[hash].js'),
+  new webpack.optimize.CommonsChunkPlugin('vendors', 'iam-dashboard.ui.vendors.' + project.version + '.js'),
 
   // Compress and uglify the output.
   new webpack.optimize.UglifyJsPlugin({

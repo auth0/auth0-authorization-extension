@@ -1,6 +1,7 @@
 const _ = require('lodash');
 const path = require('path');
 const Webpack = require('webpack');
+const project = require('../../package.json');
 const externalModules = require('./externals');
 
 module.exports = externalModules.then((externals) => {
@@ -17,7 +18,7 @@ module.exports = externalModules.then((externals) => {
     const module = externals.incompatible[key];
     console.log(` ${key} - Local: ${module.local.join(', ')} - Webtask: ${module.webtask}`);
   }); */
-  
+
   // Even though we don't have an semver match, it's ok to use these versions.
   externals.compatible['async'] = true; // Local: ^0.9.0, ^1.5.0, ^1.4.0, ^1.5.2, ~0.2.9, ~0.2.6, ^1.3.0, ~1.0.0, ~1.5.2 - Webtask: 1.0.0
   externals.compatible['aws-sdk'] = true; // Local: ^2.2.47 - Webtask: 2.2.30
@@ -49,15 +50,15 @@ module.exports = externalModules.then((externals) => {
 
   // Modules we still need in webtask.
   externals.compatible['auth0'] = true;
-  externals.compatible['nconf'] = true;
-  externals.compatible['validate.js'] = true;
+  externals.compatible['nconf'] = false;
+  externals.compatible['validate.js'] = false;
 
   return {
     entry: path.join(__dirname, '../../webtask'),
     target: 'node',
     output: {
-      path: './build',
-      filename: 'bundle.js',
+      path: './dist',
+      filename: 'iam-dashboard.extension.' + project.version + '.js',
       library: true,
       libraryTarget: 'commonjs2'
     },
