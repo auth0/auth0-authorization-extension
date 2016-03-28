@@ -3,6 +3,7 @@ import jwt from 'express-jwt';
 import { ManagementClient } from 'auth0';
 import { Router } from 'express';
 
+import { getDb } from '../lib/storage/getdb';
 import authorize from './authorize';
 import applications from './applications';
 import connections from './connections';
@@ -12,28 +13,26 @@ import users from './users';
 import groups from './groups';
 // import permissions from './permissions';
 
-import Database from '../lib/storage/database';
-import S3Provider from '../lib/storage/providers/s3';
-
 export default () => {
-  const db = new Database({
-    provider: new S3Provider({
-      path: 'iam-dashboard.json',
-      bucket: nconf.get('AWS_S3_BUCKET'),
-      keyId: nconf.get('AWS_ACCESS_KEY_ID'),
-      keySecret: nconf.get('AWS_SECRET_ACCESS_KEY')
-    })
-  });
+  const db = getDb();
 
   const managementClient = new ManagementClient({
     token: nconf.get('AUTH0_APIV2_TOKEN'),
     domain: nconf.get('AUTH0_DOMAIN')
   });
 
-  const authenticate = jwt({
-    secret: new Buffer(nconf.get('AUTH0_CLIENT_SECRET'), 'base64'),
-    audience: nconf.get('AUTH0_CLIENT_ID')
+  let authenticate = jwt({
+    secret: (req, payload, done) => {
+      done(null, req.webtaskContext.data.TOKEN_SECRET);
+    }
   });
+
+  if (nconf.get('HOSTING_ENV') === 'default') {
+    authenticate = jwt({
+      secret: new Buffer(nconf.get('AUTH0_CLIENT_SECRET'), 'base64'),
+      audience: nconf.get('AUTH0_CLIENT_ID')
+    });
+  }
 
   const authenticateOrApiKey = (req, res, next) => {
     const header = req.headers['x-api-key'];

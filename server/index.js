@@ -6,6 +6,9 @@ import bodyParser from 'body-parser';
 import validator from 'validate.js';
 import auth0 from 'auth0-oauth2-express';
 
+import { init as initDb } from './lib/storage/getdb';
+import Database from './lib/storage/database';
+import { S3Provider } from './lib/storage/providers';
 import api from './routes/api';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
@@ -21,6 +24,18 @@ validator.options = { fullMessages: false };
 validator.validators.presence.options = {
   message: (value, attribute) => `The ${attribute} is required.`
 };
+
+// Initialize database.
+if (nconf.get('HOSTING_ENV') === 'default') {
+  initDb(new Database({
+    provider: new S3Provider({
+      path: 'iam-dashboard.json',
+      bucket: nconf.get('AWS_S3_BUCKET'),
+      keyId: nconf.get('AWS_ACCESS_KEY_ID'),
+      keySecret: nconf.get('AWS_SECRET_ACCESS_KEY')
+    })
+  }));
+}
 
 // Initialize the app.
 const app = new Express();
