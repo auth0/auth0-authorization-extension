@@ -19,73 +19,74 @@ logger.info('Starting server...');
 // import { init as initProvider } from './lib/providers';
 // initProvider(nconf.get('DATA_PROVIDER'));
 
-// Configure validator.
-validator.options = { fullMessages: false };
-validator.validators.presence.options = {
-  message: (value, attribute) => `The ${attribute} is required.`
-};
+module.exports = (options = { }) => {
+  // Configure validator.
+  validator.options = { fullMessages: false };
+  validator.validators.presence.options = {
+    message: (value, attribute) => `The ${attribute} is required.`
+  };
 
-// Initialize database.
-if (nconf.get('HOSTING_ENV') === 'default') {
+  // Initialize database.
   initDb(new Database({
-    provider: new S3Provider({
+    provider: options.storageProvider || new S3Provider({
       path: 'iam-dashboard.json',
       bucket: nconf.get('AWS_S3_BUCKET'),
       keyId: nconf.get('AWS_ACCESS_KEY_ID'),
       keySecret: nconf.get('AWS_SECRET_ACCESS_KEY')
     })
   }));
-}
 
-// Initialize the app.
-const app = new Express();
-app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
-  stream: logger.stream
-}));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-
-if (nconf.get('HOSTING_ENV') === 'webtask') {
-  app.use(auth0({
-    clientName: 'IAM Dashboard Extension',
-    scopes: 'read:connections read:users read:clients'
+  // Initialize the app.
+  const app = new Express();
+  app.use(morgan(':method :url :status :response-time ms - :res[content-length]', {
+    stream: logger.stream
   }));
-}
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: false }));
 
-// Configure routes.
-app.use('/api', api());
-app.use('/app', Express.static(path.join(__dirname, '../dist')));
-app.get('*', htmlRoute());
-
-// Generic error handler.
-app.use((err, req, res, next) => {
-  logger.error(err);
-
-  if (err && err.name === 'NotFoundError') {
-    res.status(404);
-    return res.json({ error: err.message });
+  // Use OAuth2 authorization if runnings as a webtask.
+  if (nconf.get('HOSTING_ENV') === 'webtask') {
+    app.use(auth0({
+      clientName: 'IAM Dashboard Extension',
+      scopes: 'read:connections read:users read:clients'
+    }));
   }
 
-  if (err && err.name === 'ValidationError') {
-    res.status(400);
-    return res.json({ error: err.message });
-  }
+  // Configure routes.
+  app.use('/api', api());
+  app.use('/app', Express.static(path.join(__dirname, '../dist')));
+  app.get('*', htmlRoute());
 
-  res.status(err.status || 500);
-  if (process.env.NODE_ENV === 'production') {
-    res.json({
-      message: err.message
-    });
-  } else {
-    res.json({
-      message: err.message,
-      error: {
+  // Generic error handler.
+  app.use((err, req, res, next) => {
+    logger.error(err);
+
+    if (err && err.name === 'NotFoundError') {
+      res.status(404);
+      return res.json({ error: err.message });
+    }
+
+    if (err && err.name === 'ValidationError') {
+      res.status(400);
+      return res.json({ error: err.message });
+    }
+
+    res.status(err.status || 500);
+    if (process.env.NODE_ENV === 'production') {
+      res.json({
+        message: err.message
+      });
+    } else {
+      res.json({
         message: err.message,
-        status: err.status,
-        stack: err.stack
-      }
-    });
-  }
-});
+        error: {
+          message: err.message,
+          status: err.status,
+          stack: err.stack
+        }
+      });
+    }
+  });
 
-module.exports = app;
+  return app;
+};

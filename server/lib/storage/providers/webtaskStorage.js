@@ -28,7 +28,7 @@ export default class WebtaskStorageProvider {
 
   _writeObject(data) {
     return new Promise((resolve, reject) => {
-      this.storageContext.storage.set(data, { force: 1 }, (err) => {
+      this.storageContext.set(data, { force: 1 }, (err) => {
         if (err) {
           return reject(err);
         }

@@ -23,7 +23,7 @@ export default () => {
 
   let authenticate = jwt({
     secret: (req, payload, done) => {
-      done(null, req.webtaskContext.data.TOKEN_SECRET);
+      done(null, req.webtaskContext.data.EXTENSION_SECRET);
     }
   });
 

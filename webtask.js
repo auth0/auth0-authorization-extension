@@ -1,8 +1,5 @@
 const nconf = require('nconf');
 const Webtask = require('webtask-tools');
-
-const getDb = require('./server/lib/storage/getdb');
-const Database = require('./server/lib/storage/database');
 const StorageProviders = require('./lib/storage/providers');
 
 module.exports = Webtask.fromExpress((req, res) => {
@@ -15,13 +12,12 @@ module.exports = Webtask.fromExpress((req, res) => {
     HOSTING_ENV: 'webtask'
   });
 
-  getDb.init(new Database({
-    provider: new StorageProviders.WebtaskStorageProvider({
+  // Start the server.
+  const initServer = require('./server');
+  const app = initServer({
+    storageProvider: new StorageProviders.WebtaskStorageProvider({
       storageContext: req.webtaskContext.storage
     })
-  }));
-
-  // Start the server.
-  const app = require('./server');
+  });
   return app(req, res);
 });
