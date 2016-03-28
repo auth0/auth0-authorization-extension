@@ -26,7 +26,7 @@ export function login(returnUrl) {
 
 export function logout() {
   return (dispatch) => {
-    localStorage.removeItem('userToken');
+    localStorage.removeItem('apiToken');
 
     dispatch({
       type: constants.LOGOUT_SUCCESS
@@ -62,7 +62,7 @@ export function loadCredentials() {
             });
           }
 
-          localStorage.setItem('userToken', hash.id_token);
+          localStorage.setItem('apiToken', hash.id_token);
           localStorage.setItem('userProfile', JSON.stringify(profile));
 
           dispatch({
@@ -82,7 +82,7 @@ export function loadCredentials() {
       }
     }
 
-    const id_token = localStorage.getItem('userToken');
+    const id_token = localStorage.getItem('apiToken');
     const profile = localStorage.getItem('userProfile');
     if (id_token && profile) {
       const decodedToken = jwtDecode(id_token);
