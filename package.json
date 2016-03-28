@@ -14,7 +14,7 @@
     "server:prod": "NODE_ENV=production node index.js",
     "test": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --timeout 5000 $(find ./tests -name *.tests.js) tests/runner.js",
     "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
-    "postinstall": "npm run client:prod",
+    "postinstall": "npm run client:build",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
     "build": "npm run clean && npm run client:build && npm run extension:build"
   },
