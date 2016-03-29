@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -10,12 +11,18 @@ import { loadCredentials } from './actions/auth';
 import routes from './routes';
 import configureStore from './store/configureStore';
 
+// Make axios aware of the base path.
+axios.defaults.baseURL = window.config.BASE_URL;
+
+// Make history aware of the base path.
 const history = useRouterHistory(createHistory)({
   basename: window.config.BASE_PATH || ''
 });
 
 const store = configureStore([ routerMiddleware(history) ], { });
 const reduxHistory = syncHistoryWithStore(history, store);
+
+
 
 // Fire first events.
 store.dispatch(loadCredentials());
