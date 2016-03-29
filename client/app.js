@@ -2,15 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
-import { browserHistory } from 'react-router';
+import { useRouterHistory } from 'react-router'
+import { createHistory } from 'history'
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 
 import { loadCredentials } from './actions/auth';
 import routes from './routes';
 import configureStore from './store/configureStore';
 
-const store = configureStore([ routerMiddleware(browserHistory) ], { });
-const history = syncHistoryWithStore(browserHistory, store);
+const history = useRouterHistory(createHistory)({
+  basename: window.config.BASE_PATH || ''
+});
+
+const store = configureStore([ routerMiddleware(history) ], { });
+const reduxHistory = syncHistoryWithStore(history, store);
 
 // Fire first events.
 store.dispatch(loadCredentials());
@@ -18,7 +23,7 @@ store.dispatch(loadCredentials());
 // Render application.
 ReactDOM.render(
   <Provider store={store}>
-    {routes(history)}
+    {routes(reduxHistory)}
   </Provider>,
   document.getElementById('app')
 );

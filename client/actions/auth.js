@@ -3,21 +3,10 @@ import jwtDecode from 'jwt-decode';
 import { push } from 'react-router-redux';
 
 import * as constants from '../constants';
-
-const lock = new Auth0Lock(window.config.AUTH0_CLIENT_ID, window.config.AUTH0_DOMAIN);
+import { show, parseHash, getProfile } from '../utils/lock';
 
 export function login(returnUrl) {
-  const origin = window.location.origin || window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
-
-  lock.show({
-    closable: false,
-    responseType: 'token',
-    callbackURL: `${origin}/login`,
-    callbackOnLocationHash: true,
-    authParams: {
-      state: returnUrl
-    }
-  });
+  show(returnUrl);
 
   return {
     type: constants.SHOW_LOGIN
@@ -37,7 +26,7 @@ export function logout() {
 export function loadCredentials() {
   return (dispatch) => {
     if (window.location.hash) {
-      const hash = lock.parseHash(window.location.hash);
+      const hash = parseHash(window.location.hash);
       if (hash && hash.id_token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${hash.id_token}`;
 
@@ -52,7 +41,7 @@ export function loadCredentials() {
           type: constants.LOGIN_PENDING
         });
 
-        lock.$auth0.getProfile(hash.id_token, (err, profile) => {
+        getProfile(hash.id_token, (err, profile) => {
           if (err) {
             return dispatch({
               type: constants.LOGIN_FAILED,
@@ -104,6 +93,29 @@ export function loadCredentials() {
         payload: {
           id_token,
           user: JSON.parse(profile)
+        }
+      });
+      return;
+    }
+
+    // Webtask support.
+    const apiToken = sessionStorage.getItem('apiToken');
+    if (apiToken) {
+      const decodedToken = jwtDecode(apiToken);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`;
+
+      dispatch({
+        type: constants.LOADED_TOKEN,
+        payload: {
+          apiToken
+        }
+      });
+
+      dispatch({
+        type: constants.LOGIN_SUCCESS,
+        payload: {
+          apiToken,
+          user: decodedToken
         }
       });
       return;

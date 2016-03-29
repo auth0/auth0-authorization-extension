@@ -8,7 +8,7 @@ import { LoadingPanel } from '../../components/Dashboard';
 class LoginContainer extends Component {
   componentWillMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.push(`/users`);
+      this.props.push(`/groups`);
     } else if (!this.props.auth.isAuthenticating) {
       this.props.login(this.props.location.query.returnUrl);
     }
