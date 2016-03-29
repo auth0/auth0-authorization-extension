@@ -5,10 +5,17 @@
   "author": "auth0",
   "description": "This application gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
-  "codeUrl": "https://a0ext.blob.core.windows.net/scripts/iam-dashboard.extension.1.0.0.js",
   "logoUrl": "https://cdn.auth0.com/extensions/iam-dashboard/assets/logo.png",
   "keywords": [
     "auth0",
     "extension"
   ]
+  "secrets": {
+    "AUTH0_DOMAIN": {
+      "description": "Auth0 Domain"
+    },
+    "AUTH0_APIV2_TOKEN": {
+      "description": "Auth0 Management Token"
+    }
+  }
 }
