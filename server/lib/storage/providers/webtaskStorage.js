@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import AWS from 'aws-sdk';
 import uuid from 'node-uuid';
 import { ArgumentError, NotFoundError, ValidationError } from '../../errors';
 

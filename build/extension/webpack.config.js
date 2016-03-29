@@ -5,20 +5,6 @@ const project = require('../../package.json');
 const externalModules = require('./externals');
 
 module.exports = externalModules.then((externals) => {
-  // Remove client side dependencies that are incorrectly marked as incompatible.
-  Object.keys(externals.incompatible).forEach(key => {
-    if (key.indexOf('babel') === 0 || key.indexOf('webpack') === 0 || key.indexOf('react') === 0 || key.indexOf('postcss') === 0) {
-      externals.compatible[key] = true;
-      delete externals.incompatible[key];
-    }
-  });
-
-  /* // List incompatible modules.
-  Object.keys(externals.incompatible).sort().forEach(key => {
-    const module = externals.incompatible[key];
-    console.log(` ${key} - Local: ${module.local.join(', ')} - Webtask: ${module.webtask}`);
-  }); */
-
   // Even though we don't have an semver match, it's ok to use these versions.
   externals.compatible['async'] = true; // Local: ^0.9.0, ^1.5.0, ^1.4.0, ^1.5.2, ~0.2.9, ~0.2.6, ^1.3.0, ~1.0.0, ~1.5.2 - Webtask: 1.0.0
   externals.compatible['aws-sdk'] = true; // Local: ^2.2.47 - Webtask: 2.2.30
@@ -48,10 +34,20 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['winston'] = true; // Local: ^2.2.0 - Webtask: 1.0.0
   externals.compatible['xml2js'] = true; // Local: 0.4.15 - Webtask: 0.4.8
 
-  // Modules we still need in webtask.
+  // Additional dependencies that are available in webtask.
   externals.compatible['auth0'] = true;
-  externals.compatible['nconf'] = false;
-  externals.compatible['validate.js'] = false;
+  externals.compatible['nconf'] = true;
+  externals.compatible['node-uuid'] = true;
+  externals.compatible['jade'] = true;
+  externals.compatible['jsonwebtokens'] = true;
+  externals.compatible['debug'] = true;
+  externals.compatible['body-parser'] = true;
+  externals.compatible['mime-types'] = true;
+  externals.compatible['auth0@2.0.0'] = true;
+  // externals.compatible['validate.js'] = false;
+
+  // Transform to commonjs.
+  Object.keys(externals.compatible).forEach(k => { externals.compatible[k] = 'commonjs ' + k; });
 
   return {
     entry: path.join(__dirname, '../../webtask'),

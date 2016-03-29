@@ -16,7 +16,12 @@ import groups from './groups';
 export default () => {
   const db = getDb();
 
-  const managementClient = new ManagementClient({
+  let auth0 = require('auth0');
+  if (nconf.get('HOSTING_ENV') === 'webtask') {
+    auth0 = require('auth0@2.0.0');
+  }
+
+  const managementClient = new auth0.ManagementClient({
     token: nconf.get('AUTH0_APIV2_TOKEN'),
     domain: nconf.get('AUTH0_DOMAIN')
   });

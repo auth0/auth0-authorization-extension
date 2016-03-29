@@ -1,6 +1,9 @@
+'use latest';
+
 const nconf = require('nconf');
 const Webtask = require('webtask-tools');
-const StorageProviders = require('./lib/storage/providers');
+const logger = require('./server/lib/logger');
+logger.info('Starting webtask.');
 
 module.exports = Webtask.fromExpress((req, res) => {
   nconf.defaults({
@@ -13,6 +16,7 @@ module.exports = Webtask.fromExpress((req, res) => {
   });
 
   // Start the server.
+  const StorageProviders = require('./server/lib/storage/providers');
   const initServer = require('./server');
   const app = initServer({
     storageProvider: new StorageProviders.WebtaskStorageProvider({
