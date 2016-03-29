@@ -13,8 +13,6 @@ import api from './routes/api';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
 
-logger.info('Starting server...');
-
 // Initialize data provider.
 // import { init as initProvider } from './lib/providers';
 // initProvider(nconf.get('DATA_PROVIDER'));
@@ -48,7 +46,10 @@ module.exports = (options = { }) => {
   if (nconf.get('HOSTING_ENV') === 'webtask') {
     app.use(auth0({
       clientName: 'IAM Dashboard Extension',
-      scopes: 'read:connections read:users read:clients'
+      scopes: 'read:connections read:users read:clients',
+      apiToken: {
+        secret: nconf.get('AUTHORIZE_API_KEY')
+      }
     }));
   }
 
