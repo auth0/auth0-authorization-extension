@@ -70,28 +70,20 @@ module.exports = externalModules.then((externals) => {
       ]
     },
     plugins: [
-      new Webpack.DefinePlugin({
-        'process.env': {
-          NODE_ENV: JSON.stringify('production')
-        }
-      }),
       new Webpack.optimize.DedupePlugin(),
       new Webpack.optimize.UglifyJsPlugin({
         minimize: true,
-        mangle: true,
         output: {
           comments: false
         },
         compress: {
-          sequences: true,
-          dead_code: true,
-          conditionals: true,
-          booleans: true,
-          unused: true,
-          if_return: true,
-          join_vars: true,
-          drop_console: true,
           warnings: false
+        }
+      }),
+      new Webpack.DefinePlugin({
+        'process.env': {
+          NODE_ENV: JSON.stringify('production'),
+          CLIENT_VERSION: JSON.stringify(project.version)
         }
       })
     ],
