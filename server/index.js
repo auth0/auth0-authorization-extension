@@ -42,6 +42,10 @@ module.exports = (options = { }) => {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: false }));
 
+  // Configure routes.
+  app.use('/api', api());
+  app.use('/app', Express.static(path.join(__dirname, '../dist')));
+
   // Use OAuth2 authorization if runnings as a webtask.
   if (nconf.get('HOSTING_ENV') === 'webtask') {
     app.use(auth0({
@@ -53,9 +57,7 @@ module.exports = (options = { }) => {
     }));
   }
 
-  // Configure routes.
-  app.use('/api', api());
-  app.use('/app', Express.static(path.join(__dirname, '../dist')));
+  // Fallback to rendering HTML.
   app.get('*', htmlRoute());
 
   // Generic error handler.
