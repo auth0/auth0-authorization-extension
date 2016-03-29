@@ -9,7 +9,7 @@
   "keywords": [
     "auth0",
     "extension"
-  ]
+  ],
   "secrets": {
     "AUTH0_DOMAIN": {
       "description": "Auth0 Domain"
