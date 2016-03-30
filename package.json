@@ -1,6 +1,6 @@
 {
   "name": "auth0-iam-dashboard",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Identity and Access Management Dashboard for Auth0",
   "engines": {
     "node": "5.9.0"
