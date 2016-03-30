@@ -1,7 +1,7 @@
 {
   "title": "Identity and Access Management Dashboard",
   "name": "iam-dashboard",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "author": "auth0",
   "description": "This application gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
