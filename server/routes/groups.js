@@ -169,7 +169,7 @@ export default (db, managementClient) => {
   api.get('/:id/members', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => auth0.getUsersById(group.members || []))
-      .then(users => _.orderBy(users, [ 'last_login' ], [ 'desc' ]))
+      .then(users => _.sortByOrder(users, [ 'last_login' ], [ false ]))
       .then(users => res.json(users))
       .catch(next);
   });
@@ -201,7 +201,7 @@ export default (db, managementClient) => {
         );
       }
       )
-      .then(nested => _.orderBy(nested, [ 'user.name' ], [ 'asc' ]))
+      .then(nested => _.sortByOrder(nested, [ 'user.name' ], [ true ]))
       .then(nested => res.json(nested))
       .catch(next);
   });
@@ -258,7 +258,7 @@ export default (db, managementClient) => {
         }
         return _.filter(groups, g => group.nested.indexOf(g._id) > -1);
       })
-      .then(nested => _.orderBy(nested, [ 'name' ], [ 'asc' ]))
+      .then(nested => _.sortByOrder(nested, [ 'name' ], [ true ]))
       .then(nested => res.json(nested))
       .catch(next);
   });

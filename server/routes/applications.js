@@ -7,7 +7,7 @@ export default (db, auth0) => {
   api.get('/', (req, res, next) => {
     auth0.clients.getAll({ fields: 'client_id,name,callbacks,global' })
       .then(clients => _.chain(clients)
-        .filter([ 'global', false ])
+        .filter({ 'global': false })
         .sortBy((client) => client.name.toLowerCase())
         .value())
       .then(clients => Promise.all([ clients, db.getApplications(), db.getGroups() ]))
@@ -27,7 +27,7 @@ export default (db, auth0) => {
           return client;
         })
       )
-      .then(clients => _.orderBy(clients, [ 'groups.length' ], [ 'desc' ]))
+      .then(clients => _.sortByOrder(clients, [ 'groups.length' ], [ false ]))
       .then(clients => res.json(clients))
       .catch(next);
   });
