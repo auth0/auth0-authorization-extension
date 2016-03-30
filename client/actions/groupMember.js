@@ -21,6 +21,25 @@ export function fetchGroupMembers(groupId, reload) {
 }
 
 /*
+ * Load the nested users of a single group.
+ */
+export function fetchGroupMembersNested(groupId, reload) {
+  return {
+    type: constants.FETCH_GROUP_MEMBERS_NESTED,
+    meta: {
+      groupId,
+      reload
+    },
+    payload: {
+      promise: axios.get(`/api/groups/${groupId}/members/nested`, {
+        timeout: 5000,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
  * Add the selected users members to a group.
  */
 export function addGroupMembers(groupId, members, callback) {

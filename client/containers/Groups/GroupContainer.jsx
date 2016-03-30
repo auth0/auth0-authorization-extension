@@ -51,6 +51,7 @@ export default class GroupContainer extends Component {
     this.props.cancelUserPicker();
     this.props.addGroupMembers(groupId, users, () => {
       this.props.fetchGroupMembers(groupId, true);
+      this.props.fetchGroupMembersNested(groupId, true);
     });
   }
 
@@ -70,6 +71,7 @@ export default class GroupContainer extends Component {
     this.props.cancelGroupPicker();
     this.props.addNestedGroup(groupId, nestedGroup._id, () => {
       this.props.fetchNestedGroups(groupId, true);
+      this.props.fetchGroupMembersNested(groupId, true);
     });
   }
 
@@ -113,7 +115,7 @@ export default class GroupContainer extends Component {
           <div className="col-xs-12">
             <Tabs defaultActiveKey={1} animation={false}>
               <Tab eventKey={1} title="Members">
-                <GroupMembers members={group.get('members')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
+                <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />

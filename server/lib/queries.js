@@ -72,9 +72,38 @@ export function isApplicationAccessAllowed(db, clientId, userGroups) {
 }
 
 /*
- * Resolve all nested groups for a group.
+ * Resolve all child groups.
  */
-const getNested = (groups, userGroups) => {
+export const getChildGroups = (groups, selectedGroups) => {
+  const groupsFlat = [];
+
+  // Recursive method to find roles.
+  const findGroups = (groupId) => {
+    // Only process each role once.
+    if (groupsFlat.indexOf(groupId) === -1) {
+      groupsFlat.push(groupId);
+
+      // Process the child groups.
+      let group = _.find(groups, { '_id': groupId });
+      if (group && group.nested) {
+        _.forEach(group.nested, (nestedId) => {
+          findGroups(nestedId);
+        });
+      }
+    }
+  };
+
+  // Process the user's groups.
+  selectedGroups.forEach(g => findGroups(g._id));
+
+  // Return the groups.
+  return _.filter(groups, (g) => groupsFlat.indexOf(g._id) > -1);
+};
+
+/*
+ * Resolve all parent groups.
+ */
+export const getParentGroups = (groups, selectedGroups) => {
   const groupsFlat = [];
 
   // Recursive method to find roles.
@@ -90,10 +119,36 @@ const getNested = (groups, userGroups) => {
   };
 
   // Process the user's groups.
-  userGroups.forEach(g => findGroups(g._id));
+  selectedGroups.forEach(g => findGroups(g._id));
 
   // Return the groups.
   return _.filter(groups, (g) => groupsFlat.indexOf(g._id) > -1);
+};
+
+/*
+ * Resolve all users for a list of groups.
+ */
+export const getMembers = (selectedGroups) => {
+  const users = { };
+
+  // Process the user's groups.
+  selectedGroups.forEach(g => {
+    if (g.members) {
+      g.members.forEach(m => {
+        if (!users[m]) {
+          users[m] = g;
+        }
+      });
+    }
+  });
+
+  // Return the users.
+  return Object.keys(users).map(userId => {
+    return {
+      userId,
+      group: users[userId]
+    };
+  });
 };
 
 /*
@@ -107,7 +162,7 @@ export function getUserGroups(db, userId) {
       }
 
       const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
-      const nestedGroups = getNested(groups, userGroups).map((group) => group.name);
+      const nestedGroups = getParentGroups(groups, userGroups).map((group) => group.name);
       return resolve(nestedGroups);
     });
   });

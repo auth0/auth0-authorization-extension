@@ -20,6 +20,11 @@ const initialState = {
     error: null,
     records: []
   },
+  nestedMembers: {
+    loading: false,
+    error: null,
+    records: []
+  },
   mappings: {
     loading: false,
     error: null,
@@ -185,6 +190,18 @@ export const group = createReducer(fromJS(initialState), {
   [constants.DELETE_GROUP_MAPPING_FULFILLED]: (state, action) =>
     state.merge({
       mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_PENDING]: (state, action) =>
+    state.merge({
+      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
     })
 });
 
@@ -319,6 +336,32 @@ const groupMembers = createReducer(fromJS(initialState.members), {
     return state.merge({
       loading: false,
       records: records.delete(index)
+    });
+  }
+});
+
+const nestedMembers = createReducer(fromJS(initialState.nestedMembers), {
+  [constants.FETCH_GROUP_MEMBERS_NESTED_PENDING]: (state, action) => {
+    if (action.meta && action.meta.reload) {
+      return state.merge({
+        loading: true
+      });
+    }
+
+    return state.merge({
+      ...initialState.nestedMembers,
+      loading: true
+    });
+  },
+  [constants.FETCH_GROUP_MEMBERS_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.nestedMembers,
+      error: `An error occured while loading the nested members: ${action.errorMessage}`
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) => {
+    return state.merge({
+      loading: false,
+      records: fromJS(action.payload.data)
     });
   }
 });
