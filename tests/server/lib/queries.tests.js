@@ -82,7 +82,7 @@ describe('Queries', () => {
     });
   });
 
-  describe('#getUserGroups', () => {
+  describe.only('#getUserGroups', () => {
     it('should return an empty array if user does not belong to any groups', (done) => {
       const db = mockGroups([
         { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
@@ -127,6 +127,60 @@ describe('Queries', () => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(1);
           expect(groups[0]).to.equal('Group 2');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should handle nested groups', (done) => {
+      const db = mockGroups([
+        { _id: '123', name: 'Group 1', nested: [ '456' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666', '777' ] },
+        { _id: '789', name: 'Group 3' }
+      ]);
+
+      getUserGroups(db, '777')
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(2);
+          expect(groups[0]).to.equal('Group 1');
+          expect(groups[1]).to.equal('Group 2');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should handle nested groups that dont belong to the current user', (done) => {
+      const db = mockGroups([
+        { _id: '123', name: 'Group 1', nested: [ '789' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666', '777' ] },
+        { _id: '789', name: 'Group 3' }
+      ]);
+
+      getUserGroups(db, '777')
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(1);
+          expect(groups[0]).to.equal('Group 2');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should handle nested groups (cyclic)', (done) => {
+      const db = mockGroups([
+        { _id: '123', name: 'Group 1', nested: [ '456', '789' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666', '777' ] },
+        { _id: '789', name: 'Group 3', nested: [ '123', '456', '789' ] }
+      ]);
+
+      getUserGroups(db, '777')
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(3);
+          expect(groups[0]).to.equal('Group 1');
+          expect(groups[1]).to.equal('Group 2');
+          expect(groups[2]).to.equal('Group 3');
           done();
         })
         .catch(err => done(err));

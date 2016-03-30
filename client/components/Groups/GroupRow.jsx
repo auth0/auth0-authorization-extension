@@ -25,6 +25,7 @@ class GroupRow extends Component {
         {this.renderGroupName(group)}
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
         <TableTextCell>{ (group.members && group.members.length) || '0' }</TableTextCell>
+        <TableTextCell>{ (group.nested && group.nested.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.mappings && group.mappings.length) || '0' }</TableTextCell>
         <TableCell>
           <ButtonToolbar style={{ marginBottom: '0px' }}>

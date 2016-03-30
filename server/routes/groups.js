@@ -216,5 +216,62 @@ export default (db, managementClient) => {
       .catch(next);
   });
 
+  api.get('/:id/nested', (req, res, next) => {
+    db.getGroups()
+      .then((groups) => {
+        const group = _.find(groups, { _id: req.params.id });
+        if (!group.nested) {
+          group.nested = [];
+        }
+        return _.filter(groups, g => group.nested.indexOf(g._id) > -1);
+      })
+      .then(nested => _.orderBy(nested, [ 'name' ], [ 'asc' ]))
+      .then(nested => res.json(nested))
+      .catch(next);
+  });
+
+  api.patch('/:id/nested', (req, res, next) => {
+    if (!Array.isArray(req.body)) {
+      res.status(400);
+      return res.json({
+        code: 'invalid_request',
+        message: 'The nested groups must be an array.'
+      });
+    }
+
+    return db.getGroup(req.params.id)
+      .then(group => {
+        const currentGroup = group;
+        if (!currentGroup.nested) {
+          currentGroup.nested = [];
+        }
+
+        // Add each nested group.
+        req.body.forEach((nestedGroup) => {
+          if (currentGroup.nested.indexOf(nestedGroup) === -1 && nestedGroup !== req.params.id) {
+            currentGroup.nested.push(nestedGroup);
+          }
+        });
+
+        return db.updateGroup(req.params.id, currentGroup);
+      })
+      .then(() => res.sendStatus(202))
+      .catch(next);
+  });
+
+  api.delete('/:id/nested', (req, res, next) => {
+    db.getGroup(req.params.id)
+      .then(group => {
+        const index = group.nested.indexOf(req.body.groupId);
+        if (index > -1) {
+          group.nested.splice(index, 1);
+        }
+
+        return db.updateGroup(req.params.id, group);
+      })
+      .then(() => res.sendStatus(202))
+      .catch(next);
+  });
+
   return api;
 };

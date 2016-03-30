@@ -3,10 +3,10 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupActions, groupMemberActions, groupMappingActions, userPickerActions } from '../../actions';
+import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions } from '../../actions';
 
 import UserPickerDialog from '../../components/Users/UserPickerDialog';
-import { GroupHeader, GroupMappingDialog, GroupMappingRemoveDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog } from '../../components/Groups';
+import { GroupPickerDialog, GroupHeader, GroupMappingDialog, GroupMappingRemoveDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog, NestedGroups, NestedGroupRemoveDialog } from '../../components/Groups';
 
 export default class GroupContainer extends Component {
   constructor() {
@@ -19,20 +19,16 @@ export default class GroupContainer extends Component {
     this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
     this.saveGroupMapping = this.saveGroupMapping.bind(this);
 
-        this.saveMapping = this.saveMapping.bind(this);
+    // Nested groups.
+    this.requestAddNestedGroup = this.requestAddNestedGroup.bind(this);
+    this.addNestedGroup = this.addNestedGroup.bind(this);
+    this.requestRemoveNestedGroup = this.requestRemoveNestedGroup.bind(this);
+    this.removeNestedGroup = this.removeNestedGroup.bind(this);
   }
+
   componentWillMount() {
     this.props.fetchGroup(this.props.params.id);
   }
-
-  saveMapping(group, groupMapping) {
-    console.log(group, groupMapping);
-  }
-    cancelEditMapping() {
-
-    }
-
-
 
   addMember() {
     this.props.openUserPicker(`Add members to "${this.props.group.get('record').get('name')}"`);
@@ -65,18 +61,41 @@ export default class GroupContainer extends Component {
     });
   }
 
+  requestAddNestedGroup() {
+    this.props.openGroupPicker(`Add a nested group to "${this.props.group.get('record').get('name')}"`);
+  }
+
+  addNestedGroup(nestedGroup) {
+    const groupId = this.props.group.get('groupId');
+    this.props.cancelGroupPicker();
+    this.props.addNestedGroup(groupId, nestedGroup._id, () => {
+      this.props.fetchNestedGroups(groupId, true);
+    });
+  }
+
+  requestRemoveNestedGroup(nestedGroup) {
+    this.props.requestRemoveNestedGroup(this.props.group.get('record').toJS(), nestedGroup);
+  }
+
+  removeNestedGroup(groupId, nestedGroupId) {
+    this.props.removeNestedGroup(groupId, nestedGroupId);
+  }
+
+
   render() {
-    const { connections, group, groupMember, groupMapping, userPicker } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested } = this.props;
 
     return (
       <div>
         <div>
-          <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.saveGroupMapping} onClose={this.props.clearGroupMapping} />
-          <GroupMappingRemoveDialog group={group} groupMapping={groupMapping} onConfirm={this.props.deleteGroupMapping} onCancel={this.props.cancelDeleteGroupMapping} />
-          <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
           <UserPickerDialog userPicker={userPicker} onSelectUser={this.props.selectUser} onUnselectUser={this.props.unselectUser}
             onConfirm={this.addMembers} onCancel={this.props.cancelUserPicker} onReset={this.props.resetUserPicker} onSearch={this.props.searchUserPicker}
           />
+          <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
+          <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.saveGroupMapping} onClose={this.props.clearGroupMapping} />
+          <GroupMappingRemoveDialog group={group} groupMapping={groupMapping} onConfirm={this.props.deleteGroupMapping} onCancel={this.props.cancelDeleteGroupMapping} />
+          <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
+          <NestedGroupRemoveDialog groupNested={groupNested} onConfirm={this.removeNestedGroup} onCancel={this.props.cancelRemoveNestedGroup} />
         </div>
         <div className="row">
           <div className="col-xs-12">
@@ -96,7 +115,10 @@ export default class GroupContainer extends Component {
               <Tab eventKey={1} title="Members">
                 <GroupMembers members={group.get('members')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
-              <Tab eventKey={2} title="Mappings">
+              <Tab eventKey={2} title="Nested Groups">
+                <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
+              </Tab>
+              <Tab eventKey={3} title="Group Mappings">
                 <GroupMappings mappings={group.get('mappings')} createMapping={this.props.createGroupMapping} removeMapping={this.props.requestDeleteGroupMapping} />
               </Tab>
             </Tabs>
@@ -111,6 +133,7 @@ GroupContainer.propTypes = {
   group: React.PropTypes.object,
   groupMapping: React.PropTypes.object,
   groupMember: React.PropTypes.object,
+  groupNested: React.PropTypes.object,
   userPicker: React.PropTypes.object,
   params: React.PropTypes.object.isRequired,
   fetchGroup: React.PropTypes.func.isRequired,
@@ -126,10 +149,12 @@ function mapStateToProps(state) {
   return {
     connections: state.connections,
     group: state.group,
+    groupNested: state.groupNested,
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,
+    groupPicker: state.groupPicker,
     userPicker: state.userPicker
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupMappingActions, ...userPickerActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions })(GroupContainer);

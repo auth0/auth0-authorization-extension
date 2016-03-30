@@ -20,6 +20,7 @@ import { roles } from './roles';
 import { group } from './group';
 import { groupPicker } from './groupPicker';
 import { groupMember } from './groupMember';
+import { groupNested } from './groupNested';
 import { groupMapping } from './groupMapping';
 import { groups } from './groups';
 import { permission } from './permission';
@@ -46,6 +47,7 @@ export default combineReducers({
   groupPicker,
   groupMember,
   groupMapping,
+  groupNested,
   groups,
   permission,
   permissions,

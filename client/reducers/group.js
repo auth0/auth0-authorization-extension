@@ -24,6 +24,11 @@ const initialState = {
     loading: false,
     error: null,
     records: []
+  },
+  nested: {
+    loading: false,
+    error: null,
+    records: []
   }
 };
 
@@ -137,6 +142,34 @@ export const group = createReducer(fromJS(initialState), {
     state.merge({
       members: groupMembers(state.get('members'), action)
     }),
+    [constants.FETCH_GROUP_NESTED_PENDING]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+    [constants.FETCH_GROUP_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+    [constants.FETCH_GROUP_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+    [constants.ADD_GROUP_NESTED_PENDING]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+    [constants.ADD_GROUP_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+    [constants.ADD_GROUP_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+    [constants.REMOVE_GROUP_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
   [constants.FETCH_GROUP_MAPPINGS_PENDING]: (state, action) =>
     state.merge({
       mappings: groupMappings(state.get('mappings'), action)
@@ -182,6 +215,55 @@ const groupMappings = createReducer(fromJS(initialState.mappings), {
   [constants.DELETE_GROUP_MAPPING_FULFILLED]: (state, action) => {
     const records = state.get('records');
     const index = records.findIndex((groupMapping) => groupMapping.get('_id') === action.meta.groupMappingId);
+    return state.merge({
+      loading: false,
+      records: records.delete(index)
+    });
+  }
+});
+
+const nestedGroups = createReducer(fromJS(initialState.nested), {
+  [constants.FETCH_GROUP_NESTED_PENDING]: (state, action) => {
+    if (action.meta && action.meta.reload) {
+      return state.merge({
+        loading: true
+      });
+    }
+
+    return state.merge({
+      ...initialState.nested,
+      loading: true
+    });
+  },
+  [constants.FETCH_GROUP_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.nested,
+      error: `An error occured while loading the nested groups: ${action.errorMessage}`
+    }),
+  [constants.FETCH_GROUP_NESTED_FULFILLED]: (state, action) => {
+    return state.merge({
+      loading: false,
+      records: fromJS(action.payload.data)
+    });
+  },
+  [constants.ADD_GROUP_NESTED_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      error: null
+    }),
+  [constants.ADD_GROUP_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while adding the nested groups: ${action.errorMessage}`
+    }),
+  [constants.ADD_GROUP_NESTED_FULFILLED]: (state) => {
+    return state.merge({
+      loading: false
+    });
+  },
+  [constants.REMOVE_GROUP_NESTED_FULFILLED]: (state, action) => {
+    const records = state.get('records');
+    const index = records.findIndex((g) => g.get('_id') === action.meta.groupId);
     return state.merge({
       loading: false,
       records: records.delete(index)

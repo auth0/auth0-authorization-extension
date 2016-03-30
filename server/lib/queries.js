@@ -72,6 +72,31 @@ export function isApplicationAccessAllowed(db, clientId, userGroups) {
 }
 
 /*
+ * Resolve all nested groups for a group.
+ */
+const getNested = (groups, userGroups) => {
+  const groupsFlat = [];
+
+  // Recursive method to find roles.
+  const findGroups = (groupId) => {
+    // Only process each role once.
+    if (groupsFlat.indexOf(groupId) === -1) {
+      groupsFlat.push(groupId);
+
+      // Process the parent groups.
+      const parentGroups = _.filter(groups, (group) => _.includes(group.nested || [], groupId));
+      parentGroups.forEach(g => findGroups(g._id));
+    }
+  };
+
+  // Process the user's groups.
+  userGroups.forEach(g => findGroups(g._id));
+
+  // Return the groups.
+  return _.filter(groups, (g) => groupsFlat.indexOf(g._id) > -1);
+};
+
+/*
  * Get the groups a user belongs to.
  */
 export function getUserGroups(db, userId) {
@@ -81,9 +106,9 @@ export function getUserGroups(db, userId) {
         return reject(err);
       }
 
-      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId))
-        .map((group) => group.name);
-      return resolve(userGroups);
+      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+      const nestedGroups = getNested(groups, userGroups).map((group) => group.name);
+      return resolve(nestedGroups);
     });
   });
 }

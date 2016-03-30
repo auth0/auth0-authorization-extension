@@ -47,7 +47,7 @@ export default () => {
       AUTH0_CLIENT_ID: nconf.get('AUTH0_CLIENT_ID'),
       HOSTING_ENV: nconf.get('HOSTING_ENV'),
       BASE_URL: url.format({
-        protocol: 'https',
+        protocol: nconf.get('NODE_ENV') !== 'production' ? 'http' : 'https',
         host: req.get('host'),
         pathname: url.parse(req.originalUrl || '').pathname.replace(req.path, '')
       }),
@@ -55,7 +55,7 @@ export default () => {
     };
 
     // Render from CDN.
-    const clientVersion = nconf.get('CLIENT_VERSION') || '1.1.1';
+    const clientVersion = nconf.get('CLIENT_VERSION');
     if (clientVersion) {
       return res.send(ejs.render(template, {
         config,

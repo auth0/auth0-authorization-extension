@@ -3,6 +3,7 @@ import axios from 'axios';
 import * as constants from '../constants';
 import { fetchGroupMembers } from './groupMember';
 import { fetchGroupMappings } from './groupMapping';
+import { fetchNestedGroups } from './groupNested';
 
 /*
  * Load all available groups.
@@ -45,6 +46,7 @@ export function fetchGroup(groupId) {
     dispatch(fetchGroupDetails(groupId));
     dispatch(fetchGroupMembers(groupId));
     dispatch(fetchGroupMappings(groupId));
+    dispatch(fetchNestedGroups(groupId));
   };
 }
 

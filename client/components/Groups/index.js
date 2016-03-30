@@ -10,3 +10,5 @@ export GroupMembers from './GroupMembers';
 export GroupMemberRemoveDialog from './GroupMemberRemoveDialog';
 export GroupPickerDialog from './GroupPickerDialog';
 export GroupsTable from './GroupsTable';
+export NestedGroups from './NestedGroups';
+export NestedGroupRemoveDialog from './NestedGroupRemoveDialog';

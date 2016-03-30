@@ -3,6 +3,7 @@ export * as applicationGroupActions from './applicationGroup';
 export * as authActions from './auth';
 export * as connectionActions from './connection';
 export * as groupActions from './group';
+export * as groupNestedActions from './groupNested';
 export * as groupMappingActions from './groupMapping';
 export * as groupPickerActions from './groupPicker';
 export * as groupMemberActions from './groupMember';
