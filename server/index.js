@@ -54,8 +54,12 @@ module.exports = (options = { }) => {
     // Helper to store the user's token in storage.
     const onUserAuthenticated = (req, res, accessToken, next) => {
       const decodedToken = jwtDecode(accessToken);
+
       getDb().setToken(decodedToken.sub, { accessToken })
-        .then(next)
+        // next is expecting only one parameter with the error.
+        .then(() => {
+          next();
+        })
         .catch(next);
     };
 
