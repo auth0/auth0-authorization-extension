@@ -5,7 +5,7 @@ import uuid from 'node-uuid';
 import validator from 'validate.js';
 import memoizer from 'lru-memoizer';
 
-import auth0 from '../lib/auth0';
+import { managementClient } from '../lib/middlewares';
 import { getChildGroups, getMembers } from '../lib/queries';
 
 const validateGroup = (group) => validator(group, {
@@ -31,18 +31,18 @@ const validateGroupMapping = (groupMapping) => validator(groupMapping, {
   }
 });
 
-export default (db, managementClient) => {
+export default (db) => {
   const getConnection = memoizer({
-    load: (connectionId, callback) => managementClient.connections.get({ id: connectionId }, callback),
-    hash: (connectionId) => connectionId,
+    load: (auth0, connectionId, callback) => auth0.connections.get({ id: connectionId }, callback),
+    hash: (auth0, connectionId) => connectionId,
     max: 100,
     maxAge: 1000 * 600
   });
 
-  const getMappingNames = (mappings) => new Promise((resolve, reject) => {
+  const getMappingNames = (auth0, mappings) => new Promise((resolve, reject) => {
     const existingMappings = [];
     async.eachLimit(mappings, 10, (mapping, cb) => {
-      getConnection(mapping.connectionId, (err, connection) => {
+      getConnection(auth0, mapping.connectionId, (err, connection) => {
         if (err) {
           if (err.statusCode === 404) {
             return cb();
@@ -115,10 +115,10 @@ export default (db, managementClient) => {
       .catch(next);
   });
 
-  api.get('/:id/mappings', (req, res, next) => {
+  api.get('/:id/mappings', managementClient, (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => group.mappings || [])
-      .then(mappings => getMappingNames(mappings))
+      .then(mappings => getMappingNames(req.auth0, mappings))
       .then(mappings => res.json(mappings))
       .catch(next);
   });
@@ -166,15 +166,15 @@ export default (db, managementClient) => {
       .catch(next);
   });
 
-  api.get('/:id/members', (req, res, next) => {
+  api.get('/:id/members', managementClient, (req, res, next) => {
     db.getGroup(req.params.id)
-      .then(group => auth0.getUsersById(group.members || []))
+      .then(group => req.auth0.getUsersById(group.members || []))
       .then(users => _.sortByOrder(users, [ 'last_login' ], [ false ]))
       .then(users => res.json(users))
       .catch(next);
   });
 
-  api.get('/:id/members/nested', (req, res, next) => {
+  api.get('/:id/members/nested', managementClient, (req, res, next) => {
     db.getGroups()
       .then((groups) => {
         const group = _.find(groups, { _id: req.params.id });
@@ -182,7 +182,7 @@ export default (db, managementClient) => {
         return getMembers(allGroups);
       })
       .then(members => {
-        return auth0.getUsersById(members.map(m => m.userId))
+        return req.auth0.getUsersById(members.map(m => m.userId))
           .then(users => users.map(u => {
             let userGroup = _.find(members, { userId: u.user_id });
             if (userGroup) {

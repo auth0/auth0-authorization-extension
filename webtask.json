@@ -6,6 +6,7 @@
   "description": "This application gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
   "logoUrl": "https://cdn.auth0.com/extensions/iam-dashboard/assets/logo.png",
+  "initialUrlPath": "/admin/login",
   "keywords": [
     "auth0",
     "extension"

@@ -1,6 +1,5 @@
 import nconf from 'nconf';
 import jwt from 'express-jwt';
-import { ManagementClient } from 'auth0';
 import { Router } from 'express';
 
 import { getDb } from '../lib/storage/getdb';
@@ -15,16 +14,6 @@ import groups from './groups';
 
 export default () => {
   const db = getDb();
-
-  let auth0 = require('auth0');
-  if (nconf.get('HOSTING_ENV') === 'webtask') {
-    auth0 = require('auth0@2.0.0');
-  }
-
-  const managementClient = new auth0.ManagementClient({
-    token: nconf.get('AUTH0_APIV2_TOKEN'),
-    domain: nconf.get('AUTH0_DOMAIN')
-  });
 
   let authenticate = jwt({
     secret: (req, payload, done) => {
@@ -53,12 +42,12 @@ export default () => {
 
   const api = Router();
   api.use('/authorize', authenticateOrApiKey, authorize(db, managementClient));
-  api.use('/applications', authenticate, applications(db, managementClient));
-  api.use('/connections', authenticate, connections(managementClient));
+  api.use('/applications', authenticate, applications(db));
+  api.use('/connections', authenticate, connections());
   api.use('/users', authenticate, users(db));
   api.use('/logs', authenticate, logs(db));
   // api.use('/roles', authenticate, roles(db));
   // api.use('/permissions', authenticate, permissions(db));
-  api.use('/groups', authenticate, groups(db, managementClient));
+  api.use('/groups', authenticate, groups(db));
   return api;
 };

@@ -1,11 +1,12 @@
 import _ from 'lodash';
 import Promise from 'bluebird';
 import { Router } from 'express';
+import { managementClient } from '../lib/middlewares';
 
-export default (db, auth0) => {
+export default (db) => {
   const api = Router();
-  api.get('/', (req, res, next) => {
-    auth0.clients.getAll({ fields: 'client_id,name,callbacks,global' })
+  api.get('/', managementClient, (req, res, next) => {
+    req.auth0.clients.getAll({ fields: 'client_id,name,callbacks,global' })
       .then(clients => _.chain(clients)
         .filter({ 'global': false })
         .sortBy((client) => client.name.toLowerCase())
@@ -32,8 +33,8 @@ export default (db, auth0) => {
       .catch(next);
   });
 
-  api.get('/:id', (req, res, next) => {
-    auth0.clients.get({ client_id: req.params.id })
+  api.get('/:id', managementClient, (req, res, next) => {
+    req.auth0.clients.get({ client_id: req.params.id })
       .then(client => res.json(client))
       .catch(next);
   });
