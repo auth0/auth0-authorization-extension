@@ -1,7 +1,7 @@
 {
   "title": "Identity and Access Management Dashboard",
   "name": "iam-dashboard",
-  "version": "1.2.0",
+  "version": "1.3.0",
   "author": "auth0",
   "description": "This application gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
@@ -10,12 +10,7 @@
     "auth0",
     "extension"
   ],
-  "secrets": {
-    "AUTH0_DOMAIN": {
-      "description": "Auth0 Domain"
-    },
-    "AUTH0_APIV2_TOKEN": {
-      "description": "Auth0 Management Token"
-    }
+  "auth0": {
+    "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users"
   }
 }

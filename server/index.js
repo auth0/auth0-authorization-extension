@@ -10,6 +10,7 @@ import { init as initDb } from './lib/storage/getdb';
 import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
 import api from './routes/api';
+import meta from './routes/meta';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
 
@@ -45,12 +46,15 @@ module.exports = (options = { }) => {
   // Configure routes.
   app.use('/api', api());
   app.use('/app', Express.static(path.join(__dirname, '../dist')));
+  app.use('/meta', meta());
 
-  // Use OAuth2 authorization if runnings as a webtask.
-  if (nconf.get('HOSTING_ENV') === 'webtask') {
+  // Use OAuth2 authorization.
+  if (nconf.get('USE_OAUTH2')) {
     app.use(auth0({
+      scopes: nconf.get('AUTH0_SCOPES'),
+      clientId: nconf.get('AUTH0_CLIENT_ID'),
+      rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
       clientName: 'IAM Dashboard Extension',
-      scopes: 'read:connections read:users read:clients',
       apiToken: {
         secret: nconf.get('AUTHORIZE_API_KEY')
       }

@@ -22,8 +22,6 @@ const history = useRouterHistory(createHistory)({
 const store = configureStore([ routerMiddleware(history) ], { });
 const reduxHistory = syncHistoryWithStore(history, store);
 
-
-
 // Fire first events.
 store.dispatch(loadCredentials());
 

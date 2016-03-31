@@ -32,7 +32,7 @@ export default () => {
     }
   });
 
-  if (nconf.get('HOSTING_ENV') === 'default') {
+  if (!nconf.get('USE_OAUTH2')) {
     authenticate = jwt({
       secret: new Buffer(nconf.get('AUTH0_CLIENT_SECRET'), 'base64'),
       audience: nconf.get('AUTH0_CLIENT_ID')
