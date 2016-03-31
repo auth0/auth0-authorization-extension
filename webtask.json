@@ -11,6 +11,7 @@
     "extension"
   ],
   "auth0": {
+    "createClient": true,
     "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users"
   }
 }
