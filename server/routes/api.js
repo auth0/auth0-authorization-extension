@@ -11,6 +11,7 @@ import users from './users';
 // import roles from './roles';
 import groups from './groups';
 // import permissions from './permissions';
+import { managementClient } from '../lib/middlewares';
 
 export default () => {
   const db = getDb();
