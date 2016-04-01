@@ -12,6 +12,7 @@
     "extension"
   ],
   "auth0": {
+    "callbackPath": "/admins/callback",
     "createClient": true,
     "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users"
   }
