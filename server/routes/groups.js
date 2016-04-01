@@ -8,6 +8,8 @@ import memoizer from 'lru-memoizer';
 import { managementClient } from '../lib/middlewares';
 import { getChildGroups, getMembers } from '../lib/queries';
 
+import auth0 from '../lib/auth0';
+
 const validateGroup = (group) => validator(group, {
   name: {
     presence: true,
@@ -168,7 +170,7 @@ export default (db) => {
 
   api.get('/:id/members', managementClient, (req, res, next) => {
     db.getGroup(req.params.id)
-      .then(group => req.auth0.getUsersById(group.members || []))
+      .then(group => auth0.getUsersById(group.members || [], {}, req.sub))
       .then(users => _.sortByOrder(users, [ 'last_login' ], [ false ]))
       .then(users => res.json(users))
       .catch(next);
@@ -182,7 +184,7 @@ export default (db) => {
         return getMembers(allGroups);
       })
       .then(members => {
-        return req.auth0.getUsersById(members.map(m => m.userId))
+        return auth0.getUsersById(members.map(m => m.userId), {}, req.sub)
           .then(users => users.map(u => {
             let userGroup = _.find(members, { userId: u.user_id });
             if (userGroup) {

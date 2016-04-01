@@ -1,7 +1,7 @@
 import nconf from 'nconf';
 import jwt from 'express-jwt';
 import { Router } from 'express';
-
+import jwtDecode from 'jwt-decode';
 import { getDb } from '../lib/storage/getdb';
 import authorize from './authorize';
 import applications from './applications';
@@ -12,6 +12,15 @@ import users from './users';
 import groups from './groups';
 // import permissions from './permissions';
 import { managementClient } from '../lib/middlewares';
+
+const readSub = (req, res, next) => {
+  const token        = req.get('Authorization').replace('Bearer ', '').replace('Bearer ', '');
+  const decodedToken = jwtDecode(token);
+
+  req.sub = decodedToken.sub;
+
+  next();
+}
 
 export default () => {
   const db = getDb();
@@ -43,12 +52,12 @@ export default () => {
 
   const api = Router();
   api.use('/authorize', authenticateOrApiKey, authorize(db, managementClient));
-  api.use('/applications', authenticate, applications(db));
-  api.use('/connections', authenticate, connections());
-  api.use('/users', authenticate, users(db));
-  api.use('/logs', authenticate, logs(db));
+  api.use('/applications', authenticate, readSub, applications(db));
+  api.use('/connections',  authenticate, readSub, connections());
+  api.use('/users',        authenticate, readSub, users(db));
+  api.use('/logs',         authenticate, readSub, logs(db));
   // api.use('/roles', authenticate, roles(db));
   // api.use('/permissions', authenticate, permissions(db));
-  api.use('/groups', authenticate, groups(db));
+  api.use('/groups',       authenticate, readSub, groups(db));
   return api;
 };

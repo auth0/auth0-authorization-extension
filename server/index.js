@@ -85,6 +85,11 @@ module.exports = (options = { }) => {
     }));
   }
 
+  // After login the app should run at root.
+  app.get('/admins', (req, res) => {
+    res.redirect(res.locals.baseUrl.replace('admins', ''));
+  });
+
   // Fallback to rendering HTML.
   app.get('*', htmlRoute());
 
