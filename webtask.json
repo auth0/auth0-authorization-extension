@@ -14,6 +14,6 @@
   "auth0": {
     "callbackPath": "/admins/callback",
     "createClient": true,
-    "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users"
+    "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs"
   }
 }

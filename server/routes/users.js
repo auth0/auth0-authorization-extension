@@ -47,7 +47,7 @@ export default (db) => {
   });
 
   api.get('/:id/logs', (req, res, next) => {
-    auth0.getUserLogs(req.params.id)
+    auth0.getUserLogs(req.params.id, {}, req.sub)
       .then(logs => res.json(logs))
       .catch(next);
   });

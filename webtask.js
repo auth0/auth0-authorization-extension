@@ -13,7 +13,7 @@ module.exports = Webtask.fromExpress((req, res) => {
       AUTH0_CLIENT_ID: req.webtaskContext.secrets.AUTH0_CLIENT_ID,
       AUTH0_CLIENT_SECRET: req.webtaskContext.secrets.AUTH0_CLIENT_SECRET,
       AUTH0_SCOPES: req.webtaskContext.secrets.AUTH0_SCOPES,
-      DATA_CACHE_MAX_AGE: 1000 * 10,
+      DATA_CACHE_MAX_AGE: 0,
       NODE_ENV: 'production',
       HOSTING_ENV: 'webtask',
       CLIENT_VERSION: process.env.CLIENT_VERSION,
