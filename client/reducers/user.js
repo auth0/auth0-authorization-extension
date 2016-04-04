@@ -133,24 +133,28 @@ const userLogs = createReducer(fromJS(initialState.logs), {
       ...initialState.logs,
       error: `An error occured while loading the user logs: ${action.errorMessage}`
     }),
-  [constants.FETCH_USER_LOGS_FULFILLED]: (state, action) =>
-    state.merge({
+  [constants.FETCH_USER_LOGS_FULFILLED]: (state, action) => {
+    return state.merge({
       loading: false,
-      records: fromJS(action.payload.data.logs.map(log => {
-        log.time_ago = moment(log.date).fromNow();
-        log.type = logTypes[log.type];
-        if (!log.type) {
-          log.type = {
-            event: 'Unknown Error',
-            icon: {
-              name: '354',
-              color: '#FFA500'
-            }
-          };
-        }
-        return log;
-      }))
-    })
+      records: fromJS(typeof action.payload.data.logs !== 'undefined' ?
+        action.payload.data.logs.map(log => {
+          log.time_ago = moment(log.date).fromNow();
+          log.type = logTypes[log.type];
+          if (!log.type) {
+            log.type = {
+              event: 'Unknown Error',
+              icon: {
+                name: '354',
+                color: '#FFA500'
+              }
+            };
+          }
+          return log;
+        }) :
+        []
+      )
+    });
+  }
 });
 
 const userGroups = createReducer(fromJS(initialState.groups), {

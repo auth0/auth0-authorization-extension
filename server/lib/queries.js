@@ -66,6 +66,8 @@ export function isApplicationAccessAllowed(db, clientId, userGroups) {
       }
 
       const accessAllowed = _.filter(app.groups, (groupId) => groups.indexOf(groupId) >= 0).length > 0;
+
+
       return resolve(accessAllowed);
     });
   });
@@ -163,6 +165,7 @@ export function getUserGroups(db, userId) {
 
       const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
       const nestedGroups = getParentGroups(groups, userGroups).map((group) => group.name);
+
       return resolve(nestedGroups);
     });
   });
@@ -208,6 +211,7 @@ export function getDynamicUserGroups(auth0, db, connectionName, groupMemberships
 
         const connection = _.find(connections, { name: connectionName }) || { };
         const userGroups = _.filter(groups, (group) => matchMappings(group.mappings, connection.id, groupMemberships));
+
         return resolve(userGroups.map(group => group.name));
       });
     });

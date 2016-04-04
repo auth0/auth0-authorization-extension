@@ -9,6 +9,16 @@ export default class Database {
     this.provider = options.provider;
   }
 
+  getRules() {
+    return this.provider
+      .getRecords('rules');
+  }
+
+  createRule(rule) {
+    return this.provider
+      .createRecord('rules', rule);
+  }
+
   getToken(sub) {
     return this.provider
       .getRecord('tokens', sub);

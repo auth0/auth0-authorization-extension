@@ -33,10 +33,8 @@ export const getToken = memoizer({
 
 
 module.exports = function managementClientMiddleware(req, res, next) {
-  console.log('managementClientMiddleware');
   // Use the static client.
   if (managementClient) {
-    console.log('managementClientMiddleware:using:static:client');
     req.auth0 = managementClient;
     return next();
   }
@@ -44,7 +42,6 @@ module.exports = function managementClientMiddleware(req, res, next) {
   // Use the dynamic client based on the current user token.
   return getToken(req.sub, (err, token) => {
     if (err) {
-      console.log('managementClientMiddleware:err:getToken', err);
       return next(err);
     }
 

@@ -63,16 +63,16 @@ module.exports = (options = { }) => {
         .catch(next);
     };
 
-    // // Authenticate non-admins.
-    // app.use(auth0({
-    //   scopes: nconf.get('AUTH0_SCOPES'),
-    //   authenticatedCallback: onUserAuthenticated,
-    //   clientId: nconf.get('AUTH0_CLIENT_ID'),
-    //   rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
-    //   apiToken: {
-    //     secret: nconf.get('AUTHORIZE_API_KEY')
-    //   }
-    // }));
+    // Authenticate non-admins.
+    app.use(auth0({
+      scopes: nconf.get('AUTH0_SCOPES'),
+      authenticatedCallback: onUserAuthenticated,
+      clientId: nconf.get('AUTH0_CLIENT_ID'),
+      rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
+      apiToken: {
+        secret: nconf.get('AUTHORIZE_API_KEY')
+      }
+    }));
 
     // Authenticate admins.
     app.use('/admins', auth0({

@@ -12,14 +12,50 @@ import users from './users';
 import groups from './groups';
 // import permissions from './permissions';
 import { managementClient } from '../lib/middlewares';
+import _ from 'lodash';
+import authorizeRule from '../rules/authorize';
 
 const readSub = (req, res, next) => {
   const token        = req.get('Authorization').replace('Bearer ', '').replace('Bearer ', '');
   const decodedToken = jwtDecode(token);
-
   req.sub = decodedToken.sub;
-
   next();
+}
+
+const ensureRule = (req, res, next) => {
+  const ruleVersion = '1.0';
+  const db = getDb();
+  const createRule = (ruleVersion, db, req, next) => {
+    return req.auth0.rules.create({
+      name: 'iam-dashboard',
+      enabled: true,
+      script: authorizeRule(req.webtaskContext.secrets.WT_URL, req.webtaskContext.secrets.EXTENSION_SECRET)
+    })
+    .then(() => {
+      return db.createRule({version: ruleVersion});
+    })
+    .then(() => {
+      next();
+    })
+    .catch((err) => {
+      next();
+    });
+  }
+
+  db.getRules()
+    // Rule already installed
+    .then((data) => {
+      let found = _.find(data, {version: ruleVersion});
+
+      if (found) {
+        return next();
+      }
+
+      return createRule(ruleVersion, db, req, next);
+    })
+    .catch(() => {
+      createRule(ruleVersion, db, req, next);
+    });
 }
 
 export default () => {
@@ -51,13 +87,15 @@ export default () => {
   };
 
   const api = Router();
-  api.use('/authorize', authenticateOrApiKey, authorize(db, managementClient));
-  api.use('/applications', authenticate, readSub, applications(db));
-  api.use('/connections',  authenticate, readSub, connections());
-  api.use('/users',        authenticate, readSub, users(db));
-  api.use('/logs',         authenticate, readSub, logs(db));
+  api.use(readSub, managementClient, ensureRule);
+
+  api.use('/authorize'   , authenticateOrApiKey, readSub, authorize(db, managementClient));
+  api.use('/applications', authenticate        , readSub, applications(db));
+  api.use('/connections' , authenticate        , readSub, connections());
+  api.use('/users'       , authenticate        , readSub, users(db));
+  api.use('/logs'        , authenticate        , readSub, logs(db));
   // api.use('/roles', authenticate, roles(db));
   // api.use('/permissions', authenticate, permissions(db));
-  api.use('/groups',       authenticate, readSub, groups(db));
+  api.use('/groups'      , authenticate        , readSub, groups(db));
   return api;
 };
