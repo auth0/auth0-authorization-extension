@@ -7,7 +7,7 @@ import './LoadingPanel.css';
 class LoadingPanel extends Component {
   constructor(props) {
     super(props);
-    
+
     this.setLoading = this.setLoading.bind(this);
     this.state = {
       show: false
@@ -43,9 +43,9 @@ class LoadingPanel extends Component {
       return <div >{this.props.children}</div>;
     }
 
-    const animation = <div style={this.animationStyle}>
-        <img className="loadingAnimation" style={this.spinnerStyle} src={Spinner} />
-      </div>;
+    const animation = <div className="spinner spinner-lg is-auth0" style={{marginLeft: 'auto', marginRight: 'auto'}}>
+      <div className="circle"></div>
+    </div>;
 
     return <Loader show={this.state.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>
       {this.props.children}
@@ -68,7 +68,7 @@ class LoadingPanel extends Component {
       clearTimeout(this.showTimer);
     }
   }
-  
+
   setLoading() {
     this.setState({ show: true });
   }

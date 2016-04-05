@@ -64,15 +64,15 @@ module.exports = (options = { }) => {
     };
 
     // Authenticate non-admins.
-    app.use(auth0({
-      scopes: nconf.get('AUTH0_SCOPES'),
-      authenticatedCallback: onUserAuthenticated,
-      clientId: nconf.get('AUTH0_CLIENT_ID'),
-      rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
-      apiToken: {
-        secret: nconf.get('AUTHORIZE_API_KEY')
-      }
-    }));
+    // app.use(auth0({
+    //   scopes: nconf.get('AUTH0_SCOPES'),
+    //   authenticatedCallback: onUserAuthenticated,
+    //   clientId: nconf.get('AUTH0_CLIENT_ID'),
+    //   rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
+    //   apiToken: {
+    //     secret: nconf.get('AUTHORIZE_API_KEY')
+    //   }
+    // }));
 
     // Authenticate admins.
     app.use('/admins', auth0({
@@ -84,11 +84,6 @@ module.exports = (options = { }) => {
       }
     }));
   }
-
-  // After login the app should run at root.
-  app.get('/admins', (req, res) => {
-    res.redirect(res.locals.baseUrl.replace('admins', ''));
-  });
 
   // Fallback to rendering HTML.
   app.get('*', htmlRoute());

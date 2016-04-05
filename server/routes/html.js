@@ -17,7 +17,7 @@ export default () => {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styles/zocial.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/manage/v0.3.973/css/index.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styleguide/3.1.10/index.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styleguide/3.8.4/index.css">
     <% if (assets.style) { %><link rel="stylesheet" type="text/css" href="/app/<%= assets.style %>"><% } %>
     <% if (assets.version) { %><link rel="stylesheet" type="text/css" href="//cdn.auth0.com/extensions/temp/iam-dashboard.ui.<%= assets.version %>.css"><% } %>
   </head>
@@ -50,7 +50,7 @@ export default () => {
         host: req.get('host'),
         pathname: url.parse(req.originalUrl || '').pathname.replace(req.path, '')
       }),
-      BASE_PATH: '/' + url.parse(req.originalUrl || '').pathname.replace(req.path, '')
+      BASE_PATH: url.parse(req.originalUrl || '').pathname.replace(req.path, '') + (req.path === '/admins' ? '/admins' : '')
     };
 
     // Render from CDN.
