@@ -4,7 +4,7 @@ import uuid from 'node-uuid';
 import { ArgumentError, NotFoundError, ValidationError } from '../../errors';
 
 export default class S3Provider {
-  constructor({ path = 'iam-dashboard.json', bucket, keyId, keySecret } = { }) {
+  constructor({ path = 'auth0-groups.json', bucket, keyId, keySecret } = { }) {
     if (!bucket || bucket === 0) {
       throw new ArgumentError('The \'bucket\' property is required when configuring the S3Provider.');
     }

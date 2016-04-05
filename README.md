@@ -1,4 +1,4 @@
-# Auth0 Identity & Access Management Dashboard
+# Auth0 Groups
 
 ## Introduction
 
@@ -48,7 +48,7 @@ Configure you settings in `/server/config.json` or as environment variables:
  - `AUTH0_DOMAIN`: Your Auth0 domain
  - `AUTH0_CLIENT_ID`: The client_id of your application
  - `AUTH0_CLIENT_SECRET`: The client_secret of your application
- - `AUTH0_APIV2_TOKEN`: The API v2 token for interacting with API v2. Needs the following permissions: `read:clients update:users read:users read:device_credentials delete:device_credentials`
+ - `AUTH0_APIV2_TOKEN`: The API v2 token for interacting with API v2. Needs the following permissions: `read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs`
 
 ### Data Providers
 
@@ -117,18 +117,18 @@ npm run serve:prod
 Building:
 
 ```
-docker build -t auth0/iam-dashboard .
+docker build -t auth0/auth0-groups .
 ```
 
 Start interactive:
 
 ```
-docker rm iam-dashboard
-docker run -it --name "iam-dashboard" -p 5000:3000 auth0/iam-dashboard
+docker rm auth0-groups
+docker run -it --name "auth0-groups" -p 5000:3000 auth0/auth0-groups
 ```
 
 Start in the background:
 
 ```
-docker run -d --name "iam-dashboard" -p 5000:3000 auth0/iam-dashboard
+docker run -d --name "auth0-groups" -p 5000:3000 auth0/auth0-groups
 ```

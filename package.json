@@ -1,6 +1,6 @@
 {
-  "name": "auth0-iam-dashboard",
-  "version": "1.3.0",
+  "name": "auth0-groups",
+  "version": "1.3.31",
   "description": "Identity and Access Management Dashboard for Auth0",
   "engines": {
     "node": "5.9.0"

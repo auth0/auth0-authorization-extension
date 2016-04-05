@@ -1,6 +1,6 @@
 FROM node:4.2-slim
 
-ENV APP_SOURCE /usr/src/iam-dashboard
+ENV APP_SOURCE /usr/src/auth0-groups
 COPY ./ $APP_SOURCE
 WORKDIR $APP_SOURCE
 

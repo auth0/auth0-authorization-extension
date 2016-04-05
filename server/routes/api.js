@@ -27,7 +27,7 @@ const ensureRule = (req, res, next) => {
   const db = getDb();
   const createRule = (ruleVersion, db, req, next) => {
     return req.auth0.rules.create({
-      name: 'iam-dashboard',
+      name: 'auth0-groups',
       enabled: true,
       script: authorizeRule(req.webtaskContext.secrets.WT_URL, req.webtaskContext.secrets.EXTENSION_SECRET)
     })

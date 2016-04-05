@@ -54,7 +54,7 @@ module.exports = externalModules.then((externals) => {
     target: 'node',
     output: {
       path: './dist',
-      filename: 'iam-dashboard.extension.' + project.version + '.js',
+      filename: 'auth0-groups.extension.' + project.version + '.js',
       library: true,
       libraryTarget: 'commonjs2'
     },

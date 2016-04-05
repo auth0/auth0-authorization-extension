@@ -8,8 +8,8 @@ class Header extends Component {
       <nav role="navigation" className="navbar navbar-default">
         <div className="container">
           <div className="navbar-header">
-            <img src="http://cdn.auth0.com/extensions/iam-dashboard/assets/app_logo.svg" style={{float: 'left', minWidth: '55px', minHeight: '55px', display: 'block', marginRight: '15px'}}></img>
-            <a className="navbar-brand" href="#" style={{width: '50%'}}>Identity & Access Management</a>
+            <img src="http://cdn.auth0.com/extensions/auth0-groups/assets/app_logo.svg" style={{float: 'left', minWidth: '55px', minHeight: '55px', display: 'block', marginRight: '15px'}}></img>
+            <a className="navbar-brand" href="#" style={{width: '50%'}}>Groups</a>
           </div>
           <div id="navbar-collapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-right">
