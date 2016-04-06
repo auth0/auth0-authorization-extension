@@ -6,10 +6,10 @@ import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
 
 class GroupMappingForm extends Component {
   render() {
-    const { fields: { connectionId, groupName }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { fields: { connectionName, groupName }, handleSubmit, loading, submitting, validationErrors } = this.props;
 
     const connections = this.props.connections.map(connection => ({
-      value: connection.id,
+      value: connection.name,
       text: `${connection.name} (${connection.strategy})`
     }));
 
@@ -18,19 +18,17 @@ class GroupMappingForm extends Component {
         <Modal.Body>
           {this.props.children}
           <LoadingPanel show={ loading } spinnerStyle={{ height: '16px', width: '16px' }} animationStyle={{ paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '10px' }}>
-            <InputCombo options={connections} field={connectionId} fieldName="connection_id" label="Connection" validationErrors={validationErrors} />
+            <InputCombo options={connections} field={connectionName} fieldName="connectionName" label="Connection" validationErrors={validationErrors} />
             <InputText field={groupName} fieldName="groupName" label="Incoming Group Name" validationErrors={validationErrors} />
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <ButtonToolbar>
-            <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-              Cancel
-            </Button>
-            <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-              Save
-            </Button>
-          </ButtonToolbar>
+          <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
+            Cancel
+          </Button>
+          <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
+            Save
+          </Button>
         </Modal.Footer>
       </div>
     );
@@ -48,4 +46,4 @@ GroupMappingForm.propTypes = {
   onClose: React.PropTypes.func.isRequired
 };
 
-export default reduxForm({ form: 'groupMapping', fields: [ 'connectionId', 'groupName' ] })(GroupMappingForm);
+export default reduxForm({ form: 'groupMapping', fields: [ 'connectionName', 'groupName' ] })(GroupMappingForm);

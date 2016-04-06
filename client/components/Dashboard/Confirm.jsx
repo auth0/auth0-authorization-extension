@@ -36,10 +36,8 @@ class Confirm extends Component {
           {this.props.children}
         </Modal.Body>
         <Modal.Footer>
-          <ButtonToolbar>
-            {this.renderCancel()}
-            {this.renderConfirm()}
-          </ButtonToolbar>
+          {this.renderCancel()}
+          {this.renderConfirm()}
         </Modal.Footer>
       </Modal>
     );

@@ -28,9 +28,7 @@ class GroupRow extends Component {
         <TableTextCell>{ (group.nested && group.nested.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.mappings && group.mappings.length) || '0' }</TableTextCell>
         <TableCell>
-          <ButtonToolbar style={{ marginBottom: '0px' }}>
-            {this.props.renderActions(group, index)}
-          </ButtonToolbar>
+          {this.props.renderActions(group, index)}
         </TableCell>
       </TableRow>
     );

@@ -18,10 +18,10 @@ class GroupsTable extends Component {
           <TableColumn width="3%" />
           <TableColumn width="15%">Name</TableColumn>
           <TableColumn width="28%">Description</TableColumn>
-          <TableColumn width="8%">Members</TableColumn>
-          <TableColumn width="8%">Nested</TableColumn>
-          <TableColumn width="9%">Mappings</TableColumn>
-          <TableColumn width="15%" />
+          <TableColumn>Members</TableColumn>
+          <TableColumn>Nested</TableColumn>
+          <TableColumn>Mappings</TableColumn>
+          <TableColumn />
         </TableHeader>
         <TableBody>
           {_.sortBy(groups, 'name').map((group, index) =>

@@ -43,7 +43,7 @@ class ApplicationGroups extends Component {
           <TableColumn width="3%" />
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="60%">Description</TableColumn>
-          <TableColumn width="10%" />
+          <TableColumn />
         </TableHeader>
         <TableBody>
         {groups.map((group, index) =>

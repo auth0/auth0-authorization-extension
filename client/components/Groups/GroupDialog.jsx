@@ -20,7 +20,7 @@ class GroupDialog extends Component {
       </Modal.Header>
       <GroupForm loading={group.loading} initialValues={group.record} validationErrors={group.validationErrors}
           onClose={this.props.onClose} onSubmit={(perm) => this.props.onSave(perm)}>
-          <Error message={group.error} />
+        <Error message={group.error} />
       </GroupForm>
     </Modal>;
   }

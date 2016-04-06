@@ -43,9 +43,7 @@ class UsersTable extends Component {
                 <TableTextCell>{ user.logins_count }</TableTextCell>
                 <TableTextCell>{ user.identities[0].connection }</TableTextCell>
                 <TableActionCell>
-                  <ButtonToolbar style={{ marginBottom: '0px' }}>
-                    {this.renderActions(user, index)}
-                  </ButtonToolbar>
+                  {this.renderActions(user, index)}
                 </TableActionCell>
               </TableRow>
             );
