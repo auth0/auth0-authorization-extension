@@ -1,6 +1,7 @@
 import async from 'async';
 import nconf from 'nconf';
 import moment from 'moment';
+import Promise from 'bluebird';
 import request from 'request';
 import memoizer from 'lru-memoizer';
 import { getDb } from './storage/getdb';
