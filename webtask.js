@@ -13,11 +13,13 @@ module.exports = Webtask.fromExpress((req, res) => {
       AUTH0_CLIENT_ID: req.webtaskContext.secrets.AUTH0_CLIENT_ID,
       AUTH0_CLIENT_SECRET: req.webtaskContext.secrets.AUTH0_CLIENT_SECRET,
       AUTH0_SCOPES: req.webtaskContext.secrets.AUTH0_SCOPES,
+      EXTENSION_SECRET: req.webtaskContext.secrets.EXTENSION_SECRET,
       DATA_CACHE_MAX_AGE: 1000 * 10,
       NODE_ENV: 'production',
       HOSTING_ENV: 'webtask',
       CLIENT_VERSION: process.env.CLIENT_VERSION,
-      USE_OAUTH2: true
+      USE_OAUTH2: true,
+      WT_URL: req.webtaskContext.secrets.WT_URL
     });
 
   // Start the server.
