@@ -4,3 +4,4 @@ node_modules
 npm-debug.log
 server/db.json
 dist
+build/extension/bundle-size.json

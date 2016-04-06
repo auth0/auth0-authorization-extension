@@ -16,6 +16,7 @@
     "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
     "postinstall": "npm run client:build",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
+    "extension:size": "webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
     "build": "npm run clean && npm run client:build && npm run extension:build"
   },
   "keywords": [
