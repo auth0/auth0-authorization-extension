@@ -5,7 +5,8 @@ import request from 'request';
 import memoizer from 'lru-memoizer';
 import { getDb } from './storage/getdb';
 
-export const getToken = memoizer({
+
+export const getTokenCached = memoizer({
   load: (sub, callback) => {
     getDb().getToken(sub)
       .then((token) => {
@@ -17,6 +18,15 @@ export const getToken = memoizer({
   max: 100,
   maxAge: nconf.get('DATA_CACHE_MAX_AGE')
 });
+
+export const getToken = (sub, cb) => {
+  const token = nconf.get('AUTH0_APIV2_TOKEN');
+  if (token) {
+    return cb(null, token);
+  }
+
+  return getTokenCached(sub, cb);
+};
 
 class Auth0ApiClient {
   constructor() {

@@ -1,70 +1,124 @@
 import { Router } from 'express';
-import validator from 'validate.js';
+import { validateRole } from '../lib/validate';
 
-import data from '../lib/data';
-
-const validate = (role) => {
-  return validator(role, {
-    name: {
-      presence: true,
-      format: {
-        pattern: /^[a-z0-9_\-\:]+$/,
-        message: 'Only lowercase characters, numbers and "-", "_" are allowed.'
-      },
-      length: {
-        minimum: 3,
-        tooShort: 'Please enter a name with at least 3 characters.'
-      }
-    },
-    description: {
-      presence: true
-    }
-  });
-};
-
-export default () => {
+export default (db) => {
   const api = Router();
+
+  /*
+   * List all roles.
+   */
   api.get('/', (req, res, next) => {
-    data.getRoles()
+    db.getRoles()
       .then(roles => res.json(roles))
       .catch(next);
   });
 
-  api.get('/:name', (req, res, next) => {
-    data.getRole(req.params.name)
-      .then(role => res.json(role))
+  /*
+   * Get a role.
+   */
+  api.get('/:id', (req, res, next) => {
+    db.getRole(req.params.id)
+      .then(role => res.json({ _id: role._id, name: role.name, description: role.description }))
       .catch(next);
   });
 
+  /*
+   * Create a new role.
+   */
   api.post('/', (req, res, next) => {
-    const errors = validate(req.body);
+    const errors = validateRole(req.body);
     if (errors) {
       res.status(400);
       return res.json({ errors });
     }
 
     let role = req.body;
-    data.createRole(role)
-      .then(() => res.sendStatus(201))
+    db.createRole(role)
+      .then((created) => res.json(created))
       .catch(next);
   });
 
-  api.put('/:name', (req, res, next) => {
-    const errors = validate(req.body);
+  /*
+   * Update a role.
+   */
+  api.put('/:id', (req, res, next) => {
+    const errors = validateRole(req.body);
     if (errors) {
       res.status(400);
       return res.json({ errors });
     }
 
     let role = req.body;
-    data.updateRole(req.params.name, role)
+    db.updateRole(req.params.id, role)
+      .then((updated) => res.json(updated))
+      .catch(next);
+  });
+
+  /*
+   * Delete a role.
+   */
+  api.delete('/:id', (req, res, next) => {
+    db.deleteRole(req.params.id)
       .then(() => res.sendStatus(204))
       .catch(next);
   });
 
-  api.delete('/:name', (req, res, next) => {
-    data.deleteRole(req.params.name)
-      .then(() => res.sendStatus(204))
+  /*
+   * Get all permissions of a role.
+   */
+  api.get('/:id/permissions', (req, res, next) => {
+    db.getGroup(req.params.id)
+      .then(role => role.permissions || [])
+      .then(permissions => res.json(permissions))
+      .catch(next);
+  });
+
+  /*
+   * Add one or more permissions to a role.
+   */
+  api.patch('/:id/permissions', (req, res, next) => {
+    if (!Array.isArray(req.body)) {
+      res.status(400);
+      return res.json({
+        code: 'invalid_request',
+        message: 'The permissions must be an array.'
+      });
+    }
+
+    return db.getRole(req.params.id)
+      .then(role => {
+        const currentRole = role;
+        if (!currentRole.permissions) {
+          currentRole.permissions = [];
+        }
+
+        // Add each permission.
+        req.body.forEach((member) => {
+          if (currentRole.permissions.indexOf(member) === -1) {
+            currentRole.permissions.push(member);
+          }
+        });
+
+        return db.updateRole(req.params.id, currentRole);
+      })
+      .then(() => res.sendStatus(202))
+      .catch(next);
+  });
+
+  /*
+   * Delete a permission of a role.
+   */
+  api.delete('/:id/permissions', (req, res, next) => {
+    db.getRole(req.params.id)
+      .then(role => {
+        const index = role.permissions.indexOf(req.body.userId);
+        if (index > -1) {
+          role.permissions.splice(index, 1);
+        }
+
+        return db.updateRole(req.params.id, role);
+      })
+      .then(() => res.sendStatus(202))
       .catch(next);
   });
 

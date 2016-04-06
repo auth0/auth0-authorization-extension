@@ -1,72 +1,64 @@
 import { Router } from 'express';
-import validator from 'validate.js';
+import { validatePermission } from '../lib/validate';
 
-import data from '../lib/data';
-
-const validate = (permission) => {
-  return validator(permission, {
-    name: {
-      presence: true,
-      format: {
-        pattern: /^[a-z0-9_\-\:]+$/,
-        message: 'Only lowercase characters, numbers and "-", "_" are allowed.'
-      },
-      length: {
-        minimum: 3,
-        tooShort: 'Please enter a name with at least 3 characters.'
-      }
-    },
-    description: {
-      presence: true
-    },
-    client_id: {
-      presence: true
-    }
-  });
-};
-
-export default () => {
+export default (db) => {
   const api = Router();
+
+  /*
+   * List all permissions.
+   */
   api.get('/', (req, res, next) => {
-    data.getPermissions()
+    db.getPermissions()
       .then(permissions => res.json(permissions))
       .catch(next);
   });
 
-  api.get('/:name', (req, res, next) => {
-    data.getPermission(req.params.name)
+  /*
+   * Get a permission.
+   */
+  api.get('/:id', (req, res, next) => {
+    db.getPermission(req.params.id)
       .then(permission => res.json(permission))
       .catch(next);
   });
 
+  /*
+   * Create a new permission.
+   */
   api.post('/', (req, res, next) => {
-    const errors = validate(req.body);
+    const errors = validatePermission(req.body);
+    if (errors) {
+      res.status(400);
+      return res.json({ errors });
+    }
+
+    const permission = req.body;
+    return db.createPermission(permission)
+      .then((created) => res.json(created))
+      .catch(next);
+  });
+
+  /*
+   * Update a permission.
+   */
+  api.put('/:id', (req, res, next) => {
+    const errors = validatePermission(req.body);
     if (errors) {
       res.status(400);
       return res.json({ errors });
     }
 
     let permission = req.body;
-    data.createPermission(permission)
-      .then(() => res.sendStatus(201))
+    db.updatePermission(req.params.id, permission)
+      .then((updated) => res.json(updated))
       .catch(next);
   });
 
-  api.put('/:name', (req, res, next) => {
-    const errors = validate(req.body);
-    if (errors) {
-      res.status(400);
-      return res.json({ errors });
-    }
-
-    let permission = req.body;
-    data.updatePermission(req.params.name, permission)
-      .then(() => res.sendStatus(204))
-      .catch(next);
-  });
-
-  api.delete('/:name', (req, res, next) => {
-    data.deletePermission(req.params.name)
+  /*
+   * Delete a permission.
+   */
+  api.delete('/:id', (req, res, next) => {
+    db.deletePermission(req.params.id)
       .then(() => res.sendStatus(204))
       .catch(next);
   });

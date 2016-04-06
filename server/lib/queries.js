@@ -74,6 +74,30 @@ export function isApplicationAccessAllowed(db, clientId, userGroups) {
 }
 
 /*
+ * Get the full connection names for all mappings.
+ */
+export const getMappingsWithNames = (auth0, groupMappings) =>
+  new Promise((resolve, reject) => {
+    getConnectionsCached(auth0, (err, connections) => {
+      if (err) {
+        return reject(err);
+      }
+
+      const mappings = [];
+      groupMappings.forEach(m => {
+        const connection = _.find(connections, { name: m.connectionName });
+        if (connection) {
+          const currentMapping = m;
+          currentMapping.connectionName = `${connection.name} (${connection.strategy})`;
+          mappings.push(currentMapping);
+        }
+      });
+
+      return resolve(mappings);
+    });
+  });
+
+/*
  * Resolve all child groups.
  */
 export const getChildGroups = (groups, selectedGroups) => {
@@ -154,42 +178,23 @@ export const getMembers = (selectedGroups) => {
 };
 
 /*
- * Get the groups a user belongs to.
- */
-export function getUserGroups(db, userId) {
-  return new Promise((resolve, reject) => {
-    getGroupsCached(db, (err, groups) => {
-      if (err) {
-        return reject(err);
-      }
-
-      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
-      const nestedGroups = getParentGroups(groups, userGroups).map((group) => group.name);
-
-      return resolve(nestedGroups);
-    });
-  });
-}
-
-/*
  * Match a connection/group memberships to a mapping.
  */
-const matchMapping = (mapping, connectionId, groupMemberships) => {
-  return mapping.connectionId === connectionId && groupMemberships.indexOf(mapping.groupName) > -1;
-};
+const matchMapping = (mapping, connectionName, groupMemberships) =>
+  mapping.connectionName === connectionName && groupMemberships.indexOf(mapping.groupName) > -1;
 
 /*
  * Match a connection/group memberships to multiple mappings.
  */
-const matchMappings = (mappings, connectionId, groupMemberships) => {
+const matchMappings = (mappings, connectionName, groupMemberships) => {
   return mappings &&
-    _.filter(mappings, (mapping) => matchMapping(mapping, connectionId, groupMemberships)).length > 0;
+    _.filter(mappings, (mapping) => matchMapping(mapping, connectionName, groupMemberships)).length > 0;
 };
 
 /*
  * Calculate dynamic group memberships.
  */
-export function getDynamicUserGroups(auth0, db, connectionName, groupMemberships) {
+export function getDynamicUserGroups(db, connectionName, groupMemberships) {
   return new Promise((resolve, reject) => {
     if (!connectionName) {
       return resolve([]);
@@ -204,16 +209,30 @@ export function getDynamicUserGroups(auth0, db, connectionName, groupMemberships
         return reject(err);
       }
 
-      return getConnectionsCached(auth0, (connectionsError, connections) => {
-        if (connectionsError) {
-          return reject(connectionsError);
-        }
-
-        const connection = _.find(connections, { name: connectionName }) || { };
-        const userGroups = _.filter(groups, (group) => matchMappings(group.mappings, connection.id, groupMemberships));
-
-        return resolve(userGroups.map(group => group.name));
-      });
+      const dynamicGroups = _.filter(groups, (group) => matchMappings(group.mappings, connectionName, groupMemberships));
+      return resolve(dynamicGroups);
     });
+  });
+}
+
+/*
+ * Get the groups a user belongs to.
+ */
+export function getUserGroups(db, userId, connectionName, groupMemberships) {
+  return new Promise((resolve, reject) => {
+    getDynamicUserGroups(db, connectionName, groupMemberships)
+      .then(dynamicGroups => {
+        getGroupsCached(db, (err, groups) => {
+          if (err) {
+            return reject(err);
+          }
+
+          const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+          const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups)).map((group) => group.name);
+
+          return resolve(nestedGroups);
+        });
+      })
+      .catch(reject);
   });
 }

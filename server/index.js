@@ -7,17 +7,15 @@ import bodyParser from 'body-parser';
 import validator from 'validate.js';
 import auth0 from 'auth0-oauth2-express';
 
-import { init as initDb, getDb } from './lib/storage/getdb';
 import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
+import { init as initDb, getDb } from './lib/storage/getdb';
 import api from './routes/api';
 import meta from './routes/meta';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
-
-// Initialize data provider.
-// import { init as initProvider } from './lib/providers';
-// initProvider(nconf.get('DATA_PROVIDER'));
+import ensureRule from './lib/ensureRule';
+import * as middlewares from './lib/middlewares';
 
 module.exports = (options = { }) => {
   // Configure validator.
@@ -54,10 +52,12 @@ module.exports = (options = { }) => {
     // Helper to store the user's token in storage.
     const onUserAuthenticated = (req, res, accessToken, next) => {
       const decodedToken = jwtDecode(accessToken);
-
       getDb().setToken(decodedToken.sub, { accessToken })
-        // next is expecting only one parameter with the error.
         .then(() => {
+          // Create the rule.
+          ensureRule();
+
+          // Continue.
           next();
         })
         .catch(next);
@@ -89,35 +89,6 @@ module.exports = (options = { }) => {
   app.get('*', htmlRoute());
 
   // Generic error handler.
-  app.use((err, req, res, next) => {
-    logger.error(err);
-
-    if (err && err.name === 'NotFoundError') {
-      res.status(404);
-      return res.json({ error: err.message });
-    }
-
-    if (err && err.name === 'ValidationError') {
-      res.status(400);
-      return res.json({ error: err.message });
-    }
-
-    res.status(err.status || 500);
-    if (process.env.NODE_ENV === 'production') {
-      res.json({
-        message: err.message
-      });
-    } else {
-      res.json({
-        message: err.message,
-        error: {
-          message: err.message,
-          status: err.status,
-          stack: err.stack
-        }
-      });
-    }
-  });
-
+  app.use(middlewares.errorHandler);
   return app;
 };

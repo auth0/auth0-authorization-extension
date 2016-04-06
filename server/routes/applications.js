@@ -5,6 +5,10 @@ import { managementClient } from '../lib/middlewares';
 
 export default (db) => {
   const api = Router();
+
+  /*
+   * Get a list of applications.
+   */
   api.get('/', managementClient, (req, res, next) => {
     req.auth0.clients.getAll({ fields: 'client_id,name,callbacks,global' })
       .then(clients => _.chain(clients)
@@ -33,12 +37,18 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Get an application.
+   */
   api.get('/:id', managementClient, (req, res, next) => {
     req.auth0.clients.get({ client_id: req.params.id })
       .then(client => res.json(client))
       .catch(next);
   });
 
+  /*
+   * Get the allowed groups for an application.
+   */
   api.get('/:id/groups', (req, res, next) => {
     db.getApplications()
       .then(apps => _.find(apps, { _id: req.params.id }) || { })
@@ -57,6 +67,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Add a group to the whitelist of an application.
+   */
   api.post('/:id/groups', (req, res, next) => {
     db.getApplications()
       .then(apps => _.find(apps, { _id: req.params.id }) || { })
@@ -76,6 +89,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Remove a group that is allowed to access an application.
+   */
   api.delete('/:id/groups', (req, res, next) => {
     db.getApplications()
       .then(apps => _.find(apps, { _id: req.params.id }) || { })

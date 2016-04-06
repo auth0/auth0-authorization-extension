@@ -4,6 +4,10 @@ import { managementClient } from '../lib/middlewares';
 
 export default () => {
   const api = Router();
+
+  /*
+   * List all connections.
+   */
   api.get('/', managementClient, (req, res, next) => {
     req.auth0.connections.getAll({ fields: 'id,name,strategy' })
       .then(connections => _.chain(connections)

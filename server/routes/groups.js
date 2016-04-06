@@ -1,71 +1,13 @@
 import { Router } from 'express';
 import _ from 'lodash';
-import async from 'async';
 import uuid from 'node-uuid';
-import validator from 'validate.js';
-import memoizer from 'lru-memoizer';
-
-import { managementClient } from '../lib/middlewares';
-import { getChildGroups, getMembers } from '../lib/queries';
 
 import auth0 from '../lib/auth0';
-
-const validateGroup = (group) => validator(group, {
-  name: {
-    presence: true,
-    length: {
-      minimum: 3,
-      tooShort: 'Please enter a name with at least 3 characters.'
-    }
-  }
-});
-
-const validateGroupMapping = (groupMapping) => validator(groupMapping, {
-  connectionId: {
-    presence: true
-  },
-  groupName: {
-    presence: true,
-    length: {
-      minimum: 3,
-      tooShort: 'Please enter a group name with at least 3 characters.'
-    }
-  }
-});
+import { managementClient } from '../lib/middlewares';
+import { validateGroup, validateGroupMapping } from '../lib/validate';
+import { getMappingsWithNames, getChildGroups, getMembers } from '../lib/queries';
 
 export default (db) => {
-  const getConnection = memoizer({
-    load: (auth0, connectionId, callback) => auth0.connections.get({ id: connectionId }, callback),
-    hash: (auth0, connectionId) => connectionId,
-    max: 100,
-    maxAge: 1000 * 600
-  });
-
-  const getMappingNames = (auth0, mappings) => new Promise((resolve, reject) => {
-    const existingMappings = [];
-    async.eachLimit(mappings, 10, (mapping, cb) => {
-      getConnection(auth0, mapping.connectionId, (err, connection) => {
-        if (err) {
-          if (err.statusCode === 404) {
-            return cb();
-          }
-          return cb(err);
-        }
-
-        const currentMapping = mapping;
-        currentMapping.connectionName = `${connection.name} (${connection.strategy})`;
-        existingMappings.push(currentMapping);
-        return cb();
-      });
-    }, (err) => {
-      if (err) {
-        return reject(err);
-      }
-
-      return resolve(existingMappings);
-    });
-  });
-
   const api = Router();
   api.get('/', (req, res, next) => {
     db.getGroups()
@@ -79,12 +21,18 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Get a group.
+   */
   api.get('/:id', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => res.json({ _id: group._id, name: group.name, description: group.description }))
       .catch(next);
   });
 
+  /*
+   * Create a group.
+   */
   api.post('/', (req, res, next) => {
     const errors = validateGroup(req.body);
     if (errors) {
@@ -98,6 +46,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Update a group.
+   */
   api.put('/:id', (req, res, next) => {
     const errors = validateGroup(req.body);
     if (errors) {
@@ -111,20 +62,29 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Delete a group.
+   */
   api.delete('/:id', (req, res, next) => {
     db.deleteGroup(req.params.id)
       .then(() => res.sendStatus(204))
       .catch(next);
   });
 
+  /*
+   * Get the mappings for a group.
+   */
   api.get('/:id/mappings', managementClient, (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => group.mappings || [])
-      .then(mappings => getMappingNames(req.auth0, mappings))
+      .then(mappings => getMappingsWithNames(req.auth0, mappings))
       .then(mappings => res.json(mappings))
       .catch(next);
   });
 
+  /*
+   * Create a group mapping.
+   */
   api.post('/:id/mappings', (req, res, next) => {
     const errors = validateGroupMapping(req.body);
     if (errors) {
@@ -140,11 +100,11 @@ export default (db) => {
         }
 
         // Add the new mapping.
-        const { _id, groupName, connectionId } = req.body;
+        const { _id, groupName, connectionName } = req.body;
         currentGroup.mappings.push({
           _id: _id || uuid.v4(),
           groupName,
-          connectionId
+          connectionName
         });
 
         // Save the group.
@@ -154,6 +114,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Delete a group mapping.
+   */
   api.delete('/:id/mappings', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => {
@@ -168,6 +131,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Get all members of a group.
+   */
   api.get('/:id/members', managementClient, (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => auth0.getUsersById(group.members || [], {}, req.sub))
@@ -176,6 +142,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Get all nested members of a group.
+   */
   api.get('/:id/members/nested', managementClient, (req, res, next) => {
     db.getGroups()
       .then((groups) => {
@@ -208,6 +177,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Add one or more members to a group.
+   */
   api.patch('/:id/members', (req, res, next) => {
     if (!Array.isArray(req.body)) {
       res.status(400);
@@ -237,6 +209,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Delete a member of a group.
+   */
   api.delete('/:id/members', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => {
@@ -251,6 +226,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Get all nested groups of a group.
+   */
   api.get('/:id/nested', (req, res, next) => {
     db.getGroups()
       .then((groups) => {
@@ -265,6 +243,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Add one or more nested groups to a group.
+   */
   api.patch('/:id/nested', (req, res, next) => {
     if (!Array.isArray(req.body)) {
       res.status(400);
@@ -294,6 +275,9 @@ export default (db) => {
       .catch(next);
   });
 
+  /*
+   * Remove a nested group from a group.
+   */
   api.delete('/:id/nested', (req, res, next) => {
     db.getGroup(req.params.id)
       .then(group => {
