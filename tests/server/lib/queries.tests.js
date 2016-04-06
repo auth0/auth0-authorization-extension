@@ -82,7 +82,7 @@ describe('Queries', () => {
     });
   });
 
-  describe.only('#getUserGroups', () => {
+  describe('#getUserGroups', () => {
     it('should return an empty array if user does not belong to any groups', (done) => {
       const db = mockGroups([
         { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
@@ -189,7 +189,7 @@ describe('Queries', () => {
 
   describe('#getDynamicUserGroups', () => {
     it('should not run if connection is empty', (done) => {
-      getDynamicUserGroups({ }, null, [])
+      getDynamicUserGroups(null, [])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(0);
@@ -199,7 +199,7 @@ describe('Queries', () => {
     });
 
     it('should not run if existing group memberships are empty', (done) => {
-      getDynamicUserGroups({ }, '123', null)
+      getDynamicUserGroups('123', null)
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(0);
@@ -216,35 +216,14 @@ describe('Queries', () => {
 
       const db = mockGroups([
         { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionId: 'abc' } ]
+          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
         },
         { _id: '456', name: 'Group 2', mappings:
-          [ { _id: '67890', groupName: 'Domain Users', connectionId: 'def' } ]
+          [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
         }
       ]);
 
-      getDynamicUserGroups(auth0, db, 'abc', [ 'Domain Admins' ])
-        .then((groups) => {
-          expect(groups).to.be.instanceof(Array);
-          expect(groups.length).to.equal(0);
-          done();
-        })
-        .catch(err => done(err));
-    });
-
-    it('should return empty if the connection no longer exists', (done) => {
-      const auth0 = mockConnections([ ]);
-
-      const db = mockGroups([
-        { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Admins', connectionId: 'abc' } ]
-        },
-        { _id: '456', name: 'Group 2', mappings:
-          [ { _id: '67890', groupName: 'Domain Users', connectionId: 'abc' } ]
-        }
-      ]);
-
-      getDynamicUserGroups(auth0, db, 'abc', [ 'Domain Admins' ])
+      getDynamicUserGroups(db, 'abc', [ 'Domain Admins' ])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(0);
@@ -254,21 +233,16 @@ describe('Queries', () => {
     });
 
     it('should return empty if the current transaction does not match any groups', (done) => {
-      const auth0 = mockConnections([
-          { id: 'abc', name: 'my-ad' },
-          { id: 'def', name: 'other-ad' }
-      ]);
-
       const db = mockGroups([
         { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionId: 'abc' } ]
+          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
         },
         { _id: '456', name: 'Group 2', mappings:
-          [ { _id: '67890', groupName: 'Domain Users', connectionId: 'def' } ]
+          [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
         }
       ]);
 
-      getDynamicUserGroups(auth0, db, 'my-ad', [ 'Domain Admins' ])
+      getDynamicUserGroups(db, 'my-ad', [ 'Domain Admins' ])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(0);
@@ -278,35 +252,30 @@ describe('Queries', () => {
     });
 
     it('should mappings that match the current transaction', (done) => {
-      const auth0 = mockConnections([
-          { id: 'abc', name: 'my-ad' },
-          { id: 'def', name: 'other-ad' }
-      ]);
-
       const db = mockGroups([
         { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionId: 'abc' } ]
+          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
         },
         { _id: '456', name: 'Group 2', mappings:
           [
-            { _id: '67890', groupName: 'Domain Users', connectionId: 'def' },
-            { _id: '44444', groupName: 'Domain Admins', connectionId: 'abc' }
+            { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
+            { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
           ]
         },
         { _id: '789', name: 'Group 3', mappings:
           [
-            { _id: 'aaaaa', groupName: 'Domain Users', connectionId: 'abc' },
-            { _id: 'bbbbb', groupName: 'Domain Admins', connectionId: 'abc' }
+            { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
+            { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
           ]
         }
       ]);
 
-      getDynamicUserGroups(auth0, db, 'my-ad', [ 'Domain Admins' ])
+      getDynamicUserGroups(db, 'my-ad', [ 'Domain Admins' ])
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(2);
-          expect(groups[0]).to.equal('Group 2');
-          expect(groups[1]).to.equal('Group 3');
+          expect(groups[0].name).to.equal('Group 2');
+          expect(groups[1].name).to.equal('Group 3');
           done();
         })
         .catch((err) => done(err));
