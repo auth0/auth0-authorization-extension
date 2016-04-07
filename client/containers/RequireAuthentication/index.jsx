@@ -14,7 +14,11 @@ export function RequireAuthentication(InnerComponent) {
 
     requireAuthentication() {
       if (!this.props.auth.isAuthenticated && !this.props.auth.isAuthenticating) {
-        this.props.push(`/login?returnUrl=${this.props.location.pathname}`);
+        if(window.config.IS_ADMIN) {
+          this.props.push('/login');
+        } else {
+          this.props.push(`/login?returnUrl=${this.props.location.pathname}`);
+        }
       }
     }
 

@@ -29,7 +29,11 @@ export function parseHash(hash) {
 export function show(returnUrl) {
   const lock = getLock();
   if (!lock) {
-    window.location.href = window.config.BASE_URL + '/login';
+    if (window.config.IS_ADMIN) {
+      window.location.href = window.config.BASE_URL + '/admins/login';
+    } else {
+      window.location.href = window.config.BASE_URL + '/login';
+    }
     return;
   }
 

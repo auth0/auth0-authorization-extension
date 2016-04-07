@@ -16,6 +16,7 @@ export function login(returnUrl) {
 export function logout() {
   return (dispatch) => {
     localStorage.removeItem('apiToken');
+    sessionStorage.removeItem('apiToken');
 
     dispatch({
       type: constants.LOGOUT_SUCCESS

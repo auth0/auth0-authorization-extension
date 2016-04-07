@@ -45,6 +45,7 @@ export default () => {
     const config = {
       AUTH0_DOMAIN: nconf.get('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: nconf.get('AUTH0_CLIENT_ID'),
+      IS_ADMIN: req.path === '/admins',
       BASE_URL: url.format({
         protocol: nconf.get('NODE_ENV') !== 'production' ? 'http' : 'https',
         host: req.get('host'),
