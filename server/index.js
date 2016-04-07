@@ -55,7 +55,7 @@ module.exports = (options = { }) => {
       getDb().setToken(decodedToken.sub, { accessToken })
         .then(() => {
           // Create the rule.
-          ensureRule();
+          ensureRule(accessToken);
 
           // Continue.
           next();
