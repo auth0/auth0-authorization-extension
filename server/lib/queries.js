@@ -192,7 +192,7 @@ const matchMappings = (mappings, connectionName, groupMemberships) => {
 /*
  * Calculate dynamic group memberships.
  */
-export function getDynamicUserGroups(db, connectionName, groupMemberships) {
+export function getDynamicUserGroups(db, connectionName, groupMemberships, allGroups) {
   return new Promise((resolve, reject) => {
     if (!connectionName) {
       return resolve([]);
@@ -202,7 +202,15 @@ export function getDynamicUserGroups(db, connectionName, groupMemberships) {
       return resolve([]);
     }
 
-    return getGroupsCached(db, (err, groups) => {
+    const getGroups = (cb) => {
+      if (allGroups && allGroups.length) {
+        return cb(null, allGroups);
+      }
+
+      return getGroupsCached(db, cb);
+    };
+
+    return getGroups((err, groups) => {
       if (err) {
         return reject(err);
       }
@@ -218,18 +226,18 @@ export function getDynamicUserGroups(db, connectionName, groupMemberships) {
  */
 export function getUserGroups(db, userId, connectionName, groupMemberships) {
   return new Promise((resolve, reject) => {
-    getDynamicUserGroups(db, connectionName, groupMemberships)
-      .then(dynamicGroups => {
-        getGroupsCached(db, (err, groups) => {
-          if (err) {
-            return reject(err);
-          }
+    getGroupsCached(db, (err, groups) => {
+      if (err) {
+        return reject(err);
+      }
 
+      getDynamicUserGroups(db, connectionName, groupMemberships, groups)
+        .then(dynamicGroups => {
           const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
           const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
           return resolve(nestedGroups);
-        });
-      })
-      .catch(reject);
+        })
+        .catch(reject);
+    });
   });
 }
