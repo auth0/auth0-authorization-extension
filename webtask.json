@@ -1,13 +1,13 @@
 {
-  "title": "Auth0 Groups",
-  "name": "auth0-groups",
+  "title": "Auth0 Authorization Extension",
+  "name": "auth0-authz",
   "version": "1.3.0",
   "author": "auth0",
-  "description": "This application gives Auth0 customers the possibility to manage group memberships for their users.",
+  "description": "This extension gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
-  "logoUrl": "https://cdn.auth0.com/extensions/auth0-groups/assets/logo.svg",
+  "logoUrl": "https://cdn.auth0.com/extensions/auth0-authz/assets/logo.svg",
   "initialUrlPath": "/admins/login",
-  "repository": "https://github.com/auth0/auth0-groups",
+  "repository": "https://github.com/auth0/auth0-authz",
   "keywords": [
     "auth0",
     "extension"

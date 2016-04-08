@@ -14,7 +14,7 @@ const createRule = (ruleVersion, db, managementClient) => {
     logger.info(`Creating rule ${ruleVersion}`);
 
     managementClient.rules.create({
-      name: 'auth0-groups',
+      name: 'auth0-authz',
       enabled: true,
       stage: 'login_success',
       script: authorizeRule(nconf.get('WT_URL'), nconf.get('AUTHORIZE_API_KEY'))

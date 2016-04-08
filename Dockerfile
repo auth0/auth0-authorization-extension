@@ -1,6 +1,6 @@
 FROM node:4.2-slim
 
-ENV APP_SOURCE /usr/src/auth0-groups
+ENV APP_SOURCE /usr/src/auth0-authz
 COPY ./ $APP_SOURCE
 WORKDIR $APP_SOURCE
 

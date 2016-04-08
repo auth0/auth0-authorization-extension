@@ -117,18 +117,18 @@ npm run serve:prod
 Building:
 
 ```
-docker build -t auth0/auth0-groups .
+docker build -t auth0/auth0-authz .
 ```
 
 Start interactive:
 
 ```
-docker rm auth0-groups
-docker run -it --name "auth0-groups" -p 5000:3000 auth0/auth0-groups
+docker rm auth0-authz
+docker run -it --name "auth0-authz" -p 5000:3000 auth0/auth0-authz
 ```
 
 Start in the background:
 
 ```
-docker run -d --name "auth0-groups" -p 5000:3000 auth0/auth0-groups
+docker run -d --name "auth0-authz" -p 5000:3000 auth0/auth0-authz
 ```

@@ -27,7 +27,7 @@ module.exports = (options = { }) => {
   // Initialize database.
   initDb(new Database({
     provider: options.storageProvider || new S3Provider({
-      path: 'auth0-groups.json',
+      path: 'auth0-authz.json',
       bucket: nconf.get('AWS_S3_BUCKET'),
       keyId: nconf.get('AWS_ACCESS_KEY_ID'),
       keySecret: nconf.get('AWS_SECRET_ACCESS_KEY')
@@ -78,7 +78,7 @@ module.exports = (options = { }) => {
     app.use('/admins', auth0({
       scopes: nconf.get('AUTH0_SCOPES'),
       authenticatedCallback: onUserAuthenticated,
-      clientName: 'IAM Dashboard Extension',
+      clientName: 'Auth0 Authorization Dashboard Extension',
       apiToken: {
         secret: nconf.get('AUTHORIZE_API_KEY')
       }
