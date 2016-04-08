@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 import { Router } from 'express';
 
-import { isApplicationAccessAllowed, getUserGroups, getDynamicUserGroups } from '../lib/queries';
+import { isApplicationAccessAllowed, getUserGroups } from '../lib/queries';
 
 export default (db) => {
   const api = Router();
