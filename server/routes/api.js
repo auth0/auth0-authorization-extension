@@ -24,5 +24,20 @@ export default () => {
   api.use('/permissions', middlewares.authenticate, permissions(db));
   api.use('/groups', middlewares.authenticate, groups(db));
   api.use('/logs', middlewares.authenticate, logs(db));
+
+
+  /*
+  Consider bulk imports in the future:
+  api.get('/bulk/export', middlewares.authenticate, (req, res) => {
+    db.provider._readObject('groups')
+      .then(data => res.json(data));
+  });
+
+  api.post('/bulk/import', middlewares.authenticate, (req, res, next) => {
+    db.provider._writeObject(req.body)
+    .then(() => res.sendStatus(202))
+    .catch(next);
+  });
+  */
   return api;
 };
