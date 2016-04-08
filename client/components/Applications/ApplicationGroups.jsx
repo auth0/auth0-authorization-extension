@@ -68,7 +68,7 @@ class ApplicationGroups extends Component {
 
     return (
       <div>
-        <div className="bg-warning">
+        <div className="bg-warning" style={{ backgroundColor: '#eaca2c' }}>
           Heads up! By adding or removing groups here you are changing the authorization behavior of your application.
         </div>
         <div className="row">
