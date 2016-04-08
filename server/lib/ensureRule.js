@@ -30,7 +30,7 @@ const createRule = (ruleVersion, db, managementClient) => {
 
 export default (token) => {
   const db = getDb();
-  const ruleVersion = '1.0';
+  const ruleVersion = '2.0';
   const managementClient = new auth0.ManagementClient({
     token,
     domain: nconf.get('AUTH0_DOMAIN')
