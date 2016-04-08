@@ -9,7 +9,7 @@ class Header extends Component {
         <div className="container">
           <div className="navbar-header">
             <img src="http://cdn.auth0.com/extensions/auth0-authz/assets/app_logo.svg" style={{float: 'left', minWidth: '55px', minHeight: '55px', display: 'block', marginRight: '15px'}}></img>
-            <a className="navbar-brand" href="#" style={{width: '50%'}}>Groups</a>
+            <a className="navbar-brand" href="#" style={{width: '50%'}}>Authorization Dashboard</a>
           </div>
           <div id="navbar-collapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-right">
