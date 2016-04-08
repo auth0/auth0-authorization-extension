@@ -16,7 +16,7 @@ export default (db) => {
 
     getUserGroups(db, userId, connectionName, groups)
       .then((userGroups) => isApplicationAccessAllowed(db, clientId, userGroups)
-        .then(isAccessAllowed => res.json({ groups: userGroups, accessGranted: isAccessAllowed }))
+        .then(isAccessAllowed => res.json({ groups: userGroups.map((group) => group.name), accessGranted: isAccessAllowed }))
       )
       .catch(next);
   });

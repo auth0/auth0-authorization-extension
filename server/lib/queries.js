@@ -52,7 +52,7 @@ export const getGroupsCached = memoizer({
  * Check if access for any of the provided groups is allowed
  */
 export function isApplicationAccessAllowed(db, clientId, userGroups) {
-  const groups = userGroups || [];
+  const groups = (userGroups || []).map(group => group._id);
 
   return new Promise((resolve, reject) => {
     getApplicationsCached(db, (err, apps) => {
@@ -66,8 +66,6 @@ export function isApplicationAccessAllowed(db, clientId, userGroups) {
       }
 
       const accessAllowed = _.filter(app.groups, (groupId) => groups.indexOf(groupId) >= 0).length > 0;
-
-
       return resolve(accessAllowed);
     });
   });
@@ -228,8 +226,7 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
           }
 
           const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
-          const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups)).map((group) => group.name);
-
+          const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
           return resolve(nestedGroups);
         });
       })
