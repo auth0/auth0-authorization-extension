@@ -46,7 +46,7 @@
     "express-jwt": "^3.3.0",
     "glob": "^7.0.3",
     "json-loader": "^0.5.4",
-    "lodash": "^4.8.2",
+    "lodash": "^3.9.3",
     "lowdb": "^0.12.5",
     "lru-memoizer": "^1.1.0",
     "moment": "^2.12.0",
