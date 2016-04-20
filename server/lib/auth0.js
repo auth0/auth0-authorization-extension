@@ -215,7 +215,12 @@ class Auth0ApiClient {
             userRecords.push(user);
             cb();
           })
-          .catch(cb);
+          .catch((err) => {
+            if (err && err.errorCode === 'inexistent_user') {
+              cb();
+            }
+            cb(err);
+          });
       }, (err) => {
         if (err) {
           return reject(err);

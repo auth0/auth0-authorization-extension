@@ -14,7 +14,7 @@ export default (db) => {
       page: req.query.page || 0,
       include_totals: true,
       fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked',
-      search_engine:'v2'
+      search_engine: 'v2'
     };
 
     auth0.getUsers(options, req.sub)
