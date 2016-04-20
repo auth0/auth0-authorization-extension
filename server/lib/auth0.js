@@ -217,9 +217,10 @@ class Auth0ApiClient {
           })
           .catch((err) => {
             if (err && err.errorCode === 'inexistent_user') {
-              cb();
+              return cb();
             }
-            cb(err);
+
+            return cb(err);
           });
       }, (err) => {
         if (err) {
