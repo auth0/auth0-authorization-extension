@@ -81,7 +81,8 @@ module.exports = (options = { }) => {
       clientName: 'Auth0 Authorization Dashboard Extension',
       apiToken: {
         secret: nconf.get('AUTHORIZE_API_KEY')
-      }
+      },
+      audience: (req) => `https://${req.webtaskContext.data.AUTH0_DOMAIN}/api/v2/`
     }));
   }
 
