@@ -233,6 +233,20 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
 
       getDynamicUserGroups(db, connectionName, groupMemberships, groups)
         .then(dynamicGroups => {
+          // Merging member from mappings
+          _.forEach(groups, (group) => {
+            if (!group.members) {
+              group.members = [];
+            }
+
+            if (group.mappings) {
+              _.forEach(group.mappings, (mapping) => {
+                const found = _.find(groups, { name: mapping.groupName });
+                group.members = group.members.concat(found.members);
+              });
+            }
+          });
+
           const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
           const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
           return resolve(nestedGroups);
