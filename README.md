@@ -83,7 +83,7 @@ Client:
 ```
 nvm use 4
 npm install
-npm run build:dev
+npm run client:dev
 ```
 
 Server:
@@ -91,7 +91,7 @@ Server:
 ```
 nvm use 4
 npm install
-npm run serve:dev
+npm run server:dev
 ```
 
 ### Running in production
@@ -101,7 +101,7 @@ Client:
 ```
 nvm use 4
 npm install
-npm run build:prod
+npm run client:build
 ```
 
 Server:
@@ -109,7 +109,7 @@ Server:
 ```
 nvm use 4
 npm install
-npm run serve:prod
+npm run server:prod
 ```
 
 ### Docker
