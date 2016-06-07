@@ -11,6 +11,7 @@ import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
 import { init as initDb, getDb } from './lib/storage/getdb';
 import api from './routes/api';
+import hooks from './routes/hooks';
 import meta from './routes/meta';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
@@ -46,6 +47,7 @@ module.exports = (options = { }) => {
   app.use('/api', api());
   app.use('/app', Express.static(path.join(__dirname, '../dist')));
   app.use('/meta', meta());
+  app.use('/.extensions', hooks());
 
   // Use OAuth2 authorization.
   if (nconf.get('USE_OAUTH2')) {

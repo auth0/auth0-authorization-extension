@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import config from '../../../server/lib/config';
 
 import { setConfig } from '../../utils';
-import { getAccessToken, getForAccessToken } from '../../../server/lib/ManagementApiClient';
+import managementApiClient from '../../../server/lib/ManagementApiClient';
 
 describe.only('managementApiClient', () => {
   beforeEach(() => {
@@ -19,7 +19,7 @@ describe.only('managementApiClient', () => {
         AUTH0_CLIENT_SECRET: '222'
       });
 
-      getAccessToken(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'))
+      managementApiClient.getAccessToken(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'))
         .catch((err) => {
           expect(err.name).to.be.equal('RequestError');
           done();
@@ -43,7 +43,7 @@ describe.only('managementApiClient', () => {
         })
         .reply(401);
 
-      getAccessToken(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'))
+      managementApiClient.getAccessToken(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'))
         .catch((err) => {
           expect(err.statusCode).to.equal(401);
           done();
@@ -69,7 +69,7 @@ describe.only('managementApiClient', () => {
           access_token: 'abc'
         });
 
-      getAccessToken(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'))
+      managementApiClient.getAccessToken(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'))
         .then((accessToken) => {
           expect(accessToken).to.equal('abc');
           done();
@@ -85,7 +85,7 @@ describe.only('managementApiClient', () => {
         AUTH0_CLIENT_SECRET: '222'
       });
 
-      getForAccessToken('tenant.auth0.com', 'abcdefg')
+      managementApiClient.getForAccessToken('tenant.auth0.com', 'abcdefg')
         .then(managementClient => {
           expect(managementClient).not.to.be.null;
           done();

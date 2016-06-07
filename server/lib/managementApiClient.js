@@ -10,7 +10,7 @@ if (config('HOSTING_ENV') === 'webtask') {
   auth0 = require('auth0@2.0.0');
 }
 
-export const getAccessToken = Promise.promisify(
+const getAccessToken = Promise.promisify(
   memoizer({
     load: (domain, clientId, clientSecret, callback) => {
       const options = {
@@ -34,10 +34,11 @@ export const getAccessToken = Promise.promisify(
   }
 ));
 
-export const getForClient = (domain, clientId, clientSecret) => {
+module.exports.getAccessToken = getAccessToken;
+
+module.exports.getForClient = (domain, clientId, clientSecret) =>
   getAccessToken(domain, clientId, clientSecret)
     .then(accessToken => new auth0.ManagementClient({ domain, token: accessToken }));
-};
 
-export const getForAccessToken = (domain, accessToken) =>
+module.exports.getForAccessToken = (domain, accessToken) =>
   Promise.resolve(new auth0.ManagementClient({ domain, token: accessToken }));
