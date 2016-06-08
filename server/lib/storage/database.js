@@ -9,6 +9,17 @@ export default class Database {
     this.provider = options.provider;
   }
 
+  getConfiguration() {
+    return this.provider
+      .getRecords('configuration')
+      .then(records => (records.length ? records[0] : null));
+  }
+
+  createConfiguration(config) {
+    return this.provider
+      .createRecord('configuration', config);
+  }
+
   getRules() {
     return this.provider
       .getRecords('rules');

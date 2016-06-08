@@ -1,6 +1,7 @@
 export * as applicationActions from './application';
 export * as applicationGroupActions from './applicationGroup';
 export * as authActions from './auth';
+export * as configurationActions from './configuration';
 export * as connectionActions from './connection';
 export * as groupActions from './group';
 export * as groupNestedActions from './groupNested';

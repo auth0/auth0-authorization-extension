@@ -3,11 +3,13 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 
+import * as constants from './constants';
 import { useRouterHistory } from 'react-router'
 import { createHistory } from 'history'
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 
 import { loadCredentials } from './actions/auth';
+import { fetchRuleStatus } from './actions/configuration';
 import routes from './routes';
 import configureStore from './store/configureStore';
 
@@ -23,6 +25,11 @@ const store = configureStore([ routerMiddleware(history) ], { });
 const reduxHistory = syncHistoryWithStore(history, store);
 
 // Fire first events.
+store.subscribe(() => {
+  if (store.getState().lastAction.type === constants.LOGIN_SUCCESS) {
+    store.dispatch(fetchRuleStatus());
+  }
+});
 store.dispatch(loadCredentials());
 
 // Render application.

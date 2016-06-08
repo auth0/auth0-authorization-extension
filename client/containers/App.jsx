@@ -1,13 +1,22 @@
-import { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import { logout } from '../actions/auth';
+import { configurationActions } from '../actions';
 
-import DevTools from './DevTools';
 import Header from '../components/Header';
+import RuleStatus from '../components/Configuration/RuleStatus';
 import { Sidebar, SidebarItem } from '../components/Dashboard';
 
 class App extends Component {
+  static propTypes = {
+    user: PropTypes.object,
+    ruleStatus: PropTypes.object,
+    logout: PropTypes.func,
+    goToRules: PropTypes.func,
+    goToConfiguration: PropTypes.func
+  };
+
   render() {
     return (
       <div>
@@ -18,8 +27,13 @@ class App extends Component {
               <SidebarItem title="Applications" route="/applications" icon="icon icon-budicon-375" />
               <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
               <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
+              <SidebarItem title="Configuration" route="/configuration" icon="icon icon-budicon-329" />
             </Sidebar>
             <div id="content" className="col-xs-10">
+              <RuleStatus ruleStatus={this.props.ruleStatus}
+                goToConfiguration={this.props.goToConfiguration}
+                goToRules={this.props.goToRules}
+              />
               { this.props.children }
             </div>
           </div>
@@ -31,8 +45,9 @@ class App extends Component {
 
 function select(state) {
   return {
-    user: state.auth.get('user')
+    user: state.auth.get('user'),
+    ruleStatus: state.ruleStatus
   };
 }
 
-export default connect(select, { logout })(App);
+export default connect(select, { logout, ...configurationActions })(App);

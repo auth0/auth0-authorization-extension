@@ -24,14 +24,14 @@ export default () => {
 
             return Promise.resolve();
           })
-          .then(() => {
-            res.sendStatus(204);
-          })
-          .catch((err) => {
-            logger.error(err);
-            res.sendStatus(500);
-          })
-      );
+      )
+      .then(() => {
+        res.sendStatus(204);
+      })
+      .catch((err) => {
+        logger.error(err);
+        res.sendStatus(500);
+      });
   });
   return hooks;
 };
