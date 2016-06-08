@@ -72,10 +72,10 @@ class GroupsContainer extends Component {
           <div className="col-xs-12 wrapper">
             <div className="content-header video-template">
               <ButtonToolbar className="pull-right">
-                <Button bsSize="xsmall" onClick={this.refresh} disabled={this.props.groups.loading}>
+                <Button bsSize="small" onClick={this.refresh} disabled={this.props.groups.loading}>
                   <i className="icon icon-budicon-257"></i> Refresh
                 </Button>
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+                <Button bsStyle="primary" bsSize="small" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
                   <i className="icon icon-budicon-337"></i> Create
                 </Button>
               </ButtonToolbar>

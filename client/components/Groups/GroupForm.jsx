@@ -20,10 +20,10 @@ class GroupForm extends Component {
       </Modal.Body>
       <Modal.Footer>
         <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-          Cancel
+          <i className="icon icon-budicon-501"></i> Cancel
         </Button>
         <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-          Save
+          <i className="icon icon-budicon-245"></i> Save
         </Button>
       </Modal.Footer>
     </div>;

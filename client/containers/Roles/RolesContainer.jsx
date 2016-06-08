@@ -29,11 +29,11 @@ class RolesContainer extends Component {
         <div className="row">
           <div className="col-xs-12 wrapper">
             <ButtonToolbar className="pull-right">
-              <Button bsSize="xsmall" onClick={() => this.refresh()} disabled={this.props.roles.loading}>
+              <Button bsSize="small" onClick={() => this.refresh()} disabled={this.props.roles.loading}>
                 <i className="icon icon-budicon-257"></i>
                 Refresh
               </Button>
-              <Button bsStyle="primary" bsSize="xsmall" disabled={this.props.roles.loading} onClick={() => this.props.createRole()}>
+              <Button bsStyle="primary" bsSize="small" disabled={this.props.roles.loading} onClick={() => this.props.createRole()}>
                 <i className="icon icon-budicon-337"></i>
                 Create
               </Button>

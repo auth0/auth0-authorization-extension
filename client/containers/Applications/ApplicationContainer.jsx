@@ -44,7 +44,7 @@ export default class ApplicationContainer extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <Link className="btn btn-xs btn-default pull-right" to="/applications">
+            <Link className="btn btn-sm btn-default pull-right" to="/applications">
               <i className="icon icon-budicon-257"></i> Back to Applications
             </Link>
           </div>

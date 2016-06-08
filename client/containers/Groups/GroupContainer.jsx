@@ -101,7 +101,7 @@ export default class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Link className="btn btn-xs btn-default pull-right" to="/groups">
+            <Link className="btn btn-sm btn-default pull-right" to="/groups">
               <i className="icon icon-budicon-257"></i> Back to Groups
             </Link>
           </div>

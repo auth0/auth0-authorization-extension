@@ -8,7 +8,7 @@ export default class PermissionContainer extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <Link className="btn btn-xs btn-default pull-right" to="/permissions">
+            <Link className="btn btn-sm btn-default pull-right" to="/permissions">
               <i className="icon icon-budicon-257"></i> Back to Permissions
             </Link>
           </div>

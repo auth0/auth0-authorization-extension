@@ -26,7 +26,7 @@ class LogDialog extends Component {
       <Modal.Footer>
         <ButtonToolbar>
           <Button bsSize="small" disabled={loading} onClick={onClose}>
-            Cancel
+            <i className="icon icon-budicon-501"></i> Cancel
           </Button>
         </ButtonToolbar>
       </Modal.Footer>

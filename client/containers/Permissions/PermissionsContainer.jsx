@@ -31,11 +31,11 @@ class PermissionsContainer extends Component {
         <div className="row">
           <div className="col-xs-12 wrapper">
             <ButtonToolbar className="pull-right">
-              <Button bsSize="xsmall" onClick={() => this.refresh()} disabled={this.props.permissions.loading}>
+              <Button bsSize="small" onClick={() => this.refresh()} disabled={this.props.permissions.loading}>
                 <i className="icon icon-budicon-257"></i>
                 Refresh
               </Button>
-              <Button bsStyle="primary" bsSize="xsmall" disabled={this.props.permissions.loading} onClick={() => this.props.createPermission()}>
+              <Button bsStyle="primary" bsSize="small" disabled={this.props.permissions.loading} onClick={() => this.props.createPermission()}>
                 <i className="icon icon-budicon-337"></i>
                 Create
               </Button>

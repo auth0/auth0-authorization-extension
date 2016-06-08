@@ -26,10 +26,10 @@ class LogsContainer extends Component {
     }
 
     return <ButtonToolbar className="pull-right">
-      <Button bsSize="xsmall" onClick={this.refresh.bind(this)} disabled={this.props.logs.loading}>
+      <Button bsSize="small" onClick={this.refresh.bind(this)} disabled={this.props.logs.loading}>
         <i className="icon icon-budicon-257"></i> Refresh
       </Button>
-      <Button bsStyle="primary" bsSize="xsmall" disabled={this.props.loading} onClick={this.loadMore.bind(this)}>
+      <Button bsStyle="primary" bsSize="small" disabled={this.props.loading} onClick={this.loadMore.bind(this)}>
         <i className="icon icon-budicon-686"></i> Load More
       </Button>
     </ButtonToolbar>;
