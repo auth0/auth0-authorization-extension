@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class Header extends Component {
   render() {
-    const { user, onLogout } = this.props;
+    const { user, issuer, onLogout } = this.props;
     return <header className="dashboard-header" style={{ backgroundColor: '#fbfbfb' }}>
       <nav role="navigation" className="navbar navbar-default">
         <div className="container">
@@ -16,8 +16,8 @@ class Header extends Component {
               <li className="dropdown">
                 <span role="button" data-toggle="dropdown" data-target="#" className="btn-dro btn-username">
                   <img src={user.get('picture')} className="picture avatar" />
-                  <span className="username-text truncate">
-                    {user.get('nickname') || user.get('email')}
+                  <span className="username-text">
+                    { issuer || user.get('nickname') || user.get('email')}
                   </span>
                   <i className="icon-budicon-460"></i>
                 </span>
@@ -39,6 +39,7 @@ class Header extends Component {
 
 Header.propTypes = {
   user: React.PropTypes.object,
+  issuer: React.PropTypes.string,
   onLogout: React.PropTypes.func.isRequired
 };
 
