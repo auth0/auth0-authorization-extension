@@ -29,6 +29,6 @@ app.listen(port, (error) => {
   if (error) {
     logger.error(error);
   } else {
-    logger.info(`Listening on http://localhost:${port}.`);
+    logger.info(`Express listening on http://localhost:${port}`);
   }
 });

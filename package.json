@@ -8,13 +8,11 @@
   "main": "server.js",
   "scripts": {
     "clean": "rimraf dist",
-    "client:dev": "NODE_ENV=development node ./build/webpack/server.js",
     "client:build": "npm run clean && NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
-    "server:dev": "NODE_ENV=development nodemon --ignore assets/app/ --ignore build/webpack/ --ignore server/db.json --ignore client/ --ignore node_modules/ index.js",
-    "server:prod": "NODE_ENV=production node index.js",
+    "serve:dev": "NODE_ENV=development nodemon --ignore assets/app/ --ignore build/webpack/ --ignore client/ --ignore node_modules/ ./build/webpack/server.js",
+    "serve:prod": "NODE_ENV=production node index.js",
     "test": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --timeout 5000 $(find ./tests -name *.tests.js) tests/runner.js",
     "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
-    "postinstall": "npm run client:build",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
     "extension:size": "NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
     "build": "npm run clean && npm run client:build && npm run extension:build"
