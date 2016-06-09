@@ -2,8 +2,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-import { login } from '../../actions/auth';
-import { LoadingPanel } from '../../components/Dashboard';
+import { login } from '../actions/auth';
+import { LoadingPanel } from '../components/Dashboard';
 
 class LoginContainer extends Component {
   componentWillMount() {

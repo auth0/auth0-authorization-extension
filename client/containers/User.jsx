@@ -3,17 +3,17 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../../actions';
+import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../actions';
 
-import './UserContainer.css';
-import LogDialog from '../../components/Logs/LogDialog';
-import UserGroups from '../../components/Users/UserGroups';
-import UserLogs from '../../components/Users/UserLogs';
-import UserHeader from '../../components/Users/UserHeader';
-import UserProfile from '../../components/Users/UserProfile';
-import UserDevices from '../../components/Users/UserDevices';
+import './User.css';
+import LogDialog from '../components/Logs/LogDialog';
+import UserGroups from '../components/Users/UserGroups';
+import UserLogs from '../components/Users/UserLogs';
+import UserHeader from '../components/Users/UserHeader';
+import UserProfile from '../components/Users/UserProfile';
+import UserDevices from '../components/Users/UserDevices';
 
-import { GroupPickerDialog, GroupMemberRemoveDialog } from '../../components/Groups';
+import { GroupPickerDialog, GroupMemberRemoveDialog } from '../components/Groups';
 
 export default class UserContainer extends Component {
   constructor() {

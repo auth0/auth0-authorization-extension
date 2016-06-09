@@ -1,13 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as actions from '../../actions/user';
+import * as actions from '../actions/user';
 
-import { TableAction } from '../../components/Dashboard';
-import UserOverview from '../../components/Users/UserOverview';
-import BlockUserDialog from '../../components/Users/BlockUserDialog';
-import UnblockUserDialog from '../../components/Users/UnblockUserDialog';
-import RemoveMultiFactorDialog from '../../components/Users/RemoveMultiFactorDialog';
+import { TableAction } from '../components/Dashboard';
+import UserOverview from '../components/Users/UserOverview';
+import BlockUserDialog from '../components/Users/BlockUserDialog';
+import UnblockUserDialog from '../components/Users/UnblockUserDialog';
+import RemoveMultiFactorDialog from '../components/Users/RemoveMultiFactorDialog';
 
 class Users extends React.Component {
   constructor() {

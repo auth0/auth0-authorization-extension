@@ -15,9 +15,9 @@ export default class Database {
       .then(records => (records.length ? records[0] : null));
   }
 
-  createConfiguration(config) {
+  updateConfiguration(config) {
     return this.provider
-      .createRecord('configuration', config);
+      .updateRecord('configuration', 'v1', config, true);
   }
 
   getRules() {

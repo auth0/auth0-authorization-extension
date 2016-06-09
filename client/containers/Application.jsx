@@ -3,14 +3,14 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { applicationActions, applicationGroupActions, groupPickerActions } from '../../actions';
+import { applicationActions, applicationGroupActions, groupPickerActions } from '../actions';
 
-import ApplicationDetail from '../../components/Applications/ApplicationDetail';
-import ApplicationHeader from '../../components/Applications/ApplicationHeader';
-import ApplicationGroups from '../../components/Applications/ApplicationGroups';
-import ApplicationGroupRemoveDialog from '../../components/Applications/ApplicationGroupRemoveDialog';
+import ApplicationDetail from '../components/Applications/ApplicationDetail';
+import ApplicationHeader from '../components/Applications/ApplicationHeader';
+import ApplicationGroups from '../components/Applications/ApplicationGroups';
+import ApplicationGroupRemoveDialog from '../components/Applications/ApplicationGroupRemoveDialog';
 
-import { GroupPickerDialog } from '../../components/Groups';
+import { GroupPickerDialog } from '../components/Groups';
 
 export default class ApplicationContainer extends Component {
   constructor() {

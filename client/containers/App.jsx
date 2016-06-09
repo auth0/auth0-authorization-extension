@@ -11,6 +11,7 @@ import { Sidebar, SidebarItem } from '../components/Dashboard';
 class App extends Component {
   static propTypes = {
     user: PropTypes.object,
+    issuer: PropTypes.string,
     ruleStatus: PropTypes.object,
     logout: PropTypes.func,
     goToRules: PropTypes.func,
@@ -20,14 +21,17 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header user={this.props.user} onLogout={this.props.logout} />
+        <Header user={this.props.user} issuer={this.props.issuer} onLogout={this.props.logout} />
         <div className="container">
           <div className="row">
             <Sidebar>
               <SidebarItem title="Applications" route="/applications" icon="icon icon-budicon-375" />
               <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
               <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
-              <SidebarItem title="Configuration" route="/configuration" icon="icon icon-budicon-329" />
+              <SidebarItem title="Configuration" route="/configuration/" icon="icon icon-budicon-329">
+                <SidebarItem title="Rule" route="/configuration/rule" icon="icon icon-budicon-519" />
+                <SidebarItem title="Access" route="/configuration/access" icon="icon icon-budicon-519" />
+              </SidebarItem>
             </Sidebar>
             <div id="content" className="col-xs-10">
               <RuleStatus ruleStatus={this.props.ruleStatus}
@@ -45,6 +49,7 @@ class App extends Component {
 
 function select(state) {
   return {
+    issuer: state.auth.get('issuer'),
     user: state.auth.get('user'),
     ruleStatus: state.ruleStatus
   };

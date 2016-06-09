@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import * as actions from '../../actions/application';
-import { Error, LoadingPanel } from '../../components/Dashboard';
-import ApplicationsTable from '../../components/Applications/ApplicationsTable';
+import * as actions from '../actions/application';
+import { Error, LoadingPanel } from '../components/Dashboard';
+import ApplicationsTable from '../components/Applications/ApplicationsTable';
 
 class ApplicationsContainer extends Component {
   componentWillMount() {

@@ -2,13 +2,13 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import * as ApplicationActions from '../../actions/application';
-import * as PermissionActions from '../../actions/permission';
+import * as ApplicationActions from '../actions/application';
+import * as PermissionActions from '../actions/permission';
 
-import { Error, LoadingPanel } from '../../components/Dashboard';
-import PermissionsTable from '../../components/Permissions/PermissionsTable';
-import PermissionDialog from '../../components/Permissions/PermissionDialog';
-import DeletePermissionDialog from '../../components/Permissions/DeletePermissionDialog';
+import { Error, LoadingPanel } from '../components/Dashboard';
+import PermissionsTable from '../components/Permissions/PermissionsTable';
+import PermissionDialog from '../components/Permissions/PermissionDialog';
+import DeletePermissionDialog from '../components/Permissions/DeletePermissionDialog';
 
 class PermissionsContainer extends Component {
   componentWillMount() {

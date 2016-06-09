@@ -4,7 +4,20 @@ import classNames from 'classnames';
 
 class SidebarItem extends Component {
   state = {
-    open: false
+    open: false,
+    active: false
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let open = this.state.open;
+    const active = this.context.router.isActive(nextProps.route);
+    if (!active && this.state.active) {
+      open = false;
+    }
+    this.setState({
+      active,
+      open: open || active
+    });
   }
 
   onClick = () => {
@@ -22,6 +35,7 @@ class SidebarItem extends Component {
         open: this.state.open,
         active: this.context.router.isActive(this.props.route)
       });
+
       return (
         <li className={groupClass}>
           <a href="#" onClick={this.onClick}>

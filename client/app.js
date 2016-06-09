@@ -24,10 +24,16 @@ const history = useRouterHistory(createHistory)({
 const store = configureStore([ routerMiddleware(history) ], { });
 const reduxHistory = syncHistoryWithStore(history, store);
 
-// Fire first events.
+// Check if the rule is enabled.
 store.subscribe(() => {
-  if (store.getState().lastAction.type === constants.LOGIN_SUCCESS) {
-    store.dispatch(fetchRuleStatus());
+  switch (store.getState().lastAction.type) {
+    case constants.LOGIN_SUCCESS:
+    case constants.SAVE_CONFIGURATION_REJECTED:
+    case constants.SAVE_CONFIGURATION_FULFILLED:
+      store.dispatch(fetchRuleStatus());
+      break;
+    default:
+      break;
   }
 });
 store.dispatch(loadCredentials());

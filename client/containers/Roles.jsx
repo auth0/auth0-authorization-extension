@@ -2,12 +2,12 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import * as RoleActions from '../../actions/role';
+import * as RoleActions from '../actions/role';
 
-import { Error, LoadingPanel } from '../../components/Dashboard';
-import RolesTable from '../../components/Roles/RolesTable';
-import RoleDialog from '../../components/Roles/RoleDialog';
-import DeleteRoleDialog from '../../components/Roles/DeleteRoleDialog';
+import { Error, LoadingPanel } from '../components/Dashboard';
+import RolesTable from '../components/Roles/RolesTable';
+import RoleDialog from '../components/Roles/RoleDialog';
+import DeleteRoleDialog from '../components/Roles/DeleteRoleDialog';
 
 class RolesContainer extends Component {
   componentWillMount() {

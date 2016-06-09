@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { push } from 'react-router-redux';
 
-export function RequireAuthentication(InnerComponent) {
+export default function RequireAuthentication(InnerComponent) {
   class RequireAuthenticationContainer extends React.Component {
     componentWillMount() {
       this.requireAuthentication();

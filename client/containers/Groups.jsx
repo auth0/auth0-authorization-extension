@@ -2,10 +2,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import { connectionActions } from '../../actions';
-import * as actions from '../../actions/group';
-import { Error, LoadingPanel, TableAction } from '../../components/Dashboard';
-import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../../components/Groups';
+import { connectionActions } from '../actions';
+import * as actions from '../actions/group';
+import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
+import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../components/Groups';
 
 class GroupsContainer extends Component {
   constructor() {
