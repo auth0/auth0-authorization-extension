@@ -108,7 +108,7 @@ export const getChildGroups = (groups, selectedGroups) => {
       groupsFlat.push(groupId);
 
       // Process the child groups.
-      let group = _.find(groups, { '_id': groupId });
+      const group = _.find(groups, { _id: groupId });
       if (group && group.nested) {
         _.forEach(group.nested, (nestedId) => {
           findGroups(nestedId);
@@ -167,12 +167,10 @@ export const getMembers = (selectedGroups) => {
   });
 
   // Return the users.
-  return Object.keys(users).map(userId => {
-    return {
-      userId,
-      group: users[userId]
-    };
-  });
+  return Object.keys(users).map(userId => ({
+    userId,
+    group: users[userId]
+  }));
 };
 
 /*
@@ -184,10 +182,9 @@ const matchMapping = (mapping, connectionName, groupMemberships) =>
 /*
  * Match a connection/group memberships to multiple mappings.
  */
-const matchMappings = (mappings, connectionName, groupMemberships) => {
-  return mappings &&
+const matchMappings = (mappings, connectionName, groupMemberships) =>
+  mappings &&
     _.filter(mappings, (mapping) => matchMapping(mapping, connectionName, groupMemberships)).length > 0;
-};
 
 /*
  * Calculate dynamic group memberships.
@@ -231,7 +228,7 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
         return reject(err);
       }
 
-      getDynamicUserGroups(db, connectionName, groupMemberships, groups)
+      return getDynamicUserGroups(db, connectionName, groupMemberships, groups)
         .then(dynamicGroups => {
           // Merging member from mappings
           _.forEach(groups, (group) => {

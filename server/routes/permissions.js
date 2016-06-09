@@ -48,8 +48,8 @@ export default (db) => {
       return res.json({ errors });
     }
 
-    let permission = req.body;
-    db.updatePermission(req.params.id, permission)
+    const permission = req.body;
+    return db.updatePermission(req.params.id, permission)
       .then((updated) => res.json(updated))
       .catch(next);
   });

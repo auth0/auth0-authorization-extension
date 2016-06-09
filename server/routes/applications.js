@@ -12,7 +12,7 @@ export default (db) => {
   api.get('/', managementClient, (req, res, next) => {
     req.auth0.clients.getAll({ fields: 'client_id,name,callbacks,global' })
       .then(clients => _.chain(clients)
-        .filter({ 'global': false })
+        .filter({ global: false })
         .sortBy((client) => client.name.toLowerCase())
         .value())
       .then(clients => Promise.all([ clients, db.getApplications(), db.getGroups() ]))

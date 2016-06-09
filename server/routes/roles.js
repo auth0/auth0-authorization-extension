@@ -48,8 +48,8 @@ export default (db) => {
       return res.json({ errors });
     }
 
-    let role = req.body;
-    db.updateRole(req.params.id, role)
+    const role = req.body;
+    return db.updateRole(req.params.id, role)
       .then((updated) => res.json(updated))
       .catch(next);
   });

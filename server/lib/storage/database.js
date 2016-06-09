@@ -30,16 +30,6 @@ export default class Database {
       .createRecord('rules', rule);
   }
 
-  getToken(sub) {
-    return this.provider
-      .getRecord('tokens', sub);
-  }
-
-  setToken(sub, token) {
-    return this.provider
-      .updateRecord('tokens', sub, token, true);
-  }
-
   getPermissions() {
     return this.provider
       .getRecords('permissions');

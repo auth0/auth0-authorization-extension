@@ -1,21 +1,19 @@
 import path from 'path';
-import jwtDecode from 'jwt-decode';
-import Express from 'express';
-import morgan from 'morgan';
 import nconf from 'nconf';
+import morgan from 'morgan';
+import Express from 'express';
 import bodyParser from 'body-parser';
 import validator from 'validate.js';
 import auth0 from 'auth0-oauth2-express';
 
 import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
-import { init as initDb, getDb } from './lib/storage/getdb';
+import { init as initDb } from './lib/storage/getdb';
 import api from './routes/api';
 import hooks from './routes/hooks';
 import meta from './routes/meta';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
-import ensureRule from './lib/ensureRule';
 import * as middlewares from './lib/middlewares';
 
 module.exports = (options = { }) => {
@@ -51,20 +49,6 @@ module.exports = (options = { }) => {
 
   // Use OAuth2 authorization.
   if (nconf.get('USE_OAUTH2')) {
-    // Helper to store the user's token in storage.
-    const onUserAuthenticated = (req, res, accessToken, next) => {
-      const decodedToken = jwtDecode(accessToken);
-      getDb().setToken(decodedToken.sub, { accessToken })
-        .then(() => {
-          // Create the rule.
-          ensureRule(accessToken);
-
-          // Continue.
-          next();
-        })
-        .catch(next);
-    };
-
     // Authenticate non-admins.
     // app.use(auth0({
     //   scopes: nconf.get('AUTH0_SCOPES'),
@@ -78,8 +62,6 @@ module.exports = (options = { }) => {
 
     // Authenticate admins.
     app.use('/admins', auth0({
-      scopes: nconf.get('AUTH0_SCOPES'),
-      authenticatedCallback: onUserAuthenticated,
       clientName: 'Auth0 Authorization Dashboard Extension',
       apiToken: {
         secret: nconf.get('AUTHORIZE_API_KEY')
