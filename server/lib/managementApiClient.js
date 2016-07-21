@@ -4,6 +4,7 @@ import memoizer from 'lru-memoizer';
 import request from 'request-promise';
 
 import config from './config';
+import logger from './logger';
 
 let auth0 = require('auth0');
 if (config('HOSTING_ENV') === 'webtask') {
@@ -13,6 +14,8 @@ if (config('HOSTING_ENV') === 'webtask') {
 const getAccessToken = Promise.promisify(
   memoizer({
     load: (domain, clientId, clientSecret, callback) => {
+      logger.debug(`Requesting access token for ${clientId} - https://${domain}/api/v2/`);
+
       const options = {
         uri: `https://${domain}/oauth/token`,
         body: {

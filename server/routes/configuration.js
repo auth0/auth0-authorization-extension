@@ -48,7 +48,7 @@ export default (db) => {
   configuration.get('/status', managementClient, (req, res, next) => {
     req.auth0.rules.getAll()
       .then(rules => {
-        const rule = _.find(rules, { name: 'auth0-authz' });
+        const rule = _.find(rules, { name: 'auth0-authorization-extension' });
         res.json({
           rule: {
             exists: !!rule,

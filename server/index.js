@@ -6,6 +6,8 @@ import bodyParser from 'body-parser';
 import validator from 'validate.js';
 import auth0 from 'auth0-oauth2-express';
 
+import Hapi from 'hapi';
+
 import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
 import { init as initDb } from './lib/storage/getdb';
@@ -15,6 +17,8 @@ import meta from './routes/meta';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
 import * as middlewares from './lib/middlewares';
+
+import plugins from './plugins';
 
 module.exports = (options = { }) => {
   // Configure validator.
@@ -47,33 +51,45 @@ module.exports = (options = { }) => {
   app.use('/meta', meta());
   app.use('/.extensions', hooks());
 
-  // Use OAuth2 authorization.
-  if (nconf.get('USE_OAUTH2')) {
-    // Authenticate non-admins.
-    // app.use(auth0({
-    //   scopes: nconf.get('AUTH0_SCOPES'),
-    //   authenticatedCallback: onUserAuthenticated,
-    //   clientId: nconf.get('AUTH0_CLIENT_ID'),
-    //   rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
-    //   apiToken: {
-    //     secret: nconf.get('AUTHORIZE_API_KEY')
-    //   }
-    // }));
+  // Authenticate non-admins.
+  app.use('/login', auth0({
+    audience: 'urn:auth0-authz',
+    scopes: 'read:profile',
+    clientId: nconf.get('AUTH0_CLIENT_ID'),
+    rootTenantAuthority: `https://${nconf.get('AUTH0_DOMAIN')}`,
+    apiToken: {
+      secret: nconf.get('AUTHORIZE_API_KEY')
+    }
+  }));
 
-    // Authenticate admins.
-    app.use('/admins', auth0({
-      clientName: 'Auth0 Authorization Dashboard Extension',
-      apiToken: {
-        secret: nconf.get('AUTHORIZE_API_KEY')
-      },
-      audience: (req) => `https://${req.webtaskContext.data.AUTH0_DOMAIN}/api/v2/`
-    }));
-  }
+  // Authenticate admins.
+  app.use('/admins', auth0({
+    clientName: 'Auth0 Authorization Dashboard Extension',
+    apiToken: {
+      secret: nconf.get('AUTHORIZE_API_KEY')
+    },
+    audience: `https://${nconf.get('AUTH0_DOMAIN')}/api/v2/`
+  }));
 
   // Fallback to rendering HTML.
   app.get('*', htmlRoute());
 
   // Generic error handler.
   app.use(middlewares.errorHandler);
+
+  // Start the server.
+  const server = new Hapi.Server({ debug: { log: [ 'error' ] } });
+  server.connection({ port: 4201 });
+
+  server.register(plugins, (err) => {
+    if (err) {
+      throw err;
+    }
+
+    server.start(() => {
+      logger.info('Server running at:', server.info.uri);
+    });
+  });
+
   return app;
 };
