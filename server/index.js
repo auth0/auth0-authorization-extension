@@ -6,19 +6,15 @@ import bodyParser from 'body-parser';
 import validator from 'validate.js';
 import auth0 from 'auth0-oauth2-express';
 
-import Hapi from 'hapi';
-
 import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
 import { init as initDb } from './lib/storage/getdb';
 import api from './routes/api';
-import hooks from './routes/hooks';
-import meta from './routes/meta';
 import htmlRoute from './routes/html';
 import logger from './lib/logger';
 import * as middlewares from './lib/middlewares';
 
-import plugins from './plugins';
+import createServer from './server';
 
 module.exports = (options = { }) => {
   // Configure validator.
@@ -48,8 +44,6 @@ module.exports = (options = { }) => {
   // Configure routes.
   app.use('/api', api());
   app.use('/app', Express.static(path.join(__dirname, '../dist')));
-  app.use('/meta', meta());
-  app.use('/.extensions', hooks());
 
   // Authenticate non-admins.
   app.use('/login', auth0({
@@ -78,16 +72,9 @@ module.exports = (options = { }) => {
   app.use(middlewares.errorHandler);
 
   // Start the server.
-  const server = new Hapi.Server({ debug: { log: [ 'error' ] } });
-  server.connection({ port: 4201 });
-
-  server.register(plugins, (err) => {
-    if (err) {
-      throw err;
-    }
-
-    server.start(() => {
-      logger.info('Server running at:', server.info.uri);
+  createServer((err, hapi) => {
+    hapi.start(() => {
+      logger.info('Server running at:', hapi.info.uri);
     });
   });
 

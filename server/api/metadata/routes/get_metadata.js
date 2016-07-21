@@ -1,4 +1,4 @@
-import metadata from '../../../webtask.json';
+import metadata from '../../../../webtask.json';
 
 module.exports = () => ({
   method: 'GET',

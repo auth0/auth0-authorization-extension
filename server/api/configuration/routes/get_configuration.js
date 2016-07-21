@@ -1,6 +1,6 @@
 module.exports = () => ({
   method: 'GET',
-  path: '/configuration',
+  path: '/api/configuration',
   config: {
     auth: false
   },

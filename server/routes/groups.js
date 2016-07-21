@@ -9,67 +9,6 @@ import { getMappingsWithNames, getChildGroups, getMembers } from '../lib/queries
 
 export default (db) => {
   const api = Router();
-  api.get('/', (req, res, next) => {
-    db.getGroups()
-      .then(groups => groups.map(group => {
-        const currentGroup = group;
-        currentGroup.mappings = currentGroup.mappings || [];
-        currentGroup.members = currentGroup.members || [];
-        return currentGroup;
-      }))
-      .then(groups => res.json(groups))
-      .catch(next);
-  });
-
-  /*
-   * Get a group.
-   */
-  api.get('/:id', (req, res, next) => {
-    db.getGroup(req.params.id)
-      .then(group => res.json({ _id: group._id, name: group.name, description: group.description }))
-      .catch(next);
-  });
-
-  /*
-   * Create a group.
-   */
-  api.post('/', (req, res, next) => {
-    const errors = validateGroup(req.body);
-    if (errors) {
-      res.status(400);
-      return res.json({ errors });
-    }
-
-    const group = req.body;
-    return db.createGroup(group)
-      .then((created) => res.json(created))
-      .catch(next);
-  });
-
-  /*
-   * Update a group.
-   */
-  api.put('/:id', (req, res, next) => {
-    const errors = validateGroup(req.body);
-    if (errors) {
-      res.status(400);
-      return res.json({ errors });
-    }
-
-    const group = req.body;
-    return db.updateGroup(req.params.id, group)
-      .then((updated) => res.json(updated))
-      .catch(next);
-  });
-
-  /*
-   * Delete a group.
-   */
-  api.delete('/:id', (req, res, next) => {
-    db.deleteGroup(req.params.id)
-      .then(() => res.sendStatus(204))
-      .catch(next);
-  });
 
   /*
    * Get the mappings for a group.

@@ -6,7 +6,7 @@ import config from '../../../server/lib/config';
 import { setConfig } from '../../utils';
 import managementApiClient from '../../../server/lib/ManagementApiClient';
 
-describe.only('managementApiClient', () => {
+describe('managementApiClient', () => {
   beforeEach(() => {
     nock.cleanAll();
   });

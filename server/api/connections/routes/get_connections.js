@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 module.exports = (server) => ({
   method: 'GET',
-  path: '/connections',
+  path: '/api/connections',
   config: {
     pre: [
       server.handlers.managementClient

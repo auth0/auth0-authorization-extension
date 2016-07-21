@@ -1,7 +1,4 @@
 import _ from 'lodash';
-import Boom from 'boom';
-
-import logger from '../../lib/logger';
 
 module.exports = (server) => ({
   method: 'DELETE',
@@ -31,9 +28,6 @@ module.exports = (server) => ({
         return Promise.resolve();
       })
       .then(() => reply().code(204))
-      .catch((err) => {
-        logger.error(err);
-        reply(Boom.wrap(err));
-      });
+      .catch((err) => reply.error(err));
   }
 });
