@@ -48,6 +48,7 @@
     "good-console": "^6.1.2",
     "hapi": "^13.5.0",
     "hapi-auth-jwt2": "^7.0.1",
+    "inert": "^4.0.1",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.0.0",
     "jwks-rsa": "^1.0.0",

@@ -1,5 +1,6 @@
 import Hapi from 'hapi';
 import Good from 'good';
+import Inert from 'inert';
 import 'good-console';
 
 import logger from './lib/logger';
@@ -23,7 +24,7 @@ export default (cb) => {
 
   const server = new Hapi.Server();
   server.connection({ port: 4201 });
-  server.register([ ...plugins, goodPlugin ], (err) => {
+  server.register([ goodPlugin, Inert, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
     }
