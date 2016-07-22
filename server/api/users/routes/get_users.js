@@ -1,0 +1,35 @@
+import Joi from 'joi';
+
+module.exports = (server) => ({
+  method: 'GET',
+  path: '/api/users',
+  config: {
+    auth: false,
+    description: 'Get all users.',
+    validate: {
+      query: {
+        search: Joi.string().max(1000),
+        per_page: Joi.number().integer().min(1).max(200).default(100),
+        page: Joi.number().integer().min(0).default(0)
+      }
+    },
+    pre: [
+      server.handlers.managementClient
+    ]
+  },
+  handler: (req, reply) => {
+    const options = {
+      sort: 'last_login:-1',
+      q: req.query.search,
+      per_page: req.query.per_page || 100,
+      page: req.query.page || 0,
+      include_totals: true,
+      fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked',
+      search_engine: 'v2'
+    };
+
+    req.pre.auth0.users.getAll(options)
+      .then(users => reply(users))
+      .catch(err => reply.error(err));
+  }
+});

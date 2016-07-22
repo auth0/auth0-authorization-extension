@@ -44,6 +44,8 @@
     "express": "^4.13.4",
     "express-jwt": "^3.4.0",
     "glob": "^7.0.3",
+    "good": "^7.0.1",
+    "good-console": "^6.1.2",
     "hapi": "^13.5.0",
     "hapi-auth-jwt2": "^7.0.1",
     "json-loader": "^0.5.4",

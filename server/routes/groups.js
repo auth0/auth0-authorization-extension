@@ -56,56 +56,5 @@ export default (db) => {
       .catch(next);
   });
 
-  /*
-   * Add one or more members to a group.
-   */
-  api.patch('/:id/members', (req, res, next) => {
-    if (!Array.isArray(req.body)) {
-      res.status(400);
-      return res.json({
-        code: 'invalid_request',
-        message: 'The members must be an array.'
-      });
-    }
-
-    return db.getGroup(req.params.id)
-      .then(group => {
-        const currentGroup = group;
-        if (!currentGroup.members) {
-          currentGroup.members = [];
-        }
-
-        // Add each member.
-        req.body.forEach((member) => {
-          if (currentGroup.members.indexOf(member) === -1) {
-            currentGroup.members.push(member);
-          }
-        });
-
-        return db.updateGroup(req.params.id, currentGroup);
-      })
-      .then(() => res.sendStatus(202))
-      .catch(next);
-  });
-
-  /*
-   * Delete a member of a group.
-   */
-  api.delete('/:id/members', (req, res, next) => {
-    db.getGroup(req.params.id)
-      .then(group => {
-        const index = group.members.indexOf(req.body.userId);
-        if (index > -1) {
-          group.members.splice(index, 1);
-        }
-
-        return db.updateGroup(req.params.id, group);
-      })
-      .then(() => res.sendStatus(202))
-      .catch(next);
-  });
-
-
-
   return api;
 };

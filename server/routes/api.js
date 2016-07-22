@@ -4,7 +4,6 @@ import { getDb } from '../lib/storage/getdb';
 import * as middlewares from '../lib/middlewares';
 
 import authorize from './authorize';
-import users from './users';
 import groups from './groups';
 
 export default () => {
@@ -12,7 +11,6 @@ export default () => {
   const api = Router();
   api.use(middlewares.readSubject);
   api.use('/authorize', middlewares.authenticateOrApiKey, authorize(db));
-  api.use('/users', middlewares.authenticate, users(db));
   api.use('/groups', middlewares.authenticate, groups(db));
 
 
