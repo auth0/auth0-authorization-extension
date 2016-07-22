@@ -15,6 +15,8 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/groups-mappings/routes/delete_mappings')(server));
   server.route(require('../api/groups-mappings/routes/patch_mappings')(server));
   server.route(require('../api/groups-members/routes/delete_members')(server));
+  server.route(require('../api/groups-members/routes/get_members')(server));
+  server.route(require('../api/groups-members/routes/get_nested_members')(server));
   server.route(require('../api/groups-members/routes/patch_members')(server));
   server.route(require('../api/groups-nested/routes/delete_nested_groups')(server));
   server.route(require('../api/groups-nested/routes/get_nested_groups')(server));
@@ -23,7 +25,6 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/users/routes/get_user')(server));
   server.route(require('../api/users/routes/get_users')(server));
   server.route(require('../api/users-groups/routes/get_users_groups')(server));
-
   next();
 };
 

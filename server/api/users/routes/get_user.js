@@ -16,7 +16,7 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    req.pre.auth0.users.getAll({ id: req.params.id })
+    req.pre.auth0.users.get({ id: req.params.id })
       .then(user => reply(user))
       .catch(err => reply.error(err))
 });
