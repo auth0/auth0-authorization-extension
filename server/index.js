@@ -7,9 +7,7 @@ import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
 import { init as initDb } from './lib/storage/getdb';
 
-import htmlRoute from './routes/html';
 import logger from './lib/logger';
-
 import createServer from './server';
 
 module.exports = (options = { }) => {
@@ -48,9 +46,6 @@ module.exports = (options = { }) => {
     },
     audience: `https://${nconf.get('AUTH0_DOMAIN')}/api/v2/`
   }));
-
-  // Fallback to rendering HTML.
-  app.get('*', htmlRoute());
 
   // Start the server.
   createServer((err, hapi) => {

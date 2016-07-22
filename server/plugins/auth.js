@@ -1,9 +1,42 @@
+import url from 'url';
 import jwt from 'hapi-auth-jwt2';
 import jwksRsa from 'jwks-rsa';
 
 import config from '../lib/config';
 
 module.exports.register = (server, options, next) => {
+  server.route({
+    method: 'GET',
+    path: '/.well-known/oauth2-client-configuration',
+    config: {
+      auth: false
+    },
+    handler: (req, reply) => {
+      let protocol = 'https';
+      const pathname = url
+        .parse(req.originalUrl || '/')
+        .pathname
+        .replace(req.path, '');
+
+      if ((process.env.NODE_ENV || 'development') === 'development') {
+        protocol = req.connection.info.protocol;
+      //   opt.clientId = opt.clientId || 'N3PAwyqXomhNu6IWivtsa3drBfFjmWJL';
+      }
+
+      const baseUrl = url.format({
+        protocol,
+        host: req.headers.host,
+        pathname
+      });
+
+      reply({
+        redirect_uris: [ `${baseUrl.replace(/\/+$/, '')}/callback` ],
+        client_name: 'Authorization Extension',
+        post_logout_redirect_uris: [ baseUrl ]
+      });
+    }
+  });
+
   server.register(jwt, (err) => {
     if (err) {
       next(err);
