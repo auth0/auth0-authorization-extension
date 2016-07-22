@@ -23,12 +23,12 @@ nconf
   });
 
 // Start the server.
-const app = require('./server')();
-const port = nconf.get('PORT');
-app.listen(port, (error) => {
-  if (error) {
-    logger.error(error);
-  } else {
-    logger.info(`Express listening on http://localhost:${port}`);
+require('./server/init')({}, (err, hapi) => {
+  if (err) {
+    return logger.error(err);
   }
+
+  return hapi.start(() => {
+    logger.info('Server running at:', hapi.info.uri);
+  });
 });

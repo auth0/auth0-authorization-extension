@@ -26,6 +26,16 @@ module.exports.register = (server, options, next) => {
         BASE_PATH: url.parse(req.originalUrl || '/').pathname.replace(req.path, '') + (req.path === '/admins' ? '/admins' : '')
       };
 
+      // Development.
+      if (process.env.NODE_ENV === 'development') {
+        return reply(ejs.render(template, {
+          config: cfg,
+          assets: {
+            app: 'http://localhost:3001/app/bundle.js'
+          }
+        }));
+      }
+
       // Render from CDN.
       const clientVersion = config('CLIENT_VERSION');
       if (clientVersion) {
@@ -40,12 +50,20 @@ module.exports.register = (server, options, next) => {
         const locals = {
           config: cfg,
           assets: {
-            app: 'bundle.js'
+            app: '/app/bundle.js'
           }
         };
 
         if (!err && data) {
           locals.assets = JSON.parse(data);
+
+          if (locals.assets.app) {
+            locals.assets.app = `/app/${locals.assets.app}`;
+          }
+
+          if (locals.assets.vendors) {
+            locals.assets.vendors = `/app/${locals.assets.vendors}`;
+          }
         }
 
         // Render the HTML page.

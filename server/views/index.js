@@ -18,8 +18,8 @@ module.exports = `<!DOCTYPE html>
   <script type="text/javascript" src="//cdn.auth0.com/js/lock-9.2.min.js"></script>
   <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1672/js/bundle.js"></script>
   <script type="text/javascript">window.config = <%- JSON.stringify(config) %>;</script>
-  <% if (assets.vendors) { %><script type="text/javascript" src="/app/<%= assets.vendors %>"></script><% } %>
-  <% if (assets.app) { %><script type="text/javascript" src="/app/<%= assets.app %>"></script><% } %>
+  <% if (assets.vendors) { %><script type="text/javascript" src="<%= assets.vendors %>"></script><% } %>
+  <% if (assets.app) { %><script type="text/javascript" src="<%= assets.app %>"></script><% } %>
   <% if (assets.version) { %>
   <script type="text/javascript" src="//cdn.auth0.com/extensions/auth0-authz/assets/auth0-authz.ui.vendors.<%= assets.version %>.js"></script>
   <script type="text/javascript" src="//cdn.auth0.com/extensions/auth0-authz/assets/auth0-authz.ui.<%= assets.version %>.js"></script>

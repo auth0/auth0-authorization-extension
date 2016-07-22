@@ -5,7 +5,38 @@ import jwksRsa from 'jwks-rsa';
 
 import config from '../lib/config';
 
+const getBaseUrl = (req) => {
+  let protocol = 'https';
+  const pathname = url
+    .parse(req.originalUrl || '/')
+    .pathname
+    .replace(req.path, '');
+
+  if ((process.env.NODE_ENV || 'development') === 'development') {
+    protocol = req.connection.info.protocol;
+  }
+
+  return url.format({ protocol, host: req.headers.host, pathname }).replace(/\/+$/, '');
+};
+
 module.exports.register = (server, options, next) => {
+  server.route({
+    method: 'GET',
+    path: '/admins/login',
+    config: {
+      auth: false
+    },
+    handler: (req, reply) => {
+      const baseUrl = getBaseUrl(req);
+      const redirectUri = `${baseUrl}/`;
+      const audience = `https://${config('AUTH0_DOMAIN')}/api/v2/`;
+      const scope = 'openid';
+      const exp = 24 * 60 * 60 * 1000;
+
+      reply.redirect(`https://auth0.auth0.com/i/oauth2/authorize?client_id=${baseUrl}&audience=${audience}&response_type=token&scope=${scope}&expiration=${exp}&redirect_uri=${redirectUri}`);
+    }
+  });
+
   server.route({
     method: 'GET',
     path: '/.well-known/oauth2-client-configuration',
@@ -31,8 +62,8 @@ module.exports.register = (server, options, next) => {
       });
 
       reply({
-        redirect_uris: [ `${baseUrl.replace(/\/+$/, '')}/callback` ],
-        client_name: 'Authorization Extension',
+        redirect_uris: [ `${baseUrl.replace(/\/+$/, '')}/` ],
+        client_name: 'Auth0 Authorization Dashboard Extension',
         post_logout_redirect_uris: [ baseUrl ]
       });
     }

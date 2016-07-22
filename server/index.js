@@ -1,43 +1,46 @@
-import Express from 'express';
-import auth0 from 'auth0-oauth2-express';
+import Hapi from 'hapi';
+import Good from 'good';
+import Inert from 'inert';
+import 'good-console';
 
-import Database from './lib/storage/database';
-import { S3Provider } from './lib/storage/providers';
-import { init as initDb } from './lib/storage/getdb';
-
+import plugins from './plugins';
 import config from './lib/config';
 import logger from './lib/logger';
-import createServer from './server';
 
-module.exports = (options = { }) => {
-  // Initialize database.
-  initDb(new Database({
-    provider: options.storageProvider || new S3Provider({
-      path: 'auth0-authz.json',
-      bucket: config('AWS_S3_BUCKET'),
-      keyId: config('AWS_ACCESS_KEY_ID'),
-      keySecret: config('AWS_SECRET_ACCESS_KEY')
-    })
-  }));
+export default (cb) => {
+  const goodPlugin = {
+    register: Good,
+    options: {
+      ops: {
+        interval: 30000
+      },
+      reporters: {
+        console: [
+          { module: 'good-console', args: [ { format: '' } ] },
+          'stdout'
+        ]
+      }
+    }
+  };
 
-  // Initialize the app.
-  const app = new Express();
+  const server = new Hapi.Server();
+  server.connection({ port: config('PORT') });
+  server.register([ goodPlugin, Inert, ...plugins ], (err) => {
+    if (err) {
+      return cb(err, null);
+    }
 
-  // Authenticate admins.
-  app.use('/admins', auth0({
-    clientName: 'Auth0 Authorization Dashboard Extension',
-    apiToken: {
-      secret: config('AUTHORIZE_API_KEY')
-    },
-    audience: `https://${config('AUTH0_DOMAIN')}/api/v2/`
-  }));
+    // Use the server logger.
+    logger.debug = (...args) => {
+      server.log([ 'debug' ], args.join(' '));
+    };
+    logger.info = (...args) => {
+      server.log([ 'info' ], args.join(' '));
+    };
+    logger.error = (...args) => {
+      server.log([ 'error' ], args.join(' '));
+    };
 
-  // Start the server.
-  createServer((err, hapi) => {
-    hapi.start(() => {
-      logger.info('Server running at:', hapi.info.uri);
-    });
+    return cb(null, server);
   });
-
-  return app;
 };

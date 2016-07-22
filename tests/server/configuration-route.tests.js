@@ -1,6 +1,6 @@
 import Promise from 'bluebird';
 import { expect } from 'chai';
-import createServer from '../../server/server';
+import createServer from '../../server';
 import { init as initDb } from '../../server/lib/storage/getdb';
 
 describe.only('configuration-route', () => {
