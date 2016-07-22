@@ -7,7 +7,12 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/authorize/{userId}',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt',
+        'extension-secret'
+      ]
+    },
     description: 'Get the authorization context for a user.',
     validate: {
       params: {

@@ -5,7 +5,7 @@ import Database from './lib/storage/database';
 import { S3Provider } from './lib/storage/providers';
 import { init as initDb } from './lib/storage/getdb';
 
-import config from './config';
+import config from './lib/config';
 import logger from './lib/logger';
 import createServer from './server';
 

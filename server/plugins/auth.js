@@ -1,4 +1,5 @@
 import url from 'url';
+import Boom from 'boom';
 import jwt from 'hapi-auth-jwt2';
 import jwksRsa from 'jwks-rsa';
 
@@ -41,6 +42,25 @@ module.exports.register = (server, options, next) => {
     if (err) {
       next(err);
     }
+
+    server.auth.scheme('extension-secret', () => {
+      return {
+        authenticate: (request, reply) => {
+          const apiKey = request.headers['x-api-key'];
+          if (apiKey && apiKey === config('AUTHORIZE_API_KEY')) {
+            return reply.continue({
+              credentials: {
+                user: 'rule'
+              }
+            });
+          }
+
+          return reply(Boom.unauthorized('Invalid API Key'));
+        }
+      };
+    });
+
+    server.auth.strategy('extension-secret', 'extension-secret');
 
     server.auth.strategy('jwt', 'jwt', {
       // Get the complete decoded token, because we need info from the header (the kid)
