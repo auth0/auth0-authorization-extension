@@ -11,6 +11,8 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/groups/routes/get_groups')(server));
   server.route(require('../api/groups/routes/post_group')(server));
   server.route(require('../api/groups/routes/put_group')(server));
+  server.route(require('../api/groups-mappings/routes/get_mappings')(server));
+  server.route(require('../api/groups-mappings/routes/delete_mappings')(server));
   server.route(require('../api/metadata/routes/get_metadata')(server));
 
   next();

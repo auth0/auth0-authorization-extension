@@ -4,7 +4,6 @@ import { getDb } from '../lib/storage/getdb';
 import * as middlewares from '../lib/middlewares';
 
 import authorize from './authorize';
-import applications from './applications';
 import users from './users';
 import groups from './groups';
 

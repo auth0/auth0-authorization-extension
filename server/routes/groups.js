@@ -11,66 +11,6 @@ export default (db) => {
   const api = Router();
 
   /*
-   * Get the mappings for a group.
-   */
-  api.get('/:id/mappings', managementClient, (req, res, next) => {
-    db.getGroup(req.params.id)
-      .then(group => group.mappings || [])
-      .then(mappings => getMappingsWithNames(req.auth0, mappings))
-      .then(mappings => res.json(mappings))
-      .catch(next);
-  });
-
-  /*
-   * Create a group mapping.
-   */
-  api.post('/:id/mappings', (req, res, next) => {
-    const errors = validateGroupMapping(req.body);
-    if (errors) {
-      res.status(400);
-      return res.json({ errors });
-    }
-
-    return db.getGroup(req.params.id)
-      .then(group => {
-        const currentGroup = group;
-        if (!currentGroup.mappings) {
-          currentGroup.mappings = [];
-        }
-
-        // Add the new mapping.
-        const { _id, groupName, connectionName } = req.body;
-        currentGroup.mappings.push({
-          _id: _id || uuid.v4(),
-          groupName,
-          connectionName
-        });
-
-        // Save the group.
-        return db.updateGroup(req.params.id, currentGroup);
-      })
-      .then(() => res.sendStatus(202))
-      .catch(next);
-  });
-
-  /*
-   * Delete a group mapping.
-   */
-  api.delete('/:id/mappings', (req, res, next) => {
-    db.getGroup(req.params.id)
-      .then(group => {
-        const groupMapping = _.find(group.mappings, { _id: req.body.groupMappingId });
-        if (groupMapping) {
-          group.mappings.splice(group.mappings.indexOf(groupMapping), 1);
-        }
-
-        return db.updateGroup(req.params.id, group);
-      })
-      .then(() => res.sendStatus(202))
-      .catch(next);
-  });
-
-  /*
    * Get all members of a group.
    */
   api.get('/:id/members', managementClient, (req, res, next) => {
@@ -165,71 +105,7 @@ export default (db) => {
       .catch(next);
   });
 
-  /*
-   * Get all nested groups of a group.
-   */
-  api.get('/:id/nested', (req, res, next) => {
-    db.getGroups()
-      .then((groups) => {
-        const group = _.find(groups, { _id: req.params.id });
-        if (!group.nested) {
-          group.nested = [];
-        }
-        return _.filter(groups, g => group.nested.indexOf(g._id) > -1);
-      })
-      .then(nested => _.sortByOrder(nested, [ 'name' ], [ true ]))
-      .then(nested => res.json(nested))
-      .catch(next);
-  });
 
-  /*
-   * Add one or more nested groups to a group.
-   */
-  api.patch('/:id/nested', (req, res, next) => {
-    if (!Array.isArray(req.body)) {
-      res.status(400);
-      return res.json({
-        code: 'invalid_request',
-        message: 'The nested groups must be an array.'
-      });
-    }
-
-    return db.getGroup(req.params.id)
-      .then(group => {
-        const currentGroup = group;
-        if (!currentGroup.nested) {
-          currentGroup.nested = [];
-        }
-
-        // Add each nested group.
-        req.body.forEach((nestedGroup) => {
-          if (currentGroup.nested.indexOf(nestedGroup) === -1 && nestedGroup !== req.params.id) {
-            currentGroup.nested.push(nestedGroup);
-          }
-        });
-
-        return db.updateGroup(req.params.id, currentGroup);
-      })
-      .then(() => res.sendStatus(202))
-      .catch(next);
-  });
-
-  /*
-   * Remove a nested group from a group.
-   */
-  api.delete('/:id/nested', (req, res, next) => {
-    db.getGroup(req.params.id)
-      .then(group => {
-        const index = group.nested.indexOf(req.body.groupId);
-        if (index > -1) {
-          group.nested.splice(index, 1);
-        }
-
-        return db.updateGroup(req.params.id, group);
-      })
-      .then(() => res.sendStatus(202))
-      .catch(next);
-  });
 
   return api;
 };
