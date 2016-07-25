@@ -21,6 +21,16 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/groups-nested/routes/delete_nested_groups')(server));
   server.route(require('../api/groups-nested/routes/get_nested_groups')(server));
   server.route(require('../api/groups-nested/routes/patch_nested_groups')(server));
+  server.route(require('../api/permissions/routes/delete_permission')(server));
+  server.route(require('../api/permissions/routes/get_permission')(server));
+  server.route(require('../api/permissions/routes/get_permissions')(server));
+  server.route(require('../api/permissions/routes/post_permission')(server));
+  server.route(require('../api/permissions/routes/put_permission')(server));
+  server.route(require('../api/roles/routes/delete_role')(server));
+  server.route(require('../api/roles/routes/get_role')(server));
+  server.route(require('../api/roles/routes/get_roles')(server));
+  server.route(require('../api/roles/routes/post_role')(server));
+  server.route(require('../api/roles/routes/put_role')(server));
   server.route(require('../api/metadata/routes/get_metadata')(server));
   server.route(require('../api/users/routes/get_user')(server));
   server.route(require('../api/users/routes/get_users')(server));
