@@ -16,6 +16,9 @@ export default (history) =>
       <Route path="groups" component={containers.Groups}>
         <Route path=":id" component={containers.Group} />
       </Route>
+      <Route path="roles" component={containers.Roles}>
+        <Route path=":id" component={containers.Role} />
+      </Route>
       <Route path="permissions" component={containers.Permissions}>
         <Route path=":id" component={containers.Permission} />
       </Route>
