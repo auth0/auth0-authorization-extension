@@ -6,12 +6,9 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../actions';
 
 import './User.css';
-import LogDialog from '../components/Logs/LogDialog';
 import UserGroups from '../components/Users/UserGroups';
-import UserLogs from '../components/Users/UserLogs';
 import UserHeader from '../components/Users/UserHeader';
 import UserProfile from '../components/Users/UserProfile';
-import UserDevices from '../components/Users/UserDevices';
 
 import { GroupPickerDialog, GroupMemberRemoveDialog } from '../components/Groups';
 
@@ -54,7 +51,7 @@ export default class UserContainer extends Component {
   }
 
   render() {
-    const { user, groups, allGroups, groupPicker, groupMember, log, logs, devices } = this.props;
+    const { user, groups, allGroups, groupPicker, groupMember } = this.props;
 
     return (
       <div>
@@ -77,13 +74,6 @@ export default class UserContainer extends Component {
               <Tab eventKey={2} title="Groups">
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
-              <Tab eventKey={3} title="Devices">
-                <UserDevices loading={devices.loading} devices={devices.records} error={devices.error} />
-              </Tab>
-              <Tab eventKey={4} title="Logs">
-                <LogDialog onClose={() => this.props.clearLog()} error={log.error} loading={log.loading} log={log.record} logId={log.id} />
-                <UserLogs onOpen={(logId) => this.props.fetchLog(logId)} loading={logs.loading} logs={logs.records} user={user.record} error={logs.error} />
-              </Tab>
             </Tabs>
           </div>
         </div>
@@ -104,23 +94,7 @@ function mapStateToProps(state) {
       loading: state.user.get('loading')
     },
     allGroups: state.user.get('allGroups'),
-    groups: state.user.get('groups'),
-    log: {
-      id: state.log.get('logId'),
-      record: state.log.get('record'),
-      error: state.log.get('error'),
-      loading: state.log.get('loading')
-    },
-    logs: {
-      records: state.user.get('logs').get('records'),
-      error: state.user.get('logs').get('error'),
-      loading: state.user.get('logs').get('loading')
-    },
-    devices: {
-      records: state.user.get('devices').get('records'),
-      error: state.user.get('devices').get('error'),
-      loading: state.user.get('devices').get('loading')
-    }
+    groups: state.user.get('groups')
   };
 }
 

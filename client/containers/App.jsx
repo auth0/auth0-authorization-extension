@@ -25,7 +25,6 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <Sidebar>
-              <SidebarItem title="Applications" route="/applications" icon="icon icon-budicon-375" />
               <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
               <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
             </Sidebar>

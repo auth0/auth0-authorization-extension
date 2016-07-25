@@ -6,7 +6,7 @@ export function getUsersById(client, users, options) {
     const records = [];
 
     async.eachLimit(users, 10, (userId, cb) => {
-      users.get({ id: userId }, options)
+      client.users.get({ id: userId })
         .then((user) => {
           records.push(user);
           cb();
