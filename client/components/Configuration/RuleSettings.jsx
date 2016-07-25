@@ -38,11 +38,11 @@ export default class RuleSettings extends Component {
           <div className="col-xs-12 wrapper">
             <div className="content-header video-template">
               <ButtonToolbar className="pull-right">
-                <Button bsStyle="primary" bsSize="small" onClick={this.submitForm} disabled={loading}>
+                <Button bsStyle="success" bsSize="large" onClick={this.submitForm} disabled={loading}>
                   <i className="icon icon-budicon-728"></i> Publish Rule
                 </Button>
               </ButtonToolbar>
-              <h1>Rule Settings</h1>
+              <h1>Configuration</h1>
               <div className="cues-container">
                 <div className="use-case-box is-active">
                   <div className="explainer-text">
