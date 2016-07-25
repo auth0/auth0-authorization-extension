@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 class Header extends Component {
   render() {
-    const { user, issuer, onLogout } = this.props;
+    const { user, issuer, onLogout, openConfiguration } = this.props;
     return <header className="dashboard-header" style={{ backgroundColor: '#fbfbfb' }}>
       <nav role="navigation" className="navbar navbar-default">
         <div className="container">
@@ -23,6 +23,12 @@ class Header extends Component {
                 </span>
                 <ul role="menu" className="dropdown-menu">
                   <li role="presentation">
+                    <a href="#" role="menuitem" tabIndex="-1" onClick={openConfiguration}>
+                      Configuration
+                    </a>
+                  </li>
+                  <li role="presentation" className="divider"></li>
+                  <li role="presentation">
                     <a href="#" role="menuitem" tabIndex="-1" onClick={onLogout}>
                       Logout
                     </a>
@@ -40,7 +46,8 @@ class Header extends Component {
 Header.propTypes = {
   user: React.PropTypes.object,
   issuer: React.PropTypes.string,
-  onLogout: React.PropTypes.func.isRequired
+  onLogout: React.PropTypes.func.isRequired,
+  openConfiguration: React.PropTypes.func.isRequired
 };
 
 export default Header;
