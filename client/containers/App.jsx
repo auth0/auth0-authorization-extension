@@ -27,6 +27,8 @@ class App extends Component {
             <Sidebar>
               <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
               <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
+              <SidebarItem title="Permissions" route="/permissions" icon="icon icon-budicon-322" />
+              <SidebarItem title="Roles" route="/roles" icon="icon icon-budicon-322" />
             </Sidebar>
             <div id="content" className="col-xs-10">
               <RuleStatus ruleStatus={this.props.ruleStatus}

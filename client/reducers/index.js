@@ -9,6 +9,10 @@ import { configuration } from './configuration';
 import { user } from './user';
 import { userPicker } from './userPicker';
 import { users } from './users';
+import { role } from './role';
+import { roles } from './roles';
+import { permission } from './permission';
+import { permissions } from './permissions';
 import { group } from './group';
 import { groupPicker } from './groupPicker';
 import { groupMember } from './groupMember';
@@ -21,7 +25,6 @@ function lastAction(state = null, action) {
   return action;
 }
 
-
 export default combineReducers({
   routing: routerReducer,
   applications,
@@ -31,6 +34,10 @@ export default combineReducers({
   user,
   users,
   userPicker,
+  role,
+  roles,
+  permission,
+  permissions,
   group,
   groupPicker,
   groupMember,

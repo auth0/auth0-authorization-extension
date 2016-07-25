@@ -108,6 +108,7 @@
     "redux-logger": "^2.6.1",
     "redux-promise-middleware": "^2.4.0",
     "redux-simple-router": "^2.0.4",
+    "redux-static": "^1.0.0",
     "redux-thunk": "^2.1.0",
     "request-promise": "^2.0.1",
     "rimraf": "^2.5.2",

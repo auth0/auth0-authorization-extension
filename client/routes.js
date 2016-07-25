@@ -7,9 +7,6 @@ export default (history) =>
   <Router history={history}>
     <Route path="/" component={containers.RequireAuthentication(containers.App)}>
       <IndexRedirect to="/users" />
-      <Route path="applications" component={containers.Applications}>
-        <Route path=":id" component={containers.Application} />
-      </Route>
       <Route path="configuration">
         <Route path="rule" component={containers.ConfigurationRule} />
       </Route>
@@ -22,7 +19,6 @@ export default (history) =>
       <Route path="permissions" component={containers.Permissions}>
         <Route path=":id" component={containers.Permission} />
       </Route>
-      <Route path="logs" component={containers.Logs} />
       <Route path="users" component={containers.Users}>
         <Route path=":id" component={containers.User} />
       </Route>
