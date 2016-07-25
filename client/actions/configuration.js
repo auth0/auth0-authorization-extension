@@ -29,7 +29,6 @@ export function fetchConfiguration() {
     type: constants.FETCH_CONFIGURATION,
     payload: {
       promise: axios.get('/api/configuration', {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -44,7 +43,6 @@ export function fetchRuleStatus() {
     type: constants.FETCH_RULE_STATUS,
     payload: {
       promise: axios.get('/api/configuration/status', {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -62,7 +60,6 @@ export function saveConfiguration(config) {
         method: 'patch',
         url: '/api/configuration',
         data: config,
-        timeout: 5000,
         responseType: 'json'
       })
     }

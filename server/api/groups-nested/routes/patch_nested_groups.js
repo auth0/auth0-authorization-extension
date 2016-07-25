@@ -6,7 +6,11 @@ module.exports = () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/nested',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Add one or more nested groups in a group.',
     validate: {
       options: {

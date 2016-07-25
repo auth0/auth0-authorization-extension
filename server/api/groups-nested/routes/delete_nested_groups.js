@@ -6,7 +6,11 @@ module.exports = () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/nested',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Delete one or more nested groups from a group.',
     validate: {
       options: {

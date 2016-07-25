@@ -12,7 +12,6 @@ export function fetchUserDevices(userId) {
     },
     payload: {
       promise: axios.get(`/api/users/${userId}/devices`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }

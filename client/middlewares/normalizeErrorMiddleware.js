@@ -6,7 +6,7 @@ export default function normalizeErrorMiddleware() {
         let errorMessage = action.payload.statusText || action.payload.status || 'Unknown Server Error';
 
         // Maybe some data is available.
-        const error = action.payload.data && action.payload.data.error || action.payload.error;
+        const error = action.payload.data || action.payload.error;
         if (error) {
           errorMessage = error.message || error;
         }

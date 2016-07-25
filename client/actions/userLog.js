@@ -12,7 +12,6 @@ export function fetchUserLogs(userId) {
     },
     payload: {
       promise: axios.get(`/api/users/${userId}/logs`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }

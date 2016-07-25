@@ -6,7 +6,11 @@ module.exports = () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/members',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Delete one or more members from a group.',
     validate: {
       options: {

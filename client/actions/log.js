@@ -15,7 +15,6 @@ export function fetchLogs(page = 0) {
         params: {
           page
         },
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -33,7 +32,6 @@ export function fetchLog(logId) {
     },
     payload: {
       promise: axios.get(`/api/logs/${logId}`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }

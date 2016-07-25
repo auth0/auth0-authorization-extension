@@ -8,7 +8,6 @@ export function fetchPermissions(reload = false) {
         type: constants.FETCH_PERMISSIONS,
         payload: {
           promise: axios.get('/api/permissions', {
-            timeout: 5000,
             responseType: 'json'
           })
         }
@@ -42,7 +41,6 @@ export function savePermission(permission) {
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/permissions' : `/api/permissions/${state.permissionId}`,
           data: permission,
-          timeout: 5000,
           responseType: 'json'
         })
       },
@@ -78,7 +76,6 @@ export function deletePermission() {
       type: constants.DELETE_PERMISSION,
       payload: {
         promise: axios.delete(`/api/permissions/${permissionId}`, {
-          timeout: 5000,
           responseType: 'json'
         })
       },

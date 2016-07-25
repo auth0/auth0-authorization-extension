@@ -4,11 +4,15 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/users',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get all users.',
     validate: {
       query: {
-        search: Joi.string().max(1000),
+        search: Joi.string().max(1000).allow('').default(''),
         per_page: Joi.number().integer().min(1).max(200).default(100),
         page: Joi.number().integer().min(0).default(0)
       }

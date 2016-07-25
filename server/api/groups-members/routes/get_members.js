@@ -7,7 +7,11 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/members',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get the members for a group.',
     pre: [
       server.handlers.managementClient

@@ -5,7 +5,11 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/mappings',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get the mappings for a group.',
     pre: [
       server.handlers.managementClient

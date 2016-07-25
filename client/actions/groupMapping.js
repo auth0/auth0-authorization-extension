@@ -13,7 +13,6 @@ export function fetchGroupMappings(groupId, reload) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/mappings`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -52,7 +51,6 @@ export function saveGroupMapping(group, groupMapping, isNew, callback) {
         method: isNew ? 'post' : 'put',
         url: isNew ? `/api/groups/${group._id}/mappings` : `/api/groups/${group._id}/mappings/${groupMapping._id}`,
         data: groupMapping,
-        timeout: 5000,
         responseType: 'json'
       })
     },
@@ -94,7 +92,6 @@ export function deleteGroupMapping(groupId, groupMappingId) {
     type: constants.DELETE_GROUP_MAPPING,
     payload: {
       promise: axios.delete(`/api/groups/${groupId}/mappings`, {
-        timeout: 5000,
         responseType: 'json',
         data: {
           groupMappingId

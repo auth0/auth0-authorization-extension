@@ -5,7 +5,11 @@ module.exports = () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/mappings',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Create one or more mappings in a group.',
     validate: {
       options: {

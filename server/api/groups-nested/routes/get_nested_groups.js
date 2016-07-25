@@ -5,7 +5,11 @@ module.exports = () => ({
   method: 'GET',
   path: '/api/groups/{id}/nested',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get the nested groups for a group.',
     validate: {
       params: {

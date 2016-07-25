@@ -13,7 +13,6 @@ export function fetchGroupMembers(groupId, reload) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -32,7 +31,6 @@ export function fetchGroupMembersNested(groupId, reload) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members/nested`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -51,7 +49,6 @@ export function addGroupMembers(groupId, members, callback) {
           method: 'patch',
           url: `/api/groups/${groupId}/members`,
           data: members,
-          timeout: 5000,
           responseType: 'json'
         })
       },
@@ -98,7 +95,6 @@ export function removeGroupMember(groupId, userId) {
         data: {
           userId
         },
-        timeout: 5000,
         responseType: 'json'
       })
     },

@@ -8,7 +8,6 @@ export function fetchRoles(reload = false) {
         type: constants.FETCH_ROLES,
         payload: {
           promise: axios.get('/api/roles', {
-            timeout: 5000,
             responseType: 'json'
           })
         }
@@ -48,7 +47,6 @@ export function saveRole(role) {
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/roles' : `/api/roles/${state.roleId}`,
           data: role,
-          timeout: 5000,
           responseType: 'json'
         })
       },
@@ -93,7 +91,6 @@ export function deleteRole() {
       type: constants.DELETE_ROLE,
       payload: {
         promise: axios.delete(`/api/roles/${roleId}`, {
-          timeout: 5000,
           responseType: 'json'
         })
       },

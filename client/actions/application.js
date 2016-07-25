@@ -11,7 +11,6 @@ export function fetchApplications() {
     type: constants.FETCH_APPLICATIONS,
     payload: {
       promise: axios.get('/api/applications', {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -29,7 +28,6 @@ export function fetchApplicationDetails(applicationId) {
     },
     payload: {
       promise: axios.get(`/api/applications/${applicationId}`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }

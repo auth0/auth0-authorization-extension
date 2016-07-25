@@ -2,7 +2,11 @@ module.exports = () => ({
   method: 'GET',
   path: '/api/configuration',
   config: {
-    auth: false
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    }
   },
   handler: (req, reply) =>
     req.storage.getConfiguration()

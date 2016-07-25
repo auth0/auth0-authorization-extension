@@ -1,6 +1,8 @@
 import Hapi from 'hapi';
 import Good from 'good';
 import Inert from 'inert';
+import Relish from 'relish';
+
 import 'good-console';
 
 import plugins from './plugins';
@@ -23,8 +25,17 @@ export default (cb) => {
     }
   };
 
+  const relishPlugin = Relish({ });
+
   const server = new Hapi.Server();
-  server.connection({ port: config('PORT') });
+  server.connection({
+    port: config('PORT'),
+    routes: {
+      validate: {
+        failAction: relishPlugin.failAction
+      }
+    }
+  });
   server.register([ goodPlugin, Inert, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);

@@ -6,7 +6,11 @@ module.exports = () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/members',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Add one or more members in a group.',
     validate: {
       options: {

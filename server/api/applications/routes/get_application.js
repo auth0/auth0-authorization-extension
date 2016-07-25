@@ -4,7 +4,11 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/applications/{clientId}',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get a single application based on its Client ID.',
     validate: {
       params: {

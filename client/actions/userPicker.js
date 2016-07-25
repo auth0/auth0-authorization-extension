@@ -14,7 +14,6 @@ export function searchUserPicker(search = '', page = 0) {
           page,
           per_page: 10
         },
-        timeout: 5000,
         responseType: 'json'
       })
     },

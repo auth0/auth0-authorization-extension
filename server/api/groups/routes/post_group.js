@@ -4,7 +4,11 @@ module.exports = () => ({
   method: 'POST',
   path: '/api/groups',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Create a new group.',
     validate: {
       options: {

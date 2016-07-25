@@ -12,7 +12,6 @@ export function fetchUserGroups(userId) {
     },
     payload: {
       promise: axios.get(`/api/users/${userId}/groups`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }

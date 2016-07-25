@@ -2,7 +2,11 @@ module.exports = () => ({
   method: 'GET',
   path: '/api/groups',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get all groups in the system.'
   },
   handler: (req, reply) =>

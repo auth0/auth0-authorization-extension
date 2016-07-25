@@ -20,7 +20,6 @@ export function fetchUsers(search = '', reset = false, page = 0) {
               search,
               page
             },
-            timeout: 5000,
             responseType: 'json'
           })
         },
@@ -44,7 +43,6 @@ export function fetchUserDetail(userId, onSuccess) {
     },
     payload: {
       promise: axios.get(`/api/users/${userId}`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -68,7 +66,6 @@ export function fetchUserAuthorization(user) {
           connectionName: user.identities[0].connection,
           groups: user.groups
         },
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -118,7 +115,6 @@ export function removeMultiFactor(userId, provider) {
       type: constants.REMOVE_MULTIFACTOR,
       payload: {
         promise: axios.delete(`/api/users/${userId}/multifactor/${provider}`, {
-          timeout: 5000,
           responseType: 'json'
         })
       },
@@ -198,7 +194,6 @@ export function unblockUser() {
       type: constants.UNBLOCK_USER,
       payload: {
         promise: axios.post(`/api/users/${userId}/unblock`, {
-          timeout: 5000,
           responseType: 'json'
         })
       },

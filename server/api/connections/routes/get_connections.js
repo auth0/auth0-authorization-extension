@@ -4,6 +4,11 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/connections',
   config: {
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     pre: [
       server.handlers.managementClient
     ]

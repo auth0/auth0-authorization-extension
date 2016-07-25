@@ -7,7 +7,11 @@ module.exports = () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/mappings',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Delete one or more group mappings from a group.',
     validate: {
       options: {

@@ -7,7 +7,11 @@ module.exports = (server) => ({
   method: 'PATCH',
   path: '/api/configuration',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     pre: [
       server.handlers.managementClient
     ],

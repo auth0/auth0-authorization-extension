@@ -102,14 +102,13 @@ module.exports.register = (server, options, next) => {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 2,
-        jwksUri: `https://${config('AUTH0_DOMAIN')}/.well-known/jwks.json`
+        jwksUri: `https://auth0.auth0.com/.well-known/jwks.json`
       }),
 
-      // Your own logic to validate the user.
-      validateFunc: (decoded, request, callback) => {
-        console.log('Validating user:', decoded);
-
-        if (decoded && decoded.sub) {
+      // On tokens where the authorized party is the current extension.
+      validateFunc: (decoded, req, callback) => {
+        const baseUrl = getBaseUrl(req);
+        if (decoded && decoded.azp === baseUrl) {
           return callback(null, true);
         }
 
@@ -119,7 +118,7 @@ module.exports.register = (server, options, next) => {
       // Validate the audience and the issuer.
       verifyOptions: {
         audience: `https://${config('AUTH0_DOMAIN')}/api/v2/`,
-        issuer: `https://${config('AUTH0_DOMAIN')}/`,
+        issuer: 'https://auth0.auth0.com/',
         algorithms: [ 'RS256' ]
       }
     });

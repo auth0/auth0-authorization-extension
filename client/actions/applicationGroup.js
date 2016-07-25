@@ -13,7 +13,6 @@ export function fetchApplicationGroups(applicationId, reload) {
     },
     payload: {
       promise: axios.get(`/api/applications/${applicationId}/groups`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -34,7 +33,6 @@ export function addApplicationGroup(applicationId, groupId, callback) {
           data: {
             groupId
           },
-          timeout: 5000,
           responseType: 'json'
         })
       },
@@ -81,7 +79,6 @@ export function removeApplicationGroup(applicationId, groupId) {
         data: {
           groupId
         },
-        timeout: 5000,
         responseType: 'json'
       })
     },

@@ -5,7 +5,11 @@ module.exports = () => ({
   method: 'GET',
   path: '/api/users/{id}/groups',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get the groups for a user.',
     validate: {
       params: {

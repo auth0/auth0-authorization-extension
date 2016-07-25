@@ -13,7 +13,6 @@ export function fetchGroups() {
     type: constants.FETCH_GROUPS,
     payload: {
       promise: axios.get('/api/groups', {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -31,7 +30,6 @@ export function fetchGroupDetails(groupId) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -85,7 +83,6 @@ export function saveGroup(group) {
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/groups' : `/api/groups/${state.groupId}`,
           data: group,
-          timeout: 5000,
           responseType: 'json'
         })
       },
@@ -127,7 +124,6 @@ export function deleteGroup(group) {
     type: constants.DELETE_GROUP,
     payload: {
       promise: axios.delete(`/api/groups/${group._id}`, {
-        timeout: 5000,
         responseType: 'json'
       })
     },

@@ -5,7 +5,11 @@ module.exports = () => ({
   method: 'PUT',
   path: '/api/groups/{id}',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Update a group.',
     validate: {
       options: {

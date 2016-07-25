@@ -9,7 +9,6 @@ export function loadGroupPicker() {
     type: constants.LOAD_GROUP_PICKER,
     payload: {
       promise: axios.get('/api/groups', {
-        timeout: 5000,
         responseType: 'json'
       })
     }

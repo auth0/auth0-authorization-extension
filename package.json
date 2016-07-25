@@ -55,6 +55,7 @@
     "ms": "^0.7.1",
     "nconf": "^0.8.4",
     "node-uuid": "^1.4.7",
+    "relish": "^0.2.3",
     "request": "^2.72.0",
     "semver": "^5.1.0",
     "webtask-tools": "^1.4.0",

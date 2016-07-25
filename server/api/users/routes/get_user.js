@@ -4,7 +4,11 @@ module.exports = (server) => ({
   method: 'GET',
   path: '/api/users/{id}',
   config: {
-    auth: false,
+    auth: {
+      strategies: [
+        'jwt'
+      ]
+    },
     description: 'Get a single user based on its unique identifier.',
     validate: {
       params: {
