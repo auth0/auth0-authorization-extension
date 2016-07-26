@@ -75,7 +75,10 @@ export function saveRole(role) {
         promise: axios({
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/roles' : `/api/roles/${state.roleId}`,
-          data: role,
+          data: {
+            applicationType: 'client',
+            ...role
+          },
           responseType: 'json'
         })
       },

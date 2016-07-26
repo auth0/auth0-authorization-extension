@@ -6,6 +6,7 @@ export default class RoleRow extends Component {
   static propTypes = {
     loading: PropTypes.bool,
     index: PropTypes.number.isRequired,
+    application: PropTypes.object,
     role: PropTypes.object.isRequired,
     renderActions: PropTypes.func.isRequired
   };
@@ -15,11 +16,11 @@ export default class RoleRow extends Component {
   }
 
   render() {
-    const { role, index } = this.props;
+    const { application, role, index } = this.props;
 
     return (
       <TableRow>
-        <TableIconCell icon="322" />
+        <TableTextCell>{ application ? application.name : role.applicationId }</TableTextCell>
         <TableTextCell>{ role.name || 'N/A' }</TableTextCell>
         <TableTextCell>{ role.description || 'N/A' }</TableTextCell>
         <TableCell>

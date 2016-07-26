@@ -11,7 +11,7 @@ class InputCombo extends Component {
 
     return <div className={classes}>
       <label>{label}</label>
-      <select className="form-control" {...field}>
+      <select className="form-control" {...this.props} {...field}>
         <option value=""></option>
         {options.map((option, index) => {
           return <option key={index} value={option.value}>{option.text}</option>;

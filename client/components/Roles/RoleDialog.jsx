@@ -17,6 +17,7 @@ export default class RoleDialog extends Component {
   }
 
   render() {
+    const applications = this.props.applications.toJS();
     const role = this.props.role.toJS();
     const title = role.isNew ? 'New Role' : `Edit Role: ${role.record.name}`;
     const isVisible = role.isEdit || role.isNew;
@@ -26,8 +27,8 @@ export default class RoleDialog extends Component {
         <Modal.Header closeButton={!role.loading}>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <RoleForm loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
-            onClose={this.props.onClose} onSubmit={(perm) => this.props.onSave(perm)}>
+        <RoleForm isNew={role.isNew} applications={applications.records} loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
+            onClose={this.props.onClose} onSubmit={this.props.onSave}>
           <Error message={role.error} />
         </RoleForm>
       </Modal>

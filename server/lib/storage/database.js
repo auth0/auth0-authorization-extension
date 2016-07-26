@@ -67,7 +67,7 @@ export default class Database {
 
   createRole(role) {
     return this.provider
-      .createRecord('roles', { name: role.name }, role);
+      .createRecord('roles', role);
   }
 
   updateRole(id, role) {
