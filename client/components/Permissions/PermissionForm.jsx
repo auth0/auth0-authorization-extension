@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
 import createForm from '../../utils/createForm';
-import { InputText, LoadingPanel } from '../Dashboard';
+import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
 
 export default createForm('permission', class extends Component {
   static propTypes = {
@@ -10,16 +10,22 @@ export default createForm('permission', class extends Component {
     loading: PropTypes.bool.isRequired,
     submitting: PropTypes.bool,
     handleSubmit: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    applications: PropTypes.object.isRequired
   };
 
   static formFields = [
     'name',
-    'description'
+    'description',
+    'applicationId'
   ];
 
   render() {
-    const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { fields: { name, description, applicationId }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const applications = this.props.applications.map(app => ({
+      value: app.client_id,
+      text: `${app.name}`
+    }));
 
     return (
       <div>
@@ -30,6 +36,9 @@ export default createForm('permission', class extends Component {
               validationErrors={validationErrors}
             />
             <InputText field={description} fieldName="description" label="Description"
+              validationErrors={validationErrors}
+            />
+            <InputCombo options={applications} field={applicationId} fieldName="applicationId" label="Application"
               validationErrors={validationErrors}
             />
           </LoadingPanel>

@@ -75,7 +75,10 @@ export function savePermission(permission) {
         promise: axios({
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/permissions' : `/api/permissions/${state.permissionId}`,
-          data: permission,
+          data: {
+            applicationType: 'client',
+            ...permission
+          },
           responseType: 'json'
         })
       },

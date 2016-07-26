@@ -6,6 +6,7 @@ export default class PermissionRow extends Component {
   static propTypes = {
     loading: PropTypes.bool,
     index: PropTypes.number.isRequired,
+    application: PropTypes.object,
     permission: PropTypes.object.isRequired,
     renderActions: PropTypes.func.isRequired
   };
@@ -15,11 +16,11 @@ export default class PermissionRow extends Component {
   }
 
   render() {
-    const { permission, index } = this.props;
+    const { application, permission, index } = this.props;
 
     return (
       <TableRow>
-        <TableIconCell icon="322" />
+        <TableTextCell>{ application ? application.name : permission.applicationId }</TableTextCell>
         <TableTextCell>{ permission.name || 'N/A' }</TableTextCell>
         <TableTextCell>{ permission.description || 'N/A' }</TableTextCell>
         <TableCell>
