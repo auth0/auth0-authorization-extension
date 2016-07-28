@@ -6,7 +6,7 @@ class Confirm extends Component {
     if (this.props.onCancel) {
       return (
         <Button bsSize="small" disabled={this.props.loading} onClick={this.props.onCancel}>
-          Cancel
+          <i className="icon icon-budicon-501"></i> Cancel
         </Button>
       );
     }
@@ -18,7 +18,7 @@ class Confirm extends Component {
     if (this.props.onConfirm) {
       return (
         <Button bsStyle="success" bsSize="small" disabled={this.props.loading} onClick={this.props.onConfirm}>
-          {this.props.confirmMessage || 'Confirm'}
+          { this.props.confirmMessage || <span><i className="icon icon-budicon-499"></i> Confirm</span> }
         </Button>
       );
     }

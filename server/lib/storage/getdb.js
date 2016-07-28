@@ -1,4 +1,4 @@
-var _db = null;
+let _db = null;
 
 module.exports.init = (db) => {
   _db = db;

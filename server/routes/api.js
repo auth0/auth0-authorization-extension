@@ -4,6 +4,7 @@ import { getDb } from '../lib/storage/getdb';
 import * as middlewares from '../lib/middlewares';
 
 import authorize from './authorize';
+import configuration from './configuration';
 import applications from './applications';
 import connections from './connections';
 import logs from './logs';
@@ -17,6 +18,7 @@ export default () => {
   const api = Router();
   api.use(middlewares.readSubject);
   api.use('/authorize', middlewares.authenticateOrApiKey, authorize(db));
+  api.use('/configuration', middlewares.authenticate, configuration(db));
   api.use('/applications', middlewares.authenticate, applications(db));
   api.use('/connections', middlewares.authenticate, connections());
   api.use('/users', middlewares.authenticate, users(db));

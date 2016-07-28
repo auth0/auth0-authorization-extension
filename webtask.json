@@ -13,6 +13,8 @@
     "extension"
   ],
   "auth0": {
+    "onUninstallPath": "/.extensions/on-uninstall",
+    "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
     "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs"
   }
 }

@@ -52,7 +52,7 @@ class UserOverview extends React.Component {
             </div>
             <div className="col-xs-2">
               <ButtonToolbar className="pull-right">
-                <Button bsSize="xsmall" onClick={ this.onReset } disabled={ loading }>
+                <Button bsSize="small" onClick={ this.onReset } disabled={ loading }>
                   <i className="icon icon-budicon-257"></i> Reset
                 </Button>
               </ButtonToolbar>

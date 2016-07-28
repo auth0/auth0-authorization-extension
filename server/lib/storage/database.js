@@ -9,6 +9,17 @@ export default class Database {
     this.provider = options.provider;
   }
 
+  getConfiguration() {
+    return this.provider
+      .getRecords('configuration')
+      .then(records => (records.length ? records[0] : null));
+  }
+
+  updateConfiguration(config) {
+    return this.provider
+      .updateRecord('configuration', 'v1', config, true);
+  }
+
   getRules() {
     return this.provider
       .getRecords('rules');
@@ -17,16 +28,6 @@ export default class Database {
   createRule(rule) {
     return this.provider
       .createRecord('rules', rule);
-  }
-
-  getToken(sub) {
-    return this.provider
-      .getRecord('tokens', sub);
-  }
-
-  setToken(sub, token) {
-    return this.provider
-      .updateRecord('tokens', sub, token, true);
   }
 
   getPermissions() {

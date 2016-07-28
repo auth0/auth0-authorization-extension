@@ -7,6 +7,7 @@ import { application } from './application';
 import { applicationGroup } from './applicationGroup';
 import { applications } from './applications';
 import { connections } from './connections';
+import { configuration } from './configuration';
 import { mfa } from './mfa';
 import { block } from './block';
 import { unblock } from './unblock';
@@ -25,6 +26,12 @@ import { groupMapping } from './groupMapping';
 import { groups } from './groups';
 import { permission } from './permission';
 import { permissions } from './permissions';
+import { ruleStatus } from './ruleStatus';
+
+function lastAction(state = null, action) {
+  return action;
+}
+
 
 export default combineReducers({
   routing: routerReducer,
@@ -32,6 +39,7 @@ export default combineReducers({
   applicationGroup,
   applications,
   connections,
+  configuration,
   auth,
   mfa,
   block,
@@ -51,5 +59,7 @@ export default combineReducers({
   groups,
   permission,
   permissions,
+  ruleStatus,
+  lastAction,
   form: formReducer
 });

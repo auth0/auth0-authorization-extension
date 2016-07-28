@@ -4,8 +4,6 @@ const WebpackDevServer = require('webpack-dev-server');
 const config = require('./config.dev.js');
 const logger = require('../../server/lib/logger');
 
-logger.info('Running development webpack server...');
-
 const options = {
   publicPath: 'http://localhost:3001/app/',
   hot: true,
@@ -32,6 +30,9 @@ new WebpackDevServer(webpack(config), options)
       if (err) {
         logger.error(err);
       } else {
-        logger.info('Development server listening on: http://localhost:3001');
+        logger.info('Webpack proxy listening on: http://localhost:3001');
+
+        // Start the actual webserver.
+        require('../../index');
       }
     });

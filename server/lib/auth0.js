@@ -6,7 +6,7 @@ import request from 'request';
 import memoizer from 'lru-memoizer';
 import { getDb } from './storage/getdb';
 
-
+// TODO: Move to static client.
 export const getTokenCached = memoizer({
   load: (sub, callback) => {
     getDb().getToken(sub)
