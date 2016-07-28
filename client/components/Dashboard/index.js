@@ -18,6 +18,8 @@ import TableRouteCell from './TableRouteCell';
 import TableActionCell from './TableActionCell';
 import TableTotals from './TableTotals';
 import TableAction from './TableAction';
+import Scope from './Scope';
+import ScopeGroup from './ScopeGroup';
 
 export {
   Confirm,
@@ -28,6 +30,8 @@ export {
   LoadingPanel,
   Sidebar,
   SidebarItem,
+  Scope,
+  ScopeGroup,
   Table,
   TableBody,
   TableIconCell,

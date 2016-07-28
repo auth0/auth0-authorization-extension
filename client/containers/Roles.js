@@ -11,13 +11,15 @@ export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
     applications: state.applications,
     role: state.role,
-    roles: state.roles
+    roles: state.roles,
+    permissions: state.permissions
   });
 
   static actionsToProps = {
     ...actions.applicationActions,
     ...actions.connectionActions,
-    ...actions.roleActions
+    ...actions.roleActions,
+    ...actions.permissionActions
   }
 
   static propTypes = {
@@ -25,6 +27,8 @@ export default connectContainer(class extends Component {
     role: PropTypes.object.isRequired,
     roles: PropTypes.object.isRequired,
     applications: PropTypes.object.isRequired,
+    permissions: PropTypes.object.isRequired,
+    fetchPermissions: PropTypes.func.isRequired,
     fetchApplications: PropTypes.func.isRequired,
     fetchRoles: PropTypes.func.isRequired,
     createRole: PropTypes.func.isRequired,
@@ -38,6 +42,7 @@ export default connectContainer(class extends Component {
 
   componentWillMount() {
     this.props.fetchApplications();
+    this.props.fetchPermissions();
     this.props.fetchRoles();
   }
 
@@ -83,7 +88,7 @@ export default connectContainer(class extends Component {
 
     return (
       <div>
-        <RoleDialog applications={this.props.applications} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
+        <RoleDialog applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
         <RoleDeleteDialog role={this.props.role} onCancel={this.props.cancelDeleteRole} onConfirm={this.props.deleteRole} />
 
         <div className="row">

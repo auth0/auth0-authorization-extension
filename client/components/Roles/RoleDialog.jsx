@@ -9,15 +9,17 @@ export default class RoleDialog extends Component {
     onSave: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     role: PropTypes.object.isRequired,
-    applications: PropTypes.object.isRequired
+    applications: PropTypes.object.isRequired,
+    permissions: PropTypes.object.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.role !== this.props.role || nextProps.applications !== this.props.applications;
+    return nextProps.role !== this.props.role || nextProps.applications !== this.props.applications || nextProps.permissions !== this.props.permissions;
   }
 
   render() {
     const applications = this.props.applications.toJS();
+    const permissions = this.props.permissions.toJS();
     const role = this.props.role.toJS();
     const title = role.isNew ? 'New Role' : `Edit Role: ${role.record.name}`;
     const isVisible = role.isEdit || role.isNew;
@@ -27,7 +29,7 @@ export default class RoleDialog extends Component {
         <Modal.Header closeButton={!role.loading}>
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <RoleForm isNew={role.isNew} applications={applications.records} loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
+        <RoleForm isNew={role.isNew} applications={applications.records} permissions={permissions.records} loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
             onClose={this.props.onClose} onSubmit={this.props.onSave}>
           <Error message={role.error} />
         </RoleForm>

@@ -60,9 +60,9 @@ export default class Database {
       .getRecords('roles');
   }
 
-  getRole(name) {
+  getRole(id) {
     return this.provider
-      .getRecord('roles', { name });
+      .getRecord('roles', id);
   }
 
   createRole(role) {

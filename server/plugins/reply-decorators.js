@@ -5,7 +5,7 @@ function notFound(message) {
 }
 
 function error(err) {
-  return this.response(Boom.wrap(err));
+  return this.response(Boom.badRequest(err.message || err.code || err.name));
 }
 
 function unauthorized(message) {
