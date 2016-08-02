@@ -231,23 +231,12 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
         return reject(err);
       }
 
-      getDynamicUserGroups(db, connectionName, groupMemberships, groups)
+      // Get the direct groups memberships of a user.
+      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+
+      // Calculate the dynamic user groups based on external and internal group memberships.
+      getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
         .then(dynamicGroups => {
-          // Merging member from mappings
-          _.forEach(groups, (group) => {
-            if (!group.members) {
-              group.members = [];
-            }
-
-            if (group.mappings) {
-              _.forEach(group.mappings, (mapping) => {
-                const found = _.find(groups, { name: mapping.groupName });
-                group.members = group.members.concat(found.members);
-              });
-            }
-          });
-
-          const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
           const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
           return resolve(nestedGroups);
         })
