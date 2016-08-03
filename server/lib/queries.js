@@ -40,7 +40,9 @@ export const getConnectionsCached = memoizer({
 export const getGroupsCached = memoizer({
   load: (db, callback) => {
     db.getGroups()
-      .then(groups => callback(null, groups))
+      .then(groups => {
+        callback(null, groups);
+      })
       .catch(err => callback(err));
   },
   hash: (db) => db.hash || 'groups',
@@ -225,6 +227,10 @@ export function getDynamicUserGroups(db, connectionName, groupMemberships, allGr
  * Get the groups a user belongs to.
  */
 export function getUserGroups(db, userId, connectionName, groupMemberships) {
+  if (!Array.isArray(groupMemberships) || groupMemberships === undefined || groupMemberships === null) {
+    groupMemberships = [ ];
+  }
+
   return new Promise((resolve, reject) => {
     getGroupsCached(db, (err, groups) => {
       if (err) {
