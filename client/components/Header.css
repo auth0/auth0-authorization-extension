@@ -1,8 +1,19 @@
 /* Extension header */
 
 .extension-header{
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 70px;
-  background-color: #fbfbfb;
+}
+
+.extension-header .navbar{
+  border-radius: 0;
+  background-color: transparent;
+  border: 0;
+  border-bottom: 1px solid #f1f1f1;
+  margin-bottom: 40px;
 }
 
 .extension-header-logo{
@@ -30,8 +41,9 @@
 }
 
 .extension-header .navbar-right > li{
+  display: inline-block;
   font-size: 13px;
-  line-height: 70px;
+  margin-top: 22px;
   margin-left: 25px
 }
 
