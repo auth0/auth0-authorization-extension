@@ -6,6 +6,8 @@
   left: 0;
   right: 0;
   height: 70px;
+  z-index: 99;
+  background-color: white;
 }
 
 .extension-header .navbar{
@@ -62,4 +64,32 @@
   position: relative;
   top: 3px;
   margin-left: 8px;
+}
+
+/* No content section */
+
+.no-content-section{
+  text-align: center;
+}
+
+.no-content-section .title{
+  font-weight: 500;
+  margin-bottom: 40px;
+}
+
+.no-content-section .section-icon{
+  font-size: 84px;
+  color: #0a86b1;
+  opacity: 0.2;
+}
+
+.no-content-section .description{
+  display: block;
+  max-width: 440px;
+  margin: 0 auto;
+  margin-bottom: 60px;
+}
+
+.no-content-section .button-container .btn + .btn {
+  margin-left: 20px;
 }
