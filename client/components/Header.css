@@ -1,21 +1,53 @@
-header.dashboard-header nav .navbar-brand {
-  font-weight: normal;
-  padding: 15px 15px;
-  width: 100%;
-  min-width: 400px;
+/* Extension header */
+
+.extension-header{
+  height: 70px;
+  background-color: #fbfbfb;
 }
 
-header.dashboard-header ul.dropdown-menu {
-  padding: 0px;
+.extension-header-logo{
+  height: 70px;
+  float: left;
 }
 
-header.dashboard-header ul.dropdown-menu li {
-  margin: 0px;
+.extension-header-logo .auth0-logo{
+  display: inline-block;
+  background-image: url('http://cdn.auth0.com/styleguide/latest/lib/logos/img/logo-blue.svg');
+  background-size: contain;
+  background-repeat: no-repeat;
+  width: 81px;
+  height: 70px;
+  background-position: center, center;
+  float: left;
+  margin-right: 12px;
 }
 
+.extension-header-logo .extension-name{
+  display: inline-block;
+  font-size: 19px;
+  color: #16214D;
+  line-height: 70px;
+}
 
-.btn-nav span {
-  font-size: 16px;
-  top: 2px;
+.extension-header .navbar-right > li{
+  font-size: 13px;
+  line-height: 70px;
+  margin-left: 25px
+}
+
+.extension-header .btn-username{
+  cursor: pointer;
+}
+
+.extension-header .btn-username .avatar{
+  height: 24px;
+  width: 24px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.extension-header .btn-username .toggle-icon{
   position: relative;
+  top: 3px;
+  margin-left: 8px;
 }
