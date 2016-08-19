@@ -68,36 +68,57 @@ class GroupsContainer extends Component {
         <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
         <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
 
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="content-header video-template">
-              <ButtonToolbar className="pull-right">
-                <Button bsSize="small" onClick={this.refresh} disabled={this.props.groups.loading}>
-                  <i className="icon icon-budicon-257"></i> Refresh
-                </Button>
-                <Button bsStyle="primary" bsSize="small" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-                  <i className="icon icon-budicon-337"></i> Create
-                </Button>
-              </ButtonToolbar>
-              <h1>Groups</h1>
-              <div className="cues-container">
-                <div className="use-case-box is-active">
-                  <div className="explainer-text">
-                    <span className="explainer-text-content">Create and manage groups in which you can add users and define dynamic group memberships.</span>
+        { !this.props.groups.records.size && !this.props.groups.error ?
+          <div className="no-content-section">
+            <h1 className="title">Groups</h1>
+            <i className="icon-budicon-292 section-icon"></i>
+            <p className="description">
+              Create and manage groups in which you can add users
+              to define dynamic group memberships.
+            </p>
+            <div className="button-container">
+              <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" className="btn btn-transparent btn-md">
+                Read more
+              </a>
+              <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+                <i className="icon icon-budicon-473"></i> Create your first group
+              </Button>
+            </div>
+          </div>
+          :
+          <div>
+            <div className="row">
+              <div className="col-xs-12 wrapper">
+                <div className="content-header video-template">
+                  <ButtonToolbar className="pull-right">
+                    <Button bsSize="small" onClick={this.refresh} disabled={this.props.groups.loading}>
+                      <i className="icon icon-budicon-257"></i> Refresh
+                    </Button>
+                    <Button bsStyle="primary" bsSize="small" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+                      <i className="icon icon-budicon-337"></i> Create
+                    </Button>
+                  </ButtonToolbar>
+                  <h1>Groups</h1>
+                  <div className="cues-container">
+                    <div className="use-case-box is-active">
+                      <div className="explainer-text">
+                        <span className="explainer-text-content">Create and manage groups in which you can add users and define dynamic group memberships.</span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div className="row">
+              <div className="col-xs-12 wrapper">
+                <Error message={this.props.groups.error} />
+                <LoadingPanel show={this.props.groups.loading}>
+                  <GroupsTable canOpenGroup={true} groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
+                </LoadingPanel>
+              </div>
+            </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <Error message={this.props.groups.error} />
-            <LoadingPanel show={this.props.groups.loading}>
-              <GroupsTable canOpenGroup={true} groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
-            </LoadingPanel>
-          </div>
-        </div>
+        }
       </div>
     );
   }
