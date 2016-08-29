@@ -1,6 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
+import SectionHeader from '../components/Dashboard/SectionHeader';
+import BlankState from '../components/Dashboard/BlankState';
 
 import { connectionActions } from '../actions';
 import * as actions from '../actions/group';
@@ -69,44 +71,28 @@ class GroupsContainer extends Component {
         <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
 
         { !this.props.groups.records.size && !this.props.groups.error ?
-          <div className="no-content-section">
-            <h2 className="title">Groups</h2>
-            <i className="icon-budicon-292 section-icon"></i>
-            <p className="description">
-              Create and manage groups in which you can add users
-              to define dynamic group memberships.
-            </p>
-            <div className="button-container">
-              <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" className="btn btn-transparent btn-md">
-                Read more
-              </a>
-              <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-                <i className="icon icon-budicon-473"></i> Create your first group
-              </Button>
-            </div>
-          </div>
+          <BlankState
+            title="Groups"
+            iconCode="292"
+            description="Create and manage groups in which you can add users to define dynamic group memberships."
+          >
+            <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" className="btn btn-transparent btn-md">
+              Read more
+            </a>
+            <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+              <i className="icon icon-budicon-473"></i> Create your first group
+            </Button>
+          </BlankState>
           :
           <div>
-            <div className="row">
-              <div className="col-xs-12">
-                <div className="content-header">
-                  <div>
-                    <h2>Groups</h2>
-                    <div className="header-button-container">
-                      <Button bsSize="default" onClick={this.refresh} disabled={this.props.groups.loading}>
-                        <i className="icon icon-budicon-257"></i> Refresh
-                      </Button>
-                      <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-                        <i className="icon icon-budicon-337"></i> Create
-                      </Button>
-                    </div>
-                  </div>
-                  <p>
-                    Create and manage groups in which you can add users and define dynamic group memberships.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <SectionHeader title="Groups" description="Create and manage groups in which you can add users and define dynamic group memberships.">
+              <Button bsSize="default" onClick={this.refresh} disabled={this.props.groups.loading}>
+                <i className="icon icon-budicon-257"></i> Refresh
+              </Button>
+              <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+                <i className="icon icon-budicon-337"></i> Create
+              </Button>
+            </SectionHeader>
             <div className="row">
               <div className="col-xs-12">
                 <Error message={this.props.groups.error} />

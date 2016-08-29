@@ -112,9 +112,13 @@
   transform: translateY(-50%);
 }
 
+.extension-section-header .buttons-container .btn + .btn{
+  margin-left: 14px;
+}
+
 .extension-section-header .title{
   margin: 0;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .extension-section-header .description{
