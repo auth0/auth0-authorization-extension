@@ -34,11 +34,7 @@ class UserOverview extends React.Component {
     return (
       <div>
         <LoadingPanel show={ loading }>
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              <Error message={ error } />
-            </div>
-          </div>
+          <Error message={ error } />
           <div className="row">
             <div className="col-xs-10">
               <div className="advanced-search-control">
