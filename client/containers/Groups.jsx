@@ -88,7 +88,7 @@ class GroupsContainer extends Component {
           :
           <div>
             <div className="row">
-              <div className="col-xs-12 wrapper">
+              <div className="col-xs-12">
                 <div className="content-header video-template">
                   <ButtonToolbar className="pull-right">
                     <Button bsSize="small" onClick={this.refresh} disabled={this.props.groups.loading}>
@@ -110,7 +110,7 @@ class GroupsContainer extends Component {
               </div>
             </div>
             <div className="row">
-              <div className="col-xs-12 wrapper">
+              <div className="col-xs-12">
                 <Error message={this.props.groups.error} />
                 <LoadingPanel show={this.props.groups.loading}>
                   <GroupsTable canOpenGroup={true} groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
