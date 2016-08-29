@@ -17,12 +17,8 @@ export default class RuleStatus extends Component {
 
     if (error) {
       return (
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="alert alert-danger">
-              <strong>Error</strong> Unable to load configuration status - <i>{error}</i>
-            </div>
-          </div>
+        <div className="alert alert-danger">
+          <strong>Error</strong> Unable to load configuration status - <i>{error}</i>
         </div>
       );
     }
