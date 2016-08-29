@@ -94,3 +94,29 @@
 .no-content-section .button-container .btn + .btn {
   margin-left: 20px;
 }
+
+/* Extension section */
+
+.extension-section-header{
+  margin-bottom: 40px;
+}
+
+.extension-section-header .title-container{
+  position: relative;
+}
+
+.extension-section-header .buttons-container{
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%);
+}
+
+.extension-section-header .title{
+  margin: 0;
+  margin-bottom: 20px;
+}
+
+.extension-section-header .description{
+  margin: 0;
+}

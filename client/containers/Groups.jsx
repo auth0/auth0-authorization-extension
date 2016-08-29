@@ -70,7 +70,7 @@ class GroupsContainer extends Component {
 
         { !this.props.groups.records.size && !this.props.groups.error ?
           <div className="no-content-section">
-            <h1 className="title">Groups</h1>
+            <h2 className="title">Groups</h2>
             <i className="icon-budicon-292 section-icon"></i>
             <p className="description">
               Create and manage groups in which you can add users
@@ -89,23 +89,21 @@ class GroupsContainer extends Component {
           <div>
             <div className="row">
               <div className="col-xs-12">
-                <div className="content-header video-template">
-                  <ButtonToolbar className="pull-right">
-                    <Button bsSize="small" onClick={this.refresh} disabled={this.props.groups.loading}>
-                      <i className="icon icon-budicon-257"></i> Refresh
-                    </Button>
-                    <Button bsStyle="primary" bsSize="small" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-                      <i className="icon icon-budicon-337"></i> Create
-                    </Button>
-                  </ButtonToolbar>
-                  <h1>Groups</h1>
-                  <div className="cues-container">
-                    <div className="use-case-box is-active">
-                      <div className="explainer-text">
-                        <span className="explainer-text-content">Create and manage groups in which you can add users and define dynamic group memberships.</span>
-                      </div>
+                <div className="content-header">
+                  <div>
+                    <h2>Groups</h2>
+                    <div className="header-button-container">
+                      <Button bsSize="default" onClick={this.refresh} disabled={this.props.groups.loading}>
+                        <i className="icon icon-budicon-257"></i> Refresh
+                      </Button>
+                      <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+                        <i className="icon icon-budicon-337"></i> Create
+                      </Button>
                     </div>
                   </div>
+                  <p>
+                    Create and manage groups in which you can add users and define dynamic group memberships.
+                  </p>
                 </div>
               </div>
             </div>
