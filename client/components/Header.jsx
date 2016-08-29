@@ -9,7 +9,7 @@ class Header extends Component {
         <div className="container">
           <div className="extension-header-logo">
             <div className="auth0-logo"></div>
-            <div className="extension-name">Authorization Extension</div>
+            <h1 className="extension-name">Authorization Extension</h1>
           </div>
           <div id="navbar-collapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-right">

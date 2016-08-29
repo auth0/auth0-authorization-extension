@@ -36,6 +36,12 @@ class UserOverview extends React.Component {
         <LoadingPanel show={ loading }>
           <Error message={ error } />
           <div className="row">
+            <div className="col-xs-12">
+              <h2 className="section-title">Users</h2>
+              <p className="section-description">Here you will find all the users.</p>
+            </div>
+          </div>
+          <div className="row">
             <div className="col-xs-10">
               <div className="advanced-search-control">
                 <span className="search-area">
