@@ -2,6 +2,7 @@ import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import SectionHeader from '../Dashboard/SectionHeader';
 import UsersTable from './UsersTable';
 import { Error, LoadingPanel, TableTotals } from '../Dashboard';
 
@@ -35,12 +36,7 @@ class UserOverview extends React.Component {
       <div>
         <LoadingPanel show={ loading }>
           <Error message={ error } />
-          <div className="row">
-            <div className="col-xs-12">
-              <h2>Users</h2>
-              <p>Here you will find all the users.</p>
-            </div>
-          </div>
+          <SectionHeader title="Users" description="Here you will find all the users." />
           <div className="row">
             <div className="col-xs-12">
               <ul className="nav nav-tabs">
@@ -53,6 +49,7 @@ class UserOverview extends React.Component {
               </ul>
             </div>
             <div className="col-xs-10">
+              <p>Description lorem ipsum dolor sit amet</p>
               <div className="advanced-search-control">
                 <span className="search-area">
                   <i className="icon-budicon-489"></i>
