@@ -1,12 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-export default class BlankState extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    iconCode: PropTypes.number.isRequired,
-    description: PropTypes.string.isRequired
-  }
-
+class BlankState extends Component {
   render() {
     const { title, iconCode, description } = this.props;
     return (
@@ -21,3 +15,11 @@ export default class BlankState extends Component {
     );
   }
 }
+
+BlankState.propTypes = {
+  title: PropTypes.string.isRequired,
+  iconCode: PropTypes.number.isRequired,
+  description: PropTypes.string.isRequired
+};
+
+export default BlankState;
