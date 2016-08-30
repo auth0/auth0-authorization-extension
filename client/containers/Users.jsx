@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import './Users.styl';
 
 import * as actions from '../actions/user';
 import UserOverview from '../components/Users/UserOverview';
@@ -32,7 +33,7 @@ class Users extends React.Component {
     const { loading, error, users, total } = this.props;
 
     return (
-      <div>
+      <div className="users-section">
         <UserOverview onReset={this.onReset} onSearch={this.onSearch}
           error={error} users={users} total={total} loading={loading}
         />
