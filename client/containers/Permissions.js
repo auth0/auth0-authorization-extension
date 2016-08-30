@@ -2,6 +2,8 @@ import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import { Button, ButtonToolbar } from 'react-bootstrap';
+import SectionHeader from '../components/Dashboard/SectionHeader';
+import BlankState from '../components/Dashboard/BlankState';
 
 import * as actions from '../actions';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
@@ -54,14 +56,6 @@ export default connectContainer(class extends Component {
   )
 
   renderBody(records, loading) {
-    if (records.length === 0) {
-      return (
-        <Button bsStyle="success" bsSize="large" onClick={this.props.createPermission} disabled={loading}>
-          <i className="icon icon-budicon-337"></i> Create Your First Permission
-        </Button>
-      );
-    }
-
     return (
       <div>
         <div className="row">
@@ -99,37 +93,22 @@ export default connectContainer(class extends Component {
 
   render() {
     const { error, loading, records } = this.props.permissions.toJS();
-    const buttonClasses = classNames({
-      hidden: records.length === 0,
-      'pull-right': true
-    });
 
     return (
       <div>
         <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
         <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
+        <SectionHeader
+          title="Permissions"
+          description="Create and manage permsisions (granular actions) for your applications which can then be organized in Roles."
+        >
+          <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
+            <i className="icon icon-budicon-337"></i> Create Permission
+          </Button>
+        </SectionHeader>
 
         <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="content-header video-template">
-              <ButtonToolbar className={buttonClasses}>
-                <Button bsStyle="success" bsSize="large" onClick={this.props.createPermission} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Create Permission
-                </Button>
-              </ButtonToolbar>
-              <h1>Permissions</h1>
-              <div className="cues-container">
-                <div className="use-case-box is-active">
-                  <div className="explainer-text">
-                    <span className="explainer-text-content">Create and manage permsisions (granular actions) for your applications which can then be organized in Roles.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12 wrapper">
+          <div className="col-xs-12">
             <Error message={error} />
             <LoadingPanel show={loading}>
               {this.renderBody(records, loading)}
