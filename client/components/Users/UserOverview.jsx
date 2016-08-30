@@ -1,6 +1,7 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button, ButtonToolbar, Nav, NavItem } from 'react-bootstrap';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 import SectionHeader from '../Dashboard/SectionHeader';
 import UsersTable from './UsersTable';
@@ -31,6 +32,7 @@ class UserOverview extends React.Component {
 
   render() {
     const { loading, error, users, total, renderActions } = this.props;
+    Tabs.setUseDefaultStyles(false);
 
     return (
       <div>
@@ -39,22 +41,28 @@ class UserOverview extends React.Component {
           <SectionHeader title="Users" description="Here you will find all the users." />
           <div className="row">
             <div className="col-xs-12">
-              <Nav bsStyle="tabs">
-                <NavItem active="true">Users</NavItem>
-                <NavItem>Federated users (Pending login)</NavItem>
-              </Nav>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12">
-              <p>
-                When using federated connections like AD, ADFS, SAML.. you&#39;ll only know the
-                user once they have logged in for the first time. This tab will allow you to define
-                group and role memberships for users that have not logged in yet (by specifying what
-                the user identifier will look like upon first login). When the user logs in for the
-                first time, they will receive the groups and roles configured here and the pending
-                user will become an actual user.
-              </p>
+              <Tabs>
+                <TabList className="nav nav-tabs" activeTabClassName="active">
+                  <Tab><a>Users</a></Tab>
+                  <Tab><a>Federated users (Pending login)</a></Tab>
+                </TabList>
+                <TabPanel>
+                  <p className="user-section-description">User panel description.</p>
+                </TabPanel>
+                <TabPanel className="federated-users-section">
+                  <p className="user-section-description">
+                    When using federated connections like AD, ADFS, SAML.. you&#39;ll only know the
+                    user once they have logged in for the first time. This tab will allow you to define
+                    group and role memberships for users that have not logged in yet (by specifying what
+                    the user identifier will look like upon first login). When the user logs in for the
+                    first time, they will receive the groups and roles configured here and the pending
+                    user will become an actual user.
+                  </p>
+                  <Button className="user-section-btn pull-right" bsStyle="success" disabled={loading}>
+                    <i className="icon icon-budicon-473"></i> Create user
+                  </Button>
+                </TabPanel>
+              </Tabs>
             </div>
           </div>
           <div className="row">
