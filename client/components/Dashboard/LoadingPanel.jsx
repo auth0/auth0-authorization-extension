@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Loader from 'react-loader-advanced';
 import Spinner from './svg/Spinner.svg';
 
-import './LoadingPanel.css';
-
 class LoadingPanel extends Component {
   constructor(props) {
     super(props);

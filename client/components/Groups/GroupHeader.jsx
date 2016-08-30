@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './GroupHeader.css';
+import './GroupHeader.styl';
 
 class GroupHeader extends Component {
   shouldComponentUpdate(nextProps) {
