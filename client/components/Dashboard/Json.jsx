@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './Json.css';
+import './Json.styl';
 
 class Json extends Component {
   shouldComponentUpdate(nextProps) {

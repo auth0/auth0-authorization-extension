@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './UserPickerDialog.css';
+import './UserPickerDialog.styl';
 import { Error, Confirm } from '../Dashboard';
 import UserOverview from './UserOverview';
 import UserPickerSelectAction from './UserPickerSelectAction';

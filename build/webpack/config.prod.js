@@ -16,10 +16,6 @@ config.output.hash = true;
 config.output.filename = 'auth0-authz.ui.' + project.version + '.js';
 
 // Development modules.
-config.module.loaders.push({
-  test: /\.css$/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
-});
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([

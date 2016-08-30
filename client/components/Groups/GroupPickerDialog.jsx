@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import './GroupPickerDialog.css';
+import './GroupPickerDialog.styl';
 import GroupsTable from './GroupsTable';
 import { Error, Confirm, TableAction, LoadingPanel } from '../Dashboard';
 
