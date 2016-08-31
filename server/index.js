@@ -29,6 +29,7 @@ export default (cb) => {
 
   const server = new Hapi.Server();
   server.connection({
+    host: 'localhost',
     port: config('PORT'),
     routes: {
       validate: {

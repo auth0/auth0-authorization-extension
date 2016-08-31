@@ -9,9 +9,16 @@ const options = {
   hot: true,
   inline: true,
   historyApiFallback: true,
-  proxy: {
-    '*': 'http://localhost:3000'
-  },
+  proxy: [
+    {
+      context: function(pathname, req) {
+        return true;
+      },
+      target: {
+        port: 3000
+      }
+    }
+  ],
 
   quiet: false,
   noInfo: true,
