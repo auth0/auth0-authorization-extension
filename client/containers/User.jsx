@@ -12,7 +12,7 @@ import UserProfile from '../components/Users/UserProfile';
 
 import { GroupPickerDialog, GroupMemberRemoveDialog } from '../components/Groups';
 
-export default class UserContainer extends Component {
+export class UserContainer extends Component {
   constructor() {
     super();
 

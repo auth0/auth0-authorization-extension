@@ -8,7 +8,7 @@ import { groupActions, groupNestedActions, groupMemberActions, groupMappingActio
 import UserPickerDialog from '../components/Users/UserPickerDialog';
 import { GroupPickerDialog, GroupHeader, GroupMappingDialog, GroupMappingRemoveDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog, NestedGroups, NestedGroupRemoveDialog } from '../components/Groups';
 
-export default class GroupContainer extends Component {
+export class GroupContainer extends Component {
   constructor() {
     super();
 
