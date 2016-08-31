@@ -5,7 +5,6 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../actions';
 
-import './User.styl';
 import UserGroups from '../components/Users/UserGroups';
 import UserHeader from '../components/Users/UserHeader';
 import UserProfile from '../components/Users/UserProfile';

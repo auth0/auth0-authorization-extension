@@ -1,8 +1,9 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import { Button, ButtonToolbar, Nav, NavItem } from 'react-bootstrap';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
 
+import UserGeneral from './UserGeneral';
+import UserFederated from './UserFederated';
 import SectionHeader from '../Dashboard/SectionHeader';
 import UsersTable from './UsersTable';
 import { Error, LoadingPanel, TableTotals } from '../Dashboard';
@@ -32,7 +33,6 @@ class UserOverview extends React.Component {
 
   render() {
     const { loading, error, users, total, renderActions } = this.props;
-    Tabs.setUseDefaultStyles(false);
 
     return (
       <div>
@@ -41,27 +41,13 @@ class UserOverview extends React.Component {
           <SectionHeader title="Users" description="Here you will find all the users." />
           <div className="row">
             <div className="col-xs-12">
-              <Tabs>
-                <TabList className="nav nav-tabs" activeTabClassName="active">
-                  <Tab><a>Users</a></Tab>
-                  <Tab><a>Federated users (Pending login)</a></Tab>
-                </TabList>
-                <TabPanel>
-                  <p className="user-section-description">User panel description.</p>
-                </TabPanel>
-                <TabPanel className="federated-users-section">
-                  <p className="user-section-description">
-                    When using federated connections like AD, ADFS, SAML.. you&#39;ll only know the
-                    user once they have logged in for the first time. This tab will allow you to define
-                    group and role memberships for users that have not logged in yet (by specifying what
-                    the user identifier will look like upon first login). When the user logs in for the
-                    first time, they will receive the groups and roles configured here and the pending
-                    user will become an actual user.
-                  </p>
-                  <Button className="user-section-btn pull-right" bsStyle="success" disabled={loading}>
-                    <i className="icon icon-budicon-473" /> Create user
-                  </Button>
-                </TabPanel>
+              <Tabs defaultActiveKey={1} animation={false}>
+                <Tab eventKey={1} title="Users">
+                  <UserGeneral />
+                </Tab>
+                <Tab eventKey={2} title="Federated users (Pending login)">
+                  <UserFederated loading={loading} />
+                </Tab>
               </Tabs>
             </div>
           </div>
