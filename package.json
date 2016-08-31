@@ -65,6 +65,7 @@
     "winston": "^2.2.0"
   },
   "devDependencies": {
+    "auth0-styleguide": "auth0/styleguide#4.6.5",
     "autoprefixer": "^6.3.6",
     "babel-eslint": "^6.0.4",
     "babel-loader": "^6.2.5",

@@ -57,11 +57,6 @@ export class UserContainer extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <Link className="btn btn-sm btn-primary pull-right" to="/users">Back to Users</Link>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
             <UserHeader loading={user.loading} user={user.record} error={user.error} />
           </div>
         </div>

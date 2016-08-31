@@ -36,8 +36,8 @@ class UserOverview extends React.Component {
 
     return (
       <div>
-        <LoadingPanel show={ loading }>
-          <Error message={ error } />
+        <LoadingPanel show={loading}>
+          <Error message={error} />
           <SectionHeader title="Users" description="Here you will find all the users." />
           <div className="row">
             <div className="col-xs-12">
@@ -59,7 +59,7 @@ class UserOverview extends React.Component {
                     user will become an actual user.
                   </p>
                   <Button className="user-section-btn pull-right" bsStyle="success" disabled={loading}>
-                    <i className="icon icon-budicon-473"></i> Create user
+                    <i className="icon icon-budicon-473" /> Create user
                   </Button>
                 </TabPanel>
               </Tabs>
@@ -69,7 +69,7 @@ class UserOverview extends React.Component {
             <div className="col-xs-12">
               <form className="advanced-search-control">
                 <span className="search-area">
-                  <i className="icon-budicon-489"></i>
+                  <i className="icon-budicon-489" />
                   <input className="user-input" type="text" ref="search" placeholder="Search for users"
                     spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
                   />
@@ -77,14 +77,14 @@ class UserOverview extends React.Component {
 
                 <span className="controls pull-right">
                   <div className="js-select custom-select">
-                    <span>Search by </span><span className="truncate" data-select-value="">Name</span> <i className="icon-budicon-460"></i>
+                    <span>Search by </span><span className="truncate" data-select-value="">Name</span> <i className="icon-budicon-460" />
                     <select data-mode="">
                       <option value="user" selected="selected">Name</option>
                       <option value="email">Email</option>
                       <option value="connection">Connection</option>
                     </select>
                   </div>
-                  <button type="reset">Reset <i className="icon-budicon-471"></i></button>
+                  <button type="reset">Reset <i className="icon-budicon-471" /></button>
                 </span>
               </form>
             </div>
@@ -96,12 +96,12 @@ class UserOverview extends React.Component {
 
           <div className="row">
             <div className="col-xs-12">
-                <UsersTable loading={ loading } users={ users } renderActions={ renderActions } />
+              <UsersTable loading={loading} users={users} renderActions={renderActions} />
             </div>
           </div>
           <div className="row">
             <div className="col-xs-12">
-              <TableTotals currentCount={ users.length } totalCount={ total } />
+              <TableTotals currentCount={users.length} totalCount={total} />
             </div>
           </div>
         </LoadingPanel>

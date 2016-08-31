@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './UserHeader.styl';
 
 class UserHeader extends Component {
   shouldComponentUpdate(nextProps) {
@@ -6,40 +7,24 @@ class UserHeader extends Component {
   }
 
   getEmail(user) {
-    if (!user.email) {
-      return <div></div>;
-    }
-
+    if (!user.email) return null;
     return <span className="user-label user-head-email">{ user.email }</span>;
   }
 
   render() {
-    if (this.props.loading || this.props.error) {
-      return <div></div>;
-    }
+    if (this.props.loading || this.props.error) return null;
 
     const user = this.props.user.toJS();
 
-    return <div className="user-header">
-      <img className="img-polaroid" src={user.picture} />
-        <div className="user-bg-box" style={{ position: 'relative', height: '120px', overflow: 'hidden' }}>
-          <img className="user-bg" src={user.picture} />
-          <div className="box-content">
-            <div className="login-count">
-              <span className="lined-text">Logins Count:</span>
-              <strong>{user.logins_count || 0}</strong>
-            </div>
-            <div className="username-area">
-              <h4>
-                <span className="name user-head-nickname">
-                  { user.name || user.nickname || user.email }
-                </span>
-                {this.getEmail(user)}
-              </h4>
-            </div>
-          </div>
+    return (
+      <div className="user-header">
+        <img src={user.picture} alt="" className="user-header-avatar" />
+        <div className="user-header-content">
+          <h2 className="user-header-primary">{ user.name || user.nickname || user.email }</h2>
+          <h5 className="user-header-secondary">{this.getEmail(user)}</h5>
+        </div>
       </div>
-    </div>;
+    );
   }
 }
 
