@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import SectionHeader from '../Dashboard/SectionHeader';
 import UserGroupRemoveAction from './UserGroupRemoveAction';
 import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
@@ -101,17 +102,12 @@ class UserGroups extends Component {
 
     return (
       <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <h4>Explicit Group Memberships</h4>
-            <span className="pull-left">{this.getHelpText(groups.records)}</span>
-            <ButtonToolbar className="pull-right">
-              <Button bsStyle="primary" bsSize="xsmall" onClick={this.addToGroup} disabled={groups.loading}>
-                <i className="icon icon-budicon-337"></i> Add
-              </Button>
-            </ButtonToolbar>
-          </div>
-        </div>
+        <SectionHeader isSubsection title="Explicit Group Memberships" description={this.getHelpText(groups.records)}>
+          <Button bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
+            Add Group
+          </Button>
+        </SectionHeader>
+
         <LoadingPanel show={groups.loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <Error message={groups.error} />
           {this.renderGroups(groups.error, groups.loading, groups.records, (group, index) => {
