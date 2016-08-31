@@ -68,6 +68,15 @@ export class UserContainer extends Component {
               <Tab eventKey={2} title="Groups">
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
+              <Tab eventKey={3} title="Roles">
+                <h1>Roles</h1>
+              </Tab>
+              <Tab eventKey={4} title="Devices">
+                <h1>Devices</h1>
+              </Tab>
+              <Tab eventKey={5} title="Logs">
+                <h1>Logs</h1>
+              </Tab>
             </Tabs>
           </div>
         </div>

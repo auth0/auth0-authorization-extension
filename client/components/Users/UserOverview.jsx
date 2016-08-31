@@ -39,18 +39,14 @@ class UserOverview extends React.Component {
         <LoadingPanel show={loading}>
           <Error message={error} />
           <SectionHeader title="Users" description="Here you will find all the users." />
-          <div className="row">
-            <div className="col-xs-12">
-              <Tabs defaultActiveKey={1} animation={false}>
-                <Tab eventKey={1} title="Users">
-                  <UserGeneral />
-                </Tab>
-                <Tab eventKey={2} title="Federated users (Pending login)">
-                  <UserFederated loading={loading} />
-                </Tab>
-              </Tabs>
-            </div>
-          </div>
+          <Tabs defaultActiveKey={1} animation={false}>
+            <Tab eventKey={1} title="Users">
+              <UserGeneral />
+            </Tab>
+            <Tab eventKey={2} title="Federated users (Pending login)">
+              <UserFederated loading={loading} />
+            </Tab>
+          </Tabs>
           <div className="row">
             <div className="col-xs-12">
               <form className="advanced-search-control">
