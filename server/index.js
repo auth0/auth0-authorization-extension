@@ -2,6 +2,7 @@ import Hapi from 'hapi';
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
+import Blipp from 'blipp';
 
 import 'good-console';
 
@@ -37,7 +38,7 @@ export default (cb) => {
       }
     }
   });
-  server.register([ goodPlugin, Inert, ...plugins ], (err) => {
+  server.register([ goodPlugin, Inert, Blipp, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
     }
