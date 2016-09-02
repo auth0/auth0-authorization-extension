@@ -49,11 +49,11 @@ class GroupsContainer extends Component {
   renderGroupActions(group) {
     return (
       <div>
-        <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="266"
+        <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
           onClick={this.props.editGroup} args={[ group ]} d disabled={this.props.groups.loading || false}
         />
         <span> </span>
-        <TableAction id={`delete-${group._id}`} type="success" title="Delete Group" icon="263"
+        <TableAction id={`delete-${group._id}`} type="default" title="Delete Group" icon="264"
           onClick={this.props.requestDeleteGroup} args={[ group ]} disabled={this.props.groups.loading || false}
         />
       </div>

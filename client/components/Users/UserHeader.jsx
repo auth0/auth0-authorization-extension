@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './UserHeader.styl';
+import EntityHeader from '../Dashboard/EntityHeader';
 
 class UserHeader extends Component {
   shouldComponentUpdate(nextProps) {
@@ -17,13 +18,11 @@ class UserHeader extends Component {
     const user = this.props.user.toJS();
 
     return (
-      <div className="user-header">
-        <img src={user.picture} alt="" className="user-header-avatar" />
-        <div className="user-header-content">
-          <h2 className="user-header-primary">{ user.name || user.nickname || user.email }</h2>
-          <h5 className="user-header-secondary">{this.getEmail(user)}</h5>
-        </div>
-      </div>
+      <EntityHeader
+        imgSource={user.picture}
+        primaryText={user.name || user.nickname || user.email}
+        secondaryText={this.getEmail(user)}
+      />
     );
   }
 }
