@@ -8,11 +8,11 @@ class UserHeader extends Component {
 
   getEmail(user) {
     if (!user.email) return null;
-    return <span className="user-label user-head-email">{ user.email }</span>;
+    return user.email;
   }
 
   render() {
-    if (this.props.loading || this.props.error) return null;
+    if (this.props.error) return null;
 
     const user = this.props.user.toJS();
 
