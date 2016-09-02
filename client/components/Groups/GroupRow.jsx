@@ -21,7 +21,6 @@ class GroupRow extends Component {
 
     return (
       <TableRow>
-        <TableIconCell icon="322" />
         {this.renderGroupName(group)}
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
         <TableTextCell>{ (group.members && group.members.length) || '0' }</TableTextCell>

@@ -29,7 +29,7 @@ class Confirm extends Component {
   render() {
     return (
       <Modal dialogClassName={this.props.dialogClassName} show={this.props.show} onHide={this.props.onCancel}>
-        <Modal.Header closeButton={!this.props.loading}>
+        <Modal.Header className="has-border" closeButton={!this.props.loading}>
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>

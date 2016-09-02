@@ -104,7 +104,7 @@ class UserGroups extends Component {
       <div>
         <SectionHeader isSubsection title="Explicit Group Memberships" description={this.getHelpText(groups.records)}>
           <Button bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
-            Add Group
+            Add user to groups
           </Button>
         </SectionHeader>
 

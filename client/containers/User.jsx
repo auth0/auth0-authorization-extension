@@ -7,6 +7,7 @@ import { groupPickerActions, groupMemberActions, logActions, userActions, userGr
 
 import UserGroups from '../components/Users/UserGroups';
 import UserHeader from '../components/Users/UserHeader';
+import UserRoles from '../components/Users/UserRoles';
 import UserProfile from '../components/Users/UserProfile';
 
 import { GroupPickerDialog, GroupMemberRemoveDialog } from '../components/Groups';
@@ -27,7 +28,7 @@ export class UserContainer extends Component {
   }
 
   requestAddToGroup(user) {
-    this.props.openGroupPicker(`Add "${user.email || user.nickname || 'user'}" to a group`);
+    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
   }
 
   addToGroup(group) {
@@ -61,7 +62,7 @@ export class UserContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
               <Tab eventKey={1} title="Profile">
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
@@ -69,13 +70,7 @@ export class UserContainer extends Component {
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Roles">
-                <h1>Roles</h1>
-              </Tab>
-              <Tab eventKey={4} title="Devices">
-                <h1>Devices</h1>
-              </Tab>
-              <Tab eventKey={5} title="Logs">
-                <h1>Logs</h1>
+                <UserRoles />
               </Tab>
             </Tabs>
           </div>

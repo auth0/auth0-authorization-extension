@@ -6,7 +6,7 @@ import UserGeneral from './UserGeneral';
 import UserFederated from './UserFederated';
 import SectionHeader from '../Dashboard/SectionHeader';
 import UsersTable from './UsersTable';
-import { Error, LoadingPanel, TableTotals } from '../Dashboard';
+import { Error, LoadingPanel, TableTotals, BlankState } from '../Dashboard';
 
 class UserOverview extends React.Component {
   constructor() {
@@ -37,55 +37,66 @@ class UserOverview extends React.Component {
     return (
       <div>
         <LoadingPanel show={loading}>
-          <Error message={error} />
-          <SectionHeader title="Users" description="Here you will find all the users." />
-          <Tabs defaultActiveKey={1} animation={false}>
-            <Tab eventKey={1} title="Users">
-              <UserGeneral />
-            </Tab>
-            <Tab eventKey={2} title="Federated users (Pending login)">
-              <UserFederated loading={loading} />
-            </Tab>
-          </Tabs>
-          <div className="row">
-            <div className="col-xs-12">
-              <form className="advanced-search-control">
-                <span className="search-area">
-                  <i className="icon-budicon-489" />
-                  <input className="user-input" type="text" ref="search" placeholder="Search for users"
-                    spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
-                  />
-                </span>
+          { !loading && !error && !users.length ? (
+            <BlankState
+              title="Users"
+              iconCode="292"
+              description="Lorem ipsum dolor sit amet."
+            >
+            </BlankState>
+          ) : (
+            <div>
+              <Error message={error} />
+              <SectionHeader title="Users" description="Here you will find all the users." />
+              <Tabs defaultActiveKey={1} animation={false}>
+                <Tab eventKey={1} title="Users">
+                  <UserGeneral />
+                </Tab>
+                <Tab eventKey={2} title="Federated users (Pending login)">
+                  <UserFederated loading={loading} />
+                </Tab>
+              </Tabs>
+              <div className="row">
+                <div className="col-xs-12">
+                  <form className="advanced-search-control">
+                    <span className="search-area">
+                      <i className="icon-budicon-489" />
+                      <input className="user-input" type="text" ref="search" placeholder="Search for users"
+                        spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
+                      />
+                    </span>
 
-                <span className="controls pull-right">
-                  <div className="js-select custom-select">
-                    <span>Search by </span><span className="truncate" data-select-value="">Name</span> <i className="icon-budicon-460" />
-                    <select data-mode="">
-                      <option value="user" selected="selected">Name</option>
-                      <option value="email">Email</option>
-                      <option value="connection">Connection</option>
-                    </select>
-                  </div>
-                  <button type="reset">Reset <i className="icon-budicon-471" /></button>
-                </span>
-              </form>
-            </div>
-            <div className="col-xs-12 help-block">
-              To perform your search, press <span className="keyboard-button">enter</span>.
-              You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.
-            </div>
-          </div>
+                    <span className="controls pull-right">
+                      <div className="js-select custom-select">
+                        <span>Search by </span><span className="truncate" data-select-value="">Name</span> <i className="icon-budicon-460" />
+                        <select data-mode="">
+                          <option value="user" selected="selected">Name</option>
+                          <option value="email">Email</option>
+                          <option value="connection">Connection</option>
+                        </select>
+                      </div>
+                      <button type="reset">Reset <i className="icon-budicon-471" /></button>
+                    </span>
+                  </form>
+                </div>
+                <div className="col-xs-12 help-block">
+                  To perform your search, press <span className="keyboard-button">enter</span>.
+                  You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.
+                </div>
+              </div>
 
-          <div className="row">
-            <div className="col-xs-12">
-              <UsersTable loading={loading} users={users} renderActions={renderActions} />
+              <div className="row">
+                <div className="col-xs-12">
+                  <UsersTable loading={loading} users={users} renderActions={renderActions} />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-xs-12">
+                  <TableTotals currentCount={users.length} totalCount={total} />
+                </div>
+              </div>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12">
-              <TableTotals currentCount={users.length} totalCount={total} />
-            </div>
-          </div>
+          ) }
         </LoadingPanel>
       </div>
     );

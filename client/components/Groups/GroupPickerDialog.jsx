@@ -30,6 +30,7 @@ class GroupPickerDialog extends Component {
     return (
       <Confirm dialogClassName="group-picker-dialog" size="large" title={title} show={open} loading={loading} onCancel={onCancel}>
         <Error message={error} />
+        <p className="text-center">Select the groups you want this user to be part of.</p>
         <LoadingPanel show={ loading }>
           <GroupsTable canOpenGroup={false} groups={this.props.groupPicker.get('records')}
             loading={loading} renderActions={this.renderActions}

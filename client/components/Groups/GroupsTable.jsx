@@ -15,7 +15,6 @@ class GroupsTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="3%" />
           <TableColumn width="15%">Name</TableColumn>
           <TableColumn width="28%">Description</TableColumn>
           <TableColumn>Members</TableColumn>
