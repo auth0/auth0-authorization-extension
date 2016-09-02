@@ -16,14 +16,15 @@ class GroupForm extends Component {
             validationErrors={validationErrors} />
           <InputText field={description} fieldName="description" label="Description"
             validationErrors={validationErrors} />
+          <InputText fieldName="members" label="Members" validationErrors={validationErrors} />
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>
-        <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-          <i className="icon icon-budicon-501"></i> Cancel
+        <Button bsSize="large" bsStyle="transparent" disabled={ loading || submitting } onClick={this.props.onClose}>
+          Cancel
         </Button>
-        <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-          <i className="icon icon-budicon-245"></i> Save
+        <Button bsSize="large" bsStyle="primary" disabled={ loading || submitting } onClick={handleSubmit}>
+          Save
         </Button>
       </Modal.Footer>
     </div>;

@@ -11,11 +11,11 @@ class GroupDialog extends Component {
 
   render() {
     const group = this.props.group.toJS();
-    const title = group.isNew ? 'New Group' : `Edit Group: ${group.record.name}`;
+    const title = group.isNew ? 'Create Group' : `Edit Group: ${group.record.name}`;
     const isVisible = group.isEdit || group.isNew;
 
     return <Modal show={isVisible} onHide={this.props.onClose}>
-      <Modal.Header closeButton={!group.loading}>
+      <Modal.Header closeButton={!group.loading} className="has-border">
         <Modal.Title>{title}</Modal.Title>
       </Modal.Header>
       <GroupForm loading={group.loading} initialValues={group.record} validationErrors={group.validationErrors}
