@@ -77,7 +77,7 @@ export default connectContainer(class extends Component {
     const { error, loading, records } = this.props.roles.toJS();
 
     return (
-      !error && !records ?
+      !loading && !error && !records.length ?
         <BlankState
           title="Roles"
           iconCode="292"

@@ -70,7 +70,7 @@ class GroupsContainer extends Component {
         <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
         <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
 
-        { !this.props.groups.records.size && !this.props.groups.error ?
+        { !this.props.groups.loading && !this.props.groups.records.size && !this.props.groups.error ?
           <BlankState
             title="Groups"
             iconCode="292"

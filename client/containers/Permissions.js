@@ -95,27 +95,41 @@ export default connectContainer(class extends Component {
     const { error, loading, records } = this.props.permissions.toJS();
 
     return (
-      <div>
-        <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
-        <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
-        <SectionHeader
+      !loading && !error && !records.lenght ?
+        <BlankState
           title="Permissions"
-          description="Create and manage permsisions (granular actions) for your applications which can then be organized in Roles."
+          iconCode="292"
+          description="Permissions description."
         >
-          <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
-            <i className="icon icon-budicon-337"></i> Create Permission
+          <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
+            Read more
+          </a>
+          <Button bsStyle="success" onClick={this.props.createPermission} disabled={this.props.permissions.loading}>
+            <i className="icon icon-budicon-473" /> Create your first permission
           </Button>
-        </SectionHeader>
+        </BlankState>
+      :
+        <div>
+          <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
+          <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
+          <SectionHeader
+            title="Permissions"
+            description="Create and manage permsisions (granular actions) for your applications which can then be organized in Roles."
+          >
+            <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
+              <i className="icon icon-budicon-337"></i> Create Permission
+            </Button>
+          </SectionHeader>
 
-        <div className="row">
-          <div className="col-xs-12">
-            <Error message={error} />
-            <LoadingPanel show={loading}>
-              {this.renderBody(records, loading)}
-            </LoadingPanel>
+          <div className="row">
+            <div className="col-xs-12">
+              <Error message={error} />
+              <LoadingPanel show={loading}>
+                {this.renderBody(records, loading)}
+              </LoadingPanel>
+            </div>
           </div>
         </div>
-      </div>
     );
   }
 });

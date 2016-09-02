@@ -5,8 +5,9 @@ import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap'
 import UserGeneral from './UserGeneral';
 import UserFederated from './UserFederated';
 import SectionHeader from '../Dashboard/SectionHeader';
+import BlankState from '../Dashboard/BlankState';
 import UsersTable from './UsersTable';
-import { Error, LoadingPanel, TableTotals, BlankState } from '../Dashboard';
+import { Error, LoadingPanel, TableTotals } from '../Dashboard';
 
 class UserOverview extends React.Component {
   constructor() {
