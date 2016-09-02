@@ -101,19 +101,12 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Link className="btn btn-sm btn-default pull-right" to="/groups">
-              <i className="icon icon-budicon-257"></i> Back to Groups
-            </Link>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
             <GroupHeader group={group} members={group.get('members')} />
           </div>
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
               <Tab eventKey={1} title="Members">
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>

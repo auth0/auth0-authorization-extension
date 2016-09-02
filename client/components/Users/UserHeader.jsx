@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import './UserHeader.styl';
 import EntityHeader from '../Dashboard/EntityHeader';
 
 class UserHeader extends Component {

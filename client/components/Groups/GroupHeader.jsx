@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import EntityHeader from '../Dashboard/EntityHeader';
 
-import './GroupHeader.styl';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 
 class GroupHeader extends Component {
   shouldComponentUpdate(nextProps) {
@@ -31,26 +32,18 @@ class GroupHeader extends Component {
     }
 
     return (
-      <div className="group-header">
-        <img className="img-polaroid" src={this.getPicture(group)} />
-          <div className="group-bg-box" style={{ position: 'relative', height: '120px', overflow: 'hidden' }}>
-            <img className="group-bg" src={this.getPicture(group)} />
-            <div className="box-content">
-              <div className="login-count">
-                <span className="lined-text">Member Count: </span>
-                <strong>{members.get('records').size || 0}</strong>
-              </div>
-              <div className="name-area">
-                <h4>
-                  <span className="name group-head-name">
-                    { group.get('record').get('name') || group.get('record').get('_id') }
-                  </span>
-                  {this.getDescription(group)}
-                </h4>
-              </div>
-            </div>
-        </div>
-      </div>
+      <EntityHeader
+        imgSource={this.getPicture(group)}
+        primaryText={group.get('record').get('name') || group.get('record').get('_id')}
+        secondaryText={this.getDescription(group)}
+      >
+        <Button>
+          <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
+        </Button>
+        <Button style={{ marginLeft: '10px' }}>
+          <i className="icon icon-budicon-471" style={{ marginRight: 0 }} />
+        </Button>
+      </ EntityHeader>
     );
   }
 }
