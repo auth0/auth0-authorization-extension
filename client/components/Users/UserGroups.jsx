@@ -35,13 +35,12 @@ class UserGroups extends Component {
 
   renderGroups(error, loading, groups, actionRenderer) {
     if (!error && groups.length === 0) {
-      return <div></div>;
+      return null;
     }
 
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="3%" />
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="60%">Description</TableColumn>
           <TableColumn width="10%" />
@@ -49,10 +48,9 @@ class UserGroups extends Component {
         <TableBody>
         {groups.map((group, index) =>
           <TableRow key={index}>
-            <TableIconCell color="green" icon="322" />
             <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
             <TableTextCell>{group.description}</TableTextCell>
-            <TableCell>
+            <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
               {actionRenderer(group, index)}
             </TableCell>
           </TableRow>
@@ -79,7 +77,6 @@ class UserGroups extends Component {
           <Error message={allGroups.error} />
           <Table>
             <TableHeader>
-              <TableColumn width="3%" />
               <TableColumn width="97%">Name</TableColumn>
             </TableHeader>
             <TableBody>
@@ -112,9 +109,7 @@ class UserGroups extends Component {
           <Error message={groups.error} />
           {this.renderGroups(groups.error, groups.loading, groups.records, (group, index) => {
             return (
-              <ButtonToolbar style={{ marginBottom: '0px' }}>
-                <UserGroupRemoveAction index={index} group={group} loading={groups.loading} onRemove={this.removeFromGroup} />
-              </ButtonToolbar>
+              <UserGroupRemoveAction index={index} group={group} loading={groups.loading} onRemove={this.removeFromGroup} />
             );
           })}
         </LoadingPanel>
