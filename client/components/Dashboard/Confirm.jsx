@@ -17,7 +17,7 @@ class Confirm extends Component {
   renderConfirm() {
     if (this.props.onConfirm) {
       return (
-        <Button bsStyle="success" bsSize="small" disabled={this.props.loading} onClick={this.props.onConfirm}>
+        <Button bsStyle="success" bsSize="large" disabled={this.props.loading} onClick={this.props.onConfirm}>
           { this.props.confirmMessage || <span><i className="icon icon-budicon-499"></i> Confirm</span> }
         </Button>
       );
