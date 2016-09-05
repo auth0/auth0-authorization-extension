@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
+import './TableAction.styl'
 
 class TableAction extends Component {
   constructor() {
@@ -19,7 +20,7 @@ class TableAction extends Component {
   render() {
     return (
       <OverlayTrigger placement="top" overlay={<Tooltip id={this.props.id}>{this.props.title}</Tooltip>}>
-        <Button onClick={this.onClick} bsStyle={ this.props.type || 'default' } bsSize="xsmall" disabled={this.props.disabled} style={{ padding: '6px 10px' }}>
+        <Button className="table-action" onClick={this.onClick} bsStyle={ this.props.type || 'default' } bsSize="xsmall" disabled={this.props.disabled}>
           <i className={`icon icon-budicon-${this.props.icon}`} style={{ marginRight: '0px' }}></i>
         </Button>
       </OverlayTrigger>

@@ -3,7 +3,6 @@ import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
 import { InputText, LoadingPanel } from '../Dashboard';
 import TypeaheadTokenizer from '../Dashboard/TypeaheadTokenizer';
-import DropdownList from '../Dashboard/DropdownList';
 
 class GroupForm extends Component {
   render() {

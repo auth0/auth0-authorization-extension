@@ -3,7 +3,7 @@ import './EntityHeader.styl';
 
 const EntityHeader = ({ imgSource, primaryText, secondaryText, children }) => {
   return (
-    <div className="entity-header">
+    <div className={`entity-header ${imgSource && 'with-image'}`}>
       { imgSource && <img src={imgSource} alt="" className="entity-header-avatar" /> }
       <div className="entity-header-content">
         <h2 className="entity-header-primary">{primaryText}</h2>

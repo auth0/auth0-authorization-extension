@@ -52,7 +52,6 @@ class GroupsContainer extends Component {
         <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
           onClick={this.props.editGroup} args={[ group ]} d disabled={this.props.groups.loading || false}
         />
-        <span> </span>
         <TableAction id={`delete-${group._id}`} type="default" title="Delete Group" icon="264"
           onClick={this.props.requestDeleteGroup} args={[ group ]} disabled={this.props.groups.loading || false}
         />

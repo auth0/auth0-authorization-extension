@@ -11,11 +11,11 @@ class GroupDeleteDialog extends Component {
   shouldComponentUpdate(nextProps) {
     return nextProps.group !== this.props.group;
   }
-  
+
   confirm() {
     this.props.onConfirm(this.props.group.get('record').toJS());
   }
-  
+
   clear() {
     this.props.onCancel();
   }
@@ -25,13 +25,13 @@ class GroupDeleteDialog extends Component {
     const title = `Delete Group: ${group.record.name}`;
 
     return (
-      <Confirm title={ title } show={ group.requesting && group.isDelete } loading={ group.loading } 
-        onCancel={ this.clear } onConfirm={ this.confirm }>
+      <Confirm title={ title } show={ group.requesting && group.isDelete } loading={ group.loading }
+        onCancel={ this.clear } onConfirm={ this.confirm } confirmMessage="Delete">
         <LoadingPanel show={ group.loading } spinnerStyle={{ height: '40px', width: '40px' }}
             animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <Error message={ group.error } />
           <p>
-            Do you really want to delete "<strong>{ group.record.name }</strong>"? 
+            Do you really want to delete "<strong>{ group.record.name }</strong>"?
             This means all group memberships will also be removed.
           </p>
         </LoadingPanel>
