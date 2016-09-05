@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
-
 import { InputText, LoadingPanel } from '../Dashboard';
+import TypeaheadTokenizer from '../Dashboard/TypeaheadTokenizer';
 
 class GroupForm extends Component {
   render() {
     const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors } = this.props;
-
     return <div>
       <Modal.Body>
         {this.props.children}
@@ -16,7 +15,7 @@ class GroupForm extends Component {
             validationErrors={validationErrors} />
           <InputText field={description} fieldName="description" label="Description"
             validationErrors={validationErrors} />
-          <InputText fieldName="members" label="Members" validationErrors={validationErrors} />
+          <TypeaheadTokenizer options={[ 'Sandrino', 'Victor', 'Ricky', 'Ariel' ]} />
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>

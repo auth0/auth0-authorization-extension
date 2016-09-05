@@ -105,6 +105,7 @@
     "react-router": "^2.7.0",
     "react-router-redux": "^4.0.5",
     "react-transform-hmr": "^1.0.4",
+    "react-typeahead": "^2.0.0-alpha.5",
     "redux": "^3.5.2",
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",

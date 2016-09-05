@@ -1,0 +1,58 @@
+@import "../../../node_modules/auth0-styleguide/lib/vars";
+
+.typeahead-tokenizer
+  border 1px solid rgba(black, 0.3)
+  border-radius 3px
+  padding 10px
+
+  .typeahead-token
+    display inline-block
+    background-color rgba(black, 0.05)
+    border-radius 4px
+    padding 10px 12px
+    padding-right 0
+    margin-right 10px
+
+    .typeahead-token-close
+      padding 8px 14px
+      border-left 1px solid rgba(white, 0.5)
+      margin-left 12px
+      color #979797
+      font-size 20px
+      transition color 0.1s linear
+
+      &:hover
+        color darken(#979797, 50%)
+
+  .typeahead
+    position relative
+    display inline-block
+    z-index 1
+
+    input
+      height 43px
+      border none
+      outline none
+
+    .typeahead-selector
+      position absolute
+      top 100%
+      width 100%
+      list-style-type none
+      background-color white
+      border 1px solid black
+      padding 0
+      margin 0
+      border-radius 3px
+
+      li
+        padding 15px
+        border-bottom 1px solid black
+        background-color white
+
+        &.hover
+          a
+            color orange
+
+        &:last-child
+          border-bottom none
