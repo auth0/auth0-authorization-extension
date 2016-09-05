@@ -4,7 +4,20 @@ import typeahead from 'react-typeahead';
 
 const Tokenizer = typeahead.Tokenizer;
 
-const TypeaheadTokenizer = props =>
-  <Tokenizer {...props} />;
+class TypeaheadTokenizer extends Component {
+  render() {
+    return (
+      <div
+        className="tokenizer-container form-control"
+        onClick={() => { this.tokenizer.focus(); }}
+      >
+        <Tokenizer
+          ref={(tokenizer => { this.tokenizer = tokenizer; })}
+          {...this.props}
+        />
+      </div>
+    );
+  }
+}
 
 export default TypeaheadTokenizer;

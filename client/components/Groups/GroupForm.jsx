@@ -3,6 +3,7 @@ import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
 import { InputText, LoadingPanel } from '../Dashboard';
 import TypeaheadTokenizer from '../Dashboard/TypeaheadTokenizer';
+import DropdownList from '../Dashboard/DropdownList';
 
 class GroupForm extends Component {
   render() {
@@ -15,7 +16,10 @@ class GroupForm extends Component {
             validationErrors={validationErrors} />
           <InputText field={description} fieldName="description" label="Description"
             validationErrors={validationErrors} />
-          <TypeaheadTokenizer options={[ 'Sandrino', 'Victor', 'Ricky', 'Ariel' ]} />
+          <label htmlFor="">Members</label>
+          <TypeaheadTokenizer
+            options={[ 'Sandrino', 'Victor', 'Ricky', 'Ariel', 'John Doe', 'Alicia', 'Juan', 'Jon' ]}
+          />
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>

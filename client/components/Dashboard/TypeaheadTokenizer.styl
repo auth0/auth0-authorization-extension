@@ -1,15 +1,19 @@
 @import "../../../node_modules/auth0-styleguide/lib/vars";
 
-.typeahead-tokenizer
-  border 1px solid rgba(black, 0.3)
-  border-radius 3px
+.tokenizer-container
+  min-height 69px
+  height auto
+  cursor text
   padding 10px
+  line-height 1.5
+
+.typeahead-tokenizer
 
   .typeahead-token
     display inline-block
     background-color rgba(black, 0.05)
-    border-radius 4px
-    padding 10px 12px
+    border-radius $border-radius-base
+    padding 8px 12px
     padding-right 0
     margin-right 10px
 
@@ -17,12 +21,8 @@
       padding 8px 14px
       border-left 1px solid rgba(white, 0.5)
       margin-left 12px
-      color #979797
+      color $gray-dark
       font-size 20px
-      transition color 0.1s linear
-
-      &:hover
-        color darken(#979797, 50%)
 
   .typeahead
     position relative
@@ -30,29 +30,34 @@
     z-index 1
 
     input
-      height 43px
+      height 45px
       border none
       outline none
 
     .typeahead-selector
       position absolute
       top 100%
-      width 100%
+      width 240px
       list-style-type none
       background-color white
-      border 1px solid black
+      border 1px solid $gray-lighter
       padding 0
       margin 0
-      border-radius 3px
+      border-radius $border-radius-base
 
       li
         padding 15px
-        border-bottom 1px solid black
+        border-bottom 1px solid $gray-lighter
         background-color white
 
+        a
+          color black
+
         &.hover
+          background-color rgba(black, 0.02)
+
           a
-            color orange
+            color $brand-success
 
         &:last-child
           border-bottom none
