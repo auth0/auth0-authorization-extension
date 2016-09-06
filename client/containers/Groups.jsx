@@ -59,49 +59,69 @@ class GroupsContainer extends Component {
     );
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
+
+  renderEmptyState() {
+    return (
+      <BlankState
+        title="Groups"
+        iconCode="292"
+        description="Create and manage groups in which you can add users to define dynamic group memberships."
+      >
+        <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
+          Read more
+        </a>
+        <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+          <i className="icon icon-budicon-473" /> Create your first group
+        </Button>
+      </BlankState>
+    );
+  }
+
+  renderBody() {
+    return (
+      <div>
+        <SectionHeader title="Groups" description="Create and manage groups in which you can add users and define dynamic group memberships.">
+          <Button bsSize="default" onClick={this.refresh} disabled={this.props.groups.loading}>
+            <i className="icon icon-budicon-257" /> Refresh
+          </Button>
+          <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+            <i className="icon icon-budicon-337" /> Create
+          </Button>
+        </SectionHeader>
+        <div className="row">
+          <div className="col-xs-12">
+            <Error message={this.props.groups.error} />
+            <LoadingPanel show={this.props.groups.loading}>
+              <GroupsTable canOpenGroup groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
+            </LoadingPanel>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
+    const { error, loading, records } = this.props.groups;
+
     if (this.props.children) {
       return this.props.children;
     }
+
+    if (loading) { return this.renderLoading(); }
 
     return (
       <div>
         <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
         <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
 
-        { !this.props.groups.loading && !this.props.groups.records.size && !this.props.groups.error ?
-          <BlankState
-            title="Groups"
-            iconCode="292"
-            description="Create and manage groups in which you can add users to define dynamic group memberships."
-          >
-            <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" className="btn btn-transparent btn-md">
-              Read more
-            </a>
-            <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-              <i className="icon icon-budicon-473"></i> Create your first group
-            </Button>
-          </BlankState>
-          :
-          <div>
-            <SectionHeader title="Groups" description="Create and manage groups in which you can add users and define dynamic group memberships.">
-              <Button bsSize="default" onClick={this.refresh} disabled={this.props.groups.loading}>
-                <i className="icon icon-budicon-257"></i> Refresh
-              </Button>
-              <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-                <i className="icon icon-budicon-337"></i> Create
-              </Button>
-            </SectionHeader>
-            <div className="row">
-              <div className="col-xs-12">
-                <Error message={this.props.groups.error} />
-                <LoadingPanel show={this.props.groups.loading}>
-                  <GroupsTable canOpenGroup={true} groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
-                </LoadingPanel>
-              </div>
-            </div>
-          </div>
-        }
+        { !error && !records.size ? this.renderEmptyState() : this.renderBody() }
       </div>
     );
   }

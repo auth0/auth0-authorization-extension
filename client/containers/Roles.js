@@ -53,7 +53,6 @@ export default connectContainer(class extends Component {
       <TableAction id={`edit-${role._id}`} type="default" title="Edit Role" icon="266"
         onClick={this.props.editRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
-      <span> </span>
       <TableAction id={`delete-${role._id}`} type="success" title="Delete Role" icon="263"
         onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
@@ -73,43 +72,60 @@ export default connectContainer(class extends Component {
     );
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
+
+  renderEmptyState() {
+    return (
+      <BlankState
+        title="Roles"
+        iconCode="292"
+        description="Create and manage Roles (collection of Permissions) for your applications which can then be added to Groups."
+      >
+        <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
+          Read more
+        </a>
+        <Button bsStyle="success" onClick={this.props.createRole} disabled={this.props.roles.loading}>
+          <i className="icon icon-budicon-473" /> Create your first role
+        </Button>
+      </BlankState>
+    );
+  }
+
   render() {
     const { error, loading, records } = this.props.roles.toJS();
 
+    if (loading) { return this.renderLoading(); }
+
     return (
-      !loading && !error && !records.length ?
-        <BlankState
-          title="Roles"
-          iconCode="292"
-          description="Create and manage Roles (collection of Permissions) for your applications which can then be added to Groups."
-        >
-          <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" className="btn btn-transparent btn-md">
-            Read more
-          </a>
-          <Button bsStyle="success" onClick={this.props.createRole} disabled={this.props.roles.loading}>
-            <i className="icon icon-budicon-473"></i> Create your first role
-          </Button>
-        </BlankState>
-        :
-        <div>
-          <RoleDialog applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
-          <RoleDeleteDialog role={this.props.role} onCancel={this.props.cancelDeleteRole} onConfirm={this.props.deleteRole} />
+      <div>
+        <RoleDialog applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
+        <RoleDeleteDialog role={this.props.role} onCancel={this.props.cancelDeleteRole} onConfirm={this.props.deleteRole} />
 
-          <SectionHeader title="Roles" description="Create and manage Roles (collection of Permissions) for your applications which can then be added to Groups.">
-            <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>
-              <i className="icon icon-budicon-337"></i> Create Role
-            </Button>
-          </SectionHeader>
+        { !error && !records.length ? this.renderEmptyState() : (
+          <div>
+            <SectionHeader title="Roles" description="Create and manage Roles (collection of Permissions) for your applications which can then be added to Groups.">
+              <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>
+                <i className="icon icon-budicon-337" /> Create Role
+              </Button>
+            </SectionHeader>
 
-          <div className="row">
-            <div className="col-xs-12">
-              <Error message={error} />
-              <LoadingPanel show={loading}>
-                {this.renderBody(records, loading)}
-              </LoadingPanel>
+            <div className="row">
+              <div className="col-xs-12">
+                <Error message={error} />
+                <LoadingPanel show={loading}>
+                  {this.renderBody(records, loading)}
+                </LoadingPanel>
+              </div>
             </div>
           </div>
-        </div>
+        ) }
+      </div>
     );
   }
 });
