@@ -94,8 +94,16 @@ export default connectContainer(class extends Component {
   render() {
     const { error, loading, records } = this.props.permissions.toJS();
 
-    return (
-      !loading && !error && !records.lenght ?
+    if (loading) {
+      return (
+        <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+          <div className="circle" />
+        </div>
+      );
+    }
+
+    if (!error && !records.length) {
+      return (
         <BlankState
           title="Permissions"
           iconCode="292"
@@ -108,28 +116,29 @@ export default connectContainer(class extends Component {
             <i className="icon icon-budicon-473" /> Create your first permission
           </Button>
         </BlankState>
-      :
-        <div>
-          <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
-          <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
-          <SectionHeader
-            title="Permissions"
-            description="Create and manage permsisions (granular actions) for your applications which can then be organized in Roles."
-          >
-            <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
-              <i className="icon icon-budicon-337"></i> Create Permission
-            </Button>
-          </SectionHeader>
+      );
+    }
 
-          <div className="row">
-            <div className="col-xs-12">
-              <Error message={error} />
-              <LoadingPanel show={loading}>
-                {this.renderBody(records, loading)}
-              </LoadingPanel>
-            </div>
+    return (
+      <div>
+        <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
+        <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
+        <SectionHeader
+          title="Permissions"
+          description="Create and manage permsisions (granular actions) for your applications which can then be organized in Roles."
+        >
+          <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
+            <i className="icon icon-budicon-337" /> Create Permission
+          </Button>
+        </SectionHeader>
+
+        <div className="row">
+          <div className="col-xs-12">
+            <Error message={error} />
+            {this.renderBody(records, loading)}
           </div>
         </div>
+      </div>
     );
   }
 });
