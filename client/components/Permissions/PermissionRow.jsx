@@ -20,10 +20,10 @@ export default class PermissionRow extends Component {
 
     return (
       <TableRow>
-        <TableTextCell>{ application ? application.name : permission.applicationId }</TableTextCell>
         <TableTextCell>{ permission.name || 'N/A' }</TableTextCell>
+        <TableTextCell>{ application ? application.name : permission.applicationId }</TableTextCell>
         <TableTextCell>{ permission.description || 'N/A' }</TableTextCell>
-        <TableCell>
+        <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
           {this.props.renderActions(permission, index)}
         </TableCell>
       </TableRow>

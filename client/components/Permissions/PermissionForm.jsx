@@ -32,24 +32,23 @@ export default createForm('permission', class extends Component {
         <Modal.Body>
           {this.props.children}
           <LoadingPanel show={loading}>
-            <InputText field={name} fieldName="name" label="Name"
+            <InputText
+              field={name} fieldName="name" label="Name"
               validationErrors={validationErrors}
             />
-            <InputText field={description} fieldName="description" label="Description"
+            <InputText
+              field={description} fieldName="description" label="Description"
               validationErrors={validationErrors}
             />
-            <InputCombo options={applications} field={applicationId} fieldName="applicationId" label="Application"
+            <InputCombo
+              options={applications} field={applicationId} fieldName="applicationId" label="Application"
               validationErrors={validationErrors}
             />
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-            <i className="icon icon-budicon-501"></i> Cancel
-          </Button>
-          <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-            <i className="icon icon-budicon-245"></i> Save
-          </Button>
+          <Button bsSize="small" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
+          <Button bsStyle="primary" bsSize="small" disabled={loading || submitting} onClick={handleSubmit}> Save </Button>
         </Modal.Footer>
       </div>
     );

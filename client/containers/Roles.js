@@ -50,10 +50,10 @@ export default connectContainer(class extends Component {
 
   renderRoleActions = (role) => (
     <div>
-      <TableAction id={`edit-${role._id}`} type="default" title="Edit Role" icon="266"
+      <TableAction id={`edit-${role._id}`} type="default" title="Edit Role" icon="274"
         onClick={this.props.editRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
-      <TableAction id={`delete-${role._id}`} type="success" title="Delete Role" icon="263"
+      <TableAction id={`delete-${role._id}`} type="success" title="Delete Role" icon="264"
         onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
     </div>

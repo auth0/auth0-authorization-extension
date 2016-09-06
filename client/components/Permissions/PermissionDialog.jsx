@@ -24,7 +24,7 @@ export default class PermissionDialog extends Component {
 
     return (
       <Modal show={isVisible} onHide={this.props.onClose}>
-        <Modal.Header closeButton={!permission.loading}>
+        <Modal.Header closeButton={!permission.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <PermissionForm applications={applications.records} loading={permission.loading} initialValues={permission.record} validationErrors={permission.validationErrors}

@@ -4,6 +4,7 @@ import connectContainer from 'redux-static';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import SectionHeader from '../components/Dashboard/SectionHeader';
 import BlankState from '../components/Dashboard/BlankState';
+import SearchBar from '../components/Dashboard/SearchBar';
 
 import * as actions from '../actions';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
@@ -45,10 +46,12 @@ export default connectContainer(class extends Component {
 
   renderPermissionActions = (permission) => (
     <div>
-      <TableAction id={`edit-${permission._id}`} type="default" title="Edit Permission" icon="266"
+      <TableAction
+        id={`edit-${permission._id}`} type="default" title="Edit Permission" icon="274"
         onClick={this.props.editPermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
       />
-      <TableAction id={`delete-${permission._id}`} type="success" title="Delete Permission" icon="263"
+      <TableAction
+        id={`delete-${permission._id}`} type="default" title="Delete Permission" icon="264"
         onClick={this.props.requestDeletePermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
       />
     </div>
@@ -59,25 +62,24 @@ export default connectContainer(class extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <form className="advanced-search-control">
-              <span className="search-area">
-                <i className="icon-budicon-489"></i>
-                <input className="user-input" type="text" ref="search" placeholder="Search for permissions"
-                  spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
-                />
-              </span>
-
-              <span className="controls pull-right">
-                <div className="js-select custom-select">
-                  <span>Search by </span><span className="truncate" data-select-value="">Application</span> <i className="icon-budicon-460"></i>
-                  <select data-mode="">
-                    <option value="user" selected="selected">Application</option>
-                    <option value="email">Permission</option>
-                  </select>
-                </div>
-                <button type="reset">Reset <i className="icon-budicon-471"></i></button>
-              </span>
-            </form>
+            <SearchBar
+              placeholder="Search for permissions"
+              searchOptions={[
+                {
+                  value: 'name',
+                  title: 'Name',
+                  selected: true
+                },
+                {
+                  value: 'application',
+                  title: 'Application'
+                },
+                {
+                  value: 'description',
+                  title: 'Description'
+                }
+              ]}
+            />
           </div>
         </div>
         <PermissionsTable

@@ -14,7 +14,7 @@ class GroupMappingRemoveAction extends Component {
   render() {
     const { index, loading } = this.props;
     return (
-      <TableAction id={`remove-groupMapping-${index}`} type="success" title="Remove" icon="263"
+      <TableAction id={`remove-groupMapping-${index}`} type="success" title="Remove" icon="264"
         onClick={this.onRemove} disabled={loading || false}
       />
     );
