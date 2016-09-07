@@ -75,6 +75,12 @@ export default connectContainer(class extends Component {
                   title: 'Description'
                 }
               ]}
+              handleKeyPress={(e) => {
+                if (e.charCode === 13) {
+                  e.preventDefault();
+                  // Search for permissions
+                }
+              }}
               handleReset={() => {}}
             />
           </div>
