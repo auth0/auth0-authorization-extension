@@ -1,29 +1,54 @@
 import React, { Component } from 'react';
 
-const SearchBar = ({ placeholder, iconCode, searchOptions, handleKeyPress, handleReset }) =>
-  <form className="advanced-search-control">
-    <span className="search-area">
-      <i className={iconCode ? `icon-budicon-${iconCode}` : 'icon-budicon-489'} />
-      <input
-        className="user-input" type="text" placeholder={placeholder || 'Search'}
-        spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={handleKeyPress}
-      />
-    </span>
+class SearchBar extends Component {
+  constructor() {
+    super();
+    this.state = {
+      selectedOption: {
+        title: 'Application',
+        value: 'application'
+      }
+    };
 
-    <span className="controls pull-right">
-      { searchOptions ? (
-        <div className="js-select custom-select">
-          <span>Search by </span><span className="truncate" data-select-value="">Application</span> <i className="icon-budicon-460" />
-          <select data-mode="" defaultValue={searchOptions.find((opt) => opt.selected).value}>
-            { searchOptions.map((opt) => {
-              return <option key={opt.title} value={opt.value}>{opt.title}</option>;
-            })}
-          </select>
-        </div>
-      ) : null }
-      { handleReset && <button type="reset" onClick={handleReset}>Reset <i className="icon-budicon-471" /></button> }
-    </span>
-  </form>;
+    this.handleChange = this.handleChange.bind(this);
+  }
+  handleChange(event) {
+    this.setState({
+      selectedOption: this.props.searchOptions.find(opt => opt.value === event.target.value)
+    });
+  }
+  render() {
+    const { placeholder, iconCode, searchOptions, handleKeyPress, handleReset } = this.props;
+    return (
+      <form className="advanced-search-control">
+        <span className="search-area">
+          <i className={iconCode ? `icon-budicon-${iconCode}` : 'icon-budicon-489'} />
+          <input
+            className="user-input" type="text" placeholder={placeholder || 'Search'}
+            spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={handleKeyPress}
+          />
+        </span>
+
+        <span className="controls pull-right">
+          { searchOptions ? (
+            <div className="js-select custom-select">
+              <span>Search by </span><span className="truncate">{this.state.selectedOption.title}</span> <i className="icon-budicon-460" />
+              <select
+                value={this.state.selectedOption.value}
+                onChange={this.handleChange}
+              >
+                { searchOptions.map((opt) => {
+                  return <option key={opt.title} value={opt.value}>{opt.title}</option>;
+                })}
+              </select>
+            </div>
+          ) : null }
+          { handleReset && <button type="reset" onClick={handleReset}>Reset <i className="icon-budicon-471" /></button> }
+        </span>
+      </form>
+    );
+  }
+}
 
 SearchBar.propTypes = {
   placeholder: React.PropTypes.string,
