@@ -113,7 +113,7 @@ export default connectContainer(class extends Component {
           <div>
             <SectionHeader title="Roles" description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups.">
               <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>
-                <i className="icon icon-budicon-337" /> Create Role
+                <i className="icon icon-budicon-473" /> Create Role
               </Button>
             </SectionHeader>
 

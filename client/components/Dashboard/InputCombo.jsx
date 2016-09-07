@@ -9,16 +9,18 @@ class InputCombo extends Component {
       'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length
     });
 
-    return <div className={classes}>
-      <label>{label}</label>
-      <select className="form-control" {...this.props} {...field}>
-        <option value=""></option>
-        {options.map((option, index) => {
-          return <option key={index} value={option.value}>{option.text}</option>;
-        })}
-      </select>
-      { validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{ validationErrors[fieldName][0] }</div> }
-    </div>;
+    return (
+      <div className={classes}>
+        <label>{label}</label>
+        <select className="form-control" {...this.props} {...field}>
+          <option value="" />
+          {options.map((option, index) => {
+            return <option key={index} value={option.value}>{option.text}</option>;
+          })}
+        </select>
+        { validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{ validationErrors[fieldName][0] }</div> }
+      </div>
+    );
   }
 }
 
