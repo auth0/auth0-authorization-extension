@@ -34,7 +34,7 @@ export default class PermissionDeleteDialog extends Component {
           animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}
         >
           <Error message={permission.error} />
-          <p>Do you really want to delete "<strong>{ permission.record.name }</strong>"?</p>
+          <p className="text-center">Do you really want to delete "<strong>{ permission.record.name }</strong>"?</p>
         </LoadingPanel>
       </Confirm>
     );

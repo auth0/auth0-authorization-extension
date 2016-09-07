@@ -27,8 +27,10 @@ export default class PermissionDialog extends Component {
         <Modal.Header closeButton={!permission.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <PermissionForm applications={applications.records} loading={permission.loading} initialValues={permission.record} validationErrors={permission.validationErrors}
-            onClose={this.props.onClose} onSubmit={this.props.onSave}>
+        <PermissionForm
+          applications={applications.records} loading={permission.loading} initialValues={permission.record} validationErrors={permission.validationErrors}
+          onClose={this.props.onClose} onSubmit={this.props.onSave}
+        >
           <Error message={permission.error} />
         </PermissionForm>
       </Modal>

@@ -11,7 +11,8 @@ export default createForm('permission', class extends Component {
     submitting: PropTypes.bool,
     handleSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-    applications: PropTypes.object.isRequired
+    applications: PropTypes.object.isRequired,
+    children: PropTypes.node
   };
 
   static formFields = [
@@ -47,8 +48,8 @@ export default createForm('permission', class extends Component {
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="small" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
-          <Button bsStyle="primary" bsSize="small" disabled={loading || submitting} onClick={handleSubmit}> Save </Button>
+          <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
+          <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}> Create </Button>
         </Modal.Footer>
       </div>
     );
