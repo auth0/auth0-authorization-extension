@@ -50,10 +50,12 @@ export default connectContainer(class extends Component {
 
   renderRoleActions = (role) => (
     <div>
-      <TableAction id={`edit-${role._id}`} type="default" title="Edit Role" icon="274"
+      <TableAction
+        id={`edit-${role._id}`} title="Edit Role" icon="274"
         onClick={this.props.editRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
-      <TableAction id={`delete-${role._id}`} type="success" title="Delete Role" icon="264"
+      <TableAction
+        id={`delete-${role._id}`} title="Delete Role" icon="264"
         onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
     </div>
@@ -85,7 +87,7 @@ export default connectContainer(class extends Component {
       <BlankState
         title="Roles"
         iconCode="292"
-        description="Create and manage Roles (collection of Permissions) for your applications which can then be added to Groups."
+        description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
           Read more
@@ -109,7 +111,7 @@ export default connectContainer(class extends Component {
 
         { !error && !records.length ? this.renderEmptyState() : (
           <div>
-            <SectionHeader title="Roles" description="Create and manage Roles (collection of Permissions) for your applications which can then be added to Groups.">
+            <SectionHeader title="Roles" description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups.">
               <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>
                 <i className="icon icon-budicon-337" /> Create Role
               </Button>

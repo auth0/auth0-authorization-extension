@@ -23,7 +23,7 @@ export default class RoleRow extends Component {
         <TableTextCell>{ application ? application.name : role.applicationId }</TableTextCell>
         <TableTextCell>{ role.name || 'N/A' }</TableTextCell>
         <TableTextCell>{ role.description || 'N/A' }</TableTextCell>
-        <TableCell>
+        <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
           {this.props.renderActions(role, index)}
         </TableCell>
       </TableRow>

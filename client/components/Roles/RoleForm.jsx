@@ -69,6 +69,9 @@ export default createForm('role', class extends Component {
     if (this.state.mode === 'select-app') {
       return (
         <div>
+          <p className="modal-description">
+            Give a name, description (optional) and permissions for this role.
+          </p>
           <InputCombo options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
             validationErrors={validationErrors}
           />
@@ -78,14 +81,17 @@ export default createForm('role', class extends Component {
 
     return (
       <div>
+        <p className="modal-description">
+          Select the application you want to create the role for.
+        </p>
+        <InputCombo options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
+          validationErrors={validationErrors} readOnly
+        />
         <InputText field={name} fieldName="name" label="Name"
           validationErrors={validationErrors}
         />
         <InputText field={description} fieldName="description" label="Description"
           validationErrors={validationErrors}
-        />
-        <InputCombo options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
-          validationErrors={validationErrors} readOnly
         />
       <ScopeGroup options={this.state.permissions} field={permissions} fieldName="permissions" />
       </div>
@@ -95,15 +101,15 @@ export default createForm('role', class extends Component {
   getActionButton(loading, submitting, handleSubmit) {
     if (this.state.mode === 'edit-role') {
       return (
-        <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-          <i className="icon icon-budicon-245"></i> Save
+        <Button bsStyle="primary" bsSize="large" disabled={ loading || submitting } onClick={handleSubmit}>
+          Save
         </Button>
       );
     }
 
     return (
-      <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={this.onNext}>
-        <i className="icon icon-budicon-245"></i> Next
+      <Button bsStyle="primary" bsSize="large" disabled={ loading || submitting } onClick={this.onNext}>
+        Next
       </Button>
     );
   }
@@ -120,9 +126,7 @@ export default createForm('role', class extends Component {
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-            <i className="icon icon-budicon-501"></i> Cancel
-          </Button>
+          <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}>Cancel</Button>
           {this.getActionButton(loading, submitting, handleSubmit)}
         </Modal.Footer>
       </div>
