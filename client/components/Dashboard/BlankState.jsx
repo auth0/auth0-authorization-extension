@@ -19,7 +19,7 @@ class BlankState extends Component {
 
 BlankState.propTypes = {
   title: PropTypes.string.isRequired,
-  iconCode: PropTypes.number.isRequired,
+  iconCode: PropTypes.string.isRequired,
   description: PropTypes.string,
   children: React.PropTypes.node
 };

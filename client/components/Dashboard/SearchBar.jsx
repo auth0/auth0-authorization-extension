@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-const SearchBar = ({ placeholder, iconCode, onKeyPress, searchOptions }) =>
+const SearchBar = ({ placeholder, iconCode, searchOptions, handleKeyPress, handleReset }) =>
   <form className="advanced-search-control">
     <span className="search-area">
       <i className={iconCode ? `icon-budicon-${iconCode}` : 'icon-budicon-489'} />
       <input
         className="user-input" type="text" placeholder={placeholder || 'Search'}
-        spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={onKeyPress}
+        spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={handleKeyPress}
       />
     </span>
 
@@ -14,22 +14,29 @@ const SearchBar = ({ placeholder, iconCode, onKeyPress, searchOptions }) =>
       { searchOptions ? (
         <div className="js-select custom-select">
           <span>Search by </span><span className="truncate" data-select-value="">Application</span> <i className="icon-budicon-460" />
-          <select data-mode="">
+          <select data-mode="" defaultValue={searchOptions.find((opt) => opt.selected).value}>
             { searchOptions.map((opt) => {
-              return <option value={opt.value} selected={opt.selected}>{opt.title}</option>;
+              return <option key={opt.title} value={opt.value}>{opt.title}</option>;
             })}
           </select>
         </div>
       ) : null }
-      <button type="reset">Reset <i className="icon-budicon-471" /></button>
+      { handleReset && <button type="reset" onClick={handleReset}>Reset <i className="icon-budicon-471" /></button> }
     </span>
   </form>;
 
 SearchBar.propTypes = {
   placeholder: React.PropTypes.string,
   iconCode: React.PropTypes.number,
-  onKeyPress: React.PropTypes.func,
-  searchOptions: React.PropTypes.array
+  searchOptions: React.PropTypes.arrayOf(
+    React.PropTypes.shape({
+      value: React.PropTypes.string.isRequired,
+      title: React.PropTypes.string.isRequired,
+      selected: React.PropTypes.bool
+    })
+  ),
+  handleKeyPress: React.PropTypes.func,
+  handleReset: React.PropTypes.func
 };
 
 export default SearchBar;

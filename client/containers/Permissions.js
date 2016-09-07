@@ -47,10 +47,6 @@ export default connectContainer(class extends Component {
   renderPermissionActions = (permission) => (
     <div>
       <TableAction
-        id={`edit-${permission._id}`} type="default" title="Edit Permission" icon="274"
-        onClick={this.props.editPermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
-      />
-      <TableAction
         id={`delete-${permission._id}`} type="default" title="Delete Permission" icon="264"
         onClick={this.props.requestDeletePermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
       />
@@ -67,18 +63,19 @@ export default connectContainer(class extends Component {
               searchOptions={[
                 {
                   value: 'name',
-                  title: 'Name',
-                  selected: true
+                  title: 'Name'
                 },
                 {
                   value: 'application',
-                  title: 'Application'
+                  title: 'Application',
+                  selected: true
                 },
                 {
                   value: 'description',
                   title: 'Description'
                 }
               ]}
+              handleReset={() => {}}
             />
           </div>
         </div>
@@ -131,10 +128,10 @@ export default connectContainer(class extends Component {
           <div>
             <SectionHeader
               title="Permissions"
-              description="Create and manage permsisions (granular actions) for your applications which can then be organized in Roles."
+              description="Define permissions for your apps that you can then group in Roles and assign to users."
             >
               <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
-                <i className="icon icon-budicon-337" /> Create Permission
+                <i className="icon icon-budicon-473" /> Create Permission
               </Button>
             </SectionHeader>
 

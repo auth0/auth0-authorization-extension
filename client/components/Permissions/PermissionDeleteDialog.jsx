@@ -27,7 +27,7 @@ export default class PermissionDeleteDialog extends Component {
     return (
       <Confirm
         title={title} show={permission.requesting && permission.isDelete} loading={permission.loading}
-        onCancel={this.clear} onConfirm={this.confirm}
+        onCancel={this.clear} onConfirm={this.confirm} confirmMessage="Delete"
       >
         <LoadingPanel
           show={permission.loading} spinnerStyle={{ height: '40px', width: '40px' }}
