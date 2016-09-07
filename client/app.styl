@@ -1,4 +1,4 @@
-// Application general styles / fixes
+@import "../node_modules/auth0-styleguide/lib/vars";
 
 // Overwrite manage styles default button margin
 .alert .btn
@@ -14,10 +14,16 @@
 
 // Overwrite modal buttons height
 
-.modal-dialog .modal-footer .btn
-  padding-top 16px
-  padding-bottom 16px
-  margin-left 16px
+.modal-dialog
+  .modal-footer .btn
+    padding-top 16px
+    padding-bottom 16px
+    margin-left 16px
 
-  &:first-child
-    margin-left 0
+    &:first-child
+      margin-left 0
+
+  .modal-description
+    text-align center
+    color $color-text-light
+    margin-bottom 30px

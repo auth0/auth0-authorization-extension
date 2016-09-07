@@ -19,7 +19,7 @@ export default class PermissionDialog extends Component {
   render() {
     const applications = this.props.applications.toJS();
     const permission = this.props.permission.toJS();
-    const title = permission.isNew ? 'New Permission' : `Edit Permission: ${permission.record.name}`;
+    const title = permission.isNew ? 'Create Permission' : `Edit Permission: ${permission.record.name}`;
     const isVisible = permission.isEdit || permission.isNew;
 
     return (

@@ -33,6 +33,7 @@ export default createForm('permission', class extends Component {
         <Modal.Body>
           {this.props.children}
           <LoadingPanel show={loading}>
+            <p className="modal-description">Select the application of this permission and give it a name and a  description (optional).</p>
             <InputText
               field={name} fieldName="name" label="Name"
               validationErrors={validationErrors}
