@@ -25,10 +25,10 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <Sidebar>
-              <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
-              <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
-              <SidebarItem title="Roles" route="/roles" icon="icon icon-budicon-322" />
-              <SidebarItem title="Permissions" route="/permissions" icon="icon icon-budicon-322" />
+              <SidebarItem icon="users" title="Users" route="/users" />
+              <SidebarItem icon="groups" title="Groups" route="/groups" />
+              <SidebarItem icon="roles" title="Roles" route="/roles" />
+              <SidebarItem icon="permissions" title="Permissions" route="/permissions" />
             </Sidebar>
             <div id="content" className="col-xs-10">
               <RuleStatus ruleStatus={this.props.ruleStatus}

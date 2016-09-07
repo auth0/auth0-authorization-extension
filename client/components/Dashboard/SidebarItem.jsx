@@ -1,6 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+import './SidebarItem.styl';
+
+import usersIcon from './svg/User.svg';
+import groupsIcon from './svg/Groups.svg';
+import rolesIcon from './svg/Roles.svg';
+import permissionsIcon from './svg/Permissions.svg';
+
+const sidebarIcons = {
+  users: usersIcon,
+  groups: groupsIcon,
+  roles: rolesIcon,
+  permissions: permissionsIcon
+};
 
 class SidebarItem extends Component {
   state = {
@@ -39,10 +52,14 @@ class SidebarItem extends Component {
       return (
         <li className={groupClass}>
           <a href="#" onClick={this.onClick}>
-            <i className={this.props.icon}></i> <span>{this.props.title}</span></a>
-            <ul style={{ display: this.state.open ? 'block' : 'none' }}>
-              {children}
-            </ul>
+            <div className="item-image-container">
+              <img className="item-image" src={sidebarIcons[this.props.icon]} role="presentation" />
+            </div>
+            <span>{this.props.title}</span>
+          </a>
+          <ul style={{ display: this.state.open ? 'block' : 'none' }}>
+            {children}
+          </ul>
         </li>
       );
     }
@@ -53,7 +70,10 @@ class SidebarItem extends Component {
     return (
       <li className={linkClass}>
         <Link to={`${this.props.route}`}>
-          <i className={this.props.icon}></i> <span>{this.props.title}</span>
+          <div className="item-image-container">
+            <img className="item-image" src={sidebarIcons[this.props.icon]} role="presentation" />
+          </div>
+          <span>{this.props.title}</span>
         </Link>
       </li>
     );
