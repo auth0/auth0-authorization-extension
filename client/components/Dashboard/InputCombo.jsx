@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 class InputCombo extends Component {
   render() {
-    const { label, field, fieldName, options, validationErrors } = this.props;
+    const { label, field, fieldName, options, validationErrors} = this.props;
     const classes = classNames({
       'form-group': true,
       'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length

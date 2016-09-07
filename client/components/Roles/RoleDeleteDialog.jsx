@@ -25,12 +25,16 @@ export default class RoleDeleteDialog extends Component {
     const title = `Delete Role: ${role.record.name}`;
 
     return (
-      <Confirm title={ title } show={ role.requesting && role.isDelete } loading={ role.loading }
-        onCancel={ this.clear } onConfirm={ this.confirm }>
-        <LoadingPanel show={ role.loading } spinnerStyle={{ height: '40px', width: '40px' }}
-          animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <Error message={ role.error } />
-          <p>Do you really want to delete "<strong>{ role.record.name }</strong>"?</p>
+      <Confirm
+        title={title} show={role.requesting && role.isDelete} loading={role.loading}
+        onCancel={this.clear} onConfirm={this.confirm} confirmMessage="Delete"
+      >
+        <LoadingPanel
+          show={role.loading} spinnerStyle={{ height: '40px', width: '40px' }}
+          animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}
+        >
+          <Error message={role.error} />
+          <p className="text-center">Do you really want to delete "<strong>{ role.record.name }</strong>"?</p>
         </LoadingPanel>
       </Confirm>
     );

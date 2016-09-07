@@ -72,7 +72,8 @@ export default createForm('role', class extends Component {
           <p className="modal-description">
             Give a name, description (optional) and permissions for this role.
           </p>
-          <InputCombo options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
+          <InputCombo
+            options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
             validationErrors={validationErrors}
           />
         </div>
@@ -84,16 +85,19 @@ export default createForm('role', class extends Component {
         <p className="modal-description">
           Select the application you want to create the role for.
         </p>
-        <InputCombo options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
-          validationErrors={validationErrors} readOnly
+        <InputCombo
+          options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
+          validationErrors={validationErrors} disabled
         />
-        <InputText field={name} fieldName="name" label="Name"
+        <InputText
+          field={name} fieldName="name" label="Name"
           validationErrors={validationErrors}
         />
-        <InputText field={description} fieldName="description" label="Description"
+        <InputText
+          field={description} fieldName="description" label="Description"
           validationErrors={validationErrors}
         />
-      <ScopeGroup options={this.state.permissions} field={permissions} fieldName="permissions" />
+        <ScopeGroup options={this.state.permissions} field={permissions} fieldName="permissions" label="Permissions" />
       </div>
     );
   }
@@ -101,14 +105,14 @@ export default createForm('role', class extends Component {
   getActionButton(loading, submitting, handleSubmit) {
     if (this.state.mode === 'edit-role') {
       return (
-        <Button bsStyle="primary" bsSize="large" disabled={ loading || submitting } onClick={handleSubmit}>
+        <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}>
           Save
         </Button>
       );
     }
 
     return (
-      <Button bsStyle="primary" bsSize="large" disabled={ loading || submitting } onClick={this.onNext}>
+      <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={this.onNext}>
         Next
       </Button>
     );
