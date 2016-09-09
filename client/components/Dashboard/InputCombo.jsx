@@ -13,7 +13,7 @@ class InputCombo extends Component {
       <div className={classes}>
         <label>{label}</label>
         <select className="form-control" {...this.props} {...field}>
-          <option value="" />
+          { options.length > 1 && <option value="" />}
           {options.map((option, index) => {
             return <option key={index} value={option.value}>{option.text}</option>;
           })}
