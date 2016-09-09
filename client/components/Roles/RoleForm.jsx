@@ -31,10 +31,6 @@ export default createForm('role', class extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.isNew) {
-      return;
-    }
-
     const { applicationId } = (nextProps.initialValues || nextProps.values);
 
     this.setState({

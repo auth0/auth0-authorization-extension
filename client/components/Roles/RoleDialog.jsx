@@ -29,8 +29,10 @@ export default class RoleDialog extends Component {
         <Modal.Header closeButton={!role.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <RoleForm isNew={role.isNew} applications={applications.records} permissions={permissions.records} loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
-            onClose={this.props.onClose} onSubmit={this.props.onSave}>
+        <RoleForm
+          isNew={role.isNew} applications={applications.records} permissions={permissions.records} loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
+          onClose={this.props.onClose} onSubmit={this.props.onSave}
+        >
           <Error message={role.error} />
         </RoleForm>
       </Modal>
