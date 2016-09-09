@@ -1,9 +1,16 @@
+@import "../../../node_modules/auth0-styleguide/lib/vars";
+
 .item-image-container
   display inline-block
   max-width 18px
   max-height 18px
   margin-right 10px
+  vertical-align middle
 
 .item-image
-  max-width 100%
-  max-height 100%
+  width 18px
+  height 18px
+  color $color-text-black
+
+  .sidebar-item.active &
+    color $brand-success
