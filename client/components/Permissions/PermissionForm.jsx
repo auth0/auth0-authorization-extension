@@ -36,7 +36,7 @@ export default createForm('permission', class extends Component {
             <p className="modal-description">Select the application of this permission and give it a name and a  description (optional).</p>
             <InputText
               field={name} fieldName="name" label="Name"
-              validationErrors={validationErrors}
+              validationErrors={validationErrors} placeholder="e.g. read:invoce, delete:user, edit:book"
             />
             <InputText
               field={description} fieldName="description" label="Description"

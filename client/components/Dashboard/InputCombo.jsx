@@ -11,13 +11,15 @@ class InputCombo extends Component {
 
     return (
       <div className={classes}>
-        <label>{label}</label>
-        <select className="form-control" {...this.props} {...field}>
-          { options.length > 1 && <option value="" />}
-          {options.map((option, index) => {
-            return <option key={index} value={option.value}>{option.text}</option>;
-          })}
-        </select>
+        <label style={{ width: '100%' }}>
+          <span style={{ display: 'inline-block', marginBottom: '5px' }}>{label}</span>
+          <select className="form-control" {...this.props} {...field}>
+            { options.length > 1 && <option value="">Select your application...</option>}
+            {options.map((option, index) => {
+              return <option key={index} value={option.value}>{option.text}</option>;
+            })}
+          </select>
+        </label>
         { validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{ validationErrors[fieldName][0] }</div> }
       </div>
     );
