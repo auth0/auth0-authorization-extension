@@ -25,6 +25,7 @@ class GroupDialog extends Component {
           validationErrors={group.validationErrors}
           onClose={this.props.onClose}
           onSubmit={(perm) => this.props.onSave(perm)}
+          isNew={group.isNew}
         >
           <Error message={group.error} />
         </GroupForm>

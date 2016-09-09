@@ -2,22 +2,36 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
 import { InputText, LoadingPanel } from '../Dashboard';
-import TypeaheadTokenizer from '../Dashboard/TypeaheadTokenizer';
+import Multiselect from '../Dashboard/Multiselect';
 
 class GroupForm extends Component {
   render() {
-    const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
     return <div>
       <Modal.Body>
         {this.props.children}
         <LoadingPanel show={loading}>
-          <InputText field={name} fieldName="name" label="Name"
-            validationErrors={validationErrors} />
-          <InputText field={description} fieldName="description" label="Description"
-            validationErrors={validationErrors} />
+          { isNew &&
+            <p className="modal-description">
+              Name your group and add members. You can also edit name and membership later.
+            </p>
+          }
+          <InputText
+            field={name} fieldName="name" label="Name"
+            validationErrors={validationErrors}
+          />
+          <InputText
+            field={description} fieldName="description" label="Description"
+            validationErrors={validationErrors}
+          />
           <label htmlFor="">Members</label>
-          <TypeaheadTokenizer
-            options={[ 'Sandrino', 'Victor', 'Ricky', 'Ariel', 'John Doe', 'Alicia', 'Juan', 'Jon' ]}
+          <Multiselect
+            options={[
+              { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
+              { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
+              { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
+              { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
+            ]}
           />
         </LoadingPanel>
       </Modal.Body>

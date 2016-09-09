@@ -88,11 +88,8 @@ class GroupsContainer extends Component {
     return (
       <div>
         <SectionHeader title="Groups" description="Create and manage groups in which you can add users and define dynamic group memberships.">
-          <Button bsSize="default" onClick={this.refresh} disabled={this.props.groups.loading}>
-            <i className="icon icon-budicon-257" /> Refresh
-          </Button>
           <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-            <i className="icon icon-budicon-337" /> Create
+            <i className="icon icon-budicon-473" /> Create Group
           </Button>
         </SectionHeader>
         <div className="row">

@@ -13,8 +13,12 @@ class Header extends Component {
           </div>
           <div id="navbar-collapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-right">
-              <li>Help</li>
-              <li>Dashboard</li>
+              <li>
+                <a href="https://auth0.com/docs/extensions/authorization-extension">Help</a>
+              </li>
+              <li>
+                <a href="https://manage.auth0.com/">Dashboard</a>
+              </li>
               <li className="dropdown">
                 <span role="button" data-toggle="dropdown" data-target="#" className="btn-username">
                   <img src={user.get('picture')} className="avatar" />
