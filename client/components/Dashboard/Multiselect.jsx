@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
 import '../../../node_modules/react-select/dist/react-select.css';
+import './Multiselect.styl'
 
 class Multiselect extends Component {
   constructor() {
@@ -17,7 +18,7 @@ class Multiselect extends Component {
     return (
       <span>
         <strong>{value.label}</strong>
-        <span>{value.email}</span>
+        <span> ({value.email})</span>
       </span>
     );
   }
@@ -25,6 +26,7 @@ class Multiselect extends Component {
     const { options, onChange } = this.props;
     return (
       <Select
+        className="react-multiselect"
         name="react-multiselect"
         options={options}
         onChange={this.onChange}
