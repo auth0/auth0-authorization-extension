@@ -98,7 +98,7 @@ export default createForm('role', class extends Component {
     );
   }
 
-  getActionButton(loading, submitting, handleSubmit) {
+  getActionButton(loading, submitting, handleSubmit, applicationId) {
     if (this.state.mode === 'edit-role') {
       return (
         <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}>
@@ -108,7 +108,7 @@ export default createForm('role', class extends Component {
     }
 
     return (
-      <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={this.onNext}>
+      <Button bsStyle="primary" bsSize="large" disabled={loading || submitting || !applicationId.value} onClick={this.onNext}>
         Next
       </Button>
     );
@@ -127,7 +127,7 @@ export default createForm('role', class extends Component {
         </Modal.Body>
         <Modal.Footer>
           <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}>Cancel</Button>
-          {this.getActionButton(loading, submitting, handleSubmit)}
+          {this.getActionButton(loading, submitting, handleSubmit, applicationId)}
         </Modal.Footer>
       </div>
     );
