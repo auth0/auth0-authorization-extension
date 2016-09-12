@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import { LoadingPanel, Error } from '../Dashboard';
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
-import SectionHeader from '../Dashboard/SectionHeader';
-import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from '../Dashboard';
 
 class GroupMembers extends Component {
   constructor() {
     super();
     this.renderActions = this.renderActions.bind(this);
+    this.state = {
+      showOnlyGroupMembers: true
+    };
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.members !== this.props.members || nextProps.nestedMembers !== this.props.nestedMembers;
+    return nextProps.members !== this.props.members || nextProps.nestedMembers !== this.props.nestedMembers;
   }
 
   renderActions(user, index) {
@@ -97,7 +98,7 @@ class GroupMembers extends Component {
               </ul>
             </div>
           </div>
-          <div className="row">
+          <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-8">
               <p>Add members to or remove them from the group.</p>
             </div>
