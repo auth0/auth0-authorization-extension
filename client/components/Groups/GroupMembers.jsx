@@ -86,13 +86,18 @@ class GroupMembers extends Component {
           </div>
           <div className="row">
             <div className="col-xs-12">
-              <h4>Members</h4>
-              <span className="pull-left">Add members to or remove them from the group.</span>
-              <ButtonToolbar className="pull-right">
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.addMember} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Add
-                </Button>
-              </ButtonToolbar>
+              <ul className="nav nav-pills">
+                <li className="active">
+                  <a href="">Members of this group</a>
+                </li>
+                <li>
+                  <a href="">All members</a>
+                </li>
+              </ul>
+              <p>Add members to or remove them from the group.</p>
+              <Button bsStyle="success" onClick={this.props.addMember} disabled={loading}>
+                <i className="icon icon-budicon-473"></i> Add member
+              </Button>
             </div>
           </div>
           {this.renderMembers(loading, records)}

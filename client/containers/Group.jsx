@@ -110,10 +110,13 @@ export class GroupContainer extends Component {
               <Tab eventKey={1} title="Members">
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
-              <Tab eventKey={2} title="Nested Groups">
+              <Tab eventKey={2} title="Roles">
+                <h1>Roles</h1>
+              </Tab>
+              <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
               </Tab>
-              <Tab eventKey={3} title="Group Mappings">
+              <Tab eventKey={4} title="Group Mappings">
                 <GroupMappings mappings={group.get('mappings')} createMapping={this.props.createGroupMapping} removeMapping={this.props.requestDeleteGroupMapping} />
               </Tab>
             </Tabs>

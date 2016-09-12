@@ -14,7 +14,7 @@ class NestedGroupRemoveAction extends Component {
   render() {
     const { index, loading } = this.props;
     return (
-      <TableAction id={`remove-group-${index}`} type="success" title="Remove" icon="296"
+      <TableAction id={`remove-group-${index}`} title="Remove nested group" icon="296"
         onClick={this.onRemove} disabled={loading || false}
       />
     );

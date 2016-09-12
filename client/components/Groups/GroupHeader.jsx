@@ -37,11 +37,11 @@ class GroupHeader extends Component {
         primaryText={group.get('record').get('name') || group.get('record').get('_id')}
         secondaryText={this.getDescription(group)}
       >
-        <Button>
+        <Button className="table-action" bsSize="small">
           <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
         </Button>
-        <Button style={{ marginLeft: '10px' }}>
-          <i className="icon icon-budicon-471" style={{ marginRight: 0 }} />
+        <Button className="table-action" bsSize="small" style={{ marginLeft: '10px' }}>
+          <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
         </Button>
       </ EntityHeader>
     );

@@ -30,8 +30,8 @@ class GroupDeleteDialog extends Component {
         <LoadingPanel show={ group.loading } spinnerStyle={{ height: '40px', width: '40px' }}
             animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <Error message={ group.error } />
-          <p>
-            Do you really want to delete "<strong>{ group.record.name }</strong>"?
+          <p className="text-center">
+            Do you really want to delete "<strong>{ group.record.name }</strong>"? <br/>
             This means all group memberships will also be removed.
           </p>
         </LoadingPanel>

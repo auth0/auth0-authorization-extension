@@ -9,13 +9,13 @@ class GroupForm extends Component {
     const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
     return <div>
       <Modal.Body>
-        {this.props.children}
         <LoadingPanel show={loading}>
           { isNew &&
             <p className="modal-description">
               Name your group and add members. You can also edit name and membership later.
             </p>
           }
+          {this.props.children}
           <InputText
             field={name} fieldName="name" label="Name"
             validationErrors={validationErrors}
@@ -40,7 +40,7 @@ class GroupForm extends Component {
           Cancel
         </Button>
         <Button bsSize="large" bsStyle="primary" disabled={ loading || submitting } onClick={handleSubmit}>
-          Save
+          Create
         </Button>
       </Modal.Footer>
     </div>;

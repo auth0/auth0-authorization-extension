@@ -25,11 +25,9 @@ class GroupMappings extends Component {
               <span className="pull-left">Mappings allow you to define which existing group memberships (eg: Active Directory) should be translated to this group. For example: &quot;<i>If <strong>John</strong> from <strong>fabrikam-adfs</strong> belongs to <strong>Fabrikam HR</strong> then he should also be member of this group.&quot;</i></span>
             </div>
             <div className="col-xs-2">
-              <ButtonToolbar className="pull-right">
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.createMapping} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Create
-                </Button>
-              </ButtonToolbar>
+              <Button bsStyle="success" onClick={this.props.createMapping} disabled={loading}>
+                <i className="icon icon-budicon-473" /> Create
+              </Button>
             </div>
           </div>
           <div className="row">
