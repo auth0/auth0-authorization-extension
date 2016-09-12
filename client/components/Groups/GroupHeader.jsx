@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import EntityHeader from '../Dashboard/EntityHeader';
 
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class GroupHeader extends Component {
   shouldComponentUpdate(nextProps) {
@@ -37,12 +37,16 @@ class GroupHeader extends Component {
         primaryText={group.get('record').get('name') || group.get('record').get('_id')}
         secondaryText={this.getDescription(group)}
       >
-        <Button className="table-action" bsSize="small">
-          <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
-        </Button>
-        <Button className="table-action" bsSize="small" style={{ marginLeft: '10px' }}>
-          <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
-        </Button>
+        <OverlayTrigger placement="top" overlay={<Tooltip id="edit-group">Edit group</Tooltip>}>
+          <Button className="table-action" bsSize="small">
+            <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
+          <Button className="table-action" bsSize="small" style={{ marginLeft: '10px' }}>
+            <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
+          </Button>
+        </OverlayTrigger>
       </ EntityHeader>
     );
   }

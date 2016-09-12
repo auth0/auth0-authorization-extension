@@ -83,9 +83,18 @@ export class GroupContainer extends Component {
     this.props.removeNestedGroup(groupId, nestedGroupId);
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
 
   render() {
     const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested } = this.props;
+
+    if (group.get('loading')) { return this.renderLoading(); }
 
     return (
       <div>
