@@ -31,9 +31,14 @@ class NestedGroups extends Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-xs-12">
-              <span className="pull-left">Add nested groups (sub groups) to this group. All members of these nested groups will automatically become members of this group also.</span>
-              <Button bsStyle="success" onClick={this.props.addNestedGroup} disabled={loading}>
+            <div className="col-xs-8">
+              <p>
+                Add nested groups (sub groups) to this group. All members of these nested groups
+                will automatically become members of this group also.
+              </p>
+            </div>
+            <div className="col-xs-4">
+              <Button className="pull-right" bsStyle="success" onClick={this.props.addNestedGroup} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Add nested group
               </Button>
             </div>

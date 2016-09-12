@@ -4,8 +4,9 @@ import './SectionHeader.styl';
 export default class SectionHeader extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    isSubsection: PropTypes.bool
+    description: PropTypes.string,
+    isSubsection: PropTypes.bool,
+    children: PropTypes.node
   }
 
   render() {

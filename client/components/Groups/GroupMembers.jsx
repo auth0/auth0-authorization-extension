@@ -4,6 +4,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import { LoadingPanel, Error } from '../Dashboard';
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
+import SectionHeader from '../Dashboard/SectionHeader';
 import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
 class GroupMembers extends Component {
@@ -84,7 +85,7 @@ class GroupMembers extends Component {
               <Error message={error} />
             </div>
           </div>
-          <div className="row">
+          <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-12">
               <ul className="nav nav-pills">
                 <li className="active">
@@ -94,9 +95,15 @@ class GroupMembers extends Component {
                   <a href="">All members</a>
                 </li>
               </ul>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-8">
               <p>Add members to or remove them from the group.</p>
-              <Button bsStyle="success" onClick={this.props.addMember} disabled={loading}>
-                <i className="icon icon-budicon-473"></i> Add member
+            </div>
+            <div className="col-xs-4">
+              <Button className="pull-right" bsStyle="success" onClick={this.props.addMember} disabled={loading}>
+                <i className="icon icon-budicon-473" /> Add member
               </Button>
             </div>
           </div>
