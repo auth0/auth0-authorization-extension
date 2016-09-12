@@ -17,17 +17,21 @@ class GroupMappingForm extends Component {
       <div>
         <Modal.Body>
           {this.props.children}
-          <LoadingPanel show={ loading } spinnerStyle={{ height: '16px', width: '16px' }} animationStyle={{ paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '10px' }}>
+          <LoadingPanel show={loading} spinnerStyle={{ height: '16px', width: '16px' }} animationStyle={{ paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '10px' }}>
+            <p className="modal-description">
+              When creating a mapping if users log in with the selected connection and belongs
+              to the specified Incomming group then they will be part of this group also.
+            </p>
             <InputCombo options={connections} field={connectionName} fieldName="connectionName" label="Connection" validationErrors={validationErrors} />
             <InputText field={groupName} fieldName="groupName" label="Incoming Group Name" validationErrors={validationErrors} />
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-            <i className="icon icon-budicon-501"></i> Cancel
+          <Button disabled={loading || submitting} onClick={this.props.onClose}>
+            Cancel
           </Button>
-          <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-            <i className="icon icon-budicon-245"></i> Save
+          <Button bsStyle="primary" disabled={loading || submitting} onClick={handleSubmit}>
+            Create
           </Button>
         </Modal.Footer>
       </div>
