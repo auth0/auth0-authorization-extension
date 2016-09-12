@@ -6,6 +6,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
+import GroupRoles from '../components/Groups/GroupRoles';
 import { GroupPickerDialog, GroupHeader, GroupMappingDialog, GroupMappingRemoveDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog, NestedGroups, NestedGroupRemoveDialog } from '../components/Groups';
 
 export class GroupContainer extends Component {
@@ -121,7 +122,7 @@ export class GroupContainer extends Component {
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <h1>Roles</h1>
+                <GroupRoles />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />

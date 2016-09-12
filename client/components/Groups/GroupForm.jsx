@@ -7,7 +7,7 @@ import Multiselect from '../Dashboard/Multiselect';
 class GroupForm extends Component {
   render() {
     const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
-    return <div>
+    return (<div>
       <Modal.Body>
         <LoadingPanel show={loading}>
           { isNew &&
@@ -24,26 +24,30 @@ class GroupForm extends Component {
             field={description} fieldName="description" label="Description"
             validationErrors={validationErrors}
           />
-          <label htmlFor="">Members</label>
-          <Multiselect
-            options={[
-              { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
-              { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
-              { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
-              { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
-            ]}
-          />
+          { isNew &&
+            <div>
+              <label>Members</label>
+              <Multiselect
+                options={[
+                  { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
+                  { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
+                  { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
+                  { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
+                ]}
+              />
+            </div>
+          }
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>
-        <Button bsSize="large" bsStyle="transparent" disabled={ loading || submitting } onClick={this.props.onClose}>
+        <Button bsSize="large" bsStyle="transparent" disabled={loading || submitting} onClick={this.props.onClose}>
           Cancel
         </Button>
-        <Button bsSize="large" bsStyle="primary" disabled={ loading || submitting } onClick={handleSubmit}>
+        <Button bsSize="large" bsStyle="primary" disabled={loading || submitting} onClick={handleSubmit}>
           Create
         </Button>
       </Modal.Footer>
-    </div>;
+    </div>);
   }
 }
 
@@ -52,7 +56,8 @@ GroupForm.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   submitting: React.PropTypes.bool,
   handleSubmit: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired
+  onClose: React.PropTypes.func.isRequired,
+  children: React.PropTypes.node
 };
 
 export default reduxForm({ form: 'group', fields: [ 'name', 'description' ] })(GroupForm);

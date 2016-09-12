@@ -26,7 +26,7 @@ class GroupRow extends Component {
         <TableTextCell>{ (group.members && group.members.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.nested && group.nested.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.mappings && group.mappings.length) || '0' }</TableTextCell>
-        <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
+        <TableCell style={{ paddingRight: 0, paddingLeft: 0, textAlign: 'right' }}>
           {this.props.renderActions(group, index)}
         </TableCell>
       </TableRow>
