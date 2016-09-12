@@ -28,7 +28,7 @@ class Confirm extends Component {
 
   render() {
     return (
-      <Modal dialogClassName={this.props.dialogClassName} show={this.props.show} onHide={this.props.onCancel}>
+      <Modal className={this.props.className} dialogClassName={this.props.dialogClassName} show={this.props.show} onHide={this.props.onCancel}>
         <Modal.Header className="has-border" closeButton={!this.props.loading}>
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
@@ -51,7 +51,8 @@ Confirm.propTypes = {
   title: React.PropTypes.string.isRequired,
   show: React.PropTypes.bool.isRequired,
   onCancel: React.PropTypes.func.isRequired,
-  onConfirm: React.PropTypes.func
+  onConfirm: React.PropTypes.func,
+  className: React.PropTypes.string
 };
 
 export default Confirm;

@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 
-import './UserPickerDialog.styl';
 import { Error, Confirm } from '../Dashboard';
-import UserOverview from './UserOverview';
+import Multiselect from '../Dashboard/Multiselect';
 import UserPickerSelectAction from './UserPickerSelectAction';
 import UserPickerUnselectAction from './UserPickerUnselectAction';
 
@@ -41,10 +40,19 @@ class UserPickerDialog extends Component {
     const confirmMessage = selection.length ? `Add ${selection.length} Users` : 'Confirm';
 
     return (
-      <Confirm confirmMessage={confirmMessage} dialogClassName="user-picker-dialog" size="large" title={title} show={open} loading={loading} onCancel={onCancel} onConfirm={this.onConfirm}>
+      <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={onCancel} onConfirm={this.onConfirm}>
         <Error message={error} />
-        <UserOverview onReset={onReset} onSearch={onSearch}
-          error={error} users={records} total={total} loading={loading} renderActions={this.renderActions}
+        <p className="modal-description">
+          Add or remove members from this group.
+        </p>
+        <label htmlFor="">Add Members</label>
+        <Multiselect
+          options={[
+            { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
+            { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
+            { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
+            { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
+          ]}
         />
       </Confirm>
     );

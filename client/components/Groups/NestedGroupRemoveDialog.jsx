@@ -25,10 +25,12 @@ class NestedGroupRemoveDialog extends Component {
     const title = `Remove nested group '${nestedGroupName}' from '${groupName}'`;
 
     return (
-      <Confirm title={ title } show={ requesting && isRemove } loading={ loading } onCancel={ this.clear } onConfirm={ this.confirm }>
-        <LoadingPanel show={ loading } spinnerStyle={{ height: '40px', width: '40px' }} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <Error message={ error } />
-          <p>Do you really want to remove <strong>{ nestedGroupName }</strong> from <strong>{ groupName }</strong>?</p>
+      <Confirm confirmMessage="Remove" title={title} show={requesting && isRemove} loading={loading} onCancel={this.clear} onConfirm={this.confirm}>
+        <LoadingPanel show={loading} spinnerStyle={{ height: '40px', width: '40px' }} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+          <Error message={error} />
+          <p className="text-center">
+            Do you really want to remove <strong>{ nestedGroupName }</strong> from <strong>{ groupName }</strong>?
+          </p>
         </LoadingPanel>
       </Confirm>
     );
