@@ -56,7 +56,7 @@ export default connectContainer(class extends Component {
   renderBody(records, loading) {
     return (
       <div>
-        <div className="row">
+        <div className="row" style={{ marginBottom: '20px' }}>
           <div className="col-xs-12">
             <SearchBar
               placeholder="Search for permissions"

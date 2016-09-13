@@ -69,7 +69,7 @@ class UserOverview extends React.Component {
               <UserFederated loading={loading} />
             </Tab>
           </Tabs>
-          <div className="row">
+          <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-12">
               <SearchBar
                 placeholder="Search for users"

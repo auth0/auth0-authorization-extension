@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import SectionHeader from '../components/Dashboard/SectionHeader';
 import BlankState from '../components/Dashboard/BlankState';
+import SearchBar from '../components/Dashboard/SearchBar';
 
 import { connectionActions } from '../actions';
 import * as actions from '../actions/group';
@@ -96,6 +97,29 @@ class GroupsContainer extends Component {
             <i className="icon icon-budicon-473" /> Create Group
           </Button>
         </SectionHeader>
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-12">
+            <SearchBar
+              placeholder="Search for groups"
+              searchOptions={[
+                {
+                  value: 'group',
+                  title: 'Group'
+                },
+                {
+                  value: 'email',
+                  title: 'Email'
+                },
+                {
+                  value: 'connection',
+                  title: 'Connection'
+                }
+              ]}
+              handleKeyPress={() => { console.log('SearchBar key press'); }}
+              handleReset={() => { console.log('SearchBar handleReset'); }}
+            />
+          </div>
+        </div>
         <div className="row">
           <div className="col-xs-12">
             <Error message={this.props.groups.error} />

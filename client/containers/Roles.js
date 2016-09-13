@@ -4,6 +4,7 @@ import connectContainer from 'redux-static';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 import SectionHeader from '../components/Dashboard/SectionHeader';
 import BlankState from '../components/Dashboard/BlankState';
+import SearchBar from '../components/Dashboard/SearchBar';
 
 import * as actions from '../actions';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
@@ -116,6 +117,30 @@ export default connectContainer(class extends Component {
                 <i className="icon icon-budicon-473" /> Create Role
               </Button>
             </SectionHeader>
+
+            <div className="row" style={{ marginBottom: '20px' }}>
+              <div className="col-xs-12">
+                <SearchBar
+                  placeholder="Search for roles"
+                  searchOptions={[
+                    {
+                      value: 'role',
+                      title: 'Role'
+                    },
+                    {
+                      value: 'email',
+                      title: 'Email'
+                    },
+                    {
+                      value: 'connection',
+                      title: 'Connection'
+                    }
+                  ]}
+                  handleKeyPress={() => { console.log('SearchBar key press'); }}
+                  handleReset={() => { console.log('SearchBar handleReset'); }}
+                />
+              </div>
+            </div>
 
             <div className="row">
               <div className="col-xs-12">
