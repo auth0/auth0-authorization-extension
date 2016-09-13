@@ -108,16 +108,8 @@ class GroupsContainer extends Component {
               placeholder="Search for groups"
               searchOptions={[
                 {
-                  value: 'group',
-                  title: 'Group'
-                },
-                {
-                  value: 'email',
-                  title: 'Email'
-                },
-                {
-                  value: 'connection',
-                  title: 'Connection'
+                  value: 'name',
+                  title: 'Name'
                 }
               ]}
               handleKeyPress={() => { console.log('SearchBar key press'); }}

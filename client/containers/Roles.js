@@ -129,16 +129,12 @@ export default connectContainer(class extends Component {
                   placeholder="Search for roles"
                   searchOptions={[
                     {
-                      value: 'role',
-                      title: 'Role'
+                      value: 'name',
+                      title: 'Name'
                     },
                     {
-                      value: 'email',
-                      title: 'Email'
-                    },
-                    {
-                      value: 'connection',
-                      title: 'Connection'
+                      value: 'application',
+                      title: 'Application'
                     }
                   ]}
                   handleKeyPress={() => { console.log('SearchBar key press'); }}

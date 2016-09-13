@@ -23,8 +23,8 @@ export default class RoleTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="30%">Application</TableColumn>
           <TableColumn width="30%">Name</TableColumn>
+          <TableColumn width="30%">Application</TableColumn>
           <TableColumn width="28%">Description</TableColumn>
           <TableColumn />
         </TableHeader>

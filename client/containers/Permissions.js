@@ -64,12 +64,12 @@ export default connectContainer(class extends Component {
               searchOptions={[
                 {
                   value: 'name',
-                  title: 'Name'
+                  title: 'Name',
+                  selected: true
                 },
                 {
                   value: 'application',
-                  title: 'Application',
-                  selected: true
+                  title: 'Application'
                 },
                 {
                   value: 'description',
@@ -79,7 +79,7 @@ export default connectContainer(class extends Component {
               handleKeyPress={(e) => {
                 if (e.charCode === 13) {
                   e.preventDefault();
-                  // Search for permissions
+                  // Search
                 }
               }}
               handleReset={() => {}}
