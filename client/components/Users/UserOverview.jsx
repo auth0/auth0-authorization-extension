@@ -7,7 +7,8 @@ import UserFederated from './UserFederated';
 import SectionHeader from '../Dashboard/SectionHeader';
 import BlankState from '../Dashboard/BlankState';
 import UsersTable from './UsersTable';
-import { Error, LoadingPanel, TableTotals } from '../Dashboard';
+import { Error, TableTotals } from '../Dashboard';
+import SearchBar from '../Dashboard/SearchBar';
 
 class UserOverview extends React.Component {
   constructor() {
@@ -70,31 +71,25 @@ class UserOverview extends React.Component {
           </Tabs>
           <div className="row">
             <div className="col-xs-12">
-              <form className="advanced-search-control">
-                <span className="search-area">
-                  <i className="icon-budicon-489" />
-                  <input
-                    className="user-input" type="text" ref={elem => { this.searchInput = elem; }} placeholder="Search for users"
-                    spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
-                  />
-                </span>
-
-                <span className="controls pull-right">
-                  <div className="js-select custom-select">
-                    <span>Search by </span><span className="truncate" data-select-value="">Name</span> <i className="icon-budicon-460" />
-                    <select data-mode="">
-                      <option value="user" selected="selected">Name</option>
-                      <option value="email">Email</option>
-                      <option value="connection">Connection</option>
-                    </select>
-                  </div>
-                  <button type="reset">Reset <i className="icon-budicon-471" /></button>
-                </span>
-              </form>
-            </div>
-            <div className="col-xs-12 help-block">
-              To perform your search, press <span className="keyboard-button">enter</span>.
-              You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.
+              <SearchBar
+                placeholder="Search for users"
+                searchOptions={[
+                  {
+                    value: 'user',
+                    title: 'User'
+                  },
+                  {
+                    value: 'email',
+                    title: 'Email'
+                  },
+                  {
+                    value: 'connection',
+                    title: 'Connection'
+                  }
+                ]}
+                handleKeyPress={() => { console.log('SearchBar key press'); }}
+                handleReset={() => { console.log('SearchBar handleReset'); }}
+              />
             </div>
           </div>
 
