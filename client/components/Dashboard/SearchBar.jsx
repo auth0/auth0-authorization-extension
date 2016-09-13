@@ -32,8 +32,9 @@ class SearchBar extends Component {
         <span className="controls pull-right">
           { searchOptions ? (
             <div className="js-select custom-select">
-              <span>Search by </span><span className="truncate">{this.state.selectedOption.title}</span> <i className="icon-budicon-460" />
+              <span>Search by </span><span className="truncate" data-select-value>{this.state.selectedOption.title}</span> <i className="icon-budicon-460" />
               <select
+                data-mode
                 value={this.state.selectedOption.value}
                 onChange={this.handleChange}
               >
@@ -43,7 +44,7 @@ class SearchBar extends Component {
               </select>
             </div>
           ) : null }
-          { handleReset && <button type="reset" onClick={handleReset}>Reset <i className="icon-budicon-471" /></button> }
+          { handleReset && <button type="reset" style={{ marginLeft: 0 }} onClick={handleReset}>Reset <i className="icon-budicon-471" /></button> }
         </span>
       </form>
     );
