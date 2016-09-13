@@ -83,6 +83,7 @@ export const SAVE_GROUP_FULFILLED = 'SAVE_GROUP_FULFILLED';
 // Create or edit.
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const EDIT_GROUP = 'EDIT_GROUP';
+export const EDIT_GROUP_USERS = 'EDIT_GROUP_USERS';
 export const CLEAR_GROUP = 'CLEAR_GROUP';
 
 // Delete.

@@ -8,6 +8,7 @@ import { connectionActions } from '../actions';
 import * as actions from '../actions/group';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
 import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../components/Groups';
+import GroupUsersDialog from '../components/Groups/GroupUsersDialog';
 
 class GroupsContainer extends Component {
   constructor() {
@@ -50,7 +51,7 @@ class GroupsContainer extends Component {
     return (
       <div>
         <TableAction id={`manage-members-${group._id}`} type="default" title="Manage members" icon="299"
-          onClick={() => {}} args={[ group ]} disabled={this.props.groups.loading || false}
+          onClick={this.props.editGroupUsers} args={[ group ]} disabled={this.props.groups.loading || false}
         />
         <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
           onClick={this.props.editGroup} args={[ group ]} disabled={this.props.groups.loading || false}
@@ -120,6 +121,7 @@ class GroupsContainer extends Component {
       <div>
         <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
         <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
+        <GroupUsersDialog group={this.props.group} onClose={this.clear} />
 
         { !error && !records.size ? this.renderEmptyState() : this.renderBody() }
       </div>
