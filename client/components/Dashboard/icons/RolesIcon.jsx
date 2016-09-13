@@ -3,7 +3,7 @@ import React, { Component, PropTypes } from 'react';
 class RolesIcon extends Component {
   render() {
     return (
-      <svg className="item-image" width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+      <svg className={this.props.className} width="32px" height="32px" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg">
         <g id="Page-1" stroke="none" strokeWidth="2" fill="none" fillRule="evenodd">
           <g id="Roles" transform="translate(1.000000, 1.000000)">
             <path d="M7,0 C3.1,0 0,3.1 0,7 C0,9.8 1.6,12.2 4,13.3 L4,27 L6,30 L7,30 L10,27 L10,25 L8,24 L8,22 L10,20 L8,18 L10,16" id="Shape" stroke="currentColor" stroke-width="2"></path>

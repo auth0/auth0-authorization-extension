@@ -5,6 +5,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import SectionHeader from '../components/Dashboard/SectionHeader';
 import BlankState from '../components/Dashboard/BlankState';
 import SearchBar from '../components/Dashboard/SearchBar';
+import RolesIcon from '../components/Dashboard/icons/RolesIcon';
 
 import * as actions from '../actions';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
@@ -87,7 +88,11 @@ export default connectContainer(class extends Component {
     return (
       <BlankState
         title="Roles"
-        iconCode="292"
+        iconImage={
+          <div className="no-content-image">
+            <RolesIcon />
+          </div>
+        }
         description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">

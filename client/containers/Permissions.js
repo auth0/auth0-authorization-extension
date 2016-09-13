@@ -5,6 +5,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 import SectionHeader from '../components/Dashboard/SectionHeader';
 import BlankState from '../components/Dashboard/BlankState';
 import SearchBar from '../components/Dashboard/SearchBar';
+import PermissionsIcon from '../components/Dashboard/icons/PermissionsIcon';
 
 import * as actions from '../actions';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
@@ -107,7 +108,11 @@ export default connectContainer(class extends Component {
     return (
       <BlankState
         title="Permissions"
-        iconCode="292"
+        iconImage={
+          <div className="no-content-image">
+            <PermissionsIcon />
+          </div>
+        }
         description="Permissions description."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">

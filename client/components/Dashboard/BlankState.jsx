@@ -3,11 +3,11 @@ import './BlankState.styl';
 
 class BlankState extends Component {
   render() {
-    const { title, iconCode, description } = this.props;
+    const { title, iconImage, description } = this.props;
     return (
       <div className="no-content-section">
         <h2 className="title">{title}</h2>
-        { iconCode && <i className={`icon-budicon-${iconCode} section-icon`} /> }
+        { iconImage }
         { description && <p className="description">{description}</p> }
         <div className="button-container">
           {this.props.children}
@@ -19,7 +19,7 @@ class BlankState extends Component {
 
 BlankState.propTypes = {
   title: PropTypes.string.isRequired,
-  iconCode: PropTypes.string.isRequired,
+  iconImage: PropTypes.string.node,
   description: PropTypes.string,
   children: React.PropTypes.node
 };

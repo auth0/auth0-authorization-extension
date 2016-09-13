@@ -10,6 +10,7 @@ import * as actions from '../actions/group';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
 import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../components/Groups';
 import GroupUsersDialog from '../components/Groups/GroupUsersDialog';
+import GroupsIcon from '../components/Dashboard/icons/GroupsIcon';
 
 class GroupsContainer extends Component {
   constructor() {
@@ -76,7 +77,11 @@ class GroupsContainer extends Component {
     return (
       <BlankState
         title="Groups"
-        iconCode="292"
+        iconImage={
+          <div className="no-content-image">
+            <GroupsIcon />
+          </div>
+        }
         description="Create and manage groups in which you can add users to define dynamic group memberships."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">

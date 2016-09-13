@@ -9,6 +9,7 @@ import BlankState from '../Dashboard/BlankState';
 import UsersTable from './UsersTable';
 import { Error, TableTotals } from '../Dashboard';
 import SearchBar from '../Dashboard/SearchBar';
+import UserIcon from '../Dashboard/icons/UsersIcon';
 
 class UserOverview extends React.Component {
   constructor() {
@@ -45,9 +46,17 @@ class UserOverview extends React.Component {
     return (
       <BlankState
         title="Users"
-        iconCode="292"
+        iconImage={
+          <div className="no-content-image">
+            <UserIcon />
+          </div>
+        }
         description="Lorem ipsum dolor sit amet."
-      />
+      >
+        <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
+          Read more
+        </a>
+      </BlankState>
     );
   }
 
