@@ -104,7 +104,7 @@ class GroupMembers extends Component {
             </div>
             <div className="col-xs-4">
               <Button className="pull-right" bsStyle="success" onClick={this.props.addMember} disabled={loading}>
-                <i className="icon icon-budicon-473" /> Add member
+                <i className="icon icon-budicon-292" /> Manage members
               </Button>
             </div>
           </div>

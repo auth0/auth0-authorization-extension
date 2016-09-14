@@ -50,14 +50,24 @@ export class UserContainer extends Component {
     this.props.requestRemoveGroupMember(group, user);
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
+
   render() {
     const { user, groups, allGroups, groupPicker, groupMember } = this.props;
+
+    if (user.loading) { return this.renderLoading(); }
 
     return (
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <UserHeader loading={user.loading} user={user.record} error={user.error} />
+            <UserHeader user={user.record} error={user.error} />
           </div>
         </div>
         <div className="row">

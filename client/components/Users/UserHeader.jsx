@@ -3,12 +3,7 @@ import EntityHeader from '../Dashboard/EntityHeader';
 
 class UserHeader extends Component {
   shouldComponentUpdate(nextProps) {
-    return nextProps.user !== this.props.user || nextProps.loading !== this.props.loading;
-  }
-
-  getEmail(user) {
-    if (!user.email) return null;
-    return user.email;
+    return nextProps.user !== this.props.user;
   }
 
   render() {
@@ -20,14 +15,13 @@ class UserHeader extends Component {
       <EntityHeader
         imgSource={user.picture}
         primaryText={user.name || user.nickname || user.email}
-        secondaryText={this.getEmail(user)}
+        secondaryText={user.email}
       />
     );
   }
 }
 
 UserHeader.propTypes = {
-  loading: React.PropTypes.bool.isRequired,
   user: React.PropTypes.object.isRequired
 };
 

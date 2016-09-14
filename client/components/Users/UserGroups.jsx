@@ -99,11 +99,16 @@ class UserGroups extends Component {
 
     return (
       <div>
-        <SectionHeader isSubsection title="Explicit Group Memberships" description={this.getHelpText(groups.records)}>
-          <Button bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
-            Add user to groups
-          </Button>
-        </SectionHeader>
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-8">
+            <p>{this.getHelpText(groups.records)}</p>
+          </div>
+          <div className="col-xs-4">
+            <Button className="pull-right" bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
+              <i className="icon icon-budicon-473" /> Add user to groups
+            </Button>
+          </div>
+        </div>
 
         <LoadingPanel show={groups.loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <Error message={groups.error} />

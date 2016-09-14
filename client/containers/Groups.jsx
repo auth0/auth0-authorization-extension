@@ -9,7 +9,7 @@ import { connectionActions } from '../actions';
 import * as actions from '../actions/group';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
 import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../components/Groups';
-import GroupUsersDialog from '../components/Groups/GroupUsersDialog';
+import GroupMembersDialog from '../components/Groups/GroupMembersDialog';
 import GroupsIcon from '../components/Dashboard/icons/GroupsIcon';
 
 class GroupsContainer extends Component {
@@ -142,7 +142,7 @@ class GroupsContainer extends Component {
       <div>
         <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
         <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
-        <GroupUsersDialog group={this.props.group} onClose={this.clear} />
+        <GroupMembersDialog group={this.props.group} onClose={this.clear} />
 
         { !error && !records.size ? this.renderEmptyState() : this.renderBody() }
       </div>

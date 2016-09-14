@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 import Multiselect from '../Dashboard/Multiselect';
 import UsersTablePicker from '../Users/UsersTablePicker';
 
-class GroupUsersDialog extends React.Component {
+class GroupMembersDialog extends React.Component {
   render() {
     const group = this.props.group.toJS();
     const title = `Manage ${group.record.name} users`;
@@ -25,6 +25,7 @@ class GroupUsersDialog extends React.Component {
               { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
             ]}
           />
+        { /* @todo: Add UsersTablePicker component with users data  */}
         </Modal.Body>
         <Modal.Footer>
           <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.props.onClose}>
@@ -39,9 +40,9 @@ class GroupUsersDialog extends React.Component {
   }
 }
 
-GroupUsersDialog.propTypes = {
+GroupMembersDialog.propTypes = {
   group: PropTypes.object.isRequired,
   onClose: PropTypes.func
 };
 
-export default GroupUsersDialog;
+export default GroupMembersDialog;
