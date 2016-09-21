@@ -12,7 +12,7 @@ import ApplicationGroupRemoveDialog from '../../components/Applications/Applicat
 
 import { GroupPickerDialog } from '../../components/Groups';
 
-export default class ApplicationContainer extends Component {
+class ApplicationContainer extends Component {
   constructor() {
     super();
 

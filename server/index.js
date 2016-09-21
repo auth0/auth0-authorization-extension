@@ -75,15 +75,18 @@ module.exports = (options = { }) => {
     // }));
 
     // Authenticate admins.
-    app.use('/admins', auth0({
-      scopes: nconf.get('AUTH0_SCOPES'),
-      authenticatedCallback: onUserAuthenticated,
-      clientName: 'Auth0 Authorization Dashboard Extension',
-      apiToken: {
-        secret: nconf.get('AUTHORIZE_API_KEY')
-      },
-      audience: (req) => `https://${req.webtaskContext.data.AUTH0_DOMAIN}/api/v2/`
-    }));
+    app.use('/admins', (req, res, next) => {
+      auth0({
+        scopes: nconf.get('AUTH0_SCOPES'),
+        authenticatedCallback: onUserAuthenticated,
+        clientName: 'Auth0 Authorization Dashboard Extension',
+        apiToken: {
+          secret: nconf.get('AUTHORIZE_API_KEY')
+        },
+        audience: (req) => `https://${req.webtaskContext.data.AUTH0_DOMAIN}/api/v2/`,
+        rootTenantAuthority: req.webtaskContext.data.AUTH0_RTA
+      })(req, res, next);
+    });
   }
 
   // Fallback to rendering HTML.
