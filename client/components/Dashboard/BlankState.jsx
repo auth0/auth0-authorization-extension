@@ -19,9 +19,9 @@ class BlankState extends Component {
 
 BlankState.propTypes = {
   title: PropTypes.string.isRequired,
-  iconImage: PropTypes.string.node,
+  iconImage: PropTypes.node,
   description: PropTypes.string,
-  children: React.PropTypes.node
+  children: PropTypes.node
 };
 
 export default BlankState;
