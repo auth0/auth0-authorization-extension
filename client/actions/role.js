@@ -51,6 +51,15 @@ export function createRole() {
   };
 }
 
+export function roleApplicationSelected(applicationId) {
+  return {
+    type: constants.ROLE_APPLICATION_SELECTED,
+    payload: {
+      applicationId
+    }
+  };
+}
+
 /*
  * Edit a specific role.
  */

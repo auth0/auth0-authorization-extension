@@ -112,7 +112,7 @@ export default connectContainer(class extends Component {
 
     return (
       <div>
-        <RoleDialog applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
+        <RoleDialog onApplicationSelected={this.props.roleApplicationSelected} applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
         <RoleDeleteDialog role={this.props.role} onCancel={this.props.cancelDeleteRole} onConfirm={this.props.deleteRole} />
 
         { !error && !records.length ? this.renderEmptyState() : (

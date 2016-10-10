@@ -45,14 +45,19 @@ export const role = createReducer(fromJS(initialState), {
   [constants.CREATE_ROLE]: (state) =>
     state.merge({
       ...initialState,
-      isNew: true
+      isNew: true,
+      page: 'chooseApplication'
     }),
+  [constants.ROLE_APPLICATION_SELECTED]: (state, action) =>
+    state.setIn([ 'record', 'applicationId' ], action.payload.applicationId)
+      .setIn([ 'page' ], action.payload.applicationId && action.payload.applicationId.length ? 'editRole' : 'chooseApplication'),
   [constants.EDIT_ROLE]: (state, action) =>
     state.merge({
       ...initialState,
       isEdit: true,
       record: action.payload.role,
-      roleId: action.payload.role._id
+      roleId: action.payload.role._id,
+      page: 'editRole'
     }),
   [constants.SAVE_ROLE_PENDING]: (state) =>
     state.merge({

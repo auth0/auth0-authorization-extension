@@ -13,7 +13,8 @@ export default createForm('role', class extends Component {
     onClose: PropTypes.func.isRequired,
     permissions: PropTypes.array.isRequired,
     applications: PropTypes.array.isRequired,
-    isNew: PropTypes.bool.isRequired
+    isNew: PropTypes.bool.isRequired,
+    onApplicationSelected: PropTypes.func.isRequired
   };
 
   static formFields = [
@@ -30,12 +31,19 @@ export default createForm('role', class extends Component {
     permissions: []
   }
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      applicationId: props.applicationId
+    };
+  }
+
   componentWillReceiveProps(nextProps) {
     const { applicationId } = (nextProps.initialValues || nextProps.values);
 
     this.setState({
-      isNew: nextProps.isNew,
-      mode: nextProps.isNew ? 'select-app' : 'edit-role',
+      applicationId,
       applications: nextProps.applications.map(app => ({
         value: app.client_id,
         text: `${app.name}`
@@ -50,19 +58,23 @@ export default createForm('role', class extends Component {
   }
 
   onBack = () => {
-    this.setState({
-      mode: 'select-app'
-    });
+    this.props.onApplicationSelected('');
   }
 
   onNext = () => {
+    if (this.props.onApplicationSelected) {
+      this.props.onApplicationSelected(this.state.applicationId);
+    }
+  }
+
+  onApplicationChanged = (e) => {
     this.setState({
-      mode: 'edit-role'
+      applicationId: e.target.value
     });
   }
 
   getFields(name, description, permissions, applicationId, validationErrors) {
-    if (this.state.mode === 'select-app') {
+    if (this.props.page === 'chooseApplication') {
       return (
         <div>
           <p className="modal-description">
@@ -70,12 +82,13 @@ export default createForm('role', class extends Component {
           </p>
           <InputCombo
             options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
-            validationErrors={validationErrors}
+            validationErrors={validationErrors} onChange={this.onApplicationChanged}
           />
         </div>
       );
     }
 
+    // editRole
     return (
       <div>
         <p className="modal-description">
@@ -98,8 +111,20 @@ export default createForm('role', class extends Component {
     );
   }
 
+  getCancelButton(loading, submitting) {
+    if (this.props.isNew && this.props.page === 'editRole') {
+      return (
+        <Button bsSize="large" disabled={loading || submitting} onClick={this.onBack}>Back</Button>
+      );
+    }
+
+    return (
+      <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}>Cancel</Button>
+    );
+  }
+
   getActionButton(loading, submitting, handleSubmit, applicationId) {
-    if (this.state.mode === 'edit-role') {
+    if (this.props.page === 'editRole') {
       return (
         <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}>
           Save
@@ -108,14 +133,14 @@ export default createForm('role', class extends Component {
     }
 
     return (
-      <Button bsStyle="primary" bsSize="large" disabled={loading || submitting || !applicationId.value} onClick={this.onNext}>
+      <Button bsStyle="primary" bsSize="large" disabled={!this.state.applicationId || this.state.applicationId === ''} onClick={this.onNext}>
         Next
       </Button>
     );
   }
 
   render() {
-    const { fields: { name, description, permissions, applicationId }, mode, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { fields: { name, description, permissions, applicationId }, handleSubmit, loading, submitting, validationErrors } = this.props;
 
     return (
       <div>
@@ -126,7 +151,7 @@ export default createForm('role', class extends Component {
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}>Cancel</Button>
+          {this.getCancelButton(loading, submitting)}
           {this.getActionButton(loading, submitting, handleSubmit, applicationId)}
         </Modal.Footer>
       </div>

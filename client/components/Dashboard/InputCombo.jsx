@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 import classNames from 'classnames';
 
 class InputCombo extends Component {
+  onChange = (event) => {
+    const { field } = this.props;
+    field.onChange(event);
+
+    if (this.props.onChange) {
+      this.props.onChange(event);
+    }
+  }
+
   render() {
     const { label, field, fieldName, options, validationErrors} = this.props;
     const classes = classNames({
@@ -13,7 +22,7 @@ class InputCombo extends Component {
       <div className={classes}>
         <label style={{ width: '100%' }}>
           <span style={{ display: 'inline-block', marginBottom: '5px' }}>{label}</span>
-          <select className="form-control" {...this.props} {...field}>
+          <select className="form-control" {...this.props} {...field} onChange={this.onChange}>
             { options.length > 1 && <option value="">Select your application...</option>}
             {options.map((option, index) => {
               return <option key={index} value={option.value}>{option.text}</option>;

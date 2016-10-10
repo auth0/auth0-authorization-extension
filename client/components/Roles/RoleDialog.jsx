@@ -10,7 +10,8 @@ export default class RoleDialog extends Component {
     onClose: PropTypes.func.isRequired,
     role: PropTypes.object.isRequired,
     applications: PropTypes.object.isRequired,
-    permissions: PropTypes.object.isRequired
+    permissions: PropTypes.object.isRequired,
+    onApplicationSelected: PropTypes.func.isRequired
   }
 
   shouldComponentUpdate(nextProps) {
@@ -32,6 +33,8 @@ export default class RoleDialog extends Component {
         <RoleForm
           isNew={role.isNew} applications={applications.records} permissions={permissions.records} loading={role.loading} initialValues={role.record} validationErrors={role.validationErrors}
           onClose={this.props.onClose} onSubmit={this.props.onSave}
+          page={role.page}
+          onApplicationSelected={this.props.onApplicationSelected}
         >
           <Error message={role.error} />
         </RoleForm>
