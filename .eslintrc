@@ -1,5 +1,5 @@
 {
-  "extends": "airbnb",
+  "extends": "auth0",
   "ecmaFeatures": {
     "jsx": true,
     "modules": true
