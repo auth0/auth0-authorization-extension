@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-
-import { connectContainer } from '../utils';
+import connectContainer from 'redux-static';
 import { configurationActions } from '../actions';
 import RuleSettings from '../components/Configuration/RuleSettings';
 
