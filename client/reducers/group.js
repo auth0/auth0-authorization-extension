@@ -12,6 +12,7 @@ const initialState = {
   groupId: null,
   isNew: false,
   isEdit: false,
+  isEditUsers: false,
   isDelete: false,
   requesting: false,
   validationErrors: { },
@@ -75,6 +76,13 @@ export const group = createReducer(fromJS(initialState), {
       isEdit: true,
       record: action.payload.group,
       groupId: action.payload.group._id
+    }),
+  [constants.EDIT_GROUP_USERS]: (state, action) =>
+    state.merge({
+      ...initialState,
+      isEditUsers: true,
+      record: action.payload.group,
+      groupId: action.payload.group_id
     }),
   [constants.SAVE_GROUP_PENDING]: (state) =>
     state.merge({

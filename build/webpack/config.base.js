@@ -1,5 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const poststylus = require('poststylus');
+const autoprefixer = require('autoprefixer');
+const postcssReporter = require('postcss-reporter');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -66,6 +69,14 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot)/,
         loader: 'url?limit=100000'
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
       }
     ]
   },
@@ -89,16 +100,12 @@ module.exports = {
   ],
 
   // Postcss configuration.
-  postcss: () => {
-    return [
-      require('postcss-simple-vars')(),
-      require('postcss-focus')(),
-      require('autoprefixer')({
-        browsers: [ 'last 2 versions', 'IE > 8' ]
-      }),
-      require('postcss-reporter')({
-        clearMessages: true
-      })
-    ];
+  stylus: {
+    use: [
+      poststylus([
+        autoprefixer({ browsers: [ 'last 2 versions', 'IE > 8' ] }),
+        postcssReporter({ clearMessages: true })
+      ])
+    ]
   }
 };

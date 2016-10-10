@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import SectionHeader from '../Dashboard/SectionHeader';
 import UserGroupRemoveAction from './UserGroupRemoveAction';
 import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
@@ -34,13 +35,12 @@ class UserGroups extends Component {
 
   renderGroups(error, loading, groups, actionRenderer) {
     if (!error && groups.length === 0) {
-      return <div></div>;
+      return null;
     }
 
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="3%" />
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="60%">Description</TableColumn>
           <TableColumn width="10%" />
@@ -48,10 +48,9 @@ class UserGroups extends Component {
         <TableBody>
         {groups.map((group, index) =>
           <TableRow key={index}>
-            <TableIconCell color="green" icon="322" />
             <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
             <TableTextCell>{group.description}</TableTextCell>
-            <TableCell>
+            <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
               {actionRenderer(group, index)}
             </TableCell>
           </TableRow>
@@ -78,7 +77,6 @@ class UserGroups extends Component {
           <Error message={allGroups.error} />
           <Table>
             <TableHeader>
-              <TableColumn width="3%" />
               <TableColumn width="97%">Name</TableColumn>
             </TableHeader>
             <TableBody>
@@ -101,24 +99,22 @@ class UserGroups extends Component {
 
     return (
       <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <h4>Explicit Group Memberships</h4>
-            <span className="pull-left">{this.getHelpText(groups.records)}</span>
-            <ButtonToolbar className="pull-right">
-              <Button bsStyle="primary" bsSize="xsmall" onClick={this.addToGroup} disabled={groups.loading}>
-                <i className="icon icon-budicon-337"></i> Add
-              </Button>
-            </ButtonToolbar>
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-8">
+            <p>{this.getHelpText(groups.records)}</p>
+          </div>
+          <div className="col-xs-4">
+            <Button className="pull-right" bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
+              <i className="icon icon-budicon-473" /> Add user to groups
+            </Button>
           </div>
         </div>
+
         <LoadingPanel show={groups.loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
           <Error message={groups.error} />
           {this.renderGroups(groups.error, groups.loading, groups.records, (group, index) => {
             return (
-              <ButtonToolbar style={{ marginBottom: '0px' }}>
-                <UserGroupRemoveAction index={index} group={group} loading={groups.loading} onRemove={this.removeFromGroup} />
-              </ButtonToolbar>
+              <UserGroupRemoveAction index={index} group={group} loading={groups.loading} onRemove={this.removeFromGroup} />
             );
           })}
         </LoadingPanel>

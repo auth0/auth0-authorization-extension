@@ -11,7 +11,8 @@ export default createForm('permission', class extends Component {
     submitting: PropTypes.bool,
     handleSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
-    applications: PropTypes.object.isRequired
+    applications: PropTypes.object.isRequired,
+    children: PropTypes.node
   };
 
   static formFields = [
@@ -32,24 +33,24 @@ export default createForm('permission', class extends Component {
         <Modal.Body>
           {this.props.children}
           <LoadingPanel show={loading}>
-            <InputText field={name} fieldName="name" label="Name"
+            <p className="modal-description">Select the application of this permission and give it a name and a  description (optional).</p>
+            <InputText
+              field={name} fieldName="name" label="Name"
+              validationErrors={validationErrors} placeholder="e.g. read:invoce, delete:user, edit:book"
+            />
+            <InputText
+              field={description} fieldName="description" label="Description"
               validationErrors={validationErrors}
             />
-            <InputText field={description} fieldName="description" label="Description"
-              validationErrors={validationErrors}
-            />
-            <InputCombo options={applications} field={applicationId} fieldName="applicationId" label="Application"
+            <InputCombo
+              options={applications} field={applicationId} fieldName="applicationId" label="Application"
               validationErrors={validationErrors}
             />
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-            <i className="icon icon-budicon-501"></i> Cancel
-          </Button>
-          <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-            <i className="icon icon-budicon-245"></i> Save
-          </Button>
+          <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
+          <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}> Create </Button>
         </Modal.Footer>
       </div>
     );

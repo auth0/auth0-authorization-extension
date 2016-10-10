@@ -2,6 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import './app.styl';
 
 import * as constants from './constants';
 import { useRouterHistory } from 'react-router'

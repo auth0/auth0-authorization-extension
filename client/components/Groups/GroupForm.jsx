@@ -1,32 +1,53 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
-
 import { InputText, LoadingPanel } from '../Dashboard';
+import Multiselect from '../Dashboard/Multiselect';
 
 class GroupForm extends Component {
   render() {
-    const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors } = this.props;
-
-    return <div>
+    const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
+    return (<div>
       <Modal.Body>
-        {this.props.children}
         <LoadingPanel show={loading}>
-          <InputText field={name} fieldName="name" label="Name"
-            validationErrors={validationErrors} />
-          <InputText field={description} fieldName="description" label="Description"
-            validationErrors={validationErrors} />
+          { isNew &&
+            <p className="modal-description">
+              Name your group and add members. You can also edit name and membership later.
+            </p>
+          }
+          {this.props.children}
+          <InputText
+            field={name} fieldName="name" label="Name"
+            validationErrors={validationErrors}
+          />
+          <InputText
+            field={description} fieldName="description" label="Description"
+            validationErrors={validationErrors}
+          />
+          { isNew &&
+            <div>
+              <label>Members</label>
+              <Multiselect
+                options={[
+                  { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
+                  { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
+                  { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
+                  { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
+                ]}
+              />
+            </div>
+          }
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>
-        <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-          <i className="icon icon-budicon-501"></i> Cancel
+        <Button bsSize="large" bsStyle="transparent" disabled={loading || submitting} onClick={this.props.onClose}>
+          Cancel
         </Button>
-        <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-          <i className="icon icon-budicon-245"></i> Save
+        <Button bsSize="large" bsStyle="primary" disabled={loading || submitting} onClick={handleSubmit}>
+          Create
         </Button>
       </Modal.Footer>
-    </div>;
+    </div>);
   }
 }
 
@@ -35,7 +56,8 @@ GroupForm.propTypes = {
   loading: React.PropTypes.bool.isRequired,
   submitting: React.PropTypes.bool,
   handleSubmit: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired
+  onClose: React.PropTypes.func.isRequired,
+  children: React.PropTypes.node
 };
 
 export default reduxForm({ form: 'group', fields: [ 'name', 'description' ] })(GroupForm);

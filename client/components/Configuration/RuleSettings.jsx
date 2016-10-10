@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
+import SectionHeader from '../Dashboard/SectionHeader';
 import RuleSettingsFrom from './RuleSettingsForm';
 import { Error, LoadingPanel } from '../Dashboard';
 
@@ -34,33 +35,22 @@ export default class RuleSettings extends Component {
 
     return (
       <div>
+        <SectionHeader
+          title="Configuration"
+          description="Configure how the authorization extension has to behave during
+          a login transaction. This is done by creating a rule in your Auth0 account."
+        >
+          <Button bsStyle="success" onClick={this.submitForm} disabled={loading}>
+            <i className="icon icon-budicon-728" /> Publish Rule
+          </Button>
+        </SectionHeader>
+
         <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="content-header video-template">
-              <ButtonToolbar className="pull-right">
-                <Button bsStyle="success" bsSize="large" onClick={this.submitForm} disabled={loading}>
-                  <i className="icon icon-budicon-728"></i> Publish Rule
-                </Button>
-              </ButtonToolbar>
-              <h1>Configuration</h1>
-              <div className="cues-container">
-                <div className="use-case-box is-active">
-                  <div className="explainer-text">
-                    <span className="explainer-text-content">
-                      Configure how the authorization extension has to behave during a login transaction. This is done by creating a rule in your Auth0 account.
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-              <Error message={error} />
-              <LoadingPanel show={loading}>
-                <RuleSettingsFrom ref="form" initialValues={record} onSubmit={this.onSave} />
-              </LoadingPanel>
+          <div className="col-xs-12">
+            <Error message={error} />
+            <LoadingPanel show={loading}>
+              <RuleSettingsFrom ref="form" initialValues={record} onSubmit={this.onSave} />
+            </LoadingPanel>
           </div>
         </div>
       </div>

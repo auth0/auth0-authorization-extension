@@ -71,6 +71,18 @@ export function editGroup(group) {
 }
 
 /*
+ * Edit a specific group users.
+ */
+export function editGroupUsers(group) {
+  return {
+    type: constants.EDIT_GROUP_USERS,
+    payload: {
+      group
+    }
+  };
+}
+
+/*
  * Save the details of a group (name, descripton)
  */
 export function saveGroup(group) {

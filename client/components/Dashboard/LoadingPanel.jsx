@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import Loader from 'react-loader-advanced';
 import Spinner from './svg/Spinner.svg';
 
-import './LoadingPanel.css';
-
 class LoadingPanel extends Component {
   constructor(props) {
     super(props);
@@ -16,7 +14,7 @@ class LoadingPanel extends Component {
     // Default styles.
     this.backgroundStyle = {
       padding: '5px',
-      backgroundColor: 'rgba(255,255,255,0.4)',
+      backgroundColor: 'rgba(255,255,255,0.8)',
       minHeight: '50px',
       ...this.props.backgroundStyle
     };
@@ -43,11 +41,11 @@ class LoadingPanel extends Component {
       return <div >{this.props.children}</div>;
     }
 
-    const animation = <div className="spinner spinner-lg is-auth0" style={{marginLeft: 'auto', marginRight: 'auto'}}>
+    const animation = <div className="spinner spinner-sm" style={{marginLeft: 'auto', marginRight: 'auto'}}>
       <div className="circle"></div>
     </div>;
 
-    return <Loader show={this.state.show} message={animation} contentBlur={1} backgroundStyle={this.backgroundStyle}>
+    return <Loader show={this.state.show} message={animation} backgroundStyle={this.backgroundStyle}>
       {this.props.children}
     </Loader>;
   }

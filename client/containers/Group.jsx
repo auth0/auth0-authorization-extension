@@ -6,6 +6,7 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
+import GroupRoles from '../components/Groups/GroupRoles';
 import { GroupPickerDialog, GroupHeader, GroupMappingDialog, GroupMappingRemoveDialog, GroupMappings, GroupMembers, GroupMemberRemoveDialog, NestedGroups, NestedGroupRemoveDialog } from '../components/Groups';
 
 export class GroupContainer extends Component {
@@ -83,14 +84,24 @@ export class GroupContainer extends Component {
     this.props.removeNestedGroup(groupId, nestedGroupId);
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
 
   render() {
     const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested } = this.props;
 
+    if (group.get('loading')) { return this.renderLoading(); }
+
     return (
       <div>
         <div>
-          <UserPickerDialog userPicker={userPicker} onSelectUser={this.props.selectUser} onUnselectUser={this.props.unselectUser}
+          <UserPickerDialog
+            userPicker={userPicker} onSelectUser={this.props.selectUser} onUnselectUser={this.props.unselectUser}
             onConfirm={this.addMembers} onCancel={this.props.cancelUserPicker} onReset={this.props.resetUserPicker} onSearch={this.props.searchUserPicker}
           />
           <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
@@ -101,26 +112,22 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Link className="btn btn-sm btn-default pull-right" to="/groups">
-              <i className="icon icon-budicon-257"></i> Back to Groups
-            </Link>
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
             <GroupHeader group={group} members={group.get('members')} />
           </div>
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
               <Tab eventKey={1} title="Members">
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
-              <Tab eventKey={2} title="Nested Groups">
+              <Tab eventKey={2} title="Roles">
+                <GroupRoles />
+              </Tab>
+              <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
               </Tab>
-              <Tab eventKey={3} title="Group Mappings">
+              <Tab eventKey={4} title="Group Mappings">
                 <GroupMappings mappings={group.get('mappings')} createMapping={this.props.createGroupMapping} removeMapping={this.props.requestDeleteGroupMapping} />
               </Tab>
             </Tabs>

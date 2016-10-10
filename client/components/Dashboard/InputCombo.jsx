@@ -3,22 +3,26 @@ import classNames from 'classnames';
 
 class InputCombo extends Component {
   render() {
-    const { label, field, fieldName, options, validationErrors } = this.props;
+    const { label, field, fieldName, options, validationErrors} = this.props;
     const classes = classNames({
       'form-group': true,
       'has-error': validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length
     });
 
-    return <div className={classes}>
-      <label>{label}</label>
-      <select className="form-control" {...this.props} {...field}>
-        <option value=""></option>
-        {options.map((option, index) => {
-          return <option key={index} value={option.value}>{option.text}</option>;
-        })}
-      </select>
-      { validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{ validationErrors[fieldName][0] }</div> }
-    </div>;
+    return (
+      <div className={classes}>
+        <label style={{ width: '100%' }}>
+          <span style={{ display: 'inline-block', marginBottom: '5px' }}>{label}</span>
+          <select className="form-control" {...this.props} {...field}>
+            { options.length > 1 && <option value="">Select your application...</option>}
+            {options.map((option, index) => {
+              return <option key={index} value={option.value}>{option.text}</option>;
+            })}
+          </select>
+        </label>
+        { validationErrors && validationErrors[fieldName] && validationErrors[fieldName].length && <div className="help-block">{ validationErrors[fieldName][0] }</div> }
+      </div>
+    );
   }
 }
 

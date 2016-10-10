@@ -33,7 +33,7 @@ class GroupMappingDialog extends Component {
 
     return (
       <Modal show={isVisible} onHide={this.props.onClose}>
-        <Modal.Header closeButton={!mapping.loading}>
+        <Modal.Header closeButton={!mapping.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <GroupMappingForm loading={mapping.loading} connections={connections.records} initialValues={mapping.record} validationErrors={mapping.validationErrors}

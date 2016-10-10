@@ -2,6 +2,10 @@ import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import { Button, ButtonToolbar } from 'react-bootstrap';
+import SectionHeader from '../components/Dashboard/SectionHeader';
+import BlankState from '../components/Dashboard/BlankState';
+import SearchBar from '../components/Dashboard/SearchBar';
+import PermissionsIcon from '../components/Dashboard/icons/PermissionsIcon';
 
 import * as actions from '../actions';
 import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
@@ -43,48 +47,43 @@ export default connectContainer(class extends Component {
 
   renderPermissionActions = (permission) => (
     <div>
-      <TableAction id={`edit-${permission._id}`} type="default" title="Edit Permission" icon="266"
-        onClick={this.props.editPermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
-      />
-      <span> </span>
-      <TableAction id={`delete-${permission._id}`} type="success" title="Delete Permission" icon="263"
+      <TableAction
+        id={`delete-${permission._id}`} type="default" title="Delete Permission" icon="264"
         onClick={this.props.requestDeletePermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
       />
     </div>
   )
 
   renderBody(records, loading) {
-    if (records.length === 0) {
-      return (
-        <Button bsStyle="success" bsSize="large" onClick={this.props.createPermission} disabled={loading}>
-          <i className="icon icon-budicon-337"></i> Create Your First Permission
-        </Button>
-      );
-    }
-
     return (
       <div>
-        <div className="row">
+        <div className="row" style={{ marginBottom: '20px' }}>
           <div className="col-xs-12">
-            <form className="advanced-search-control">
-              <span className="search-area">
-                <i className="icon-budicon-489"></i>
-                <input className="user-input" type="text" ref="search" placeholder="Search for permissions"
-                  spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
-                />
-              </span>
-
-              <span className="controls pull-right">
-                <div className="js-select custom-select">
-                  <span>Search by </span><span className="truncate" data-select-value="">Application</span> <i className="icon-budicon-460"></i>
-                  <select data-mode="">
-                    <option value="user" selected="selected">Application</option>
-                    <option value="email">Permission</option>
-                  </select>
-                </div>
-                <button type="reset">Reset <i className="icon-budicon-471"></i></button>
-              </span>
-            </form>
+            <SearchBar
+              placeholder="Search for permissions"
+              searchOptions={[
+                {
+                  value: 'name',
+                  title: 'Name',
+                  selected: true
+                },
+                {
+                  value: 'application',
+                  title: 'Application'
+                },
+                {
+                  value: 'description',
+                  title: 'Description'
+                }
+              ]}
+              handleKeyPress={(e) => {
+                if (e.charCode === 13) {
+                  e.preventDefault();
+                  // Search
+                }
+              }}
+              handleReset={() => {}}
+            />
           </div>
         </div>
         <PermissionsTable
@@ -97,45 +96,64 @@ export default connectContainer(class extends Component {
     );
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
+
+  renderEmptyState() {
+    return (
+      <BlankState
+        title="Permissions"
+        iconImage={
+          <div className="no-content-image">
+            <PermissionsIcon />
+          </div>
+        }
+        description="Permissions description."
+      >
+        <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
+          Read more
+        </a>
+        <Button bsStyle="success" onClick={this.props.createPermission} disabled={this.props.permissions.loading}>
+          <i className="icon icon-budicon-473" /> Create your first permission
+        </Button>
+      </BlankState>
+    );
+  }
+
   render() {
     const { error, loading, records } = this.props.permissions.toJS();
-    const buttonClasses = classNames({
-      hidden: records.length === 0,
-      'pull-right': true
-    });
+
+    if (loading) { return this.renderLoading(); }
 
     return (
       <div>
         <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
         <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
 
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="content-header video-template">
-              <ButtonToolbar className={buttonClasses}>
-                <Button bsStyle="success" bsSize="large" onClick={this.props.createPermission} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Create Permission
-                </Button>
-              </ButtonToolbar>
-              <h1>Permissions</h1>
-              <div className="cues-container">
-                <div className="use-case-box is-active">
-                  <div className="explainer-text">
-                    <span className="explainer-text-content">Create and manage permsisions (granular actions) for your applications which can then be organized in Roles.</span>
-                  </div>
-                </div>
+        { !error && !records.length ? this.renderEmptyState() : (
+          <div>
+            <SectionHeader
+              title="Permissions"
+              description="Define permissions for your apps that you can then group in Roles and assign to users."
+            >
+              <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
+                <i className="icon icon-budicon-473" /> Create Permission
+              </Button>
+            </SectionHeader>
+
+            <div className="row">
+              <div className="col-xs-12">
+                <Error message={error} />
+                {this.renderBody(records, loading)}
               </div>
             </div>
           </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <Error message={error} />
-            <LoadingPanel show={loading}>
-              {this.renderBody(records, loading)}
-            </LoadingPanel>
-          </div>
-        </div>
+        ) }
       </div>
     );
   }

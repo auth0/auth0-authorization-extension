@@ -19,16 +19,18 @@ export default class PermissionDialog extends Component {
   render() {
     const applications = this.props.applications.toJS();
     const permission = this.props.permission.toJS();
-    const title = permission.isNew ? 'New Permission' : `Edit Permission: ${permission.record.name}`;
+    const title = permission.isNew ? 'Create Permission' : `Edit Permission: ${permission.record.name}`;
     const isVisible = permission.isEdit || permission.isNew;
 
     return (
       <Modal show={isVisible} onHide={this.props.onClose}>
-        <Modal.Header closeButton={!permission.loading}>
+        <Modal.Header closeButton={!permission.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <PermissionForm applications={applications.records} loading={permission.loading} initialValues={permission.record} validationErrors={permission.validationErrors}
-            onClose={this.props.onClose} onSubmit={this.props.onSave}>
+        <PermissionForm
+          applications={applications.records} loading={permission.loading} initialValues={permission.record} validationErrors={permission.validationErrors}
+          onClose={this.props.onClose} onSubmit={this.props.onSave}
+        >
           <Error message={permission.error} />
         </PermissionForm>
       </Modal>

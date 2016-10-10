@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import EntityHeader from '../Dashboard/EntityHeader';
 
-import './GroupHeader.css';
+import { Button, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class GroupHeader extends Component {
   shouldComponentUpdate(nextProps) {
@@ -31,26 +32,22 @@ class GroupHeader extends Component {
     }
 
     return (
-      <div className="group-header">
-        <img className="img-polaroid" src={this.getPicture(group)} />
-          <div className="group-bg-box" style={{ position: 'relative', height: '120px', overflow: 'hidden' }}>
-            <img className="group-bg" src={this.getPicture(group)} />
-            <div className="box-content">
-              <div className="login-count">
-                <span className="lined-text">Member Count: </span>
-                <strong>{members.get('records').size || 0}</strong>
-              </div>
-              <div className="name-area">
-                <h4>
-                  <span className="name group-head-name">
-                    { group.get('record').get('name') || group.get('record').get('_id') }
-                  </span>
-                  {this.getDescription(group)}
-                </h4>
-              </div>
-            </div>
-        </div>
-      </div>
+      <EntityHeader
+        imgSource={this.getPicture(group)}
+        primaryText={group.get('record').get('name') || group.get('record').get('_id')}
+        secondaryText={this.getDescription(group)}
+      >
+        <OverlayTrigger placement="top" overlay={<Tooltip id="edit-group">Edit group</Tooltip>}>
+          <Button className="table-action" bsSize="small">
+            <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
+          </Button>
+        </OverlayTrigger>
+        <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
+          <Button className="table-action" bsSize="small" style={{ marginLeft: '10px' }}>
+            <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
+          </Button>
+        </OverlayTrigger>
+      </ EntityHeader>
     );
   }
 }

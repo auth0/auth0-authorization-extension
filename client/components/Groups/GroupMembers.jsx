@@ -1,19 +1,21 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import { LoadingPanel, Error } from '../Dashboard';
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
-import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from '../Dashboard';
 
 class GroupMembers extends Component {
   constructor() {
     super();
     this.renderActions = this.renderActions.bind(this);
+    this.state = {
+      showOnlyGroupMembers: true
+    };
   }
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.members !== this.props.members || nextProps.nestedMembers !== this.props.nestedMembers;
+    return nextProps.members !== this.props.members || nextProps.nestedMembers !== this.props.nestedMembers;
   }
 
   renderActions(user, index) {
@@ -84,15 +86,26 @@ class GroupMembers extends Component {
               <Error message={error} />
             </div>
           </div>
-          <div className="row">
+          <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-12">
-              <h4>Members</h4>
-              <span className="pull-left">Add members to or remove them from the group.</span>
-              <ButtonToolbar className="pull-right">
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.addMember} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Add
-                </Button>
-              </ButtonToolbar>
+              <ul className="nav nav-pills">
+                <li className="active">
+                  <a href="">Members of this group</a>
+                </li>
+                <li>
+                  <a href="">All members</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="row" style={{ marginBottom: '20px' }}>
+            <div className="col-xs-8">
+              <p>Add members to or remove them from the group.</p>
+            </div>
+            <div className="col-xs-4">
+              <Button className="pull-right" bsStyle="success" onClick={this.props.addMember} disabled={loading}>
+                <i className="icon icon-budicon-292" /> Manage members
+              </Button>
             </div>
           </div>
           {this.renderMembers(loading, records)}

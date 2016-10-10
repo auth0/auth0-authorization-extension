@@ -4,9 +4,6 @@ import { ButtonToolbar } from 'react-bootstrap';
 import { TableActionCell, Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
 
 class UsersTable extends Component {
-  constructor() {
-    super();
-  }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.users !== this.props.users;

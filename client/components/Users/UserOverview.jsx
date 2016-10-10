@@ -1,9 +1,15 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
 
+import UserGeneral from './UserGeneral';
+import UserFederated from './UserFederated';
+import SectionHeader from '../Dashboard/SectionHeader';
+import BlankState from '../Dashboard/BlankState';
 import UsersTable from './UsersTable';
-import { Error, LoadingPanel, TableTotals } from '../Dashboard';
+import { Error, TableTotals } from '../Dashboard';
+import SearchBar from '../Dashboard/SearchBar';
+import UserIcon from '../Dashboard/icons/UsersIcon';
 
 class UserOverview extends React.Component {
   constructor() {
@@ -16,7 +22,7 @@ class UserOverview extends React.Component {
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.props.onSearch(findDOMNode(this.refs.search).value);
+      this.props.onSearch(this.searchInput.value);
     }
   }
 
@@ -28,54 +34,86 @@ class UserOverview extends React.Component {
     return this.props.renderActions(user, index);
   }
 
+  renderLoading() {
+    return (
+      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
+        <div className="circle" />
+      </div>
+    );
+  }
+
+  renderEmptyState() {
+    return (
+      <BlankState
+        title="Users"
+        iconImage={
+          <div className="no-content-image">
+            <UserIcon />
+          </div>
+        }
+        description="Lorem ipsum dolor sit amet."
+      >
+        <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
+          Read more
+        </a>
+      </BlankState>
+    );
+  }
+
   render() {
     const { loading, error, users, total, renderActions } = this.props;
 
+    if (loading) { return this.renderLoading(); }
+
     return (
-      <div>
-        <LoadingPanel show={ loading }>
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              <Error message={ error } />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-10">
-              <div className="advanced-search-control">
-                <span className="search-area">
-                  <i className="icon-budicon-489"></i>
-                  <input className="user-input" type="text" ref="search" placeholder="Search for users"
-                    spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
-                  />
-                </span>
-              </div>
-            </div>
-            <div className="col-xs-2">
-              <ButtonToolbar className="pull-right">
-                <Button bsSize="small" onClick={ this.onReset } disabled={ loading }>
-                  <i className="icon icon-budicon-257"></i> Reset
-                </Button>
-              </ButtonToolbar>
-            </div>
+      !error && !users.length ? this.renderEmptyState() : (
+        <div>
+          <Error message={error} />
+          <SectionHeader title="Users" description="Here you will find all the users." />
+          <Tabs defaultActiveKey={1} animation={false}>
+            <Tab eventKey={1} title="Users">
+              <UserGeneral />
+            </Tab>
+            <Tab eventKey={2} title="Federated users (Pending login)">
+              <UserFederated loading={loading} />
+            </Tab>
+          </Tabs>
+          <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-12">
-              <div className="help-block">
-                To perform your search, press <span className="keyboard-button">enter</span>.
-                You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.
-              </div>
+              <SearchBar
+                placeholder="Search for users"
+                searchOptions={[
+                  {
+                    value: 'user',
+                    title: 'User'
+                  },
+                  {
+                    value: 'email',
+                    title: 'Email'
+                  },
+                  {
+                    value: 'connection',
+                    title: 'Connection'
+                  }
+                ]}
+                handleKeyPress={() => { console.log('SearchBar key press'); }}
+                handleReset={() => { console.log('SearchBar handleReset'); }}
+              />
+            </div>
+          </div>
+
+          <div className="row">
+            <div className="col-xs-12">
+              <UsersTable loading={loading} users={users} renderActions={renderActions} />
             </div>
           </div>
           <div className="row">
             <div className="col-xs-12">
-                <UsersTable loading={ loading } users={ users } renderActions={ renderActions } />
+              <TableTotals currentCount={users.length} totalCount={total} />
             </div>
           </div>
-          <div className="row">
-            <div className="col-xs-12">
-              <TableTotals currentCount={ users.length } totalCount={ total } />
-            </div>
-          </div>
-        </LoadingPanel>
-      </div>
+        </div>
+      )
     );
   }
 }

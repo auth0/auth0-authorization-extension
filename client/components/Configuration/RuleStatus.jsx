@@ -17,12 +17,8 @@ export default class RuleStatus extends Component {
 
     if (error) {
       return (
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="alert alert-danger">
-              <strong>Error</strong> Unable to load configuration status - <i>{error}</i>
-            </div>
-          </div>
+        <div className="alert alert-danger">
+          <strong>Error</strong> Unable to load configuration status - <i>{error}</i>
         </div>
       );
     }
@@ -37,7 +33,7 @@ export default class RuleStatus extends Component {
 
       return (
         <div className="row">
-          <div className="col-xs-12 wrapper">
+          <div className="col-xs-12">
             <div className="alert alert-warning">
               <strong>Warning</strong> The extension still needs to be configured before it can enforce your authorization logic.
               <div className="actions pull-right">

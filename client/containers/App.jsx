@@ -8,6 +8,11 @@ import Header from '../components/Header';
 import RuleStatus from '../components/Configuration/RuleStatus';
 import { Sidebar, SidebarItem } from '../components/Dashboard';
 
+import UsersIcon from '../components/Dashboard/icons/UsersIcon';
+import GroupsIcon from '../components/Dashboard/icons/GroupsIcon';
+import RolesIcon from '../components/Dashboard/icons/RolesIcon';
+import PermissionsIcon from '../components/Dashboard/icons/PermissionsIcon';
+
 class App extends Component {
   static propTypes = {
     user: PropTypes.object,
@@ -25,10 +30,10 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <Sidebar>
-              <SidebarItem title="Groups" route="/groups" icon="icon icon-budicon-322" />
-              <SidebarItem title="Users" route="/users" icon="icon icon-budicon-292" />
-              <SidebarItem title="Permissions" route="/permissions" icon="icon icon-budicon-322" />
-              <SidebarItem title="Roles" route="/roles" icon="icon icon-budicon-322" />
+              <SidebarItem icon={<UsersIcon className="item-image"/>} title="Users" route="/users" />
+              <SidebarItem icon={<GroupsIcon className="item-image"/>} title="Groups" route="/groups" />
+              <SidebarItem icon={<RolesIcon className="item-image"/>} title="Roles" route="/roles" />
+              <SidebarItem icon={<PermissionsIcon className="item-image"/>} title="Permissions" route="/permissions" />
             </Sidebar>
             <div id="content" className="col-xs-10">
               <RuleStatus ruleStatus={this.props.ruleStatus}
