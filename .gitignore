@@ -1,8 +1,11 @@
 .DS_Store
+.idea
 assets/app/*
 node_modules
 npm-debug.log
 server/db.json
+server/data.json
+server/config.json
 dist
 build/extension/bundle-size.json
 server/config.json
