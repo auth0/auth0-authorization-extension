@@ -1,20 +1,19 @@
+import { FileStorageContext, WebtaskStorageContext, BlobRecordProvider } from 'auth0-extension-tools';
+import path from 'path';
+
 import Database from './lib/storage/database';
-import { S3Provider } from './lib/storage/providers';
 import { init as initDb } from './lib/storage/getdb';
 
-import config from './lib/config';
 import createServer from './';
 
 module.exports = (options = { }, cb) => {
-  // Initialize database.
-  initDb(new Database({
-    provider: options.storageProvider || new S3Provider({
-      path: 'auth0-authz.json',
-      bucket: config('AWS_S3_BUCKET'),
-      keyId: config('AWS_ACCESS_KEY_ID'),
-      keySecret: config('AWS_SECRET_ACCESS_KEY')
-    })
-  }));
+  // Initialize database based on config.
+  const context = (options.storageContext)
+    ? new WebtaskStorageContext(options.storageContext, { force: 1 })
+    : new FileStorageContext(path.join(__dirname, './data.json'), { mergeWrites: true });
+  const provider = new BlobRecordProvider(context);
+
+  initDb(new Database({ provider }));
 
   // Start the server.
   createServer(cb);

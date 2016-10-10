@@ -25,6 +25,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "auth0": "^2.4.0",
+    "auth0-extension-tools": "^0.14.0",
     "autoprefixer": "^6.5.0",
     "aws-sdk": "^2.3.17",
     "axios": "^0.14.0",
