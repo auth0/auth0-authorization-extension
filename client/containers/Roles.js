@@ -1,7 +1,6 @@
-import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 import SectionHeader from '../components/Dashboard/SectionHeader';
 import BlankState from '../components/Dashboard/BlankState';
 import SearchBar from '../components/Dashboard/SearchBar';

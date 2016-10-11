@@ -30,7 +30,7 @@ export const configuration = createReducer(fromJS(initialState), {
       loading: true
     }),
   [constants.SAVE_CONFIGURATION_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const errorMessage = action.payload.data ? action.payload.data.errors : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,

@@ -12,6 +12,7 @@
   },
   "parser": "babel-eslint",
   "rules": {
+    "linebreak-style": ["error", "windows"],
     "max-len": 0,
     "react/display-name": 0,
     "array-bracket-spacing": [2, "always"],

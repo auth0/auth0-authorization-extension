@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Boom from 'boom';
 import schema from '../schemas/role';
 
 module.exports = () => ({

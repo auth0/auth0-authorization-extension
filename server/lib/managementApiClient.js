@@ -7,6 +7,7 @@ import config from './config';
 import logger from './logger';
 
 let auth0 = require('auth0');
+
 if (config('HOSTING_ENV') === 'webtask') {
   auth0 = require('auth0@2.0.0');
 }

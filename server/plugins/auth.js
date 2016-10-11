@@ -85,7 +85,6 @@ module.exports.register = (server, options, next) => {
               }
             });
           }
-
           return reply(Boom.unauthorized('Invalid API Key'));
         }
       };
@@ -102,7 +101,7 @@ module.exports.register = (server, options, next) => {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 2,
-        jwksUri: `https://auth0.auth0.com/.well-known/jwks.json`
+        jwksUri: 'https://auth0.auth0.com/.well-known/jwks.json'
       }),
 
       // On tokens where the authorized party is the current extension.

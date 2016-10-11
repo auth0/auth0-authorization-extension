@@ -129,7 +129,7 @@ describe('S3Provider (Storage Provider)', () => {
         Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
-            { _id: 'abc2', name: 'group 2' },
+            { _id: 'abc2', name: 'group 2' }
           ]
         }),
         ContentType: 'application/json'
@@ -190,7 +190,7 @@ describe('S3Provider (Storage Provider)', () => {
         Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
-            { _id: 'abc2', name: 'group 2' },
+            { _id: 'abc2', name: 'group 2' }
           ]
         }),
         ContentType: 'application/json'
@@ -246,8 +246,8 @@ describe('S3Provider (Storage Provider)', () => {
         Key: 'test-db.json',
         Body: JSON.stringify({
           groups: [
-            { _id: 'abc1', name: 'group 1', description: 'aaa', users: ['a', 'b', 'c'] },
-            { _id: 'abc2', name: 'group 2', description: 'bbb', users: ['d', 'e', 'f'] },
+            { _id: 'abc1', name: 'group 1', description: 'aaa', users: [ 'a', 'b', 'c' ] },
+            { _id: 'abc2', name: 'group 2', description: 'bbb', users: [ 'd', 'e', 'f' ] }
           ]
         }),
         ContentType: 'application/json'
@@ -276,7 +276,7 @@ describe('S3Provider (Storage Provider)', () => {
         Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
-            { _id: 'abc2', name: 'group 2' },
+            { _id: 'abc2', name: 'group 2' }
           ]
         }),
         ContentType: 'application/json'
@@ -331,7 +331,7 @@ describe('S3Provider (Storage Provider)', () => {
         Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
-            { _id: 'abc2', name: 'group 2' },
+            { _id: 'abc2', name: 'group 2' }
           ]
         }),
         ContentType: 'application/json'
@@ -357,7 +357,7 @@ describe('S3Provider (Storage Provider)', () => {
         Body: JSON.stringify({
           groups: [
             { _id: 'abc1', name: 'group 1' },
-            { _id: 'abc2', name: 'group 2' },
+            { _id: 'abc2', name: 'group 2' }
           ]
         }),
         ContentType: 'application/json'

@@ -1,4 +1,3 @@
-import moment from 'moment';
 import { fromJS } from 'immutable';
 
 import * as constants from '../constants';
@@ -96,12 +95,11 @@ const userGroups = createReducer(fromJS(initialState.groups), {
       ...initialState.groups,
       error: `An error occured while loading the groups: ${action.errorMessage}`
     }),
-  [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) => {
-    return state.merge({
+  [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) =>
+    state.merge({
       loading: false,
       records: fromJS(action.payload.data)
-    });
-  },
+    }),
   [constants.ADD_GROUP_MEMBERS_PENDING]: (state) =>
     state.merge({
       loading: true,
@@ -112,11 +110,10 @@ const userGroups = createReducer(fromJS(initialState.groups), {
       loading: false,
       error: `An error occured while adding the user: ${action.errorMessage}`
     }),
-  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state) => {
-    return state.merge({
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state) =>
+    state.merge({
       loading: false
-    });
-  },
+    }),
   [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) => {
     const records = state.get('records');
     const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
@@ -138,10 +135,9 @@ const userAllGroups = createReducer(fromJS(initialState.allGroups), {
       ...initialState.allGroups,
       error: `An error occured while loading all groups (authorization): ${action.errorMessage}`
     }),
-  [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) => {
-    return state.merge({
+  [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) =>
+    state.merge({
       loading: false,
       records: fromJS(action.payload.data.groups || [])
-    });
-  }
+    })
 });

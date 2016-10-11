@@ -1,4 +1,5 @@
 const winston = require('winston');
+
 winston.emitErrs = true;
 
 const logger = new winston.Logger({

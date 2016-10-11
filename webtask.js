@@ -3,6 +3,7 @@
 const nconf = require('nconf');
 const Webtask = require('webtask-tools');
 const logger = require('./server/lib/logger');
+
 logger.info('Starting webtask.');
 
 module.exports = Webtask.fromExpress((req, res) => {
