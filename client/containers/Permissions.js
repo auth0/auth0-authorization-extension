@@ -77,6 +77,7 @@ export default connectContainer(class extends Component {
               ]}
               handleKeyPress={(e) => {
                 if (e.charCode === 13) {
+                  // Enter key pressed
                   e.preventDefault();
                   // Search
                 }

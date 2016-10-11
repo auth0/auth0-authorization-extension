@@ -79,7 +79,7 @@ export default createForm('ruleSettingsToken', class extends Component {
                   <div className="explainer-text">
                     <span className="explainer-text-content">
                       You might have users that receive groups from the IdP (eg: Active Directory).
-                      If you want to merge these groups (in order to preserve them) with the groups defined in the Authorziation Extesion make sure you enable the following option.
+                      If you want to merge these groups (in order to preserve them) with the groups defined in the Authorization Extesion make sure you enable the following option.
                     </span>
                   </div>
                 </div>
