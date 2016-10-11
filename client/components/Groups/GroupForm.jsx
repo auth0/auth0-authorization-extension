@@ -1,12 +1,23 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
-import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
+import { Field } from 'redux-form';
+import { Button, Modal } from 'react-bootstrap';
+
 import { InputText, LoadingPanel } from '../Dashboard';
 import Multiselect from '../Dashboard/Multiselect';
+import createForm from '../../utils/createForm';
 
-class GroupForm extends Component {
+export default createForm('group', class GroupForm extends Component {
+  static propTypes = {
+    validationErrors: React.PropTypes.object,
+    loading: React.PropTypes.bool.isRequired,
+    submitting: React.PropTypes.bool,
+    handleSubmit: React.PropTypes.func.isRequired,
+    onClose: React.PropTypes.func.isRequired,
+    children: React.PropTypes.node
+  };
+
   render() {
-    const { fields: { name, description }, handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
+    const { handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
     return (<div>
       <Modal.Body>
         <LoadingPanel show={loading}>
@@ -16,18 +27,19 @@ class GroupForm extends Component {
             </p>
           }
           {this.props.children}
-          <InputText
-            field={name} fieldName="name" label="Name"
+          <Field
+            name="name" component={InputText} label="Name"
             validationErrors={validationErrors}
           />
-          <InputText
-            field={description} fieldName="description" label="Description"
-            validationErrors={validationErrors}
+          <Field
+            name="description" component={InputText}
+            label="Description" validationErrors={validationErrors}
           />
           { isNew &&
             <div>
               <label>Members</label>
-              <Multiselect
+              <Field
+                component={Multiselect}
                 options={[
                   { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
                   { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
@@ -49,15 +61,4 @@ class GroupForm extends Component {
       </Modal.Footer>
     </div>);
   }
-}
-
-GroupForm.propTypes = {
-  validationErrors: React.PropTypes.object,
-  loading: React.PropTypes.bool.isRequired,
-  submitting: React.PropTypes.bool,
-  handleSubmit: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  children: React.PropTypes.node
-};
-
-export default reduxForm({ form: 'group', fields: [ 'name', 'description' ] })(GroupForm);
+});

@@ -3,13 +3,13 @@ import Scope from './Scope';
 
 export default class ScopeGroup extends Component {
   static propTypes = {
-    field: PropTypes.object.isRequired,
+    input: PropTypes.object.isRequired,
     options: PropTypes.array.isRequired,
     label: PropTypes.string
   }
 
   render() {
-    const { options, field, label } = this.props;
+    const { input, label, options } = this.props;
     return (
       <div className="form-group">
         { label && <label>{label}</label> }
@@ -24,7 +24,7 @@ export default class ScopeGroup extends Component {
             boxShadow: 'none'
           }}
         >
-          {options.map(option => <Scope field={field} text={option.text} value={option.value} />)}
+          {options.map(option => <Scope field={input} text={option.text} value={option.value} />)}
         </div>
       </div>
     );

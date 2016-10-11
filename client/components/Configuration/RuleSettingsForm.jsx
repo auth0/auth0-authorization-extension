@@ -1,21 +1,62 @@
 import React, { Component, PropTypes } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
-
+import { Field } from 'redux-form';
 import createForm from '../../utils/createForm';
 
 export default createForm('ruleSettingsToken', class extends Component {
-  static propTypes = {
-    fields: PropTypes.object
+
+  renderSwitchItem(item) {
+    return (
+    <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
+      <div className="content">
+        <h4 className="name">{item.title}</h4>
+        <div className="desc">{item.description}</div>
+      </div>
+      <div className="switch">
+        <div className="ui-switch">
+          <Field name={item.name} component="input" type="checkbox" /><span className="status" />
+        </div>
+      </div>
+    </div>);
   }
 
-  static formFields = [
-    'groupsInToken', 'rolesInToken', 'permissionsInToken',
-    'persistGroups', 'persistRoles', 'persistPermissions',
-    'groupsPassthrough'
-  ]
-
   render() {
-    const { fields } = this.props;
+    const tabSwitchItems = {
+      tokenContents: [
+        {
+          title: 'Groups',
+          description: (<span>Add <strong>groups</strong> to the user's token.</span>),
+          name: 'groupsInToken'
+        },
+        {
+          title: 'Roles',
+          description: (<span>Add <strong>roles</strong> to the user's token.</span>),
+          name: 'rolesInToken'
+        },
+        {
+          title: 'Permissions',
+          description: (<span>Add <strong>permissions</strong> to the user's token.</span>),
+          name: 'permissionsInToken'
+        }
+      ],
+      persistence: [
+        {
+          title: 'Groups',
+          description: (<span>Persist <strong>groups</strong> in the user's application metadata.</span>),
+          name: 'persistGroups'
+        },
+        {
+          title: 'Roles',
+          description: (<span>Persist <strong>roles</strong> in the user's application metadata.</span>),
+          name: 'persistRoles'
+        },
+        {
+          title: 'Permissions',
+          description: (<span>Persist <strong>description</strong> in the user's application metadata.</span>),
+          name: 'persistPermissions'
+        }
+      ]
+    };
 
     return (
       <div>
@@ -33,39 +74,7 @@ export default createForm('ruleSettingsToken', class extends Component {
                 </div>
               </div>
               <div data-columns="3" className="switchboard switchboard-responsive">
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Groups</h4>
-                    <div className="desc">Add <strong>groups</strong> to the user's token.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.groupsInToken} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Roles</h4>
-                    <div className="desc">Add <strong>roles</strong> to the user's token.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.rolesInToken} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Permissions</h4>
-                    <div className="desc">Add <strong>permissions</strong> to the user's token.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.permissionsInToken} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
+                { tabSwitchItems.tokenContents.map(item => this.renderSwitchItem(item)) }
               </div>
 
               <div className="alert alert-info">
@@ -86,17 +95,11 @@ export default createForm('ruleSettingsToken', class extends Component {
               </div>
 
               <div data-columns="1" className="switchboard switchboard-responsive">
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Groups Passthrough</h4>
-                    <div className="desc">Merge the user's groups with groups originating from the IdP.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.groupsPassthrough} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
+                { this.renderSwitchItem({
+                  title: 'Groups Passthrough',
+                  description: (<span>Merge the user's groups with groups originating from the IdP.</span>),
+                  name: 'groupsPassthrough'
+                }) }
               </div>
             </div>
           </Tab>
@@ -115,39 +118,7 @@ export default createForm('ruleSettingsToken', class extends Component {
               </div>
 
               <div data-columns="3" className="switchboard switchboard-responsive">
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Groups</h4>
-                    <div className="desc">Persist <strong>groups</strong> in the user's application metadata.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.persistGroups} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Roles</h4>
-                    <div className="desc">Persist <strong>roles</strong> in the user's application metadata.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.persistRoles} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
-                <div tabIndex="-1" data-switch-position="left" className="switchboard-item disabled">
-                  <div className="content">
-                    <h4 className="name">Permissions</h4>
-                    <div className="desc">Persist <strong>permissions</strong> in the user's application metadata.</div>
-                  </div>
-                  <div className="switch">
-                    <div className="ui-switch">
-                      <input type="checkbox" {...fields.persistPermissions} /><span className="status"></span>
-                    </div>
-                  </div>
-                </div>
+                { tabSwitchItems.persistence.map(item => this.renderSwitchItem(item)) }
               </div>
             </div>
           </Tab>

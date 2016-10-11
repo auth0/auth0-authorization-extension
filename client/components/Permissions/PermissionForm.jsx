@@ -1,5 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { Field } from 'redux-form';
 
 import createForm from '../../utils/createForm';
 import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
@@ -15,14 +16,8 @@ export default createForm('permission', class extends Component {
     children: PropTypes.node
   };
 
-  static formFields = [
-    'name',
-    'description',
-    'applicationId'
-  ];
-
   render() {
-    const { fields: { name, description, applicationId }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { handleSubmit, loading, submitting, validationErrors } = this.props;
     const applications = this.props.applications.map(app => ({
       value: app.client_id,
       text: `${app.name}`
@@ -34,18 +29,22 @@ export default createForm('permission', class extends Component {
           {this.props.children}
           <LoadingPanel show={loading}>
             <p className="modal-description">Select the application of this permission and give it a name and a  description (optional).</p>
-            <InputText
-              field={name} fieldName="name" label="Name"
-              validationErrors={validationErrors} placeholder="e.g. read:invoce, delete:user, edit:book"
-            />
-            <InputText
-              field={description} fieldName="description" label="Description"
+
+            <Field
+              name="name" component={InputText}
+              label="Name" placeholder="e.g. read:invoce, delete:user, edit:book"
               validationErrors={validationErrors}
             />
-            <InputCombo
-              options={applications} field={applicationId} fieldName="applicationId" label="Application"
+            <Field
+              name="description" component={InputText}
+              label="Description" validationErrors={validationErrors}
+            />
+            <Field
+              name="applicationId" component={InputCombo}
+              options={applications} label="Application"
               validationErrors={validationErrors}
             />
+
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
