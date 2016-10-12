@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 import { ArgumentError } from 'auth0-extension-tools';
 
 export default class Database {
-  constructor(options = { }) {
+  constructor(options = {}) {
     if (!options.provider) {
       throw new ArgumentError('The \'provider\' has to be set when initializing the database.');
     }
@@ -12,11 +12,21 @@ export default class Database {
   }
 
   importData(data) {
-    const promises = [];
+    const actions = [];
+    // TODO: fix it
+    const addRecord = () => {
+      if (actions.length) {
+        const action = actions.pop();
+        this.provider.update(action.collection, action.id, action.data, true)
+          .then(addRecord);
+      }
+
+      return Promise.resolve(data);
+    };
 
     const assemblePromises = (collection, array) => {
       _.forEach(array, item => {
-        promises.push(this.provider.update(collection, item._id, item, true)); // eslint-disable-line no-underscore-dangle
+        actions.push({ collection, id: item._id, data: item }); // eslint-disable-line no-underscore-dangle
       });
     };
 
@@ -25,8 +35,8 @@ export default class Database {
         assemblePromises(key, item);
       }
     });
-    // TODO: fix this later
-    return Promise.all(promises);
+
+    return addRecord();
   }
 
   getConfiguration() {
