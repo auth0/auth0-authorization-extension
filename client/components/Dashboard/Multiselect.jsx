@@ -4,16 +4,7 @@ import '../../../node_modules/react-select/dist/react-select.css';
 import './Multiselect.styl'
 
 class Multiselect extends Component {
-  constructor() {
-    super();
-    this.state = {
-      value: []
-    };
-    this.onChange = this.onChange.bind(this);
-  }
-  onChange(value) {
-    this.setState({ value });
-  }
+
   renderValue(value) {
     return (
       <span>
@@ -23,16 +14,18 @@ class Multiselect extends Component {
     );
   }
   render() {
-    const { options, onChange } = this.props;
+    const { input, options } = this.props;
+
+    // NOTE: see https://github.com/erikras/redux-form/issues/82 for onBlur() react-select docs
     return (
       <Select
+        {...input}
         className="react-multiselect"
         name="react-multiselect"
         options={options}
-        onChange={this.onChange}
-        value={this.state.value}
         optionRenderer={this.renderValue}
         valueRenderer={this.renderValue}
+        onBlur={() => input.onBlur()}
         placeholder="Add members to the group"
         multi
       />
@@ -42,7 +35,8 @@ class Multiselect extends Component {
 
 Multiselect.propTypes = {
   options: React.PropTypes.array.isRequired,
-  onChange: React.PropTypes.func
+  onBlur: React.PropTypes.func,
+  input: React.PropTypes.object
 };
 
 export default Multiselect;

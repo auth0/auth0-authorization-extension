@@ -39,6 +39,7 @@ export default createForm('group', class GroupForm extends Component {
             <div>
               <label>Members</label>
               <Field
+                name="members"
                 component={Multiselect}
                 options={[
                   { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
