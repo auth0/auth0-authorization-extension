@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 
 import * as constants from '../constants';
 
@@ -67,6 +68,8 @@ export function editPermission(permission) {
  * Save the details of a permission (name, descripton)
  */
 export function savePermission(permission) {
+  const permissionData = _.pick(permission, [ 'applicationId', 'applicationType', 'description', 'name' ]);
+
   return (dispatch, getState) => {
     const state = getState().permission.toJS();
     dispatch({
@@ -77,15 +80,15 @@ export function savePermission(permission) {
           url: state.isNew ? '/api/permissions' : `/api/permissions/${state.permissionId}`,
           data: {
             applicationType: 'client',
-            ...permission
+            ...permissionData
           },
           responseType: 'json'
         })
       },
       meta: {
         isNew: state.isNew,
-        permission,
-        permissionId: state.permissionId || permission.name
+        permissionData,
+        permissionId: state.permissionId || permissionData.name
       }
     });
   };
