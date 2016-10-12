@@ -11,7 +11,7 @@ const InputText = field => {
 
   return (
     <div className={classes}>
-      <label style={{ width: '100%' }}>
+      <label htmlFor={field.name} style={{ width: '100%' }}>
         <span style={{ display: 'inline-block', marginBottom: '5px' }}>{field.label}</span>
         <input className="form-control" {...field.input} id={field.name} type="text" placeholder={field.placeholder} />
       </label>

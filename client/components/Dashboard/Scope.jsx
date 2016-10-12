@@ -31,8 +31,15 @@ export default class Scope extends Component {
     const { value, text, field } = this.props;
     return (
       <div className="scope-toggle" style={{ marginBottom: '10px' }}>
-        <input type="checkbox" checked={this.isChecked(field, value)} onChange={this.onChange} defaultValue={value} className="scope-input" />
-        <label className="status">{text}</label>
+        <input
+          id={value}
+          type="checkbox"
+          checked={this.isChecked(field, value)}
+          onChange={this.onChange}
+          defaultValue={value}
+          className="scope-input"
+        />
+        <label htmlFor={value} className="status">{text}</label>
       </div>
     );
   }

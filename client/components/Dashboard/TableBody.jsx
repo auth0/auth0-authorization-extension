@@ -1,5 +1,12 @@
-export default (props) => (
+import React, { PropTypes } from 'react';
+
+const TableBody = ({ children }) => (
   <tbody>
-  { props.children }
+  { children }
   </tbody>
 );
+
+TableBody.propTypes = {
+  children: PropTypes.node
+};
+export default TableBody;

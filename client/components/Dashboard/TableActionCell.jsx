@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class TableActionCell extends Component {
   shouldComponentUpdate(nextProps) {
@@ -6,10 +6,16 @@ class TableActionCell extends Component {
   }
 
   render() {
-    return <td>
+    return (
+      <td>
         { this.props.children }
-      </td>;
+      </td>
+    );
   }
 }
+
+TableActionCell.propTypes = {
+  children: PropTypes.node
+};
 
 export default TableActionCell;

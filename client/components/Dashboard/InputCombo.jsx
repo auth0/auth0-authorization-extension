@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames';
 
 class InputCombo extends Component {
@@ -13,9 +13,9 @@ class InputCombo extends Component {
   }
 
   renderOptions(options) {
-    return options.map((option, index) => {
-      return <option key={index} value={option.value}>{option.text}</option>;
-    });
+    return options.map((option, index) => (
+      <option key={index} value={option.value}>{option.text}</option>
+    ));
   }
 
   render() {
@@ -28,9 +28,9 @@ class InputCombo extends Component {
 
     return (
       <div className={classes}>
-        <label style={{ width: '100%' }}>
+        <label htmlFor={input.name} style={{ width: '100%' }}>
           <span style={{ display: 'inline-block', marginBottom: '5px' }}>{label}</span>
-          <select className="form-control" {...input} onChange={this.onChange} disabled={disabled} >
+          <select className="form-control" {...input} id={input.name} onChange={this.onChange} disabled={disabled} >
             { options && options.length > 1 && <option value="">Select your application...</option>}
             { this.renderOptions(options) }
           </select>
@@ -42,12 +42,12 @@ class InputCombo extends Component {
 }
 
 InputCombo.propTypes = {
-  options: React.PropTypes.array.isRequired,
-  input: React.PropTypes.object.isRequired,
-  label: React.PropTypes.string.isRequired,
-  validationErrors: React.PropTypes.object,
-  onChange: React.PropTypes.func,
-  disabled: React.PropTypes.bool
+  options: PropTypes.array.isRequired,
+  input: PropTypes.object.isRequired,
+  label: PropTypes.string.isRequired,
+  validationErrors: PropTypes.object,
+  onChange: PropTypes.func,
+  disabled: PropTypes.bool
 };
 
 export default InputCombo;

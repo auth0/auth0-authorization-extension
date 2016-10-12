@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Select from 'react-select';
 import '../../../node_modules/react-select/dist/react-select.css';
-import './Multiselect.styl'
+import './Multiselect.styl';
 
 class Multiselect extends Component {
 
@@ -34,9 +34,9 @@ class Multiselect extends Component {
 }
 
 Multiselect.propTypes = {
-  options: React.PropTypes.array.isRequired,
-  onBlur: React.PropTypes.func,
-  input: React.PropTypes.object
+  options: PropTypes.array.isRequired,
+  onBlur: PropTypes.func,
+  input: PropTypes.object
 };
 
 export default Multiselect;

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
+import React, { Component, PropTypes } from 'react';
+import { Button, Modal } from 'react-bootstrap';
 
 class Confirm extends Component {
   renderCancel() {
@@ -45,14 +45,14 @@ class Confirm extends Component {
 }
 
 Confirm.propTypes = {
-  dialogClassName: React.PropTypes.string,
-  confirmMessage: React.PropTypes.string,
-  loading: React.PropTypes.bool.isRequired,
-  title: React.PropTypes.string.isRequired,
-  show: React.PropTypes.bool.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
-  onConfirm: React.PropTypes.func,
-  className: React.PropTypes.string
+  dialogClassName: PropTypes.string,
+  confirmMessage: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
+  show: PropTypes.bool.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func,
+  className: PropTypes.string
 };
 
 export default Confirm;

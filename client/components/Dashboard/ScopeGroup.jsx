@@ -24,7 +24,7 @@ export default class ScopeGroup extends Component {
             boxShadow: 'none'
           }}
         >
-          {options.map(option => <Scope field={input} text={option.text} value={option.value} />)}
+          {options.map(option => <Scope key={option.value} field={input} text={option.text} value={option.value} />)}
         </div>
       </div>
     );
