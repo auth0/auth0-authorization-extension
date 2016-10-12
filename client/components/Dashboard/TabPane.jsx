@@ -1,28 +1,27 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 
-class TabPane extends Component {
-  render() {
-    const linkClass = classNames({
-      'active': this.context.router.isActive(this.props.route)
-    });
-    return (
-      <li className={linkClass}>
-        <Link className="script-button" to={`/${this.props.route}`} aria-expanded="true">
-          <span className="tab-title">{this.props.title}</span>
-        </Link>
-      </li>);
-  }
-}
+const TabPane = ({ route, title }) => {
+  const linkClass = classNames({
+    active: this.context.router.isActive(route)
+  });
+  return (
+    <li className={linkClass}>
+      <Link className="script-button" to={`/${route}`} aria-expanded="true">
+        <span className="tab-title">{title}</span>
+      </Link>
+    </li>
+  );
+};
 
 TabPane.propTypes = {
-  route: React.PropTypes.string.isRequired,
-  title: React.PropTypes.string.isRequired
+  route: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 TabPane.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default TabPane;

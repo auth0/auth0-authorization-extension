@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import Loader from 'react-loader-advanced';
 import Spinner from './svg/Spinner.svg';
 
@@ -36,20 +36,6 @@ class LoadingPanel extends Component {
     };
   }
 
-  render() {
-    if (!this.state.show) {
-      return <div >{this.props.children}</div>;
-    }
-
-    const animation = <div className="spinner spinner-sm" style={{marginLeft: 'auto', marginRight: 'auto'}}>
-      <div className="circle"></div>
-    </div>;
-
-    return <Loader show={this.state.show} message={animation} backgroundStyle={this.backgroundStyle}>
-      {this.props.children}
-    </Loader>;
-  }
-
   componentWillReceiveProps(nextProps) {
     if (!nextProps.show) {
       clearTimeout(this.showTimer);
@@ -70,14 +56,29 @@ class LoadingPanel extends Component {
   setLoading() {
     this.setState({ show: true });
   }
+
+  render() {
+    if (!this.state.show) {
+      return <div >{this.props.children}</div>;
+    }
+
+    const animation = (<div className="spinner spinner-sm" style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+      <div className="circle" />
+    </div>);
+
+    return (<Loader show={this.state.show} message={animation} backgroundStyle={this.backgroundStyle}>
+      {this.props.children}
+    </Loader>);
+  }
 }
 
 LoadingPanel.propTypes = {
-  backgroundStyle: React.PropTypes.object,
-  spinnerStyle: React.PropTypes.object,
-  animationStyle: React.PropTypes.object,
-  show: React.PropTypes.bool,
-  delay: React.PropTypes.number
+  backgroundStyle: PropTypes.object,
+  spinnerStyle: PropTypes.object,
+  animationStyle: PropTypes.object,
+  show: PropTypes.bool,
+  delay: PropTypes.number,
+  children: PropTypes.node
 };
 
 export default LoadingPanel;

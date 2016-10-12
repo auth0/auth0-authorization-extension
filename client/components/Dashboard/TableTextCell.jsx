@@ -1,22 +1,25 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import TableCell from './TableCell';
 
-class TableTextCell extends Component {
-  render() {
-    if (this.props.onClick) {
-      return <TableCell>
-        <a href="#" onClick={() => this.props.onClick()} title={ this.props.children || '' }>{ this.props.children || '' }</a>
-      </TableCell>;
-    }
-
-    return <TableCell>
-      <span title={ this.props.children || '' }>{ this.props.children || '' }</span>
-    </TableCell>;
+const TableTextCell = ({ children, onClick }) => {
+  if (onClick) {
+    return (
+      <TableCell>
+        <a href="#" onClick={() => onClick()} title={children || ''}>{ children || '' }</a>
+      </TableCell>
+    );
   }
-}
+
+  return (
+    <TableCell>
+      <span title={children || ''}>{ children || '' }</span>
+    </TableCell>
+  );
+};
 
 TableTextCell.propTypes = {
-  onClick: React.PropTypes.func
+  onClick: PropTypes.func,
+  children: PropTypes.node
 };
 
 export default TableTextCell;
