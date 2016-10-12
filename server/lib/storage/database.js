@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import Promise from 'bluebird';
 import { ArgumentError } from 'auth0-extension-tools';
 
 export default class Database {
@@ -7,6 +9,24 @@ export default class Database {
     }
 
     this.provider = options.provider;
+  }
+
+  importData(data) {
+    const promises = [];
+
+    const assemblePromises = (collection, array) => {
+      _.forEach(array, item => {
+        promises.push(this.provider.update(collection, item._id, item, true)); // eslint-disable-line no-underscore-dangle
+      });
+    };
+
+    _.forEach(data, (item, key) => {
+      if (item && item.length) {
+        assemblePromises(key, item);
+      }
+    });
+    // TODO: fix this later
+    return Promise.all(promises);
   }
 
   getConfiguration() {
