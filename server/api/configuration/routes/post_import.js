@@ -14,9 +14,7 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => {
-    const data = req.payload;
-
-    req.storage.importData(data)
+    req.storage.provider.storageContext.write(req.payload)
       .then(imported => reply(imported))
       .catch(err => reply.error(err));
   }
