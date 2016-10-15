@@ -1,7 +1,7 @@
 import { ArgumentError } from 'auth0-extension-tools';
 
 export default class Database {
-  constructor(options = { }) {
+  constructor(options = {}) {
     if (!options.provider) {
       throw new ArgumentError('The \'provider\' has to be set when initializing the database.');
     }
