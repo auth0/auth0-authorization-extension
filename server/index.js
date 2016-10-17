@@ -33,6 +33,7 @@ export default (cb) => {
     host: 'localhost',
     port: config('PORT'),
     routes: {
+      cors: true,
       validate: {
         failAction: relishPlugin.failAction
       }

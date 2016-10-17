@@ -1,7 +1,7 @@
-import { ArgumentError } from '../errors';
+import { ArgumentError } from 'auth0-extension-tools';
 
 export default class Database {
-  constructor(options = { }) {
+  constructor(options = {}) {
     if (!options.provider) {
       throw new ArgumentError('The \'provider\' has to be set when initializing the database.');
     }
@@ -11,112 +11,112 @@ export default class Database {
 
   getConfiguration() {
     return this.provider
-      .getRecords('configuration')
+      .getAll('configuration')
       .then(records => (records.length ? records[0] : null));
   }
 
   updateConfiguration(config) {
     return this.provider
-      .updateRecord('configuration', 'v1', config, true);
+      .update('configuration', 'v1', config, true);
   }
 
   getRules() {
     return this.provider
-      .getRecords('rules');
+      .getAll('rules');
   }
 
   createRule(rule) {
     return this.provider
-      .createRecord('rules', rule);
+      .create('rules', rule);
   }
 
   getPermissions() {
     return this.provider
-      .getRecords('permissions');
+      .getAll('permissions');
   }
 
   getPermission(id) {
     return this.provider
-      .getRecord('permissions', id);
+      .get('permissions', id);
   }
 
   createPermission(permission) {
     return this.provider
-      .createRecord('permissions', permission);
+      .create('permissions', permission);
   }
 
   updatePermission(id, permission) {
     return this.provider
-      .updateRecord('permissions', id, permission);
+      .update('permissions', id, permission);
   }
 
   deletePermission(id) {
     return this.provider
-      .deleteRecord('permissions', id);
+      .delete('permissions', id);
   }
 
   getRoles() {
     return this.provider
-      .getRecords('roles');
+      .getAll('roles');
   }
 
   getRole(id) {
     return this.provider
-      .getRecord('roles', id);
+      .get('roles', id);
   }
 
   createRole(role) {
     return this.provider
-      .createRecord('roles', role);
+      .create('roles', role);
   }
 
   updateRole(id, role) {
     return this.provider
-      .updateRecord('roles', id, role);
+      .update('roles', id, role);
   }
 
   deleteRole(id) {
     return this.provider
-      .deleteRecord('roles', id);
+      .delete('roles', id);
   }
 
   getGroups() {
     return this.provider
-      .getRecords('groups');
+      .getAll('groups');
   }
 
   getGroup(id) {
     return this.provider
-      .getRecord('groups', id);
+      .get('groups', id);
   }
 
   createGroup(group) {
     return this.provider
-      .createRecord('groups', group);
+      .create('groups', group);
   }
 
   updateGroup(id, group) {
     return this.provider
-      .updateRecord('groups', id, group);
+      .update('groups', id, group);
   }
 
   deleteGroup(id) {
     return this.provider
-      .deleteRecord('groups', id);
+      .delete('groups', id);
   }
 
   getApplications() {
     return this.provider
-      .getRecords('applications');
+      .getAll('applications');
   }
 
   getApplication(clientId) {
     return this.provider
-      .getRecord('applications', clientId);
+      .get('applications', clientId);
   }
 
   updateApplication(clientId, application) {
     return this.provider
-      .updateRecord('applications', clientId, application, true);
+      .update('applications', clientId, application, true);
   }
 }

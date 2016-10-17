@@ -1,14 +1,1 @@
-import nconf from 'nconf';
-
-let provider = null;
-export const setProvider = (providerFunction) => {
-  provider = providerFunction;
-};
-
-export default (key) => {
-  if (provider) {
-    return provider(key);
-  }
-
-  return nconf.get(key);
-};
+module.exports = require('auth0-extension-tools').config();

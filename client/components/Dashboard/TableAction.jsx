@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import './TableAction.styl';
 
@@ -20,7 +20,13 @@ class TableAction extends Component {
   render() {
     return (
       <OverlayTrigger placement="top" overlay={<Tooltip id={this.props.id}>{this.props.title}</Tooltip>}>
-        <Button className="table-action" onClick={this.onClick} bsStyle={this.props.type || 'default'} bsSize="xsmall" disabled={this.props.disabled}>
+        <Button
+          className="table-action"
+          onClick={this.onClick}
+          bsStyle={this.props.type || 'default'}
+          bsSize="xsmall"
+          disabled={this.props.disabled}
+        >
           <i className={`icon icon-budicon-${this.props.icon}`} style={{ marginRight: '0px' }} />
         </Button>
       </OverlayTrigger>
@@ -29,13 +35,13 @@ class TableAction extends Component {
 }
 
 TableAction.propTypes = {
-  id: React.PropTypes.string.isRequired,
-  type: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  disabled: React.PropTypes.bool,
-  icon: React.PropTypes.string.isRequired,
-  onClick: React.PropTypes.func,
-  args: React.PropTypes.array
+  id: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  icon: PropTypes.string.isRequired,
+  onClick: PropTypes.func,
+  args: PropTypes.array
 };
 
 export default TableAction;

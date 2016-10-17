@@ -1,10 +1,12 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
+import { Field, formValueSelector } from 'redux-form';
+import { connect } from 'react-redux'
 
 import createForm from '../../utils/createForm';
 import { InputText, InputCombo, LoadingPanel, ScopeGroup } from '../Dashboard';
 
-export default createForm('role', class extends Component {
+const roleForm = createForm('role', class extends Component {
   static propTypes = {
     validationErrors: PropTypes.object,
     loading: PropTypes.bool.isRequired,
@@ -14,15 +16,9 @@ export default createForm('role', class extends Component {
     permissions: PropTypes.array.isRequired,
     applications: PropTypes.array.isRequired,
     isNew: PropTypes.bool.isRequired,
-    onApplicationSelected: PropTypes.func.isRequired
+    onApplicationSelected: PropTypes.func.isRequired,
+    applicationId: PropTypes.string
   };
-
-  static formFields = [
-    'name',
-    'description',
-    'applicationId',
-    'permissions'
-  ];
 
   state = {
     isNew: false,
@@ -39,22 +35,28 @@ export default createForm('role', class extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const { applicationId } = (nextProps.initialValues || nextProps.values);
-
+  initStateValues(applicationId, applications, permissions) {
     this.setState({
       applicationId,
-      applications: nextProps.applications.map(app => ({
+      applications: applications.map(app => ({
         value: app.client_id,
         text: `${app.name}`
       })),
-      permissions: nextProps.permissions
+      permissions: permissions
         .filter(perm => perm.applicationId === applicationId)
         .map(perm => ({
           value: perm._id,
           text: perm.name
         }))
     });
+  }
+
+  componentWillMount() {
+    this.initStateValues(this.props.applicationId || this.props.initialValues.applicationId, this.props.applications, this.props.permissions);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.initStateValues(nextProps.applicationId || nextProps.initialValues.applicationId, nextProps.applications, nextProps.permissions);
   }
 
   onBack = () => {
@@ -73,15 +75,16 @@ export default createForm('role', class extends Component {
     });
   }
 
-  getFields(name, description, permissions, applicationId, validationErrors) {
+  getFields(validationErrors) {
     if (this.props.page === 'chooseApplication') {
       return (
         <div>
           <p className="modal-description">
             Give a name, description (optional) and permissions for this role.
           </p>
-          <InputCombo
-            options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
+          <Field
+            name="applicationId" component={InputCombo}
+            options={this.state.applications} label="Application"
             validationErrors={validationErrors} onChange={this.onApplicationChanged}
           />
         </div>
@@ -94,19 +97,23 @@ export default createForm('role', class extends Component {
         <p className="modal-description">
           Select the application you want to create the role for.
         </p>
-        <InputCombo
-          options={this.state.applications} field={applicationId} fieldName="applicationId" label="Application"
+        <Field
+          name="applicationId" component={InputCombo}
+          options={this.state.applications} label="Application"
           validationErrors={validationErrors} disabled
         />
-        <InputText
-          field={name} fieldName="name" label="Name"
-          validationErrors={validationErrors}
+        <Field
+          name="name" component={InputText}
+          label="Name" validationErrors={validationErrors}
         />
-        <InputText
-          field={description} fieldName="description" label="Description"
-          validationErrors={validationErrors}
+        <Field
+          name="description" component={InputText}
+          label="Description" validationErrors={validationErrors}
         />
-        <ScopeGroup options={this.state.permissions} field={permissions} fieldName="permissions" label="Permissions" />
+        <Field
+          name="permissions" component={ScopeGroup}
+          label="Permissions" options={this.state.permissions}
+        />
       </div>
     );
   }
@@ -123,7 +130,7 @@ export default createForm('role', class extends Component {
     );
   }
 
-  getActionButton(loading, submitting, handleSubmit, applicationId) {
+  getActionButton(loading, submitting, handleSubmit) {
     if (this.props.page === 'editRole') {
       return (
         <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}>
@@ -140,21 +147,33 @@ export default createForm('role', class extends Component {
   }
 
   render() {
-    const { fields: { name, description, permissions, applicationId }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { handleSubmit, loading, submitting, validationErrors } = this.props;
 
     return (
       <div>
         <Modal.Body>
           {this.props.children}
           <LoadingPanel show={loading}>
-            {this.getFields(name, description, permissions, applicationId, validationErrors)}
+            {this.getFields(validationErrors)}
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
           {this.getCancelButton(loading, submitting)}
-          {this.getActionButton(loading, submitting, handleSubmit, applicationId)}
+          {this.getActionButton(loading, submitting, handleSubmit)}
         </Modal.Footer>
       </div>
     );
   }
 });
+
+// Decorate with connect to read form values
+const selector = formValueSelector('role');
+const connectDecorator = connect(state => {
+  const applicationId = selector(state, 'applicationId');
+
+  return {
+    applicationId
+  };
+});
+
+export default connectDecorator(roleForm);

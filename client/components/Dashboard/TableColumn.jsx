@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 
-class TableColumn extends Component {
-  render() {
-    const classes = classNames({
-      'icon': this.props.isIcon
-    });
+const TableColumn = ({ width, isIcon, children }) => {
+  const classes = classNames({
+    icon: isIcon
+  });
 
-    return (
-      <th width={this.props.width} className={classes}>
-        { this.props.children }
-      </th>);
-  }
-}
+  return (
+    <th width={width} className={classes}>
+      { children }
+    </th>);
+};
 
 TableColumn.propTypes = {
-  width: React.PropTypes.string.isRequired
+  width: PropTypes.string,
+  isIcon: PropTypes.bool,
+  children: PropTypes.node
 };
 
 export default TableColumn;

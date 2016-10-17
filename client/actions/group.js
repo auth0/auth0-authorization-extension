@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 
 import * as constants from '../constants';
 import { fetchGroupMembers, fetchGroupMembersNested } from './groupMember';
@@ -88,20 +89,24 @@ export function editGroupUsers(group) {
 export function saveGroup(group) {
   return (dispatch, getState) => {
     const state = getState().group.toJS();
+    const groupData = state.isNew ?
+      _.pick(group, [ 'name', 'description', 'members' ]) :
+      _.pick(group, [ 'name', 'description' ]);
+
     dispatch({
       type: constants.SAVE_GROUP,
       payload: {
         promise: axios({
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/groups' : `/api/groups/${state.groupId}`,
-          data: group,
+          data: groupData,
           responseType: 'json'
         })
       },
       meta: {
         isNew: state.isNew,
-        group,
-        groupId: state.groupId || group.name
+        groupData,
+        groupId: state.groupId || groupData.name
       }
     });
   };

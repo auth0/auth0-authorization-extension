@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
 import './SidebarItem.styl';
@@ -71,13 +71,14 @@ class SidebarItem extends Component {
 }
 
 SidebarItem.propTypes = {
-  route: React.PropTypes.string,
-  title: React.PropTypes.string.isRequired,
-  icon: React.PropTypes.element
+  route: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  icon: PropTypes.element,
+  children: PropTypes.node
 };
 
 SidebarItem.contextTypes = {
-  router: React.PropTypes.object.isRequired
+  router: PropTypes.object.isRequired
 };
 
 export default SidebarItem;
