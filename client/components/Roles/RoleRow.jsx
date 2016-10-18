@@ -1,6 +1,6 @@
 import React, { PropTypes, Component } from 'react';
 
-import { TableCell, TableIconCell, TableTextCell, TableRow } from '../Dashboard';
+import { TableCell, TableIconCell, TableTextCell, TableRow } from 'auth0-extension-ui';
 
 export default class RoleRow extends Component {
   static propTypes = {

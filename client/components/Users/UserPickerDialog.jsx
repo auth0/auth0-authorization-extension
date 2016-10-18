@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
+import { Error, Confirm } from 'auth0-extension-ui';
 
+import Multiselect from '../Multiselect';
 import createForm from '../../utils/createForm';
-import { Error, Confirm } from '../Dashboard';
-import Multiselect from '../Dashboard/Multiselect';
 import UserPickerSelectAction from './UserPickerSelectAction';
 import UserPickerUnselectAction from './UserPickerUnselectAction';
 

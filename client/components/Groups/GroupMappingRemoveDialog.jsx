@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Error, Confirm, LoadingPanel } from '../Dashboard';
+import { Error, Confirm, LoadingPanel } from 'auth0-extension-ui';
 
 class GroupMappingRemoveDialog extends Component {
   constructor() {

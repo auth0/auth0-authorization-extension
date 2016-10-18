@@ -1,15 +1,12 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
+import { SectionHeader, BlankState, SearchBar, Error, TableTotals } from 'auth0-extension-ui';
 
 import UserGeneral from './UserGeneral';
 import UserFederated from './UserFederated';
-import SectionHeader from '../Dashboard/SectionHeader';
-import BlankState from '../Dashboard/BlankState';
 import UsersTable from './UsersTable';
-import { Error, TableTotals } from '../Dashboard';
-import SearchBar from '../Dashboard/SearchBar';
-import UserIcon from '../Dashboard/icons/UsersIcon';
+import UserIcon from '../Icons/UsersIcon';
 
 class UserOverview extends React.Component {
   constructor() {

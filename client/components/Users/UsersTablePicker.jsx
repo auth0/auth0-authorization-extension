@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableActionCell, Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow, TableAction } from '../Dashboard';
+import { TableActionCell, Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow, TableAction } from 'auth0-extension-ui';
 
 class UsersTablePicker extends Component {
 

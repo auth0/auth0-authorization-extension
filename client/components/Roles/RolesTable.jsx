@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { PropTypes, Component } from 'react';
 
 import RoleRow from './RoleRow';
-import { Table, TableBody, TableHeader, TableColumn } from '../Dashboard';
+import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
 
 export default class RoleTable extends Component {
   static propTypes = {

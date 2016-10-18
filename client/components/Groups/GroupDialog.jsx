@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { Error } from '../Dashboard';
+import { Error } from 'auth0-extension-ui';
 import GroupForm from './GroupForm';
 
 class GroupDialog extends Component {

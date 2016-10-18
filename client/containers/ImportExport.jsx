@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import { importExportActions } from '../actions';
-import { Error, LoadingPanel, Json } from '../components/Dashboard';
+import { Error, LoadingPanel, Json } from 'auth0-extension-ui';
 
 export default connectContainer(class extends Component {
 

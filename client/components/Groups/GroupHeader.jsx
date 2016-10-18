@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EntityHeader from '../Dashboard/EntityHeader';
+import { EntityHeader } from 'auth0-extension-ui';
 
 import { Button, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 

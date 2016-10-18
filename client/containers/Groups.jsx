@@ -1,16 +1,13 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import SectionHeader from '../components/Dashboard/SectionHeader';
-import BlankState from '../components/Dashboard/BlankState';
-import SearchBar from '../components/Dashboard/SearchBar';
+import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
 
 import { connectionActions } from '../actions';
 import * as actions from '../actions/group';
-import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
 import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../components/Groups';
 import GroupMembersDialog from '../components/Groups/GroupMembersDialog';
-import GroupsIcon from '../components/Dashboard/icons/GroupsIcon';
+import GroupsIcon from '../components/Icons/GroupsIcon';
 
 class GroupsContainer extends Component {
   constructor() {

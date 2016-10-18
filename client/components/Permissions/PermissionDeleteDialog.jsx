@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react';
-import { Error, Confirm, LoadingPanel } from '../Dashboard';
+import { Error, Confirm, LoadingPanel } from 'auth0-extension-ui';
 
 export default class PermissionDeleteDialog extends Component {
   static propTypes = {

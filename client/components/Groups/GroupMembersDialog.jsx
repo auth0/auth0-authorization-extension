@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
+import Multiselect from '../Multiselect';
 
 import createForm from '../../utils/createForm';
-import Multiselect from '../Dashboard/Multiselect';
 import UsersTablePicker from '../Users/UsersTablePicker';
 
 export default createForm('groupMembers', class GroupMembersDialog extends React.Component {
