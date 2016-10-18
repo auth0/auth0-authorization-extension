@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 
-export default class PermissionContainer extends Component {
+export class PermissionContainer extends Component {
   render() {
     return (
       <div>

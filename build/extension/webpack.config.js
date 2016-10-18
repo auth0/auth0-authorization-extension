@@ -49,6 +49,7 @@ module.exports = externalModules.then((externals) => {
 
   // Transform to commonjs.
   Object.keys(externals.compatible).forEach(k => { externals.compatible[k] = 'commonjs ' + k; });
+  externals.compatible['auth0-oauth2-express'] = 'commonjs auth0-oauth2-express@1.2.0';
 
   return {
     entry: path.join(__dirname, '../../webtask'),

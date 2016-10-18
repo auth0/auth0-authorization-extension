@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz-extension",
-  "version": "1.4.4",
+  "version": "1.4.5",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "5.9.0"
@@ -27,7 +27,7 @@
   "dependencies": {
     "async": "~1.5.2",
     "auth0": "^2.1.0",
-    "auth0-oauth2-express": "^1.1.7",
+    "auth0-oauth2-express": "^1.2.0",
     "aws-sdk": "^2.2.47",
     "axios": "^0.9.1",
     "babel": "^6.5.2",
