@@ -23,7 +23,7 @@ nconf
   });
 
 // Start the server.
-require('./server/init')({}, (err, hapi) => {
+require('./server/init')({ configProvider: (key) => nconf.get(key) }, (err, hapi) => {
   if (err) {
     return logger.error(err);
   }
