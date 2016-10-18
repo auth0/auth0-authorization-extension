@@ -8,13 +8,15 @@
   "main": "server.js",
   "scripts": {
     "clean": "rimraf dist",
-    "client:build": "npm run clean && NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
-    "serve:dev": "NODE_ENV=development nodemon --ignore assets/app/ --ignore build/webpack/ --ignore client/ --ignore server/data.json --ignore node_modules/ ./build/webpack/server.js",
-    "serve:prod": "NODE_ENV=production node index.js",
-    "test": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --timeout 5000 $(find ./tests -name *.tests.js) tests/runner.js",
-    "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
+    "client:build": "npm run clean && cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
+    "serve:dev": "cross-env NODE_ENV=development nodemon --ignore assets/app/ --ignore build/webpack/ --ignore client/ --ignore server/data.json --ignore node_modules/ ./build/webpack/server.js",
+    "serve:prod": "cross-env NODE_ENV=production node index.js",
+    "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/mocha.js ./tests/**/*.tests.js",
+    "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/mocha.js ./tests/**/*.tests.js --watch",
+    "test:pre": "npm run test:clean",
+    "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
-    "extension:size": "NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
+    "extension:size": "cross-env NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
     "build": "npm run clean && npm run client:build && npm run extension:build"
   },
   "keywords": [
