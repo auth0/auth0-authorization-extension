@@ -26,3 +26,18 @@ export function exportConfig() {
     }
   };
 }
+
+export function addError(error) {
+  return {
+    type: constants.FETCH_CONFIGURATION_ADD_ERROR,
+    meta: {
+      error: error
+    }
+  }
+}
+
+export function closeError() {
+  return {
+    type: constants.FETCH_CONFIGURATION_CLOSE_ERROR
+  }
+}

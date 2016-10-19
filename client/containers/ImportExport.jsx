@@ -1,12 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Button } from 'react-bootstrap';
-import BlankState from '../components/Dashboard/BlankState';
-
 import { importExportActions } from '../actions';
 import { Error, LoadingPanel, Json } from '../components/Dashboard';
-
-import GroupsIcon from '../components/Dashboard/icons/GroupsIcon';
 
 class ImportExportContainer extends Component {
   componentWillMount() {
@@ -48,25 +43,13 @@ class ImportExportContainer extends Component {
           let result = JSON.parse(evt.target.result);
           return this.props.importConfig(result);
         }
-        reader.onerror = function (evt) {
-          alert('Something went wrong.');
+        reader.onerror = (evt) => {
+          this.props.addError('Something went wrong.');
         }
       } else {
-        alert('Incorrect file type.');
+        this.props.addError('Incorrect file type.');
       }
     }
-  }
-
-  renderBody = () => {
-    return (
-      <div>
-        <Json jsonObject={this.props.record} />
-        <button className="btn btn-transparent btn-md" onClick={this.exportConfig}>Export</button>
-        <button style={{ float: 'right' }} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
-        <input file-accept="json" ref="file" type="file" id="fileLoader" name="files" title="Load File"
-               style={{ display: 'none' }} onChange={this.importConfig.bind(this)} />
-      </div>
-    );
   }
 
   render() {
@@ -74,18 +57,28 @@ class ImportExportContainer extends Component {
     if (this.props.children) {
       return this.props.children;
     }
-    if (loading) {
-      return this.renderLoading();
-    }
     return (
       <div>
-        { this.renderBody()  }
+        <LoadingPanel show={this.props.loading}>
+          <Error message={this.props.error} onDismiss={this.closeError} dismissAfter={10000} />
+          <Json jsonObject={this.props.record} />
+          <button className="btn btn-transparent btn-md" onClick={this.exportConfig}>Export</button>
+          <button style={{ float: 'right' }} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
+          <input ref="file" type="file" id="fileLoader" name="files" title="Load File"
+                 style={{ display: 'none' }} onChange={this.importConfig.bind(this)} />
+        </LoadingPanel>
       </div>
     );
   }
 }
 
-ImportExportContainer.propTypes = {};
+ImportExportContainer.propTypes = {
+  exportConfig: PropTypes.func,
+  addError: PropTypes.func,
+  closeError: PropTypes.func,
+  importConfig: PropTypes.func
+};
+
 function mapStateToProps(state) {
   return {
     error: state.importExport.get('error'),

@@ -41,5 +41,15 @@ export const importExport = createReducer(fromJS(initialState), {
       loading: false,
       error: null,
       record: fromJS(action.meta.config)
+    }),
+  [constants.FETCH_CONFIGURATION_ADD_ERROR]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: action.meta.error
+    }),
+  [constants.FETCH_CONFIGURATION_CLOSE_ERROR]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: null
     })
 });
