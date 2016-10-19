@@ -50,9 +50,9 @@ export default connectContainer(class extends Component {
   }
 
   render() {
-    const { error, loading, record } = this.props;
+    const { error, loading, record, children } = this.props;
     if (this.props.children) {
-      return this.props.children;
+      return children;
     }
     return (
       <div>
