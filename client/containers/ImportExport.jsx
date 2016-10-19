@@ -26,21 +26,7 @@ class ImportExportContainer extends Component {
   importConfig = (e) => {
     var file = this.refs.file.files[0];
     if (file) {
-      let name = file.name;
-      let regex = new RegExp("(.*?)\.(json)$");
-      if (regex.test(name)) {
-        let reader = new FileReader();
-        reader.readAsText(file, "UTF-8");
-        reader.onload = (evt) => {
-          let result = JSON.parse(evt.target.result);
-          return this.props.importConfig(result);
-        }
-        reader.onerror = (evt) => {
-          this.props.addError('Something went wrong.');
-        }
-      } else {
-        this.props.addError('Incorrect file type.');
-      }
+      this.props.importConfigPrepare(file);
     }
   }
 
@@ -68,6 +54,7 @@ ImportExportContainer.propTypes = {
   exportConfig: PropTypes.func,
   addError: PropTypes.func,
   closeError: PropTypes.func,
+  importConfigPrepare: PropTypes.func,
   importConfig: PropTypes.func
 };
 
