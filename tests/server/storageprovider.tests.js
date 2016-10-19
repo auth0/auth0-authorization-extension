@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import Database from '../../server/lib/storage/database';
 
-describe('Database', () => {
+describe.only('Database', () => {
   describe('#constructor', () => {
     it('should require a provider', (done) => {
       const run = () => {

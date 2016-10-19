@@ -1,6 +1,8 @@
 import path from 'path';
 import nconf from 'nconf';
 import config from '../server/lib/config';
+import { initServer } from './server';
+import { generateToken } from './token';
 
 nconf
   .argv()
@@ -16,3 +18,6 @@ nconf
   });
 
 config.setProvider((key) => nconf.get(key));
+
+initServer();
+generateToken();
