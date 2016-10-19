@@ -4,16 +4,8 @@ import { importExportActions } from '../actions';
 import { Error, LoadingPanel, Json } from '../components/Dashboard';
 
 class ImportExportContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     this.props.exportConfig();
-  }
-
-  renderLoading = () => {
-    return (
-      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
-        <div className="circle" />
-      </div>
-    );
   }
 
   exportConfig = () => {
@@ -59,13 +51,13 @@ class ImportExportContainer extends Component {
     }
     return (
       <div>
-        <LoadingPanel show={this.props.loading}>
-          <Error message={this.props.error} onDismiss={this.closeError} dismissAfter={10000} />
-          <Json jsonObject={this.props.record} />
+        <LoadingPanel show={loading}>
+          <Error message={error} onDismiss={this.closeError} dismissAfter={10000} />
+          <Json jsonObject={record} />
           <button className="btn btn-transparent btn-md" onClick={this.exportConfig}>Export</button>
-          <button style={{ float: 'right' }} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
+          <button style={{float: 'right'}} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
           <input ref="file" type="file" id="fileLoader" name="files" title="Load File"
-                 style={{ display: 'none' }} onChange={this.importConfig.bind(this)} />
+                 style={{display: 'none'}} onChange={this.importConfig.bind(this)} />
         </LoadingPanel>
       </div>
     );
