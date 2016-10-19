@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
 
-describe.only('metadata-route', () => {
+describe('metadata-route', () => {
   const { server } = getServerData();
 
   describe('#get', () => {

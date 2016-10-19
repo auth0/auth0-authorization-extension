@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../token';
 
-describe.only('applications-route', () => {
+describe('applications-route', () => {
   let clientId = null;
   const { server } = getServerData();
   const token = getToken();

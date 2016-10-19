@@ -4,7 +4,7 @@ import { getServerData } from '../server';
 import { getToken } from '../token';
 import config from '../../server/lib/config';
 
-describe.only('roles-route', () => {
+describe('roles-route', () => {
   const { db, server } = getServerData();
   const token = getToken();
   const guid = 'A56a418065aa426ca9455fd21deC0538';

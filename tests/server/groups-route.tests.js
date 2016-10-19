@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../token';
 
-describe.only('groups-route', () => {
+describe('groups-route', () => {
   let newGroup = null;
   const groupName = 'test-group';
   const { db, server } = getServerData();

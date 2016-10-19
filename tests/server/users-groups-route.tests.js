@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../token';
 
-describe.only('users-groups-route', () => {
+describe('users-groups-route', () => {
   let userId = null;
   const { db, server } = getServerData();
   const token = getToken();

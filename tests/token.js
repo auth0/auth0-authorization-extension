@@ -1,7 +1,7 @@
 let token = null;
 
 export const generateToken = () => {
-  // TODO: generate token here
+  // TODO: generate valid token here
   token = null;
 };
 

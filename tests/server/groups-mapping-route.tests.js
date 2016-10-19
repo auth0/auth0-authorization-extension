@@ -3,7 +3,7 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../token';
 
-describe.only('groups-mapping-route', () => {
+describe('groups-mapping-route', () => {
   const { db, server } = getServerData();
   const token = getToken();
   const guid = 'C56a418065aa426ca9455fd21deC0538';
