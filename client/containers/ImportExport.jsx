@@ -1,9 +1,28 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import connectContainer from 'redux-static';
 import { importExportActions } from '../actions';
 import { Error, LoadingPanel, Json } from '../components/Dashboard';
 
-class ImportExportContainer extends Component {
+export default connectContainer(class extends Component {
+
+  static stateToProps = (state) => ({
+    error: state.importExport.get('error'),
+    loading: state.importExport.get('loading'),
+    record: state.importExport.get('record')
+  });
+
+  static actionsToProps = {
+    ...importExportActions
+  }
+
+  static propTypes = {
+    exportConfig: PropTypes.func,
+    addError: PropTypes.func,
+    closeError: PropTypes.func,
+    importConfigPrepare: PropTypes.func,
+    importConfig: PropTypes.func
+  }
+
   componentDidMount() {
     this.props.exportConfig();
   }
@@ -48,22 +67,4 @@ class ImportExportContainer extends Component {
       </div>
     );
   }
-}
-
-ImportExportContainer.propTypes = {
-  exportConfig: PropTypes.func,
-  addError: PropTypes.func,
-  closeError: PropTypes.func,
-  importConfigPrepare: PropTypes.func,
-  importConfig: PropTypes.func
-};
-
-function mapStateToProps(state) {
-  return {
-    error: state.importExport.get('error'),
-    loading: state.importExport.get('loading'),
-    record: state.importExport.get('record')
-  };
-}
-
-export default connect(mapStateToProps, { ...importExportActions })(ImportExportContainer);
+})
