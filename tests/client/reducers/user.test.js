@@ -5,7 +5,18 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  record: {}
+  userId: null,
+  record: {},
+  allGroups: {
+    loading: false,
+    error: null,
+    records: []
+  },
+  groups: {
+    loading: false,
+    error: null,
+    records: []
+  }
 };
 
 describe('user reducer', () => {
@@ -17,39 +28,64 @@ describe('user reducer', () => {
     );
   });
 
-  it('should handle FETCH_RULE_STATUS', () => {
+  it('should handle FETCH_USER_PENDING', () => {
     expect(
       user(initialState, {
-        type: constants.FETCH_RULE_STATUS
+        type: constants.FETCH_USER_PENDING,
+        meta: {
+          userId: 1
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: true,
         error: null,
-        record: {}
+        userId: 1,
+        record: {},
+        allGroups: {
+          loading: false,
+          error: null,
+          records: []
+        },
+        groups: {
+          loading: false,
+          error: null,
+          records: []
+        }
       }
     );
   });
 
-  it('should handle FETCH_RULE_STATUS_REJECTED', () => {
+  it('should handle FETCH_USER_REJECTED', () => {
     expect(
       user(initialState, {
-        type: constants.FETCH_RULE_STATUS_REJECTED,
+        type: constants.FETCH_USER_REJECTED,
         errorMessage: 'ERROR'
       }).toJSON()
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while loading the rule status: ERROR',
-        record: {}
+        error: 'An error occured while loading the user: ERROR',
+        userId: null,
+        record: {},
+        allGroups: {
+          loading: false,
+          error: null,
+          records: []
+        },
+        groups: {
+          loading: false,
+          error: null,
+          records: []
+        }
       }
     );
   });
 
-  it('should handle FETCH_RULE_STATUS_FULFILLED', () => {
+  it('should handle FETCH_USER_FULFILLED', () => {
     expect(
       user(initialState, {
-        type: constants.FETCH_RULE_STATUS_FULFILLED,
+        type: constants.FETCH_USER_FULFILLED,
         payload: {
           data: {
             id: 1,
@@ -61,9 +97,19 @@ describe('user reducer', () => {
       {
         loading: false,
         error: null,
+        userId: null,
         record: {
-          id: 1,
-          test: 'name'
+
+        },
+        allGroups: {
+          loading: false,
+          error: null,
+          records: []
+        },
+        groups: {
+          loading: false,
+          error: null,
+          records: []
         }
       }
     );

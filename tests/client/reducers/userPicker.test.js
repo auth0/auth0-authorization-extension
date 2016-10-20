@@ -117,9 +117,9 @@ describe('userPicker reducer', () => {
         type: constants.SEARCH_USER_PICKER_FULFILLED,
         payload: {
           data: {
-            total: 100
+            total: 100,
+            users: []
           },
-          users: []
         },
         meta: {
           page: 1
@@ -185,7 +185,7 @@ describe('userPicker reducer', () => {
         open: false,
         total: 0,
         records: [],
-        selection: [],
+        selection: [1],
         title: 'Select one or more users.'
       }
     );
@@ -216,10 +216,9 @@ describe('userPicker reducer', () => {
         open: false,
         total: 0,
         records: [],
-        selection: {
-          user_id: 1,
-          name: 'test_1'
-        },
+        selection: [
+          1, { user_id: 2, name: 'test' }, { user_id: 1, name: 'test_1' }
+        ],
         title: 'Select one or more users.'
       }
     );
@@ -237,7 +236,7 @@ describe('userPicker reducer', () => {
         open: false,
         total: 0,
         records: [],
-        selection: false,
+        selection: [],
         title: 'Select one or more users.'
       }
     );

@@ -8,7 +8,7 @@ const initialState = {
   records: []
 };
 
-describe('groups reducer', () => {
+describe('roles reducer', () => {
   it('should return the initial state', () => {
     expect(
       roles(undefined, {}).toJSON()
@@ -52,8 +52,8 @@ describe('groups reducer', () => {
         type: constants.FETCH_ROLES_FULFILLED,
         payload: {
           data: [
-            { id: 2, 'test2' },
-            { id: 1, 'test1' }
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
           ]
         }
       }).toJSON()
@@ -62,8 +62,8 @@ describe('groups reducer', () => {
         loading: false,
         error: null,
         records: [
-          { id: 1, 'test1' },
-          { id: 2, 'test2' }
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
         ]
       }
     );
@@ -73,21 +73,63 @@ describe('groups reducer', () => {
   it('should handle SAVE_ROLE_FULFILLED', () => {
     expect(
       roles(initialState, {
-        type: constants.SAVE_ROLE_FULFILLED
+        type: constants.SAVE_ROLE_FULFILLED,
+        payload: {
+          data: {
+            _id:1,
+            name: 'test'
+          }
+        },
+        meta: {
+          roleId: 1
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
         error: null,
-        records: []
+        records: [
+          {
+            _id:1,
+            name: 'test'
+          }
+        ]
       }
     );
   });
 
-  it('should handle DELETE_GROUP_FULFILLED', () => {
+  it('should handle SAVE_ROLE_FULFILLED', () => {
     expect(
       roles(initialState, {
-        type: constants.DELETE_GROUP_FULFILLED
+        type: constants.SAVE_ROLE_FULFILLED,
+        payload: {
+          data: {
+            _id:1,
+            name: 'test'
+          }
+        },
+        meta: {
+          roleId: 2
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          {
+            _id:1,
+            name: 'test'
+          }
+        ]
+      }
+    );
+  });
+
+  it('should handle DELETE_ROLE_FULFILLED', () => {
+    expect(
+      roles(initialState, {
+        type: constants.DELETE_ROLE_FULFILLED
       }).toJSON()
     ).toEqual(
       {

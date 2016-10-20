@@ -66,7 +66,7 @@ export const role = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_ROLE_REJECTED]: (state, action) => {
     const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
-    const errorMessage = action.payload.data ? action.payload.data.errors : (action.errorMessage || 'Validation Error');
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,

@@ -32,7 +32,7 @@ describe('groupMember reducer', () => {
             name: 'test'
           },
           user: {
-            _id: 2,
+            user_id: 2,
             user_name: 'test_2'
           }
         }
@@ -44,9 +44,38 @@ describe('groupMember reducer', () => {
         requesting: true,
         isRemove: true,
         groupId: 1,
-        groupName: 'test_1',
+        groupName: 'test',
         userId: 2,
         userDisplayName: 'test_2'
+      }
+    );
+  });
+
+  it('should handle REQUEST_REMOVE_GROUP_MEMBER', () => {
+    expect(
+      groupMember(initialState, {
+        type: constants.REQUEST_REMOVE_GROUP_MEMBER,
+        meta: {
+          group: {
+            _id: 1,
+            name: 'test'
+          },
+          user: {
+            user_id: 2,
+            email: 'test_2@mail.com'
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        error: null,
+        loading: false,
+        requesting: true,
+        isRemove: true,
+        groupId: 1,
+        groupName: 'test',
+        userId: 2,
+        userDisplayName: 'test_2@mail.com'
       }
     );
   });

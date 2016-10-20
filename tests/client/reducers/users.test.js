@@ -193,7 +193,7 @@ describe('user reducer', () => {
         records: [
           {
             user_id: 1,
-            blocked: false,
+            blocked: true,
             multifactor: []
           }
         ],

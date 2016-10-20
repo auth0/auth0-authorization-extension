@@ -14,7 +14,7 @@ const initialState = {
   validationErrors: {}
 };
 
-describe('groups reducer', () => {
+describe('role reducer', () => {
   it('should return the initial state', () => {
     expect(
       role(undefined, {}).toJSON()
@@ -26,14 +26,17 @@ describe('groups reducer', () => {
   it('should handle FETCH_ROLE_PENDING', () => {
     expect(
       role(initialState, {
-        type: constants.FETCH_ROLE_PENDING
+        type: constants.FETCH_ROLE_PENDING,
+        meta: {
+          roleId: 1
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: true,
         error: null,
         record: {},
-        roleId: null,
+        roleId: 1,
         isNew: false,
         isEdit: false,
         isDelete: false,
@@ -79,10 +82,7 @@ describe('groups reducer', () => {
       {
         loading: false,
         error: null,
-        record: {
-          _id: 1,
-          name: 'test'
-        },
+        record: {},
         roleId: null,
         isNew: false,
         isEdit: false,
@@ -117,7 +117,10 @@ describe('groups reducer', () => {
       {
         loading: false,
         error: null,
-        record: {},
+        record: {
+          _id: 1,
+          name: 'test'
+        },
         roleId: 1,
         isNew: false,
         isEdit: false,
@@ -232,7 +235,7 @@ describe('groups reducer', () => {
           name: 'test'
         },
         page: 'editRole',
-        roleId: null,
+        roleId: 1,
         isNew: false,
         isEdit: true,
         isDelete: false,
@@ -275,7 +278,7 @@ describe('groups reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the role: ',
+        error: 'An error occured while saving the role: Validation Error',
         record: {},
         roleId: null,
         isNew: false,
@@ -360,7 +363,7 @@ describe('groups reducer', () => {
         roleId: 1,
         isNew: false,
         isEdit: false,
-        isDelete: false,
+        isDelete: true,
         requesting: true,
         validationErrors: {}
       }

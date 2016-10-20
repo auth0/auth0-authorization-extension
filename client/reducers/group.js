@@ -1,7 +1,5 @@
 import moment from 'moment';
 import { fromJS, Map } from 'immutable';
-import { combineReducers } from 'redux'
-
 import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
 
@@ -91,7 +89,7 @@ export const group = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_GROUP_REJECTED]: (state, action) => {
     const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
-    const errorMessage = action.payload.data ? action.payload.data.errors : (action.errorMessage || 'Validation Error');
+    const errorMessage = (action.payload.data && action.payload.data.errors)  ? 'Validation Error' : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,

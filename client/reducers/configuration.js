@@ -17,7 +17,7 @@ export const configuration = createReducer(fromJS(initialState), {
     }),
   [constants.FETCH_CONFIGURATION_REJECTED]: (state, action) =>
     state.merge({
-      loading: true,
+      loading: false,
       error: `An error occured while loading the configuration: ${action.errorMessage}`
     }),
   [constants.FETCH_CONFIGURATION_FULFILLED]: (state, action) =>

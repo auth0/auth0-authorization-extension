@@ -33,7 +33,7 @@ describe('groupNested reducer', () => {
           },
           nestedGroup: {
             _id: 2,
-            user_name: 'test_2'
+            name: 'test_2'
           }
         }
       }).toJSON()

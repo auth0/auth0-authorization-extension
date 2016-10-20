@@ -53,8 +53,8 @@ describe('groups reducer', () => {
         type: constants.FETCH_GROUPS_FULFILLED,
         payload: {
           data: [
-            { id: 2, 'test2' },
-            { id: 1, 'test1' }
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
           ]
         }
       }).toJSON()
@@ -63,8 +63,8 @@ describe('groups reducer', () => {
         loading: false,
         error: null,
         records: [
-          { id: 1, 'test1' },
-          { id: 2, 'test2' }
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
         ]
       }
     );
@@ -73,14 +73,69 @@ describe('groups reducer', () => {
 
   it('should handle SAVE_GROUP_FULFILLED', () => {
     expect(
-      groups(initialState, {
-        type: constants.SAVE_GROUP_FULFILLED
+      groups({
+        loading: false,
+        error: null,
+        records: []
+      }, {
+        type: constants.SAVE_GROUP_FULFILLED,
+        payload: {
+          data: {
+            _id: 1,
+            name: 'test'
+          }
+        },
+        meta: {
+          groupId: 1
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
         error: null,
-        records: []
+        records: [
+          {
+            _id: 1,
+            name: 'test'
+          }
+        ]
+      }
+    );
+  });
+
+  it('should handle SAVE_GROUP_FULFILLED', () => {
+    expect(
+      groups({
+        loading: false,
+        error: null,
+        records: [
+          {
+            _id: 1,
+            name: 'test'
+          }
+        ]
+      }, {
+        type: constants.SAVE_GROUP_FULFILLED,
+        payload: {
+          data: {
+            _id: 2,
+            name: 'test'
+          }
+        },
+        meta: {
+          groupId: 1
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          {
+            _id: 2,
+            name: 'test'
+          }
+        ]
       }
     );
   });

@@ -62,7 +62,8 @@ describe('auth reducer', () => {
   it('should handle LOGIN_FAILED without error payload', () => {
     expect(
       auth(initialState, {
-        type: constants.LOGIN_FAILED
+        type: constants.LOGIN_FAILED,
+        payload: { }
       }).toJSON()
     ).toEqual(
       {

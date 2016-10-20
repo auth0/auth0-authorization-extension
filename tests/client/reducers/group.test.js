@@ -47,14 +47,17 @@ describe('group reducer', () => {
   it('should handle FETCH_GROUP_PENDING', () => {
     expect(
       group(initialState, {
-        type: constants.FETCH_GROUP_PENDING
+        type: constants.FETCH_GROUP_PENDING,
+        meta: {
+          groupId: 1
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: true,
         error: null,
         record: {},
-        groupId: null,
+        groupId: 1,
         isNew: false,
         isEdit: false,
         isEditUsers: false,
@@ -253,8 +256,36 @@ describe('group reducer', () => {
       }).toJSON()
     ).toEqual(
       {
-        _id: 2,
-        name: 'test'
+        loading: false,
+        error: null,
+        record: {},
+        groupId: 1,
+        isNew: false,
+        isEdit: false,
+        isEditUsers: false,
+        isDelete: false,
+        requesting: false,
+        validationErrors: {},
+        members: {
+          loading: false,
+          error: null,
+          records: []
+        },
+        nestedMembers: {
+          loading: false,
+          error: null,
+          records: []
+        },
+        mappings: {
+          loading: false,
+          error: null,
+          records: []
+        },
+        nested: {
+          loading: false,
+          error: null,
+          records: []
+        }
       }
     );
   });
@@ -369,7 +400,8 @@ describe('group reducer', () => {
           group: {
             _id: 1,
             name: 'test'
-          }
+          },
+          group_id: 1
         }
       }).toJSON()
     ).toEqual(
@@ -458,14 +490,14 @@ describe('group reducer', () => {
         type: constants.SAVE_GROUP_REJECTED,
         payload: {
           data: {
-            errors: 'error'
+            errors: { field_1: 'test' }
           }
         }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the group: error',
+        error: 'An error occured while saving the group: Validation Error',
         record: {},
         groupId: null,
         isNew: false,
@@ -473,7 +505,7 @@ describe('group reducer', () => {
         isEditUsers: false,
         isDelete: false,
         requesting: false,
-        validationErrors: 'error',
+        validationErrors: { field_1: 'test' },
         members: {
           loading: false,
           error: null,
@@ -501,7 +533,8 @@ describe('group reducer', () => {
   it('should handle SAVE_GROUP_REJECTED without error payload', () => {
     expect(
       group(initialState, {
-        type: constants.SAVE_GROUP_REJECTED
+        type: constants.SAVE_GROUP_REJECTED,
+        payload: {}
       }).toJSON()
     ).toEqual(
       {
@@ -543,7 +576,8 @@ describe('group reducer', () => {
     expect(
       group(initialState, {
         type: constants.SAVE_GROUP_REJECTED,
-        errorMessage: 'ERROR'
+        errorMessage: 'ERROR',
+        payload: {}
       }).toJSON()
     ).toEqual(
       {
@@ -615,7 +649,7 @@ describe('group reducer', () => {
         isEdit: false,
         isEditUsers: false,
         isDelete: true,
-        requesting: false,
+        requesting: true,
         validationErrors: {},
         members: {
           loading: false,
@@ -754,7 +788,59 @@ describe('group reducer', () => {
       }).toJSON()
     ).toEqual(
       {
+        members: {
+          error: null,
+          loading: true,
+          records: []
+        }
+      }
+    );
+  });
+
+  it('should handle FETCH_GROUP_MEMBERS_REJECTED', () => {
+    expect(
+      group({
         members: {}
+      }, {
+        type: constants.FETCH_GROUP_MEMBERS_REJECTED
+      }).toJSON()
+    ).toEqual(
+      {
+        members: {
+          error: 'An error occured while loading the members: undefined',
+          loading: false,
+          records: []
+        }
+      }
+    );
+  });
+
+
+  it('should handle FETCH_GROUP_MEMBERS_FULFILLED', () => {
+    expect(
+      group({
+        members: {}
+      }, {
+        type: constants.FETCH_GROUP_MEMBERS_FULFILLED,
+        payload: {
+          data: [
+            {
+              name: "test"
+            }
+          ]
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        members: {
+          loading: false,
+          records: [
+            {
+              last_login_relative: "a few seconds ago",
+              name: "test"
+            }
+          ]
+        }
       }
     );
   });

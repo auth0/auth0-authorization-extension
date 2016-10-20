@@ -52,8 +52,8 @@ describe('permissions reducer', () => {
         type: constants.FETCH_PERMISSIONS_FULFILLED,
         payload: {
           data: [
-            { id: 2, 'test2' },
-            { id: 1, 'test1' }
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
           ]
         }
       }).toJSON()
@@ -62,8 +62,8 @@ describe('permissions reducer', () => {
         loading: false,
         error: null,
         records: [
-          { id: 1, 'test1' },
-          { id: 2, 'test2' }
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
         ]
       }
     );
@@ -73,13 +73,62 @@ describe('permissions reducer', () => {
   it('should handle SAVE_PERMISSION_FULFILLED', () => {
     expect(
       permissions(initialState, {
-        type: constants.SAVE_PERMISSION_FULFILLED
+        type: constants.SAVE_PERMISSION_FULFILLED,
+        payload: {
+          data: {
+            _id: 1,
+            name: 'test'
+          }
+        },
+        meta: {
+          permissionId:1
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
         error: null,
-        records: []
+        records: [
+          {
+            _id: 1,
+            name: 'test'
+          }
+        ]
+      }
+    );
+  });
+
+  it('should handle SAVE_PERMISSION_FULFILLED', () => {
+    expect(
+      permissions({
+        loading: false,
+        error: null,
+        records: [{
+          _id: 1,
+          name: 'test'
+        }]
+      }, {
+        type: constants.SAVE_PERMISSION_FULFILLED,
+        payload: {
+          data: {
+            _id: 1,
+            name: 'test'
+          }
+        },
+        meta: {
+          permissionId:1
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          {
+            _id: 1,
+            name: 'test'
+          }
+        ]
       }
     );
   });

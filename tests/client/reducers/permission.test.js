@@ -69,35 +69,6 @@ describe('permission reducer', () => {
 
   it('should handle FETCH_PERMISSION_FULFILLED', () => {
     expect(
-      permission(initialState, {
-        type: constants.FETCH_PERMISSION_FULFILLED,
-        payload: {
-          data: {
-            _id: 1,
-            name: 'test'
-          }
-        }
-      }).toJSON()
-    ).toEqual(
-      {
-        loading: false,
-        error: null,
-        record: {
-          _id: 1,
-          name: 'test'
-        },
-        permissionId: null,
-        isNew: false,
-        isEdit: false,
-        isDelete: false,
-        requesting: false,
-        validationErrors: {}
-      }
-    );
-  });
-
-  it('should handle FETCH_PERMISSION_FULFILLED', () => {
-    expect(
       permission({
         loading: false,
         error: null,
@@ -121,8 +92,47 @@ describe('permission reducer', () => {
       {
         loading: false,
         error: null,
-        record: {},
+        record: {
+          _id: 1,
+          name: "test"
+        },
         permissionId: 1,
+        isNew: false,
+        isEdit: false,
+        isDelete: false,
+        requesting: false,
+        validationErrors: {}
+      }
+    );
+  });
+
+  it('should handle FETCH_PERMISSION_FULFILLED', () => {
+    expect(
+      permission({
+        loading: false,
+        error: null,
+        record: {},
+        permissionId: 2,
+        isNew: false,
+        isEdit: false,
+        isDelete: false,
+        requesting: false,
+        validationErrors: {}
+      }, {
+        type: constants.FETCH_PERMISSION_FULFILLED,
+        payload: {
+          data: {
+            _id: 1,
+            name: 'test'
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        permissionId: 2,
+        record: {},
         isNew: false,
         isEdit: false,
         isDelete: false,
@@ -215,19 +225,20 @@ describe('permission reducer', () => {
     expect(
       permission(initialState, {
         type: constants.SAVE_PERMISSION_REJECTED,
-        data: {
-          errors: [
-            {
-              name: 'test'
-            }
-          ]
-        },
-        errorMessage: 'ERROR'
+        errorMessage: 'ERROR',
+        payload: {
+          data: {
+            errors:
+              {
+                name: 'test'
+              }
+          }
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the permission: ERROR',
+        error: 'An error occured while saving the permission: Validation Error',
         record: {},
         permissionId: null,
         isNew: false,
@@ -241,15 +252,21 @@ describe('permission reducer', () => {
     );
   });
 
+
   it('should handle SAVE_PERMISSION_REJECTED', () => {
     expect(
       permission(initialState, {
-        type: constants.SAVE_PERMISSION_REJECTED
+        type: constants.SAVE_PERMISSION_REJECTED,
+        errorMessage: 'ERROR',
+        payload: {
+          data: {
+          }
+        }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the permission: Validation Error',
+        error: 'An error occured while saving the permission: ERROR',
         record: {},
         permissionId: null,
         isNew: false,
@@ -260,6 +277,9 @@ describe('permission reducer', () => {
       }
     );
   });
+
+
+
 
   it('should handle SAVE_PERMISSION_FULFILLED', () => {
     expect(

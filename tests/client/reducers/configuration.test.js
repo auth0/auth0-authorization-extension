@@ -35,13 +35,14 @@ describe('configuration reducer', () => {
     expect(
       configuration(initialState, {
         type: constants.FETCH_CONFIGURATION_REJECTED,
-        errorMessage: 'ERROR'
+        errorMessage: 'ERROR',
+        payload: {}
       }).toJSON()
     ).toEqual(
       {
         loading: false,
         error: 'An error occured while loading the configuration: ERROR',
-        records: {}
+        record: {}
       }
     );
   });
@@ -51,24 +52,20 @@ describe('configuration reducer', () => {
       configuration(initialState, {
         type: constants.FETCH_CONFIGURATION_FULFILLED,
         payload: {
-          data: [
-            {
-              id: 'con_test123',
-              name: 'my-custom-db'
-            }
-          ]
+          data: {
+            id: 'con_test123',
+            name: 'my-custom-db'
+          }
         }
       }).toJSON()
     ).toEqual(
       {
         loading: false,
         error: null,
-        records: [
-          {
-            id: 'con_test123',
-            name: 'my-custom-db'
-          }
-        ]
+        record: {
+          id: 'con_test123',
+          name: 'my-custom-db'
+        }
       }
     );
   });
@@ -91,13 +88,48 @@ describe('configuration reducer', () => {
     expect(
       configuration(initialState, {
         type: constants.SAVE_CONFIGURATION_REJECTED,
-        errorMessage: 'ERROR'
+        errorMessage: 'ERROR',
+        payload: {}
       }).toJSON()
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while loading the configuration: ERROR',
-        records: {}
+        error: 'An error occured while saving the configuration: ERROR',
+        record: {}
+      }
+    );
+  });
+
+  it('should handle SAVE_CONFIGURATION_REJECTED', () => {
+    expect(
+      configuration(initialState, {
+        type: constants.SAVE_CONFIGURATION_REJECTED,
+        payload: {}
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: 'An error occured while saving the configuration: Validation Error',
+        record: {}
+      }
+    );
+  });
+
+  it('should handle SAVE_CONFIGURATION_REJECTED', () => {
+    expect(
+      configuration(initialState, {
+        type: constants.SAVE_CONFIGURATION_REJECTED,
+        payload: {
+          data: {
+            errors: 'FORBIDDEN'
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: 'An error occured while saving the configuration: FORBIDDEN',
+        record: {}
       }
     );
   });
@@ -123,7 +155,7 @@ describe('configuration reducer', () => {
       {
         loading: false,
         error: null,
-        records: [
+        record: [
           {
             id: 'con_test123',
             name: 'my-custom-db'
