@@ -65,3 +65,54 @@ export function saveConfiguration(config) {
     }
   };
 }
+
+/*
+ * Save Token Contents.
+ */
+export function saveConfigurationTokenContents(config) {
+  return {
+    type: constants.SAVE_CONFIGURATION_TOKENCONTENTS,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: '/api/configuration/tokencontents',
+        data: config,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
+ * Save Persistence.
+ */
+export function saveConfigurationPersistence(config) {
+  return {
+    type: constants.SAVE_CONFIGURATION_PERSISTENCE,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: '/api/configuration/persistence',
+        data: config,
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
+ * Save API Access.
+ */
+export function saveConfigurationAPIAccess(config) {
+  return {
+    type: constants.SAVE_CONFIGURATION_APIACCESS,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: '/api/configuration/apiaccess',
+        data: config,
+        responseType: 'json'
+      })
+    }
+  };
+}
