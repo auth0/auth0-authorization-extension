@@ -24,7 +24,8 @@ module.exports = (server) => ({
       })
       .then(rule => {
         req.storage.getStatus()
-          .then(database => reply({ rule, database }));
+          .then(database => reply({ rule, database }))
+          .catch(() => reply({ rule, database: { size: 0, type: 'unknown' } }));
       })
       .catch(err => reply.error(err))
 });
