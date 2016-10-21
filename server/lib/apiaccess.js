@@ -1,72 +1,86 @@
 import Promise from 'bluebird';
-import request from 'request-promise';
+import request from 'superagent';
+import { managementApi } from 'auth0-extension-tools';
 import config from './config';
 
 let apiAccessInstance = null;
+const apiIdentifier = 'urn:auth0-authz-api';
 
-const makeRequest = (path, method, payload) => {
-  const options = {
-    method,
-    uri: `https://${config('AUTH0_DOMAIN')}/api/v2/${path}`,
-    json: true,
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${config('AUTH0_APIV2_TOKEN')}`
-    }
-  };
+const getToken = () =>
+  managementApi.getAccessTokenCached(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'));
 
-  if (payload) {
-    options.body = payload;
-  }
+const makeRequest = (path, method, payload) =>
+  new Promise((resolve, reject) =>
+    getToken().then(token => {
+      request(method, `https://${config('AUTH0_DOMAIN')}/api/v2/${path}`)
+        .send(payload || {})
+        .set('Content-Type', 'application/json')
+        .set('Authorization', `Bearer ${token}`)
+        .end((err, res) => {
+          if (err) {
+            return reject(err);
+          }
 
-  return request(options);
-};
+          return resolve(res.body);
+        });
+    }));
 
 export default class ApiAccess {
-  constructor(baseUrl) {
+  constructor() {
     if (!apiAccessInstance) {
-      this.baseUrl = baseUrl;
       apiAccessInstance = this;
     }
 
     return apiAccessInstance;
   }
 
-  getApi(id) {
-    if (!id) {
-      return Promise.resolve();
-    }
+  getApi(returnEmpty) {
+    return makeRequest('resource-servers', 'GET')
+      .then(apis => {
+        const api = apis.filter(item => item.identifier === apiIdentifier);
 
-    return makeRequest(`resource-servers/${id}`, 'GET');
+        if (api.length !== 1 && returnEmpty) {
+          return {};
+        } else if (api.length !== 1) {
+          return Promise.reject(new Error('Cannot find auth0-authz-api'));
+        }
+
+        return api[0];
+      });
   }
 
   createApi() {
     const payload = {
       name: 'auth0-authorization-extension-api',
-      identifier: this.baseUrl,
-      signing_alg: 'RS256'
+      identifier: apiIdentifier,
+      signing_alg: 'RS256',
+      scopes: [
+        { value: 'read:users' },
+        { value: 'read:groups' },
+        { value: 'create:groups' },
+        { value: 'update:groups' },
+        { value: 'delete:groups' },
+        { value: 'read:roles' },
+        { value: 'create:roles' },
+        { value: 'update:roles' },
+        { value: 'delete:roles' },
+        { value: 'read:permissions' },
+        { value: 'create:permissions' },
+        { value: 'update:permissions' },
+        { value: 'delete:permissions' }
+      ]
     };
 
     return makeRequest('resource-servers', 'POST', payload);
   }
 
-  updateApi(id, lifeTime) {
-    if (!id) {
-      return Promise.reject(new Error('Cannot update API access - no ID'));
-    }
-
-    const payload = {
-      token_lifetime: lifeTime
-    };
-
-    return makeRequest(`resource-servers/${id}`, 'PATCH', payload);
+  updateApi(lifeTime) {
+    return this.getApi()
+      .then(api => makeRequest(`resource-servers/${api.id}`, 'PATCH', { token_lifetime: lifeTime }));
   }
 
-  deleteApi(id) {
-    if (!id) {
-      return Promise.reject(new Error('Cannot delete API access - no ID'));
-    }
-
-    return makeRequest(`resource-servers/${id}`, 'DELETE');
+  deleteApi() {
+    return this.getApi()
+      .then(api => makeRequest(`resource-servers/${api.id}`, 'DELETE'));
   }
 }

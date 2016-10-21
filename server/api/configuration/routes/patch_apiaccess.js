@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import { urlHelpers } from 'auth0-extension-hapi-tools';
 import ApiAccess from '../../../lib/apiaccess';
 
 module.exports = () => ({
@@ -18,13 +17,11 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => {
-    const baseUrl = urlHelpers.getBaseUrl(req);
-    const apiAccess = new ApiAccess(baseUrl);
+    const apiAccess = new ApiAccess();
     const lifetime = req.payload.lifetime;
 
-    return req.storage.getApiAccess()
-      .then(api => apiAccess.updateApi(api && api.api_id, lifetime))
+    return apiAccess.updateApi(lifetime)
       .then(() => reply())
-      .catch(err => reply.error(err.error || err));
+      .catch(err => reply.error(err));
   }
 });

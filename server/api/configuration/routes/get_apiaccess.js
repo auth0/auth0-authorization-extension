@@ -1,4 +1,3 @@
-import { urlHelpers } from 'auth0-extension-hapi-tools';
 import ApiAccess from '../../../lib/apiaccess';
 
 module.exports = () => ({
@@ -12,12 +11,10 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => {
-    const baseUrl = urlHelpers.getBaseUrl(req);
-    const apiAccess = new ApiAccess(baseUrl);
+    const apiAccess = new ApiAccess();
 
-    return req.storage.getApiAccess()
-      .then(api => apiAccess.getApi(api && api.api_id))
-      .then((api) => reply({ enabled: !!api, ...api }))
-      .catch(err => reply.error(err.error || err));
+    apiAccess.getApi(true)
+      .then((api) => reply({ enabled: !!api.identifier, ...api }))
+      .catch(err => reply.error(err));
   }
 });
