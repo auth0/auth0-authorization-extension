@@ -58,7 +58,18 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
 
     return (
       <div>
-        <h3>Token Contents</h3>
+        <div className="row">
+          <div className="col-xs-10">
+            <h4>Token Contents</h4>
+          </div>
+          <div className="col-xs-2">
+            <div className="pull-right">
+              <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
+                Save
+              </Button>
+            </div>
+          </div>
+        </div>
         <div className="cues-container">
           <div className="use-case-box is-active">
             <div className="explainer-text">
@@ -98,7 +109,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           }) }
         </div>
 
-        <h3>Persistence</h3>
+        <h4>Persistence</h4>
         <div className="cues-container">
           <div className="use-case-box is-active">
             <div className="explainer-text">
@@ -113,12 +124,6 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
 
         <div data-columns="3" className="switchboard switchboard-responsive">
           { this.tabSwitchItems.persistence.map(item => this.renderSwitchItem(item)) }
-        </div>
-
-        <div className="pull-right">
-          <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
-            Save
-          </Button>
         </div>
       </div>
     );

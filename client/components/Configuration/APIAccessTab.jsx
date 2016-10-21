@@ -31,12 +31,23 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
 
     return (
       <div>
-        <div className="cues-container">
-          <div className="use-case-box is-active">
-            <div className="explainer-text">
-              <span className="explainer-text-content">
-                API access description
-              </span>
+        <div className="row">
+          <div className="col-xs-10">
+            <div className="cues-container">
+              <div className="use-case-box is-active">
+                <div className="explainer-text">
+                  <span className="explainer-text-content">
+                    API access description
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-xs-2">
+            <div className="pull-right">
+              <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
+                Save
+              </Button>
             </div>
           </div>
         </div>
@@ -48,11 +59,6 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
             name: 'apiAccess'
           }) }
           { this.renderAPIAccessDetails(this.props.apiAccess) }
-        </div>
-        <div className="pull-right">
-          <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
-            Save
-          </Button>
         </div>
       </div>
     );
