@@ -89,7 +89,7 @@ export const group = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_GROUP_REJECTED]: (state, action) => {
     const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
-    const errorMessage = (action.payload.data && action.payload.data.errors)  ? 'Validation Error' : (action.errorMessage || 'Validation Error');
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,
@@ -309,15 +309,14 @@ const groupMembers = createReducer(fromJS(initialState.members), {
       ...initialState.members,
       error: `An error occured while loading the members: ${action.errorMessage}`
     }),
-  [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) => {
-    return state.merge({
+  [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
       loading: false,
       records: fromJS(action.payload.data.map(user => {
         user.last_login_relative = moment(user.last_login).fromNow();
         return user;
       }))
-    });
-  },
+    }),
   [constants.ADD_GROUP_MEMBERS_PENDING]: (state) =>
     state.merge({
       loading: true,

@@ -43,7 +43,7 @@ export const groupMapping = createReducer(fromJS(initialState), {
 
     return state.merge({
       loading: false,
-      validationErrors: validationErrors,
+      validationErrors,
       error: `An error occured while saving the mapping: ${errorMessage}`
     });
   },

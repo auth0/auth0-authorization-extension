@@ -169,7 +169,7 @@ describe('role reducer', () => {
       role(initialState, {
         type: constants.ROLE_APPLICATION_SELECTED,
         payload: {
-          applicationId: [1, 2]
+          applicationId: [ 1, 2 ]
         }
       }).toJSON()
     ).toEqual(
@@ -177,7 +177,7 @@ describe('role reducer', () => {
         loading: false,
         error: null,
         record: {
-          applicationId: [1, 2]
+          applicationId: [ 1, 2 ]
         },
         page: 'editRole',
         roleId: null,

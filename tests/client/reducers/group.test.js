@@ -825,7 +825,7 @@ describe('group reducer', () => {
         payload: {
           data: [
             {
-              name: "test"
+              name: 'test'
             }
           ]
         }
@@ -836,8 +836,8 @@ describe('group reducer', () => {
           loading: false,
           records: [
             {
-              last_login_relative: "a few seconds ago",
-              name: "test"
+              last_login_relative: 'a few seconds ago',
+              name: 'test'
             }
           ]
         }

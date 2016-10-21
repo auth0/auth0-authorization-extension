@@ -40,7 +40,8 @@ export default connectContainer(class extends Component {
     clearRole: PropTypes.func.isRequired,
     requestDeleteRole: PropTypes.func.isRequired,
     cancelDeleteRole: PropTypes.func.isRequired,
-    deleteRole: PropTypes.func.isRequired
+    deleteRole: PropTypes.func.isRequired,
+    roleApplicationSelected: PropTypes.func
   }
 
   componentWillMount() {

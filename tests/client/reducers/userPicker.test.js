@@ -70,7 +70,7 @@ describe('userPicker reducer', () => {
         loading: false,
         open: false,
         total: 0,
-        records: [1],
+        records: [ 1 ],
         selection: [],
         title: 'Select one or more users.'
       }, {
@@ -85,7 +85,7 @@ describe('userPicker reducer', () => {
         loading: true,
         open: false,
         total: 0,
-        records: [1],
+        records: [ 1 ],
         selection: [],
         title: 'Select one or more users.'
       }
@@ -119,7 +119,7 @@ describe('userPicker reducer', () => {
           data: {
             total: 100,
             users: []
-          },
+          }
         },
         meta: {
           page: 1
@@ -185,7 +185,7 @@ describe('userPicker reducer', () => {
         open: false,
         total: 0,
         records: [],
-        selection: [1],
+        selection: [ 1 ],
         title: 'Select one or more users.'
       }
     );
@@ -199,7 +199,7 @@ describe('userPicker reducer', () => {
         open: false,
         total: 0,
         records: [],
-        selection: [{ user_id: 2, name: 'test' }, { user_id: 1, name: 'test_1' }],
+        selection: [ { user_id: 2, name: 'test' }, { user_id: 1, name: 'test_1' } ],
         title: 'Select one or more users.'
       }, {
         type: constants.SELECT_USER,
@@ -241,5 +241,4 @@ describe('userPicker reducer', () => {
       }
     );
   });
-
 });

@@ -94,7 +94,7 @@ describe('permission reducer', () => {
         error: null,
         record: {
           _id: 1,
-          name: "test"
+          name: 'test'
         },
         permissionId: 1,
         isNew: false,
@@ -228,10 +228,9 @@ describe('permission reducer', () => {
         errorMessage: 'ERROR',
         payload: {
           data: {
-            errors:
-              {
-                name: 'test'
-              }
+            errors: {
+              name: 'test'
+            }
           }
         }
       }).toJSON()
@@ -252,15 +251,13 @@ describe('permission reducer', () => {
     );
   });
 
-
   it('should handle SAVE_PERMISSION_REJECTED', () => {
     expect(
       permission(initialState, {
         type: constants.SAVE_PERMISSION_REJECTED,
         errorMessage: 'ERROR',
         payload: {
-          data: {
-          }
+          data: {}
         }
       }).toJSON()
     ).toEqual(
@@ -277,9 +274,6 @@ describe('permission reducer', () => {
       }
     );
   });
-
-
-
 
   it('should handle SAVE_PERMISSION_FULFILLED', () => {
     expect(

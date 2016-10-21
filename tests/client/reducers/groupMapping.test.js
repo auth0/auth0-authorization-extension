@@ -122,7 +122,7 @@ describe('groupMapping reducer', () => {
         isEdit: false,
         isDelete: false,
         requesting: false,
-        validationErrors: { field_1: 'test' },
+        validationErrors: { field_1: 'test' }
       }
     );
   });

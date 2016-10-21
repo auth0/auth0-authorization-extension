@@ -17,7 +17,8 @@
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
     "extension:size": "cross-env NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
-    "build": "npm run clean && npm run client:build && npm run extension:build"
+    "build": "npm run clean && npm run client:build && npm run extension:build",
+    "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack ."
   },
   "keywords": [
     "auth0"

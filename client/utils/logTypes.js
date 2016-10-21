@@ -1,12 +1,12 @@
 export default {
-  's': {
+  s: {
     event: 'Success Login',
     icon: {
       name: '312',
       color: 'green'
     }
   },
-  'seacft': {
+  seacft: {
     event: 'Success Exchange',
     description: 'Authorization Code for Access Token',
     icon: {
@@ -14,7 +14,7 @@ export default {
       color: 'green'
     }
   },
-  'feacft': {
+  feacft: {
     event: 'Failed Exchange',
     description: 'Authorization Code for Access Token',
     icon: {
@@ -22,203 +22,203 @@ export default {
       color: '#A93F3F'
     }
   },
-  'f': {
+  f: {
     event: 'Failed Login',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'w': {
+  w: {
     event: 'Warnings During Login',
     icon: {
       name: '354',
       color: '#FFA500'
     }
   },
-  'du': {
+  du: {
     event: 'Deleted User',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'fu': {
+  fu: {
     event: 'Failed Login (invalid email/username)',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'fp': {
+  fp: {
     event: 'Failed Login (wrong password)',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'fc': {
+  fc: {
     event: 'Failed by Connector',
     icon: {
       name: '313',
       color: '#A93F3F'
     }
   },
-  'fco': {
+  fco: {
     event: 'Failed by CORS',
     icon: {
       name: '313',
       color: '#A93F3F'
     }
   },
-  'con': {
+  con: {
     event: 'Connector Online',
     icon: {
       name: '143',
       color: 'green'
     }
   },
-  'coff': {
+  coff: {
     event: 'Connector Offline',
     icon: {
       name: '143',
       color: '#A93F3F'
     }
   },
-  'fcpro': {
+  fcpro: {
     event: 'Failed Connector Provisioning',
     icon: {
       name: '143',
       color: '#A93F3F'
     }
   },
-  'ss': {
+  ss: {
     event: 'Success Signup',
     icon: {
       name: '314',
       color: 'green'
     }
   },
-  'fs': {
+  fs: {
     event: 'Failed Signup',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'cs': {
+  cs: {
     event: 'Code Sent',
     icon: {
       name: '243',
       color: 'green'
     }
   },
-  'cls': {
+  cls: {
     event: 'Code/Link Sent',
     icon: {
       name: '781',
       color: 'green'
     }
   },
-  'sv': {
+  sv: {
     event: 'Success Verification Email',
     icon: {
       name: '781',
       color: 'green'
     }
   },
-  'fv': {
+  fv: {
     event: 'Failed Verification Email',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'scp': {
+  scp: {
     event: 'Success Change Password',
     icon: {
       name: '280',
       color: 'green'
     }
   },
-  'fcp': {
+  fcp: {
     event: 'Failed Change Password',
     icon: {
       name: '266',
       color: '#A93F3F'
     }
   },
-  'sce': {
+  sce: {
     event: 'Success Change Email',
     icon: {
       name: '266',
       color: 'green'
     }
   },
-  'fce': {
+  fce: {
     event: 'Failed Change Email',
     icon: {
       name: '266',
       color: '#A93F3F'
     }
   },
-  'scu': {
+  scu: {
     event: 'Success Change Username',
     icon: {
       name: '266',
       color: 'green'
     }
   },
-  'fcu': {
+  fcu: {
     event: 'Failed Change Username',
     icon: {
       name: '266',
       color: '#A93F3F'
     }
   },
-  'scpn': {
+  scpn: {
     event: 'Success Change Phone Number',
     icon: {
       name: '266',
       color: 'green'
     }
   },
-  'fcpn': {
+  fcpn: {
     event: 'Failed Change Phone Number',
     icon: {
       name: '266',
       color: '#A93F3F'
     }
   },
-  'svr': {
+  svr: {
     event: 'Success Verification Email Request',
     icon: {
       name: '781',
       color: 'green'
     }
   },
-  'fvr': {
+  fvr: {
     event: 'Failed Verification Email Request',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'scpr': {
+  scpr: {
     event: 'Success Change Password Request',
     icon: {
       name: '280',
       color: 'green'
     }
   },
-  'fcpr': {
+  fcpr: {
     event: 'Failed Change Password Request',
     icon: {
       name: '311',
       color: '#A93F3F'
     }
   },
-  'fn': {
+  fn: {
     event: 'Failed Sending Notification',
     icon: {
       name: '782',
@@ -226,7 +226,7 @@ export default {
     }
   },
 
-  'sapi': {
+  sapi: {
     event: 'API Operation',
     icon: {
       name: '546',
@@ -234,7 +234,7 @@ export default {
     },
     category: 'api'
   },
-  'fapi': {
+  fapi: {
     event: 'Failed API Operation',
     icon: {
       name: '546',
@@ -242,35 +242,35 @@ export default {
     },
     category: 'api'
   },
-  'limit_wc': {
+  limit_wc: {
     event: 'Blocked Account',
     icon: {
       name: '313',
       color: '#A93F3F'
     }
   },
-  'limit_ui': {
+  limit_ui: {
     event: 'Too Many Calls to /userinfo',
     icon: {
       name: '313',
       color: '#A93F3F'
     }
   },
-  'api_limit': {
+  api_limit: {
     event: 'Rate Limit On API',
     icon: {
       name: '313',
       color: '#A93F3F'
     }
   },
-  'sdu': {
+  sdu: {
     event: 'Successful User Deletion',
     icon: {
       name: '312',
       color: 'green'
     }
   },
-  'fdu' : {
+  fdu: {
     event: 'Failed User Deletion',
     icon: {
       name: '311',

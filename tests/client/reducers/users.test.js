@@ -41,7 +41,7 @@ describe('user reducer', () => {
       users({
         loading: false,
         error: null,
-        records: [1, 2],
+        records: [ 1, 2 ],
         total: 0
       }, {
         type: constants.FETCH_USERS_PENDING,
@@ -53,7 +53,7 @@ describe('user reducer', () => {
       {
         loading: true,
         error: null,
-        records: [1, 2],
+        records: [ 1, 2 ],
         total: 0
       }
     );
