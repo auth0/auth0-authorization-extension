@@ -20,7 +20,7 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
     if (apiAccess) {
       return (
         <div>
-          <Field name="tokenExpiration" component={InputText} type="number" label="Token Expiration (Seconds)" />
+          <Field name="token_lifetime" component={InputText} type="number" label="Token Expiration (Seconds)" />
         </div>);
     }
     return null;
