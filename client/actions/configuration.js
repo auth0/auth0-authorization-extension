@@ -22,6 +22,16 @@ export function goToRules() {
 }
 
 /*
+ * Go to import/export in Configuration.
+ */
+export function goToImportExport() {
+  return (dispatch) => {
+    dispatch(push('/import-export'));
+  };
+}
+
+
+/*
  * Load configuration data.
  */
 export function fetchConfiguration() {
