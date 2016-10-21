@@ -3,6 +3,8 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/applications/routes/get_applications')(server));
   server.route(require('../api/configuration/routes/get_configuration_status')(server));
   server.route(require('../api/configuration/routes/get_configuration')(server));
+  server.route(require('../api/configuration/routes/get_export')(server));
+  server.route(require('../api/configuration/routes/post_import')(server));
   server.route(require('../api/configuration/routes/patch_configuration')(server));
   server.route(require('../api/connections/routes/get_connections')(server));
   server.route(require('../api/extension-hooks/routes/delete_uninstall')(server));

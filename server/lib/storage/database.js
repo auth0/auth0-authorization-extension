@@ -1,12 +1,25 @@
 import { ArgumentError } from 'auth0-extension-tools';
+import config from '../config';
 
 export default class Database {
-  constructor(options = { }) {
+  constructor(options = {}) {
     if (!options.provider) {
       throw new ArgumentError('The \'provider\' has to be set when initializing the database.');
     }
 
     this.provider = options.provider;
+  }
+
+  getStatus() {
+    if (!config('DB_TYPE') || config('DB_TYPE') === 'default') {
+      return this.provider.storageContext.read()
+        .then(data => ({
+          size: Buffer.byteLength(JSON.stringify(data), 'utf8'),
+          type: 'default'
+        }));
+    }
+
+    return { size: null, type: config('DB_TYPE') };
   }
 
   getConfiguration() {
@@ -15,9 +28,9 @@ export default class Database {
       .then(records => (records.length ? records[0] : null));
   }
 
-  updateConfiguration(config) {
+  updateConfiguration(data) {
     return this.provider
-      .update('configuration', 'v1', config, true);
+      .update('configuration', 'v1', data, true);
   }
 
   getRules() {

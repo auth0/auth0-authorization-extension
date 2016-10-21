@@ -34,7 +34,12 @@ describe('Queries', () => {
         { _id: '123' }
       ]);
 
-      isApplicationAccessAllowed(db, '777', [ 'Marketing', 'HR' ])
+      const userGroups = [
+        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
+      ];
+
+      isApplicationAccessAllowed(db, '777', userGroups)
         .then((isAllowed) => {
           expect(isAllowed).to.equal(true);
           done();
@@ -47,7 +52,12 @@ describe('Queries', () => {
         { _id: '777', groups: [ ] }
       ]);
 
-      isApplicationAccessAllowed(db, '777', [ 'Marketing', 'HR' ])
+      const userGroups = [
+        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
+      ];
+
+      isApplicationAccessAllowed(db, '777', userGroups)
         .then((isAllowed) => {
           expect(isAllowed).to.equal(true);
           done();
@@ -57,10 +67,15 @@ describe('Queries', () => {
 
     it('should return false if current groups dont match the application groups', (done) => {
       const db = mockApplications([
-        { _id: '777', groups: [ 'Finance', 'IT' ] }
+        { _id: '777', groups: [ '789', '455' ] }
       ]);
 
-      isApplicationAccessAllowed(db, '777', [ 'Marketing', 'HR' ])
+      const userGroups = [
+        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
+      ];
+
+      isApplicationAccessAllowed(db, '777', userGroups)
         .then((isAllowed) => {
           expect(isAllowed).to.equal(false);
           done();
@@ -70,10 +85,15 @@ describe('Queries', () => {
 
     it('should return true if current groups match the application groups', (done) => {
       const db = mockApplications([
-        { _id: '777', groups: [ 'Finance', 'IT', 'HR' ] }
+        { _id: '777', groups: [ '789', '123' ] }
       ]);
 
-      isApplicationAccessAllowed(db, '777', [ 'Marketing', 'HR' ])
+      const userGroups = [
+        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
+      ];
+
+      isApplicationAccessAllowed(db, '777', userGroups)
         .then((isAllowed) => {
           expect(isAllowed).to.equal(true);
           done();
@@ -109,7 +129,7 @@ describe('Queries', () => {
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(2);
-          expect(groups[0]).to.equal('Group 2');
+          expect(groups[0].name).to.equal('Group 2');
           done();
         })
         .catch(err => done(err));
@@ -126,7 +146,7 @@ describe('Queries', () => {
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(1);
-          expect(groups[0]).to.equal('Group 2');
+          expect(groups[0].name).to.equal('Group 2');
           done();
         })
         .catch(err => done(err));
@@ -143,8 +163,8 @@ describe('Queries', () => {
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(2);
-          expect(groups[0]).to.equal('Group 1');
-          expect(groups[1]).to.equal('Group 2');
+          expect(groups[0].name).to.equal('Group 1');
+          expect(groups[1].name).to.equal('Group 2');
           done();
         })
         .catch(err => done(err));
@@ -161,7 +181,7 @@ describe('Queries', () => {
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(1);
-          expect(groups[0]).to.equal('Group 2');
+          expect(groups[0].name).to.equal('Group 2');
           done();
         })
         .catch(err => done(err));
@@ -178,9 +198,66 @@ describe('Queries', () => {
         .then((groups) => {
           expect(groups).to.be.instanceof(Array);
           expect(groups.length).to.equal(3);
-          expect(groups[0]).to.equal('Group 1');
-          expect(groups[1]).to.equal('Group 2');
-          expect(groups[2]).to.equal('Group 3');
+          expect(groups[0].name).to.equal('Group 1');
+          expect(groups[1].name).to.equal('Group 2');
+          expect(groups[2].name).to.equal('Group 3');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should ignore existing group memberships if null', (done) => {
+      const myDb = mockGroups([
+        { _id: '123', name: 'Group 1', nested: [ '456', '789' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666', '777' ] },
+        { _id: '789', name: 'Group 3', nested: [ '123', '456', '789' ] }
+      ]);
+
+      getUserGroups(myDb, '777', 'fabrikam-ad', null)
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(3);
+          expect(groups[0].name).to.equal('Group 1');
+          expect(groups[1].name).to.equal('Group 2');
+          expect(groups[2].name).to.equal('Group 3');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should ignore existing group memberships if undefined', (done) => {
+      const myDb = mockGroups([
+        { _id: '123', name: 'Group 1', nested: [ '456', '789' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666', '777' ] },
+        { _id: '789', name: 'Group 3', nested: [ '123', '456', '789' ] }
+      ]);
+
+      getUserGroups(myDb, '777', 'fabrikam-ad', undefined)
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(3);
+          expect(groups[0].name).to.equal('Group 1');
+          expect(groups[1].name).to.equal('Group 2');
+          expect(groups[2].name).to.equal('Group 3');
+          done();
+        })
+        .catch(err => done(err));
+    });
+
+    it('should ignore existing group memberships if not an array', (done) => {
+      const myDb = mockGroups([
+        { _id: '123', name: 'Group 1', nested: [ '456', '789' ] },
+        { _id: '456', name: 'Group 2', members: [ '444', '555', '666', '777' ] },
+        { _id: '789', name: 'Group 3', nested: [ '123', '456', '789' ] }
+      ]);
+
+      getUserGroups(myDb, '777', 'fabrikam-ad', 'this is not right')
+        .then((groups) => {
+          expect(groups).to.be.instanceof(Array);
+          expect(groups.length).to.equal(3);
+          expect(groups[0].name).to.equal('Group 1');
+          expect(groups[1].name).to.equal('Group 2');
+          expect(groups[2].name).to.equal('Group 3');
           done();
         })
         .catch(err => done(err));

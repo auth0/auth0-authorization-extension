@@ -1,12 +1,24 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
-import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
+import { Field } from 'redux-form';
+import { Button, Modal } from 'react-bootstrap';
 
 import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
+import createForm from '../../utils/createForm';
 
-class GroupMappingForm extends Component {
+export default createForm('groupMapping', class GroupMappingForm extends Component {
+  propTypes = {
+    children: React.PropTypes.object,
+    fields: React.PropTypes.object,
+    connections: React.PropTypes.array,
+    validationErrors: React.PropTypes.object,
+    loading: React.PropTypes.bool.isRequired,
+    submitting: React.PropTypes.bool,
+    handleSubmit: React.PropTypes.func.isRequired,
+    onClose: React.PropTypes.func.isRequired
+  };
+
   render() {
-    const { fields: { connectionName, groupName }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { handleSubmit, loading, submitting, validationErrors } = this.props;
 
     const connections = this.props.connections.map(connection => ({
       value: connection.name,
@@ -22,8 +34,18 @@ class GroupMappingForm extends Component {
               When creating a mapping if users log in with the selected connection and belongs
               to the specified Incomming group then they will be part of this group also.
             </p>
-            <InputCombo options={connections} field={connectionName} fieldName="connectionName" label="Connection" validationErrors={validationErrors} />
-            <InputText field={groupName} fieldName="groupName" label="Incoming Group Name" validationErrors={validationErrors} />
+
+            <Field
+              name="connectionName" component={InputCombo}
+              options={connections} label="Connection"
+              validationErrors={validationErrors}
+            />
+
+            <Field
+              name="groupName" component={InputText} label="Incoming Group Name"
+              validationErrors={validationErrors}
+            />
+
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
@@ -37,17 +59,4 @@ class GroupMappingForm extends Component {
       </div>
     );
   }
-}
-
-GroupMappingForm.propTypes = {
-  children: React.PropTypes.object,
-  fields: React.PropTypes.object,
-  connections: React.PropTypes.array,
-  validationErrors: React.PropTypes.object,
-  loading: React.PropTypes.bool.isRequired,
-  submitting: React.PropTypes.bool,
-  handleSubmit: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired
-};
-
-export default reduxForm({ form: 'groupMapping', fields: [ 'connectionName', 'groupName' ] })(GroupMappingForm);
+});

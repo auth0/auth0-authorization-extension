@@ -3,6 +3,7 @@
 const nconf = require('nconf');
 const Webtask = require('webtask-tools');
 const logger = require('./server/lib/logger');
+const { configProvider } = require('./server/lib/config');
 
 logger.info('Starting webtask.');
 
@@ -26,6 +27,9 @@ module.exports = Webtask.fromExpress((req, res) => {
   // Start the server.
   const initServer = require('./server');
 
-  const app = initServer({ storageContext: req.webtaskContext.storage });
+  const app = initServer({
+    storageContext: req.webtaskContext.storage,
+    configProvider: configProvider.fromWebtaskContext(req.webtaskContext)
+  });
   return app(req, res);
 });

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 class SearchBar extends Component {
   constructor(props) {
@@ -35,9 +35,7 @@ class SearchBar extends Component {
                   value={this.state.selectedOption.value}
                   onChange={this.handleChange}
                 >
-                  { searchOptions.map((opt) => {
-                    return <option key={opt.title} value={opt.value}>{opt.title}</option>;
-                  })}
+                  { searchOptions.map((opt) => (<option key={opt.title} value={opt.value}>{opt.title}</option>)) }
                 </select>
               </div>
             ) : null }
@@ -56,18 +54,18 @@ class SearchBar extends Component {
 }
 
 SearchBar.propTypes = {
-  placeholder: React.PropTypes.string,
-  iconCode: React.PropTypes.number,
-  searchOptions: React.PropTypes.arrayOf(
-    React.PropTypes.shape({
-      value: React.PropTypes.string.isRequired,
-      title: React.PropTypes.string.isRequired,
-      selected: React.PropTypes.bool
+  placeholder: PropTypes.string,
+  iconCode: PropTypes.number,
+  searchOptions: PropTypes.arrayOf(
+    PropTypes.shape({
+      value: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      selected: PropTypes.bool
     })
   ),
-  handleKeyPress: React.PropTypes.func,
-  handleReset: React.PropTypes.func,
-  showInstructions: React.PropTypes.bool
+  handleKeyPress: PropTypes.func,
+  handleReset: PropTypes.func,
+  showInstructions: PropTypes.bool
 };
 
 export default SearchBar;

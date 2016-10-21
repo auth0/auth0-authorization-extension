@@ -25,6 +25,7 @@ export default (history) =>
       <Route path="users" component={containers.Users}>
         <Route path=":id" component={containers.User} />
       </Route>
+      <Route path="import-export" component={containers.ImportExport} />
     </Route>
     <Route path="/login" component={containers.Login} />
   </Router>;

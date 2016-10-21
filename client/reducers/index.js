@@ -20,6 +20,7 @@ import { groupNested } from './groupNested';
 import { groupMapping } from './groupMapping';
 import { groups } from './groups';
 import { ruleStatus } from './ruleStatus';
+import { importExport } from './importExport';
 
 function lastAction(state = null, action) {
   return action;
@@ -45,6 +46,7 @@ export default combineReducers({
   groupNested,
   groups,
   ruleStatus,
+  importExport,
   lastAction,
   form: formReducer
 });

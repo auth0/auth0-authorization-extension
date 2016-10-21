@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 
 import * as constants from '../constants';
 
@@ -76,6 +77,8 @@ export function editRole(role) {
  * Save the details of a role (name, descripton)
  */
 export function saveRole(role) {
+  const roleData = _.pick(role, [ 'applicationId', 'applicationType', 'description', 'name', 'permissions' ]);
+
   return (dispatch, getState) => {
     const state = getState().role.toJS();
     dispatch({
@@ -86,15 +89,15 @@ export function saveRole(role) {
           url: state.isNew ? '/api/roles' : `/api/roles/${state.roleId}`,
           data: {
             applicationType: 'client',
-            ...role
+            ...roleData
           },
           responseType: 'json'
         })
       },
       meta: {
         isNew: state.isNew,
-        role,
-        roleId: state.roleId || role.name
+        roleData,
+        roleId: state.roleId || roleData.name
       }
     });
   };

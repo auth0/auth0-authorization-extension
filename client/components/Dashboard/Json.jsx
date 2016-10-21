@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 
 import './Json.styl';
 
@@ -40,7 +40,7 @@ class Json extends Component {
 }
 
 Json.propTypes = {
-  jsonObject: React.PropTypes.object.isRequired
+  jsonObject: PropTypes.object.isRequired
 };
 
 export default Json;

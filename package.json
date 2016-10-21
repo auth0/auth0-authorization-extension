@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz-extension",
-  "version": "1.4.2",
+  "version": "1.4.4",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "5.9.0"
@@ -8,17 +8,16 @@
   "main": "server.js",
   "scripts": {
     "clean": "rimraf dist",
-    "client:build": "npm run clean && NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
-    "serve:dev": "set NODE_ENV=development && nodemon --ignore assets/app/ --ignore build/webpack/ --ignore client/ --ignore server/data.json --ignore node_modules/ ./build/webpack/server.js",
-    "serve:prod": "NODE_ENV=production node index.js",
-    "test": "set NODE_ENV=test && mocha -R spec --compilers js:babel-core/register --timeout 5000 $(find ./tests -name *.tests.js) tests/runner.js",
-    "test:watch": "NODE_ENV=test mocha -R spec --compilers js:babel-core/register --recursive --timeout 5000 $(find ./tests -name *.tests.js) --watch tests/runner.js",
+    "client:build": "npm run clean && cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
+    "serve:dev": "cross-env NODE_ENV=development nodemon --ignore assets/app/ --ignore build/webpack/ --ignore client/ --ignore server/data.json --ignore node_modules/ ./build/webpack/server.js",
+    "serve:prod": "cross-env NODE_ENV=production node index.js",
+    "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/mocha.js ./tests/**/*.tests.js",
+    "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/mocha.js ./tests/**/*.tests.js --watch",
+    "test:pre": "npm run test:clean",
+    "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
-    "extension:size": "NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
-    "build": "npm run clean && npm run client:build && npm run extension:build",
-    "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack .",
-    "test:client": "set NODE_ENV=test && nyc mocha tests/mocha.js ./tests/**/*.test.js",
-    "test:pre": "npm run test:clean && npm run lint:js"
+    "extension:size": "cross-env NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
+    "build": "npm run clean && npm run client:build && npm run extension:build"
   },
   "keywords": [
     "auth0"
@@ -28,6 +27,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "auth0": "^2.4.0",
+    "auth0-extension-hapi-tools": "git+https://github.com/auth0-extensions/auth0-extension-hapi-tools",
     "auth0-extension-tools": "^0.14.0",
     "autoprefixer": "^6.5.0",
     "aws-sdk": "^2.3.17",
@@ -86,6 +86,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "chai": "^3.5.0",
     "classnames": "^2.2.5",
+    "cross-env": "^3.1.2",
     "css-loader": "^0.24.0",
     "eslint": "^3.3.1",
     "eslint-config-auth0": "^6.0.1",
@@ -124,7 +125,7 @@
     "redux-devtools": "^3.3.1",
     "redux-devtools-dock-monitor": "^1.1.1",
     "redux-devtools-log-monitor": "^1.0.11",
-    "redux-form": "^4.2.2",
+    "redux-form": "^6.0.5",
     "redux-logger": "^2.7.0",
     "redux-promise-middleware": "^4.1.0",
     "redux-simple-router": "^2.0.4",
