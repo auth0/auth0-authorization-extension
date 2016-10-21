@@ -50,49 +50,15 @@ export function fetchRuleStatus() {
 }
 
 /*
- * Save the configuration.
- */
-export function saveConfiguration(config) {
-  return {
-    type: constants.SAVE_CONFIGURATION,
-    payload: {
-      promise: axios({
-        method: 'patch',
-        url: '/api/configuration',
-        data: config,
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
  * Save Token Contents.
  */
-export function saveConfigurationTokenContents(config) {
+export function saveConfigurationRuleConfiguration(config) {
   return {
-    type: constants.SAVE_CONFIGURATION_TOKENCONTENTS,
+    type: constants.SAVE_CONFIGURATION_RULECONFIGURATION,
     payload: {
       promise: axios({
         method: 'patch',
-        url: '/api/configuration/tokencontents',
-        data: config,
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
- * Save Persistence.
- */
-export function saveConfigurationPersistence(config) {
-  return {
-    type: constants.SAVE_CONFIGURATION_PERSISTENCE,
-    payload: {
-      promise: axios({
-        method: 'patch',
-        url: '/api/configuration/persistence',
+        url: '/api/configuration/ruleconfiguration',
         data: config,
         responseType: 'json'
       })

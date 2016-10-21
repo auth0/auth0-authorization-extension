@@ -3,15 +3,13 @@ import { Tabs, Tab } from 'react-bootstrap';
 
 import SectionHeader from '../Dashboard/SectionHeader';
 import { Error, LoadingPanel } from '../Dashboard';
-import TokenContentsTab from './TokenContentsTab';
-import PersistenceTab from './PersistenceTab';
+import RuleConfigurationTab from './RuleConfigurationTab';
 import APIAccessTab from './APIAccessTab';
 
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
-    saveConfigurationTokenContents: PropTypes.func.isRequired,
-    saveConfigurationPersistence: PropTypes.func.isRequired,
+    saveConfigurationRuleConfiguration: PropTypes.func.isRequired,
     saveConfigurationAPIAccess: PropTypes.func.isRequired
   };
 
@@ -36,13 +34,10 @@ export default class RuleSettings extends Component {
             <LoadingPanel show={loading}>
               <div>
                 <Tabs defaultActiveKey={1} animation={false}>
-                  <Tab eventKey={1} title="Token Contents">
-                    <TokenContentsTab initialValues={record} onSubmit={this.props.saveConfigurationTokenContents} />
+                  <Tab eventKey={1} title="Rule Configuration">
+                    <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfigurationRuleConfiguration} />
                   </Tab>
-                  <Tab eventKey={2} title="Persistence">
-                    <PersistenceTab initialValues={record} onSubmit={this.props.saveConfigurationPersistence} />
-                  </Tab>
-                  <Tab eventKey={3} title="API Access">
+                  <Tab eventKey={2} title="API Access">
                     <APIAccessTab initialValues={record} onSubmit={this.props.saveConfigurationAPIAccess} />
                   </Tab>
                 </Tabs>

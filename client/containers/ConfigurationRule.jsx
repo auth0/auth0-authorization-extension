@@ -15,9 +15,7 @@ export default connectContainer(class extends Component {
   static propTypes = {
     configuration: PropTypes.object,
     fetchConfiguration: PropTypes.func.required,
-    saveConfiguration: PropTypes.func.required,
-    saveConfigurationTokenContents: PropTypes.func.isRequired,
-    saveConfigurationPersistence: PropTypes.func.isRequired,
+    saveConfigurationRuleConfiguration: PropTypes.func.isRequired,
     saveConfigurationAPIAccess: PropTypes.func.isRequired
   }
 
@@ -29,9 +27,7 @@ export default connectContainer(class extends Component {
     return (
       <RuleSettings
         configuration={this.props.configuration}
-        onSave={this.props.saveConfiguration}
-        saveConfigurationTokenContents={this.props.saveConfigurationTokenContents}
-        saveConfigurationPersistence={this.props.saveConfigurationPersistence}
+        saveConfigurationRuleConfiguration={this.props.saveConfigurationRuleConfiguration}
         saveConfigurationAPIAccess={this.props.saveConfigurationAPIAccess}
       />
     );
