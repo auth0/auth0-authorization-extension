@@ -17,12 +17,15 @@ module.exports = (server) => ({
     req.pre.auth0.rules.getAll()
       .then(rules => {
         const rule = _.find(rules, { name: 'auth0-authorization-extension' });
-        reply({
-          rule: {
-            exists: !!rule,
-            enabled: rule ? rule.enabled : false
-          }
-        });
+        return {
+          exists: !!rule,
+          enabled: rule ? rule.enabled : false
+        };
+      })
+      .then(rule => {
+        req.storage.getStatus()
+          .then(database => reply({ rule, database }))
+          .catch(() => reply({ rule, database: { size: 0, type: 'unknown' } }));
       })
       .catch(err => reply.error(err))
 });
