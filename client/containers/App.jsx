@@ -21,7 +21,8 @@ class App extends Component {
     ruleStatus: PropTypes.object,
     logout: PropTypes.func,
     goToRules: PropTypes.func,
-    goToConfiguration: PropTypes.func
+    goToConfiguration: PropTypes.func,
+    goToImportExport: PropTypes.func
   };
 
   render() {
@@ -41,6 +42,7 @@ class App extends Component {
               <RuleStatus ruleStatus={this.props.ruleStatus}
                 goToConfiguration={this.props.goToConfiguration}
                 goToRules={this.props.goToRules}
+                goToImportExport={this.props.goToImportExport}
               />
               { this.props.children }
             </div>
