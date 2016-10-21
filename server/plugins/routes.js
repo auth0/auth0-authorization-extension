@@ -6,6 +6,10 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/configuration/routes/get_export')(server));
   server.route(require('../api/configuration/routes/post_import')(server));
   server.route(require('../api/configuration/routes/patch_configuration')(server));
+  server.route(require('../api/configuration/routes/get_apiaccess')(server));
+  server.route(require('../api/configuration/routes/patch_apiaccess')(server));
+  server.route(require('../api/configuration/routes/post_apiaccess')(server));
+  server.route(require('../api/configuration/routes/delete_apiaccess')(server));
   server.route(require('../api/connections/routes/get_connections')(server));
   server.route(require('../api/extension-hooks/routes/delete_uninstall')(server));
   server.route(require('../api/groups/routes/delete_group')(server));

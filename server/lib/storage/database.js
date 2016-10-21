@@ -20,6 +20,25 @@ export default class Database {
       .update('configuration', 'v1', config, true);
   }
 
+  getApiAccess() {
+    return this.provider
+      .getAll('configuration')
+      .then(configuration => {
+        const api = configuration.filter((item) => item._id === 'api'); // eslint-disable-line no-underscore-dangle
+        return api[0] || null;
+      });
+  }
+
+  createApiAccess(api) {
+    return this.provider
+      .update('configuration', 'api', { api_id: api.id }, true);
+  }
+
+  deleteApiAccess() {
+    return this.provider
+      .delete('configuration', 'api');
+  }
+
   getRules() {
     return this.provider
       .getAll('rules');
