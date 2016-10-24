@@ -1,5 +1,5 @@
-import * as constants from '../constants';
 import axios from 'axios';
+import * as constants from '../constants';
 
 import { fetchUserGroups } from './userGroup';
 

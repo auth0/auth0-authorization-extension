@@ -3,18 +3,18 @@ import * as constants from '../constants';
 
 export function importConfigPrepare(file) {
   return (dispatch) => {
-    let name = file.name;
-    let regex = new RegExp("(.*?)\.(json)$");
+    const name = file.name;
+    const regex = new RegExp('(.*?)\.(json)$');
     if (regex.test(name)) {
       let reader = new FileReader();
-      reader.readAsText(file, "UTF-8");
+      reader.readAsText(file, 'UTF-8');
       reader.onload = (evt) => {
-        let result = JSON.parse(evt.target.result);
+        const result = JSON.parse(evt.target.result);
         return dispatch(importConfig(result));
-      }
+      };
       reader.onerror = (evt) => {
         dispatch(addError('Something went wrong.'));
-      }
+      };
     } else {
       dispatch(addError('Incorrect file type.'));
     }
@@ -50,7 +50,7 @@ export function addError(error) {
   return {
     type: constants.FETCH_CONFIGURATION_ADD_ERROR,
     meta: {
-      error: error
+      error
     }
   }
 }

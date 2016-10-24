@@ -31,7 +31,7 @@ export function loadCredentials() {
           return;
         }
 
-        axios.defaults.headers.common['Authorization'] = `Bearer ${hash.accessToken}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${hash.accessToken}`;
 
         dispatch({
           type: constants.RECIEVED_TOKEN,

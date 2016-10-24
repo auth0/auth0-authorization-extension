@@ -17,7 +17,7 @@ export const ruleStatus = createReducer(fromJS(initialState), {
     }),
   [constants.FETCH_RULE_STATUS_REJECTED]: (state, action) =>
     state.merge({
-      loading: true,
+      loading: false,
       error: `An error occured while loading the rule status: ${action.errorMessage}`
     }),
   [constants.FETCH_RULE_STATUS_FULFILLED]: (state, action) =>

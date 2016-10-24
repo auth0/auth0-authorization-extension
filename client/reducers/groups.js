@@ -5,7 +5,7 @@ import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-  loading : false,
+  loading: false,
   error: null,
   records: []
 };
@@ -33,8 +33,7 @@ export const groups = createReducer(fromJS(initialState), {
     const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
     if (index >= 0) {
       records = records.splice(index, 1, record);
-    }
-    else {
+    } else {
       records = records.unshift(record);
     }
 

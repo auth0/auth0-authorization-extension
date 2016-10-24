@@ -6,13 +6,13 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  record: { },
+  record: {},
   groupMappingId: null,
   isNew: false,
   isEdit: false,
   isDelete: false,
   requesting: false,
-  validationErrors: { }
+  validationErrors: {}
 };
 
 export const groupMapping = createReducer(fromJS(initialState), {
@@ -38,12 +38,12 @@ export const groupMapping = createReducer(fromJS(initialState), {
       validationErrors: Map()
     }),
   [constants.SAVE_GROUP_MAPPING_REJECTED]: (state, action) => {
-    const validationErrors = action.payload.data && action.payload.data.errors && Map(action.payload.data.errors) || Map();
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,
-      validationErrors: validationErrors,
+      validationErrors,
       error: `An error occured while saving the mapping: ${errorMessage}`
     });
   },

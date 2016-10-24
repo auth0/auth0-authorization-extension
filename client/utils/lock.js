@@ -30,14 +30,14 @@ export function show(returnUrl) {
   const lock = getLock();
   if (!lock) {
     if (window.config.IS_ADMIN) {
-      window.location.href = window.config.BASE_URL + '/admins/login';
+      window.location.href = `${window.config.BASE_URL}/admins/login`;
     } else {
-      window.location.href = window.config.BASE_URL + '/login';
+      window.location.href = `${window.config.BASE_URL}/login`;
     }
     return;
   }
 
-  const origin = window.location.origin || window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
+  const origin = `${window.location.origin || window.location.protocol}//${window.location.hostname}${(window.location.port ? ':' + window.location.port : '')}`;
 
   lock.show({
     closable: false,

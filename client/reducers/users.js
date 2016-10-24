@@ -5,7 +5,7 @@ import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-  loading : false,
+  loading: false,
   error: null,
   records: [],
   total: 0
