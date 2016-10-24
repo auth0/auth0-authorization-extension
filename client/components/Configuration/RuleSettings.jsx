@@ -9,8 +9,7 @@ import APIAccessTab from './APIAccessTab';
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
-    saveConfigurationRuleConfiguration: PropTypes.func.isRequired,
-    saveConfigurationAPIAccess: PropTypes.func.isRequired
+    saveConfiguration: PropTypes.func.isRequired
   };
 
   shouldComponentUpdate(nextProps) {
@@ -35,10 +34,10 @@ export default class RuleSettings extends Component {
               <div>
                 <Tabs defaultActiveKey={1} animation={false}>
                   <Tab eventKey={1} title="Rule Configuration">
-                    <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfigurationRuleConfiguration} />
+                    <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
                   <Tab eventKey={2} title="API Access">
-                    <APIAccessTab initialValues={record} onSubmit={this.props.saveConfigurationAPIAccess} />
+                    <APIAccessTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
                 </Tabs>
               </div>

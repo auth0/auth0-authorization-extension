@@ -15,8 +15,7 @@ export default connectContainer(class extends Component {
   static propTypes = {
     configuration: PropTypes.object,
     fetchConfiguration: PropTypes.func.required,
-    saveConfigurationRuleConfiguration: PropTypes.func.isRequired,
-    saveConfigurationAPIAccess: PropTypes.func.isRequired
+    saveConfiguration: PropTypes.func.isRequired
   }
 
   componentWillMount() {
@@ -27,8 +26,7 @@ export default connectContainer(class extends Component {
     return (
       <RuleSettings
         configuration={this.props.configuration}
-        saveConfigurationRuleConfiguration={this.props.saveConfigurationRuleConfiguration}
-        saveConfigurationAPIAccess={this.props.saveConfigurationAPIAccess}
+        saveConfiguration={this.props.saveConfiguration}
       />
     );
   }

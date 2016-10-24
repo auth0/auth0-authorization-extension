@@ -29,10 +29,8 @@ const reduxHistory = syncHistoryWithStore(history, store);
 store.subscribe(() => {
   switch (store.getState().lastAction.type) {
     case constants.LOGIN_SUCCESS:
-    case constants.SAVE_CONFIGURATION_APIACCESS_REJECTED:
-    case constants.SAVE_CONFIGURATION_RULECONFIGURATION_REJECTED:
-    case constants.SAVE_CONFIGURATION_APIACCESS_FULFILLED:
-    case constants.SAVE_CONFIGURATION_RULECONFIGURATION_FULFILLED:
+    case constants.SAVE_CONFIGURATION_REJECTED:
+    case constants.SAVE_CONFIGURATION_FULFILLED:
       store.dispatch(fetchRuleStatus());
       break;
     default:
