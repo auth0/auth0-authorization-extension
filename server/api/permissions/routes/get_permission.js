@@ -5,9 +5,8 @@ module.exports = () => ({
   path: '/api/permissions/{id}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:permissions' ]
     },
     description: 'Get a single permission based on its unique identifier.',
     validate: {

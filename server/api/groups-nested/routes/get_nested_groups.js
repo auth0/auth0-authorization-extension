@@ -6,9 +6,8 @@ module.exports = () => ({
   path: '/api/groups/{id}/nested',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:groups' ]
     },
     description: 'Get the nested groups for a group.',
     validate: {

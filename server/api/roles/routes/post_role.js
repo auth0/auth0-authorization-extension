@@ -6,9 +6,8 @@ module.exports = () => ({
   path: '/api/roles',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'create:roles' ]
     },
     description: 'Create a new role.',
     validate: {

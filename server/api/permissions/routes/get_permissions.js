@@ -3,9 +3,8 @@ module.exports = () => ({
   path: '/api/permissions',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:permissions' ]
     },
     description: 'Get all permissions in the system.'
   },

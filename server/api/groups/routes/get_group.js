@@ -5,9 +5,8 @@ module.exports = () => ({
   path: '/api/groups/{id}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:groups' ]
     },
     description: 'Get a single group based on its unique identifier.',
     validate: {
