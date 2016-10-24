@@ -9,7 +9,8 @@ import APIAccessTab from './APIAccessTab';
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
-    saveConfiguration: PropTypes.func.isRequired
+    saveConfiguration: PropTypes.func.isRequired,
+    saveConfigurationResourceServer: PropTypes.func.isRequired
   };
 
   shouldComponentUpdate(nextProps) {
@@ -17,7 +18,7 @@ export default class RuleSettings extends Component {
   }
 
   render() {
-    const { loading, error, record } = this.props.configuration.toJS();
+    const { loading, error, record, resourceserver } = this.props.configuration.toJS();
 
     return (
       <div>
@@ -37,7 +38,7 @@ export default class RuleSettings extends Component {
                     <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
                   <Tab eventKey={2} title="API Access">
-                    <APIAccessTab initialValues={record} onSubmit={this.props.saveConfiguration} />
+                    <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
                   </Tab>
                 </Tabs>
               </div>
