@@ -1,14 +1,11 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import { Button } from 'react-bootstrap';
-import SectionHeader from '../components/Dashboard/SectionHeader';
-import BlankState from '../components/Dashboard/BlankState';
-import SearchBar from '../components/Dashboard/SearchBar';
-import RolesIcon from '../components/Dashboard/icons/RolesIcon';
+import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
 
 import * as actions from '../actions';
-import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
 import { RoleDeleteDialog, RoleDialog, RolesTable } from '../components/Roles';
+import RolesIcon from '../components/Icons/RolesIcon';
 
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({

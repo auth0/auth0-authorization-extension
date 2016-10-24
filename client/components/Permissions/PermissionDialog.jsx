@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { Error } from '../Dashboard';
+import { Error } from 'auth0-extension-ui';
 import PermissionForm from './PermissionForm';
 
 export default class PermissionDialog extends Component {

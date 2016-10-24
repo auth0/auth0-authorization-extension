@@ -1,8 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
+import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
 
-import SectionHeader from '../Dashboard/SectionHeader';
-import { Error, LoadingPanel } from '../Dashboard';
 import RuleConfigurationTab from './RuleConfigurationTab';
 import APIAccessTab from './APIAccessTab';
 

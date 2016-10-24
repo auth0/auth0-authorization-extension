@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
 
-import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
+import { InputText, InputCombo, LoadingPanel } from 'auth0-extension-ui';
 import createForm from '../../utils/createForm';
 
 export default createForm('groupMapping', class GroupMappingForm extends Component {

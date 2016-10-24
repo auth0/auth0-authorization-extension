@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 
 import GroupRowPicker from './GroupRowPicker';
-import { Table, TableBody, TableHeader, TableColumn } from '../Dashboard';
+import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
 
 class GroupsTablePicker extends Component {
   shouldComponentUpdate(nextProps) {

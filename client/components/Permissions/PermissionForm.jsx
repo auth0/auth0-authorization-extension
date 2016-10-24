@@ -3,7 +3,7 @@ import { Button, Modal } from 'react-bootstrap';
 import { Field } from 'redux-form';
 
 import createForm from '../../utils/createForm';
-import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
+import { InputText, InputCombo, LoadingPanel } from 'auth0-extension-ui';
 
 export default createForm('permission', class extends Component {
   static propTypes = {

@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import { TableAction } from '../Dashboard';
+import { TableAction } from 'auth0-extension-ui';
 
 class UserPickerUnselectAction extends Component {
   constructor() {

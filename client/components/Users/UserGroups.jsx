@@ -1,9 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import SectionHeader from '../Dashboard/SectionHeader';
 import UserGroupRemoveAction from './UserGroupRemoveAction';
-import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
 
 class UserGroups extends Component {
   constructor() {

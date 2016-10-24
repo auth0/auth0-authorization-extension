@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
 
-import { Error, Json, LoadingPanel } from '../Dashboard';
+import { Error, Json, LoadingPanel } from 'auth0-extension-ui';
 
 class LogDialog extends Component {
   render() {

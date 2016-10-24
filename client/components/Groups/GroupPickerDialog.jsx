@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 import './GroupPickerDialog.styl';
 import GroupsTablePicker from './GroupsTablePicker';
-import { Error, Confirm, TableAction, LoadingPanel } from '../Dashboard';
+import { Error, Confirm, TableAction, LoadingPanel } from 'auth0-extension-ui';
 
 class GroupPickerDialog extends Component {
   constructor() {
