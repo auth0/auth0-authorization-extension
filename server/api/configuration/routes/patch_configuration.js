@@ -5,7 +5,7 @@ import compileRule from '../../../lib/compileRule';
 
 module.exports = (server) => ({
   method: 'PATCH',
-  path: '/api/configuration/ruleconfiguration',
+  path: '/api/configuration',
   config: {
     auth: {
       strategies: [ 'jwt' ],
