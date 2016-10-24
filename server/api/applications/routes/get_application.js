@@ -5,9 +5,8 @@ module.exports = (server) => ({
   path: '/api/applications/{clientId}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:applications' ]
     },
     description: 'Get a single application based on its Client ID.',
     validate: {

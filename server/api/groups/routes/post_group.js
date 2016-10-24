@@ -5,9 +5,8 @@ module.exports = () => ({
   path: '/api/groups',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'create:groups' ]
     },
     description: 'Create a new group.',
     validate: {

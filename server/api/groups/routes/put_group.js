@@ -6,9 +6,8 @@ module.exports = () => ({
   path: '/api/groups/{id}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'update:groups' ]
     },
     description: 'Update a group.',
     validate: {

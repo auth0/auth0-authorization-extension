@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Boom from 'boom';
 import schema from '../schemas/role';
 
 module.exports = () => ({
@@ -7,9 +6,8 @@ module.exports = () => ({
   path: '/api/roles',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'create:roles' ]
     },
     description: 'Create a new role.',
     validate: {

@@ -1,20 +1,15 @@
-import ApiAccess from '../../../lib/apiaccess';
+import { deleteApi } from '../../../lib/apiaccess';
 
 module.exports = () => ({
   method: 'DELETE',
-  path: '/api/configuration/apiaccess',
+  path: '/api/configuration/resource-server',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'delete:resource-server' ]
     }
   },
-  handler: (req, reply) => {
-    const apiAccess = new ApiAccess();
-
-    return apiAccess.deleteApi()
-      .then(() => reply())
-      .catch(err => reply.error(err));
-  }
+  handler: (req, reply) => deleteApi()
+    .then(() => reply())
+    .catch(err => reply.error(err))
 });

@@ -3,9 +3,8 @@ module.exports = () => ({
   path: '/api/roles',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:roles' ]
     },
     description: 'Get all roles in the system.'
   },

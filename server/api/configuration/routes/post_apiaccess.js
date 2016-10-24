@@ -1,20 +1,15 @@
-import ApiAccess from '../../../lib/apiaccess';
+import { createApi } from '../../../lib/apiaccess';
 
 module.exports = () => ({
   method: 'POST',
-  path: '/api/configuration/apiaccess',
+  path: '/api/configuration/resource-server',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'create:resource-server' ]
     }
   },
-  handler: (req, reply) => {
-    const apiAccess = new ApiAccess();
-
-    return apiAccess.createApi()
-      .then(api => reply(api))
-      .catch(err => reply.error(err));
-  }
+  handler: (req, reply) => createApi()
+    .then(api => reply(api))
+    .catch(err => reply.error(err))
 });

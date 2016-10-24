@@ -8,9 +8,8 @@ module.exports = (server) => ({
   path: '/api/configuration/ruleconfiguration',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'update:configuration' ]
     },
     pre: [
       server.handlers.managementClient

@@ -5,9 +5,8 @@ module.exports = () => ({
   path: '/api/roles/{id}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:roles' ]
     },
     description: 'Get a single role based on its unique identifier.',
     validate: {

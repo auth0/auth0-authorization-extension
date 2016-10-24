@@ -3,6 +3,7 @@ import Boom from 'boom';
 import jwt from 'hapi-auth-jwt2';
 import jwksRsa from 'jwks-rsa';
 
+import { scopes } from '../lib/apiaccess';
 import config from '../lib/config';
 
 const getBaseUrl = (req) => {
@@ -52,7 +53,7 @@ module.exports.register = (server, options, next) => {
 
       if ((process.env.NODE_ENV || 'development') === 'development') {
         protocol = req.connection.info.protocol;
-      //   opt.clientId = opt.clientId || 'N3PAwyqXomhNu6IWivtsa3drBfFjmWJL';
+        //   opt.clientId = opt.clientId || 'N3PAwyqXomhNu6IWivtsa3drBfFjmWJL';
       }
 
       const baseUrl = url.format({
@@ -74,8 +75,8 @@ module.exports.register = (server, options, next) => {
       next(err);
     }
 
-    server.auth.scheme('extension-secret', () => {
-      return {
+    server.auth.scheme('extension-secret', () =>
+      ({
         authenticate: (request, reply) => {
           const apiKey = request.headers['x-api-key'];
           if (apiKey && apiKey === config('AUTHORIZE_API_KEY')) {
@@ -88,8 +89,8 @@ module.exports.register = (server, options, next) => {
 
           return reply(Boom.unauthorized('Invalid API Key'));
         }
-      };
-    });
+      })
+    );
 
     server.auth.strategy('extension-secret', 'extension-secret');
 
@@ -102,14 +103,15 @@ module.exports.register = (server, options, next) => {
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 2,
-        jwksUri: `https://auth0.auth0.com/.well-known/jwks.json`
+        jwksUri: 'https://auth0.auth0.com/.well-known/jwks.json'
       }),
 
       // On tokens where the authorized party is the current extension.
       validateFunc: (decoded, req, callback) => {
         const baseUrl = getBaseUrl(req);
         if (decoded && decoded.azp === baseUrl) {
-          return callback(null, true);
+          decoded.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
+          return callback(null, true, decoded);
         }
 
         return callback(null, false);
