@@ -14,15 +14,24 @@ export default connectContainer(class extends Component {
 
   static propTypes = {
     configuration: PropTypes.object,
-    saveConfiguration: PropTypes.func.required,
-    fetchConfiguration: PropTypes.func.required
+    fetchConfiguration: PropTypes.func.required,
+    saveConfiguration: PropTypes.func.isRequired,
+    fetchConfigurationResourceServer: PropTypes.func.required,
+    saveConfigurationResourceServer: PropTypes.func.isRequired
   }
 
   componentWillMount() {
     this.props.fetchConfiguration();
+    this.props.fetchConfigurationResourceServer();
   }
 
   render() {
-    return <RuleSettings configuration={this.props.configuration} onSave={this.props.saveConfiguration} />;
+    return (
+      <RuleSettings
+        configuration={this.props.configuration}
+        saveConfiguration={this.props.saveConfiguration}
+        saveConfigurationResourceServer={this.props.saveConfigurationResourceServer}
+      />
+    );
   }
 });
