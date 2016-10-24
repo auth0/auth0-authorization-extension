@@ -1,4 +1,5 @@
 import { ArgumentError } from 'auth0-extension-tools';
+import config from '../config';
 
 export default class Database {
   constructor(options = {}) {
@@ -9,15 +10,27 @@ export default class Database {
     this.provider = options.provider;
   }
 
+  getStatus() {
+    if (!config('DB_TYPE') || config('DB_TYPE') === 'default') {
+      return this.provider.storageContext.read()
+        .then(data => ({
+          size: Buffer.byteLength(JSON.stringify(data), 'utf8'),
+          type: 'default'
+        }));
+    }
+
+    return { size: null, type: config('DB_TYPE') };
+  }
+
   getConfiguration() {
     return this.provider
       .getAll('configuration')
       .then(records => (records.length ? records[0] : null));
   }
 
-  updateConfiguration(config) {
+  updateConfiguration(data) {
     return this.provider
-      .update('configuration', 'v1', config, true);
+      .update('configuration', 'v1', data, true);
   }
 
   getRules() {

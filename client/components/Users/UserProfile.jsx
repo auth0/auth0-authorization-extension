@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Error, Json, LoadingPanel } from '../Dashboard';
+import { Error, Json, LoadingPanel } from 'auth0-extension-ui';
 
 class UserProfile extends Component {
   shouldComponentUpdate(nextProps) {

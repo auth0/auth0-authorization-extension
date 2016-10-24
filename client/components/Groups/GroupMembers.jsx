@@ -3,7 +3,7 @@ import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
-import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from '../Dashboard';
+import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from 'auth0-extension-ui';
 
 class GroupMembers extends Component {
   constructor() {

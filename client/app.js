@@ -5,8 +5,8 @@ import { Provider } from 'react-redux';
 import './app.styl';
 
 import * as constants from './constants';
-import { useRouterHistory } from 'react-router'
-import { createHistory } from 'history'
+import { useRouterHistory } from 'react-router';
+import { createHistory } from 'history';
 import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
 
 import { loadCredentials } from './actions/auth';

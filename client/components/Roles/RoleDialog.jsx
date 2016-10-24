@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { Error } from '../Dashboard';
+import { Error } from 'auth0-extension-ui';
 import RoleForm from './RoleForm';
 
 export default class RoleDialog extends Component {

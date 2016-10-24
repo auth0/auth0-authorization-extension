@@ -5,9 +5,8 @@ module.exports = () => ({
   path: '/api/permissions/{id}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'delete:permissions' ]
     },
     description: 'Delete a permission.',
     validate: {

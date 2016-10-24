@@ -84,7 +84,8 @@ module.exports = externalModules.then((externals) => {
       new Webpack.DefinePlugin({
         'process.env': {
           NODE_ENV: JSON.stringify('production'),
-          CLIENT_VERSION: JSON.stringify(project.version)
+          CLIENT_VERSION: JSON.stringify(project.version),
+          MAX_DB_SIZE: 512000
         }
       })
     ],

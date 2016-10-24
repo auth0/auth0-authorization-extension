@@ -17,7 +17,8 @@
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
     "extension:size": "cross-env NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
-    "build": "npm run clean && npm run client:build && npm run extension:build"
+    "build": "npm run clean && npm run client:build && npm run extension:build",
+    "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack ."
   },
   "keywords": [
     "auth0"
@@ -29,6 +30,7 @@
     "auth0": "^2.4.0",
     "auth0-extension-hapi-tools": "git+https://github.com/auth0-extensions/auth0-extension-hapi-tools",
     "auth0-extension-tools": "^0.14.0",
+    "auth0-extension-ui": "^0.7.0",
     "autoprefixer": "^6.5.0",
     "aws-sdk": "^2.3.17",
     "axios": "^0.14.0",
@@ -73,6 +75,7 @@
     "relish": "^0.2.3",
     "request": "^2.72.0",
     "semver": "^5.1.0",
+    "superagent": "^2.3.0",
     "webtask-tools": "^3.0.0",
     "winston": "^2.2.0"
   },

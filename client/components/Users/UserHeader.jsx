@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import EntityHeader from '../Dashboard/EntityHeader';
+import { EntityHeader } from 'auth0-extension-ui';
 
 class UserHeader extends Component {
   shouldComponentUpdate(nextProps) {

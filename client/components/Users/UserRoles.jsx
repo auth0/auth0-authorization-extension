@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import SectionHeader from '../Dashboard/SectionHeader';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
 class UserRoles extends Component {

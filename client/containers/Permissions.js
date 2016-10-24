@@ -1,15 +1,11 @@
-import classNames from 'classnames';
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import SectionHeader from '../components/Dashboard/SectionHeader';
-import BlankState from '../components/Dashboard/BlankState';
-import SearchBar from '../components/Dashboard/SearchBar';
-import PermissionsIcon from '../components/Dashboard/icons/PermissionsIcon';
+import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
 
 import * as actions from '../actions';
-import { Error, LoadingPanel, TableAction } from '../components/Dashboard';
 import { PermissionDeleteDialog, PermissionDialog, PermissionsTable } from '../components/Permissions';
+import PermissionsIcon from '../components/Icons/PermissionsIcon';
 
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({

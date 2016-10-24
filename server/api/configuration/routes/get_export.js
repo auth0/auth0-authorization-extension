@@ -3,9 +3,8 @@ module.exports = () => ({
   path: '/api/configuration/export',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:configuration' ]
     }
   },
   handler: (req, reply) => {

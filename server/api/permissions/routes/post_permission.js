@@ -5,9 +5,8 @@ module.exports = () => ({
   path: '/api/permissions',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'create:permissions' ]
     },
     description: 'Create a new permission.',
     validate: {

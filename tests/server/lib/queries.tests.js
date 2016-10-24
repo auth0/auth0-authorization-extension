@@ -330,20 +330,20 @@ describe('Queries', () => {
 
     it('should mappings that match the current transaction', (done) => {
       const db = mockGroups([
-        { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
+        {
+          _id: '123', name: 'Group 1', mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
         },
-        { _id: '456', name: 'Group 2', mappings:
-          [
-            { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
-            { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
-          ]
+        {
+          _id: '456', name: 'Group 2', mappings: [
+          { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
+          { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
+        ]
         },
-        { _id: '789', name: 'Group 3', mappings:
-          [
-            { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
-            { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
-          ]
+        {
+          _id: '789', name: 'Group 3', mappings: [
+          { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
+          { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
+        ]
         }
       ]);
 

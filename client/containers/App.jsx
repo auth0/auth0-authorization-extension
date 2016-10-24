@@ -1,18 +1,18 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
+import { Sidebar, SidebarItem } from 'auth0-extension-ui';
 
 import { logout } from '../actions/auth';
 import { configurationActions } from '../actions';
 
 import Header from '../components/Header';
 import RuleStatus from '../components/Configuration/RuleStatus';
-import { Sidebar, SidebarItem } from '../components/Dashboard';
 
-import UsersIcon from '../components/Dashboard/icons/UsersIcon';
-import GroupsIcon from '../components/Dashboard/icons/GroupsIcon';
-import RolesIcon from '../components/Dashboard/icons/RolesIcon';
-import PermissionsIcon from '../components/Dashboard/icons/PermissionsIcon';
-import ImportExportIcon from '../components/Dashboard/icons/ImportExportIcon';
+import UsersIcon from '../components/Icons/UsersIcon';
+import GroupsIcon from '../components/Icons/GroupsIcon';
+import RolesIcon from '../components/Icons/RolesIcon';
+import PermissionsIcon from '../components/Icons/PermissionsIcon';
+import ImportExportIcon from '../components/Icons/ImportExportIcon';
 
 class App extends Component {
   static propTypes = {
@@ -21,7 +21,8 @@ class App extends Component {
     ruleStatus: PropTypes.object,
     logout: PropTypes.func,
     goToRules: PropTypes.func,
-    goToConfiguration: PropTypes.func
+    goToConfiguration: PropTypes.func,
+    goToImportExport: PropTypes.func
   };
 
   render() {
@@ -41,6 +42,7 @@ class App extends Component {
               <RuleStatus ruleStatus={this.props.ruleStatus}
                 goToConfiguration={this.props.goToConfiguration}
                 goToRules={this.props.goToRules}
+                goToImportExport={this.props.goToImportExport}
               />
               { this.props.children }
             </div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import { Error, LoadingPanel, Table, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Error, LoadingPanel, Table, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
 
 import { GroupMappingRemoveAction } from './';
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import { LoadingPanel, Error } from '../Dashboard';
+import { LoadingPanel, Error } from 'auth0-extension-ui';
 import GroupsTable from './GroupsTable';
 import NestedGroupRemoveAction from './NestedGroupRemoveAction';
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Table, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
 
 class LogsTable extends Component {
   shouldComponentUpdate(nextProps) {

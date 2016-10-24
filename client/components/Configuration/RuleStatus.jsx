@@ -5,12 +5,28 @@ export default class RuleStatus extends Component {
   static propTypes = {
     ruleStatus: PropTypes.object.isRequired,
     goToRules: PropTypes.func,
-    goToConfiguration: PropTypes.func
+    goToConfiguration: PropTypes.func,
+    goToImportExport: PropTypes.func
   };
 
   static contextTypes = {
     router: React.PropTypes.object.isRequired
   };
+
+  renderWarning(warning) {
+    return (
+      <div className="row">
+        <div className="col-xs-12">
+          <div className="alert alert-warning">
+            <strong>Warning</strong> {warning.message}
+            <div className="actions pull-right">
+              {warning.action}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   render() {
     const { error, record } = this.props.ruleStatus.toJS();
@@ -30,32 +46,24 @@ export default class RuleStatus extends Component {
         'btn-warning': true,
         hidden: this.context.router.isActive('configuration/rule')
       });
-
-      return (
-        <div className="row">
-          <div className="col-xs-12">
-            <div className="alert alert-warning">
-              <strong>Warning</strong> The extension still needs to be configured before it can enforce your authorization logic.
-              <div className="actions pull-right">
-                <button onClick={this.props.goToConfiguration} className={buttonClasses}>Go to Configuration</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      return this.renderWarning({
+        message: 'The extension still needs to be configured before it can enforce your authorization logic.',
+        action: (<button onClick={this.props.goToConfiguration} className={buttonClasses}>Go to Configuration</button>)
+      });
     } else if (record && record.rule && !record.rule.enabled) {
-      return (
-        <div className="row">
-          <div className="col-xs-12 wrapper">
-            <div className="alert alert-warning">
-              <strong>Warning</strong> The rule enforcing your authorization logic has been disabled.
-              <div className="actions pull-right">
-                <button onClick={this.props.goToRules} className="btn btn-sm btn-warning">Go to Rules</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      );
+      return this.renderWarning({
+        message: 'The rule enforcing your authorization logic has been disabled.',
+        action: (<button onClick={this.props.goToRules} className="btn btn-sm btn-warning">Go to Rules</button>)
+      });
+    }
+
+    if (record && record.database &&
+      record.database.type === 'default' &&
+      record.database.size > process.env.MAX_DB_SIZE) {
+      return this.renderWarning({
+        message: `Database size is higher than permited (max ${process.env.MAX_DB_SIZE} bytes).`,
+        action: (<button onClick={this.props.goToImportExport} className="btn btn-sm btn-warning">Go to Import/Export</button>)
+      });
     }
 
     return null;

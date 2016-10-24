@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
 
-import { InputText, LoadingPanel } from '../Dashboard';
-import Multiselect from '../Dashboard/Multiselect';
+import { InputText, LoadingPanel } from 'auth0-extension-ui';
+import Multiselect from '../Multiselect';
 import createForm from '../../utils/createForm';
 
 export default createForm('group', class GroupForm extends Component {

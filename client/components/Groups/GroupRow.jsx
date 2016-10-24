@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from '../Dashboard';
+import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
 
 class GroupRow extends Component {
   shouldComponentUpdate(nextProps) {

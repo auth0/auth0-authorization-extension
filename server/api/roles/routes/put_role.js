@@ -7,9 +7,8 @@ module.exports = () => ({
   path: '/api/roles/{id}',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'update:roles' ]
     },
     description: 'Update a role.',
     validate: {

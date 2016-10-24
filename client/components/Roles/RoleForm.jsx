@@ -1,10 +1,10 @@
 import React, { PropTypes, Component } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import { Field, formValueSelector } from 'redux-form';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
 
 import createForm from '../../utils/createForm';
-import { InputText, InputCombo, LoadingPanel, ScopeGroup } from '../Dashboard';
+import { InputText, InputCombo, LoadingPanel, ScopeGroup } from 'auth0-extension-ui';
 
 const roleForm = createForm('role', class extends Component {
   static propTypes = {

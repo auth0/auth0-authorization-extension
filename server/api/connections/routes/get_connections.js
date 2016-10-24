@@ -5,9 +5,8 @@ module.exports = (server) => ({
   path: '/api/connections',
   config: {
     auth: {
-      strategies: [
-        'jwt'
-      ]
+      strategies: [ 'jwt' ],
+      scope: [ 'read:connections' ]
     },
     pre: [
       server.handlers.managementClient
