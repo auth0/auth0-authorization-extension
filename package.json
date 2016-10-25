@@ -30,7 +30,7 @@
     "auth0": "^2.4.0",
     "auth0-extension-hapi-tools": "git+https://github.com/auth0-extensions/auth0-extension-hapi-tools",
     "auth0-extension-tools": "^0.14.0",
-    "auth0-extension-ui": "^0.8.0",
+    "auth0-extension-ui": "^0.9.0",
     "autoprefixer": "^6.5.0",
     "aws-sdk": "^2.3.17",
     "axios": "^0.15.0",
