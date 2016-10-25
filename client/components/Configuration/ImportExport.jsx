@@ -1,23 +1,10 @@
 import React, { Component, PropTypes } from 'react';
-import connectContainer from 'redux-static';
-import { importExportActions } from '../actions';
+import { connect } from 'react-redux';
+import * as actions from '../../actions/importExport';
 import { Error, LoadingPanel, Json, Confirm } from 'auth0-extension-ui';
 import './ImportExport.styl';
 
-export default connectContainer(class extends Component {
-
-  static stateToProps = (state) => ({
-    error: state.importExport.get('error'),
-    loading: state.importExport.get('loading'),
-    record: state.importExport.get('record'),
-    requesting: state.importExport.get('requesting'),
-    preview: state.importExport.get('preview')
-  });
-
-  static actionsToProps = {
-    ...importExportActions
-  }
-
+class ImportExport extends Component {
   static propTypes = {
     exportConfig: PropTypes.func,
     addError: PropTypes.func,
@@ -85,4 +72,14 @@ export default connectContainer(class extends Component {
       </div>
     );
   }
-})
+}
+function mapStateToProps(state) {
+  return {
+    error: state.importExport.get('error'),
+    loading: state.importExport.get('loading'),
+    record: state.importExport.get('record'),
+    requesting: state.importExport.get('requesting'),
+    preview: state.importExport.get('preview')
+  }
+}
+export default connect(mapStateToProps, actions)(ImportExport);

@@ -36,7 +36,6 @@ class App extends Component {
               <SidebarItem icon={<GroupsIcon className="item-image"/>} title="Groups" route="/groups" />
               <SidebarItem icon={<RolesIcon className="item-image"/>} title="Roles" route="/roles" />
               <SidebarItem icon={<PermissionsIcon className="item-image"/>} title="Permissions" route="/permissions" />
-              <SidebarItem icon={<ImportExportIcon className="item-image"/>} title="Import/Export" route="/import-export" />
             </Sidebar>
             <div id="content" className="col-xs-10">
               <RuleStatus ruleStatus={this.props.ruleStatus}

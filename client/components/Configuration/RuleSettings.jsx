@@ -4,6 +4,7 @@ import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
 
 import RuleConfigurationTab from './RuleConfigurationTab';
 import APIAccessTab from './APIAccessTab';
+import ImportExport from './ImportExport';
 
 export default class RuleSettings extends Component {
   static propTypes = {
@@ -38,6 +39,9 @@ export default class RuleSettings extends Component {
                   </Tab>
                   <Tab eventKey={2} title="API Access">
                     <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
+                  </Tab>
+                  <Tab eventKey={3} title="Import / Export">
+                    <ImportExport />
                   </Tab>
                 </Tabs>
               </div>
