@@ -1,5 +1,17 @@
-import { ArgumentError } from 'auth0-extension-tools';
+import { ArgumentError, ValidationError } from 'auth0-extension-tools';
 import config from '../config';
+
+const checkUnique = (items = [], errorMessage = 'Record with that identifier is already exists.', id) => {
+  if (items.length === 0) {
+    return null;
+  }
+
+  if (id && items.length === 1 && items[0]._id === id) { // eslint-disable-line no-underscore-dangle
+    return null;
+  }
+
+  return Promise.reject(new ValidationError(errorMessage));
+};
 
 export default class Database {
   constructor(options = {}) {
@@ -54,13 +66,24 @@ export default class Database {
   }
 
   createPermission(permission) {
-    return this.provider
-      .create('permissions', permission);
+    return this.getPermissions()
+      .then(permissions =>
+        checkUnique(
+          permissions.filter(item => item.name === permission.name && item.applicationId === permission.applicationId),
+          `Permission with name "${permission.name}" already exists for this application`
+        ))
+      .then(() => this.provider.create('permissions', permission));
   }
 
   updatePermission(id, permission) {
-    return this.provider
-      .update('permissions', id, permission);
+    return this.getPermissions()
+      .then(permissions =>
+        checkUnique(
+          permissions.filter(item => item.name === permission.name && item.applicationId === permission.applicationId),
+          `Permission with name "${permission.name}" already exists for this application`,
+          id
+        ))
+      .then(() => this.provider.update('permissions', id, permission));
   }
 
   deletePermission(id) {
@@ -79,13 +102,24 @@ export default class Database {
   }
 
   createRole(role) {
-    return this.provider
-      .create('roles', role);
+    return this.getRoles()
+      .then(roles =>
+        checkUnique(
+          roles.filter(item => item.name === role.name && item.applicationId === role.applicationId),
+          `Role with name "${role.name}" already exists for this application`
+        ))
+      .then(() => this.provider.create('roles', role));
   }
 
   updateRole(id, role) {
-    return this.provider
-      .update('roles', id, role);
+    return this.getRoles()
+      .then(roles =>
+        checkUnique(
+          roles.filter(item => item.name === role.name && item.applicationId === role.applicationId),
+          `Role with name "${role.name}" already exists for this application`,
+          id
+        ))
+      .then(() => this.provider.update('roles', id, role));
   }
 
   deleteRole(id) {
@@ -104,13 +138,24 @@ export default class Database {
   }
 
   createGroup(group) {
-    return this.provider
-      .create('groups', group);
+    return this.getGroups()
+      .then(groups =>
+        checkUnique(
+          groups.filter(item => (item.name === group.name)),
+          `Group with name "${group.name}" already exists`
+        ))
+      .then(() => this.provider.create('groups', group));
   }
 
   updateGroup(id, group) {
-    return this.provider
-      .update('groups', id, group);
+    return this.getGroups()
+      .then(groups =>
+        checkUnique(
+          groups.filter(item => (item.name === group.name)),
+          `Group with name "${group.name}" already exists`,
+          id
+        ))
+      .then(() => this.provider.update('groups', id, group));
   }
 
   deleteGroup(id) {
