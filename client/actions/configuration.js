@@ -29,7 +29,7 @@ export function goToRules() {
 export function goToImportExport() {
   return (dispatch) => {
     dispatch(setActiveTab(3));
-    dispatch(push('/import-export'));
+    dispatch(push('/configuration/import-export'));
   };
 }
 
