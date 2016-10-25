@@ -70,7 +70,7 @@ export default class Database {
       .then(permissions =>
         checkUnique(
           permissions.filter(item => item.name === permission.name && item.applicationId === permission.applicationId),
-          `Permission with name "${permission.name}" is already exists.`
+          `Permission with name "${permission.name}" already exists for this application`
         ))
       .then(() => this.provider.create('permissions', permission));
   }
@@ -80,7 +80,7 @@ export default class Database {
       .then(permissions =>
         checkUnique(
           permissions.filter(item => item.name === permission.name && item.applicationId === permission.applicationId),
-          `Permission with name "${permission.name}" is already exists.`,
+          `Permission with name "${permission.name}" already exists for this application`,
           id
         ))
       .then(() => this.provider.update('permissions', id, permission));
@@ -106,7 +106,7 @@ export default class Database {
       .then(roles =>
         checkUnique(
           roles.filter(item => item.name === role.name && item.applicationId === role.applicationId),
-          `Role with name "${role.name}" is already exists.`
+          `Role with name "${role.name}" already exists for this application`
         ))
       .then(() => this.provider.create('roles', role));
   }
@@ -116,7 +116,7 @@ export default class Database {
       .then(roles =>
         checkUnique(
           roles.filter(item => item.name === role.name && item.applicationId === role.applicationId),
-          `Role with name "${role.name}" is already exists.`,
+          `Role with name "${role.name}" already exists for this application`,
           id
         ))
       .then(() => this.provider.update('roles', id, role));
@@ -142,7 +142,7 @@ export default class Database {
       .then(groups =>
         checkUnique(
           groups.filter(item => (item.name === group.name)),
-          `Group with name "${group.name}" is already exists.`
+          `Group with name "${group.name}" already exists`
         ))
       .then(() => this.provider.create('groups', group));
   }
@@ -152,7 +152,7 @@ export default class Database {
       .then(groups =>
         checkUnique(
           groups.filter(item => (item.name === group.name)),
-          `Group with name "${group.name}" is already exists.`,
+          `Group with name "${group.name}" already exists`,
           id
         ))
       .then(() => this.provider.update('groups', id, group));
