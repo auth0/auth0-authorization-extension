@@ -9,6 +9,7 @@ import * as constants from '../constants';
  */
 export function goToConfiguration() {
   return (dispatch) => {
+    dispatch(setActiveTab(1));
     dispatch(push('/configuration/rule'));
   };
 }
@@ -27,10 +28,22 @@ export function goToRules() {
  */
 export function goToImportExport() {
   return (dispatch) => {
+    dispatch(setActiveTab(3));
     dispatch(push('/import-export'));
   };
 }
 
+/*
+ * Set active tab
+ */
+export function setActiveTab(activeTab) {
+  return {
+    type: constants.SET_CONFIGURATION_TAB,
+    meta: {
+      activeTab
+    }
+  }
+}
 
 /*
  * Load configuration data.

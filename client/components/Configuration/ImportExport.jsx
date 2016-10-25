@@ -51,23 +51,23 @@ class ImportExport extends Component {
   }
 
   render() {
-    const { error, loading, record, children, requesting, preview } = this.props;
+    const {error, loading, record, children, requesting, preview} = this.props;
     if (this.props.children) {
       return children;
     }
     return (
       <div>
-        <Confirm title='Are you sure?' show={ requesting } loading={ loading }
-                 onCancel={ this.closeImport } onConfirm={ this.confirmImport } confirmMessage="Import">
+        <Confirm title='Are you sure?' show={requesting} loading={loading}
+                 onCancel={this.closeImport} onConfirm={this.confirmImport} confirmMessage="Import">
           <Json jsonObject={preview.toJSON()} />
         </Confirm>
         <LoadingPanel show={loading}>
           <Error message={error} onDismiss={this.closeError} dismissAfter={10000} />
           <Json jsonObject={record.toJSON()} />
           <button className="btn btn-transparent btn-md" onClick={this.exportConfig}>Export</button>
-          <button style={{ float: 'right' }} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
+          <button style={{float: 'right'}} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
           <input ref="file" type="file" id="fileLoader" name="files" title="Load File"
-                 style={{ display: 'none' }} onChange={this.importConfig.bind(this)} />
+                 style={{display: 'none'}} onChange={this.importConfig.bind(this)} />
         </LoadingPanel>
       </div>
     );

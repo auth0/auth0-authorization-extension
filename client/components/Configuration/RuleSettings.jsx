@@ -18,8 +18,7 @@ export default class RuleSettings extends Component {
   }
 
   render() {
-    const { loading, error, record, resourceserver } = this.props.configuration.toJS();
-
+    const { loading, error, record, resourceserver, activeTab } = this.props.configuration.toJS();
     return (
       <div>
         <SectionHeader
@@ -33,7 +32,7 @@ export default class RuleSettings extends Component {
             <Error message={error} />
             <LoadingPanel show={loading}>
               <div>
-                <Tabs defaultActiveKey={1} animation={false}>
+                <Tabs defaultActiveKey={activeTab} animation={false}>
                   <Tab eventKey={1} title="Rule Configuration">
                     <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
