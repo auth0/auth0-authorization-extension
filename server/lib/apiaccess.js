@@ -55,12 +55,13 @@ export const getApi = () =>
       return api[0] || {};
     });
 
-export const createApi = () => {
+export const createApi = (lifeTime) => {
   const payload = {
     name: 'auth0-authorization-extension-api',
     identifier: apiIdentifier,
     signing_alg: 'RS256',
-    scopes: allScopes
+    scopes: allScopes,
+    token_lifetime: lifeTime
   };
 
   return makeRequest('resource-servers', 'POST', payload);
