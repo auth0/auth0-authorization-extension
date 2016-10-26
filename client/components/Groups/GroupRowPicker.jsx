@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
+import { TableCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
 
 class GroupRowPicker extends Component {
   shouldComponentUpdate(nextProps) {
@@ -17,7 +16,7 @@ class GroupRowPicker extends Component {
   }
 
   render() {
-    const { group, index } = this.props;
+    const { group } = this.props;
 
     return (
       <TableRow>

@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
 
 import GroupRowPicker from './GroupRowPicker';
-import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
 
 class GroupsTablePicker extends Component {
   shouldComponentUpdate(nextProps) {
@@ -16,7 +16,9 @@ class GroupsTablePicker extends Component {
       <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
         <Table>
           <TableHeader>
-            <TableColumn width="5%" onClick={() => { console.log('Select all records'); }}>
+            <TableColumn width="5%" onClick={() => {
+              console.log('Select all records');
+            }}>
               <input type="checkbox" name="nested-groups" value="all" />
             </TableColumn>
             <TableColumn width="45%">Name</TableColumn>
@@ -24,7 +26,14 @@ class GroupsTablePicker extends Component {
           </TableHeader>
           <TableBody>
             {_.sortBy(groups, 'name').map((group, index) =>
-              <GroupRowPicker key={index} canOpenGroup={this.props.canOpenGroup} index={index} group={group} renderActions={this.props.renderActions} setNested={this.props.setNested} />
+              <GroupRowPicker
+                key={index}
+                canOpenGroup={this.props.canOpenGroup}
+                index={index}
+                group={group}
+                renderActions={this.props.renderActions}
+                setNested={this.props.setNested}
+              />
             )}
           </TableBody>
         </Table>

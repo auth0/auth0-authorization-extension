@@ -8,7 +8,9 @@ class GroupPickerDialog extends Component {
   constructor() {
     super();
 
-    this.nestedGroups = {};
+    this.state = {
+      nestedGroups: {}
+    };
 
     this.renderActions = this.renderActions.bind(this);
     this.onConfirm = this.onConfirm.bind(this);
@@ -20,12 +22,14 @@ class GroupPickerDialog extends Component {
   }
 
   onConfirm() {
-    this.props.onConfirm(this.nestedGroups);
+    this.props.onConfirm(this.state.nestedGroups);
   }
 
   setNested(group) {
     const { value, checked } = group.target;
-    this.nestedGroups[value] = checked;
+    const current = this.state.nestedGroups;
+    current[value] = checked;
+    this.setState({ nestedGroups: current });
   }
 
   renderActions(group, index) {
