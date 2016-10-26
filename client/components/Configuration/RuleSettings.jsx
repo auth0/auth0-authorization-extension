@@ -11,7 +11,6 @@ export default class RuleSettings extends Component {
     configuration: PropTypes.object.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
     saveConfigurationResourceServer: PropTypes.func.isRequired,
-
     importConfigPrepare: PropTypes.func.isRequired,
     importConfig: PropTypes.func.isRequired,
     closePreview: PropTypes.func.isRequired,
