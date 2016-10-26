@@ -11,7 +11,8 @@ module.exports = () => ({
     },
     validate: {
       payload: {
-        token_lifetime: Joi.number().integer().required()
+        apiAccess: Joi.boolean().required(),
+        token_lifetime: Joi.number().integer()
       }
     }
   },

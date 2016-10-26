@@ -85,7 +85,9 @@ module.exports = externalModules.then((externals) => {
         'process.env': {
           NODE_ENV: JSON.stringify('production'),
           CLIENT_VERSION: JSON.stringify(project.version),
-          MAX_DB_SIZE: 512000
+          MAX_DB_SIZE: 512000,
+          MAX_MULTISELECT_USERS: 10,
+          MAX_MULTISELECT_INPUT_CHAR: 2
         }
       })
     ],

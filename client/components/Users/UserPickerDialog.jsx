@@ -1,18 +1,20 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
-import { Error, Confirm } from 'auth0-extension-ui';
+import connectContainer from 'redux-static';
+import { Error, Confirm, Multiselect } from 'auth0-extension-ui';
 
-import Multiselect from '../Multiselect';
 import createForm from '../../utils/createForm';
 import UserPickerSelectAction from './UserPickerSelectAction';
 import UserPickerUnselectAction from './UserPickerUnselectAction';
+import { userActions } from '../../actions';
 
-export default createForm('userPicker', class UserPickerDialog extends Component {
+export default createForm('userPicker', connectContainer(class UserPickerDialog extends Component {
   constructor() {
     super();
 
     this.onConfirm = this.onConfirm.bind(this);
     this.renderActions = this.renderActions.bind(this);
+    this.getOptions = this.getOptions.bind(this);
   }
 
   static propTypes = {
@@ -22,8 +24,49 @@ export default createForm('userPicker', class UserPickerDialog extends Component
     onReset: React.PropTypes.func.isRequired,
     onSearch: React.PropTypes.func.isRequired,
     onSelectUser: React.PropTypes.func.isRequired,
-    onUnselectUser: React.PropTypes.func.isRequired
+    onUnselectUser: React.PropTypes.func.isRequired,
+    fetchUsers: React.PropTypes.func.isRequired,
+    totalUsers: React.PropTypes.number,
+    users: React.PropTypes.array
   };
+
+  static stateToProps = (state) => {
+    const stateUsers = state.users.get('records').toJS();
+    let users;
+    if (stateUsers && stateUsers.length) {
+      users = _.map(stateUsers, (user) => ({
+        value: user.user_id,
+        label: user.name,
+        email: user.email
+      }));
+    }
+
+    return {
+      totalUsers: state.users.get('total'),
+      users
+    };
+  };
+
+  static actionsToProps = {
+    ...userActions
+  }
+
+  getOptions(input, callback) {
+    if (this.props.totalUsers < process.env.MAX_MULTISELECT_USERS) {
+      callback(null, {
+        options: this.props.users,
+        complete: true
+      });
+    }
+
+    if (this.props.totalUsers > process.env.MAX_MULTISELECT_USERS &&
+      input.length >= process.env.MAX_MULTISELECT_INPUT_CHAR) {
+      this.props.fetchUsers(`name:${input}*`);
+      callback(null, {
+        options: this.props.users
+      });
+    }
+  }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.userPicker !== this.props.userPicker;
@@ -62,14 +105,9 @@ export default createForm('userPicker', class UserPickerDialog extends Component
         <Field
           name="members"
           component={Multiselect}
-          options={[
-            { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
-            { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
-            { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
-            { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
-          ]}
+          loadOptions={this.getOptions}
         />
       </Confirm>
     );
   }
-});
+}));

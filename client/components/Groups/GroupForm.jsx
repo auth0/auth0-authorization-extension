@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
-
 import { InputText, LoadingPanel } from 'auth0-extension-ui';
-import Multiselect from '../Multiselect';
+
 import createForm from '../../utils/createForm';
 
 export default createForm('group', class GroupForm extends Component {
@@ -35,21 +34,6 @@ export default createForm('group', class GroupForm extends Component {
             name="description" component={InputText}
             label="Description" validationErrors={validationErrors}
           />
-          { isNew &&
-            <div>
-              <label>Members</label>
-              <Field
-                name="members"
-                component={Multiselect}
-                options={[
-                  { value: 'ariel', label: 'Ariel Gerstein', email: 'ariel@auth0.com' },
-                  { value: 'victor', label: 'Victor Fernandez', email: 'victor@auth0.com' },
-                  { value: 'ricky', label: 'Ricky Rauch', email: 'ricky@auth0.com' },
-                  { value: 'cherna', label: 'Tomas Cherna', email: 'cherna@auth0.com' }
-                ]}
-              />
-            </div>
-          }
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>
