@@ -1,15 +1,17 @@
 import React, { Component, PropTypes } from 'react';
 import connectContainer from 'redux-static';
-import { configurationActions } from '../actions';
+import { configurationActions, importExportActions } from '../actions';
 import RuleSettings from '../components/Configuration/RuleSettings';
 
 export default connectContainer(class extends Component {
   static stateToProps = (state) => ({
-    configuration: state.configuration
+    configuration: state.configuration,
+    importExport: state.importExport
   });
 
   static actionsToProps = {
-    ...configurationActions
+    ...configurationActions,
+    ...importExportActions
   }
 
   static propTypes = {
@@ -17,12 +19,14 @@ export default connectContainer(class extends Component {
     fetchConfiguration: PropTypes.func.required,
     saveConfiguration: PropTypes.func.isRequired,
     fetchConfigurationResourceServer: PropTypes.func.required,
-    saveConfigurationResourceServer: PropTypes.func.isRequired
+    saveConfigurationResourceServer: PropTypes.func.isRequired,
+    exportConfig: PropTypes.func.isRequired,
   }
 
   componentWillMount() {
     this.props.fetchConfiguration();
     this.props.fetchConfigurationResourceServer();
+    this.props.exportConfig();
   }
 
   render() {
@@ -31,6 +35,10 @@ export default connectContainer(class extends Component {
         configuration={this.props.configuration}
         saveConfiguration={this.props.saveConfiguration}
         saveConfigurationResourceServer={this.props.saveConfigurationResourceServer}
+        importExport={this.props.importExport}
+        importConfigPrepare={this.props.importConfigPrepare}
+        importConfig={this.props.importConfig}
+        closePreview={this.props.closePreview}
       />
     );
   }

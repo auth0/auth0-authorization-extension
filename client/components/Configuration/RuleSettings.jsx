@@ -10,15 +10,21 @@ export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
-    saveConfigurationResourceServer: PropTypes.func.isRequired
+    saveConfigurationResourceServer: PropTypes.func.isRequired,
+
+    importConfigPrepare: PropTypes.func.isRequired,
+    importConfig: PropTypes.func.isRequired,
+    closePreview: PropTypes.func.isRequired,
+    importExport: PropTypes.object.isRequired
   };
 
   shouldComponentUpdate(nextProps) {
-    return nextProps.configuration !== this.props.configuration;
+    return nextProps.configuration !== this.props.configuration || nextProps.importExport !== this.props.importExport;
   }
 
   render() {
     const { loading, error, record, resourceserver, activeTab } = this.props.configuration.toJS();
+    const importExport = this.props.importExport;
     return (
       <div>
         <SectionHeader
@@ -40,7 +46,17 @@ export default class RuleSettings extends Component {
                     <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
                   </Tab>
                   <Tab eventKey={3} title="Import / Export">
-                    <ImportExport />
+                    <ImportExport
+                      importConfigPrepare={this.props.importConfigPrepare}
+                      importConfig={this.props.importConfig}
+                      closePreview={this.props.closePreview}
+                      importExport={this.props.importExport}
+                      error={importExport.get('error')}
+                      loading={importExport.get('loading')}
+                      record={importExport.get('record')}
+                      requesting={importExport.get('requesting')}
+                      preview={importExport.get('preview')}
+                    />
                   </Tab>
                 </Tabs>
               </div>

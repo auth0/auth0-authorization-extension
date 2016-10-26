@@ -1,21 +1,21 @@
 import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import * as actions from '../../actions/importExport';
 import { Error, LoadingPanel, Json, Confirm } from 'auth0-extension-ui';
 import './ImportExport.styl';
 
-class ImportExport extends Component {
+export default class ImportExport extends Component {
   static propTypes = {
     exportConfig: PropTypes.func,
     addError: PropTypes.func,
     closeError: PropTypes.func,
-    importConfigPrepare: PropTypes.func,
-    closePreview: PropTypes.func,
-    importConfig: PropTypes.func
-  }
-
-  componentDidMount() {
-    this.props.exportConfig();
+    importConfigPrepare: PropTypes.func.isRequired,
+    importConfig: PropTypes.func.isRequired,
+    closePreview: PropTypes.func.isRequired,
+    importExport: PropTypes.object.isRequired,
+    error: PropTypes.string,
+    loading: PropTypes.object,
+    record: PropTypes.object,
+    requesting: PropTypes.bool,
+    preview: PropTypes.object
   }
 
   exportConfig = () => {
@@ -73,13 +73,3 @@ class ImportExport extends Component {
     );
   }
 }
-function mapStateToProps(state) {
-  return {
-    error: state.importExport.get('error'),
-    loading: state.importExport.get('loading'),
-    record: state.importExport.get('record'),
-    requesting: state.importExport.get('requesting'),
-    preview: state.importExport.get('preview')
-  }
-}
-export default connect(mapStateToProps, actions)(ImportExport);
