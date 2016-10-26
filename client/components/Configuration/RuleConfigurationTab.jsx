@@ -50,7 +50,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
   }
 
   renderSwitchItem(field) {
-    return <Field name={field.name} component={InputSwitchItem} title={field.title} description={field.description} />;
+    return <Field key={field.name} name={field.name} component={InputSwitchItem} title={field.title} description={field.description} />;
   }
 
   render() {

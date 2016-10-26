@@ -9,11 +9,26 @@ export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
-    saveConfigurationResourceServer: PropTypes.func.isRequired
+    saveConfigurationResourceServer: PropTypes.func.isRequired,
+    removeConfigurationResourceServer: PropTypes.func.isRequired
   };
+
+  constructor(props) {
+    super(props);
+    this.onSubmitResourceServer = this.onSubmitResourceServer.bind(this);
+  }
+
 
   shouldComponentUpdate(nextProps) {
     return nextProps.configuration !== this.props.configuration;
+  }
+
+  onSubmitResourceServer(data) {
+    if (data && !data.apiAccess) {
+      this.props.removeConfigurationResourceServer();
+    } else {
+      this.props.saveConfigurationResourceServer(data);
+    }
   }
 
   render() {
@@ -37,7 +52,7 @@ export default class RuleSettings extends Component {
                     <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
                   <Tab eventKey={2} title="API Access">
-                    <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
+                    <APIAccessTab initialValues={resourceserver} onSubmit={this.onSubmitResourceServer} />
                   </Tab>
                 </Tabs>
               </div>

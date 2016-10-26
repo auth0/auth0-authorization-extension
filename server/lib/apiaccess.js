@@ -55,12 +55,13 @@ export const getApi = () =>
       return api[0] || {};
     });
 
-export const createApi = () => {
+export const createApi = (lifeTime) => {
   const payload = {
     name: 'auth0-authorization-extension-api',
     identifier: apiIdentifier,
     signing_alg: 'RS256',
-    scopes: allScopes
+    scopes: allScopes,
+    token_lifetime: lifeTime
   };
 
   return makeRequest('resource-servers', 'POST', payload);
@@ -69,11 +70,13 @@ export const createApi = () => {
 export const updateApi = (lifeTime) =>
   getApi()
     .then(api => {
+      const defaultLifetimeValue = 86400;
+
       if (!api.id) {
-        return Promise.reject(new Error('Unable to update resource-server. Is it enabled?'));
+        return createApi(lifeTime || defaultLifetimeValue);
       }
 
-      return makeRequest(`resource-servers/${api.id}`, 'PATCH', { token_lifetime: lifeTime });
+      return makeRequest(`resource-servers/${api.id}`, 'PATCH', { token_lifetime: lifeTime || defaultLifetimeValue });
     });
 
 
