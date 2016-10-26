@@ -19,7 +19,6 @@ class GroupMappingDialog extends Component {
     const mappingReducer = this.props.groupMapping.toJS();
 
     this.props.onSave(groupReducer.record, {
-      _id: mappingReducer.groupMappingId,
       ...groupMapping
     });
   }

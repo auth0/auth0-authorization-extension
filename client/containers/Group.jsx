@@ -58,7 +58,7 @@ export class GroupContainer extends Component {
 
   // Create or update a group mapping.
   saveGroupMapping(group, groupMapping) {
-    this.props.saveGroupMapping(group, groupMapping, this.props.groupMapping.get('isNew'), () => {
+    this.props.saveGroupMapping(group, groupMapping, () => {
       this.props.fetchGroupMappings(group._id, true);
     });
   }
