@@ -12,7 +12,6 @@ import UsersIcon from '../components/Icons/UsersIcon';
 import GroupsIcon from '../components/Icons/GroupsIcon';
 import RolesIcon from '../components/Icons/RolesIcon';
 import PermissionsIcon from '../components/Icons/PermissionsIcon';
-import ImportExportIcon from '../components/Icons/ImportExportIcon';
 
 class App extends Component {
   static propTypes = {
