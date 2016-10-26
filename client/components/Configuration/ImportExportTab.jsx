@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Error, LoadingPanel, Json, Confirm } from 'auth0-extension-ui';
 import './ImportExport.styl';
 
-export default class ImportExport extends Component {
+export default class ImportExportTab extends Component {
   static propTypes = {
     exportConfig: PropTypes.func,
     addError: PropTypes.func,
