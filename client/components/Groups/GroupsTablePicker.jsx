@@ -24,7 +24,7 @@ class GroupsTablePicker extends Component {
           </TableHeader>
           <TableBody>
             {_.sortBy(groups, 'name').map((group, index) =>
-              <GroupRowPicker key={index} canOpenGroup={this.props.canOpenGroup} index={index} group={group} renderActions={this.props.renderActions} />
+              <GroupRowPicker key={index} canOpenGroup={this.props.canOpenGroup} index={index} group={group} renderActions={this.props.renderActions} setNested={this.props.setNested} />
             )}
           </TableBody>
         </Table>
@@ -37,7 +37,8 @@ GroupsTablePicker.propTypes = {
   groups: React.PropTypes.object.isRequired,
   canOpenGroup: React.PropTypes.bool,
   loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired
+  renderActions: React.PropTypes.func.isRequired,
+  setNested: React.PropTypes.func.isRequired
 };
 
 export default GroupsTablePicker;

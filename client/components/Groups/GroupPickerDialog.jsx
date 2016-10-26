@@ -8,11 +8,24 @@ class GroupPickerDialog extends Component {
   constructor() {
     super();
 
+    this.nestedGroups = {};
+
     this.renderActions = this.renderActions.bind(this);
+    this.onConfirm = this.onConfirm.bind(this);
+    this.setNested = this.setNested.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.groupPicker !== this.props.groupPicker;
+  }
+
+  onConfirm() {
+    this.props.onConfirm(this.nestedGroups);
+  }
+
+  setNested(group) {
+    const { value, checked } = group.target;
+    this.nestedGroups[value] = checked;
   }
 
   renderActions(group, index) {
@@ -31,7 +44,7 @@ class GroupPickerDialog extends Component {
     return (
       <Confirm
         dialogClassName="group-picker-dialog" size="large" title={title} show={open}
-        loading={loading} onCancel={onCancel} onConfirm={() => { console.log('confirm'); }} confirmMessage="Add"
+        loading={loading} onCancel={onCancel} onConfirm={this.onConfirm} confirmMessage="Add"
       >
         <Error message={error} />
         <p className="modal-description">
@@ -42,7 +55,7 @@ class GroupPickerDialog extends Component {
         <LoadingPanel show={loading}>
           <GroupsTablePicker
             canOpenGroup={false} groups={this.props.groupPicker.get('records')}
-            loading={loading}
+            loading={loading} setNested={this.setNested}
           />
         </LoadingPanel>
       </Confirm>

@@ -22,7 +22,7 @@ class GroupRowPicker extends Component {
     return (
       <TableRow>
         <TableCell>
-          <input type="checkbox" name="nested-groups" value="all" />
+          <input type="checkbox" name="nested-groups" value={group._id} onChange={this.props.setNested} />
         </TableCell>
         {this.renderGroupName(group)}
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
@@ -35,7 +35,8 @@ GroupRowPicker.propTypes = {
   loading: React.PropTypes.bool,
   index: React.PropTypes.number.isRequired,
   canOpenGroup: React.PropTypes.bool,
-  group: React.PropTypes.object.isRequired
+  group: React.PropTypes.object.isRequired,
+  setNested: React.PropTypes.func.isRequired
 };
 
 export default GroupRowPicker;
