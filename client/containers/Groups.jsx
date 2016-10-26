@@ -1,7 +1,8 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
-import { connectionActions } from '../actions';
+import { connectionActions, groupMemberActions, userActions } from '../actions';
 import * as actions from '../actions/group';
 import GroupsOverview from '../components/Groups/GroupsOverview';
 
@@ -67,6 +68,9 @@ class GroupsContainer extends Component {
           requestDeleteGroup={this.props.requestDeleteGroup}
           group={this.props.group}
           groups={this.props.groups}
+          users={this.props.users}
+          addGroupMembers={this.props.addGroupMembers}
+          fetchUsers={this.props.fetchUsers}
         />
       </div>
     );
@@ -86,7 +90,10 @@ GroupsContainer.propTypes = {
   createGroup: PropTypes.func.isRequired,
   editGroup: PropTypes.func.isRequired,
   editGroupUsers: PropTypes.func.isRequired,
-  requestDeleteGroup: PropTypes.func.isRequired
+  requestDeleteGroup: PropTypes.func.isRequired,
+  addGroupMembers: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -96,8 +103,9 @@ function mapStateToProps(state) {
       error: state.groups.get('error'),
       loading: state.groups.get('loading'),
       records: state.groups.get('records')
-    }
+    },
+    users: state.users
   };
 }
 
-export default connect(mapStateToProps, { ...actions, ...connectionActions })(GroupsContainer);
+export default connect(mapStateToProps, { ...actions, ...connectionActions, ...groupMemberActions, ...userActions })(GroupsContainer);
