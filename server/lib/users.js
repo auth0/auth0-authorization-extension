@@ -27,3 +27,31 @@ export function getUsersById(client, users, options) {
     });
   });
 }
+
+export function getUsersByIds(client, ids, page, limit) {
+  const searchArray = [];
+  const total = ids.length;
+  const options = {
+    q: '',
+    per_page: limit || 100,
+    page: page || 0,
+    fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked',
+    search_engine: 'v2'
+  };
+
+
+  ids = ids.splice(page * limit, limit); // eslint-disable-line no-param-reassign
+
+  ids.forEach(id => {
+    const clear = id.split('|')[1];
+
+    if (clear) {
+      searchArray.push(`user_id:*${clear}`);
+    }
+  });
+
+  options.q = searchArray.join(' OR ');
+
+  return client.users.getAll(options)
+    .then(users => ({ total, users }));
+}

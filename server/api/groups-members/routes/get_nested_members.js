@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Joi from 'joi';
 
-import { getUsersById } from '../../../lib/users';
+import { getUsersByIds } from '../../../lib/users';
 import { getChildGroups, getMembers } from '../../../lib/queries';
 
 module.exports = (server) => ({
@@ -19,6 +19,10 @@ module.exports = (server) => ({
     validate: {
       params: {
         id: Joi.string().guid().required()
+      },
+      query: {
+        per_page: Joi.number().integer().min(1).max(200).default(25),
+        page: Joi.number().integer().min(0).default(0)
       }
     }
   },
@@ -29,27 +33,32 @@ module.exports = (server) => ({
         const currentAndChildGroups = getChildGroups(groups, [ group ]);
         return getMembers(currentAndChildGroups);
       })
-      .then(members =>
-        getUsersById(req.pre.auth0, members.map(m => m.userId), {})
-          .then(users => users.map(u => {
-            let userGroup = _.find(members, { userId: u.user_id });
-            if (userGroup) {
-              userGroup = { _id: userGroup.group._id, name: userGroup.group.name, description: userGroup.group.description };
-            }
+      .then(members => {
+        const userIds = (members) ? members.map(member => member.userId) : [];
 
-            return {
-              user: {
-                user_id: u.user_id,
-                name: u.name,
-                nickname: u.nickname,
-                email: u.email
-              },
-              group: userGroup
-            };
-          })
-        )
-      )
-      .then(nested => _.sortByOrder(nested, [ 'user.name' ], [ true ]))
+        return getUsersByIds(req.pre.auth0, userIds, req.query.page, req.query.per_page)
+          .then(data => {
+            const total = members.length;
+            const users = data.users.map(u => {
+              let userGroup = _.find(members, { userId: u.user_id });
+              if (userGroup) {
+                userGroup = { _id: userGroup.group._id, name: userGroup.group.name, description: userGroup.group.description };
+              }
+
+              return {
+                user: {
+                  user_id: u.user_id,
+                  name: u.name,
+                  nickname: u.nickname,
+                  email: u.email
+                },
+                group: userGroup
+              };
+            });
+
+            return { total, nested: _.sortByOrder(users, [ 'user.name' ], [ true ]) };
+          });
+      })
       .then(users => reply(users))
       .catch(err => reply.error(err))
 });
