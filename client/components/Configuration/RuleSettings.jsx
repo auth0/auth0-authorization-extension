@@ -4,36 +4,26 @@ import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
 
 import RuleConfigurationTab from './RuleConfigurationTab';
 import APIAccessTab from './APIAccessTab';
+import ImportExportTab from './ImportExportTab';
 
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
     saveConfigurationResourceServer: PropTypes.func.isRequired,
-    removeConfigurationResourceServer: PropTypes.func.isRequired
+    importConfigPrepare: PropTypes.func.isRequired,
+    importConfig: PropTypes.func.isRequired,
+    closePreview: PropTypes.func.isRequired,
+    importExport: PropTypes.object.isRequired
   };
 
-  constructor(props) {
-    super(props);
-    this.onSubmitResourceServer = this.onSubmitResourceServer.bind(this);
-  }
-
-
   shouldComponentUpdate(nextProps) {
-    return nextProps.configuration !== this.props.configuration;
-  }
-
-  onSubmitResourceServer(data) {
-    if (data && !data.apiAccess) {
-      this.props.removeConfigurationResourceServer();
-    } else {
-      this.props.saveConfigurationResourceServer(data);
-    }
+    return nextProps.configuration !== this.props.configuration || nextProps.importExport !== this.props.importExport;
   }
 
   render() {
-    const { loading, error, record, resourceserver } = this.props.configuration.toJS();
-
+    const { loading, error, record, resourceserver, activeTab } = this.props.configuration.toJS();
+    const importExport = this.props.importExport;
     return (
       <div>
         <SectionHeader
@@ -47,12 +37,25 @@ export default class RuleSettings extends Component {
             <Error message={error} />
             <LoadingPanel show={loading}>
               <div>
-                <Tabs defaultActiveKey={1} animation={false}>
+                <Tabs defaultActiveKey={activeTab} animation={false}>
                   <Tab eventKey={1} title="Rule Configuration">
                     <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
                   <Tab eventKey={2} title="API Access">
-                    <APIAccessTab initialValues={resourceserver} onSubmit={this.onSubmitResourceServer} />
+                    <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
+                  </Tab>
+                  <Tab eventKey={3} title="Import / Export">
+                    <ImportExportTab
+                      importConfigPrepare={this.props.importConfigPrepare}
+                      importConfig={this.props.importConfig}
+                      closePreview={this.props.closePreview}
+                      importExport={this.props.importExport}
+                      error={importExport.get('error')}
+                      loading={importExport.get('loading')}
+                      record={importExport.get('record')}
+                      requesting={importExport.get('requesting')}
+                      preview={importExport.get('preview')}
+                    />
                   </Tab>
                 </Tabs>
               </div>
