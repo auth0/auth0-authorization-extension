@@ -112,7 +112,17 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <GroupHeader group={group} members={group.get('members')} />
+            <GroupHeader
+              group={group}
+              groupJSON={group.toJSON()}
+              members={group.get('members')}
+              editGroup={this.props.editGroup}
+              saveGroup={this.props.saveGroup}
+              closeUpdate={this.props.closeUpdate}
+              requestDeleteGroup={this.props.requestDeleteGroup}
+              deleteGroup={this.props.deleteGroup}
+              closeDelete={this.props.closeDelete}
+            />
           </div>
         </div>
         <div className="row">

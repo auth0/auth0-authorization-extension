@@ -208,6 +208,20 @@ export const group = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) =>
     state.merge({
       nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.CLOSE_UPDATE_GROUP]: (state) =>
+    state.merge({
+      isNew: false,
+      isEdit: false,
+      isDelete: false,
+      requesting: false
+    }),
+  [constants.CLOSE_DELETE_GROUP]: (state) =>
+    state.merge({
+      isNew: false,
+      isEdit: false,
+      isDelete: false,
+      requesting: false
     })
 });
 

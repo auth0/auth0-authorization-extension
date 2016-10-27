@@ -159,3 +159,15 @@ export function clearGroup() {
     type: constants.CLEAR_GROUP
   };
 }
+
+export function closeUpdate() {
+  return {
+    type: constants.CLOSE_UPDATE_GROUP
+  };
+}
+
+export function closeDelete() {
+  return {
+    type: constants.CLOSE_DELETE_GROUP
+  };
+}
