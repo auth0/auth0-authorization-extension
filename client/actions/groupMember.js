@@ -61,6 +61,29 @@ export function addGroupMembers(groupId, members, callback) {
 }
 
 /*
+ * Add the selected users members to a group.
+ */
+export function addUserToGroups(userId, groups, callback) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.ADD_GROUP_MEMBERS,
+      payload: {
+        promise: axios({
+          method: 'patch',
+          url: `/api/users/${userId}/groups`,
+          data: groups,
+          responseType: 'json'
+        })
+      },
+      meta: {
+        userId,
+        onSuccess: callback
+      }
+    });
+  };
+}
+
+/*
  * Request if it's ok to remove a member.
  */
 export function requestRemoveGroupMember(group, user) {
@@ -92,9 +115,7 @@ export function removeGroupMember(groupId, userId) {
       promise: axios({
         method: 'delete',
         url: `/api/groups/${groupId}/members`,
-        data: {
-          userId
-        },
+        data: [ userId ],
         responseType: 'json'
       })
     },

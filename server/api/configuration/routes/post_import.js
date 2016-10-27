@@ -22,7 +22,7 @@ module.exports = () => ({
     }
 
     return req.storage.provider.storageContext.write(req.payload)
-      .then(() => reply())
+      .then(() => reply().code(204))
       .catch(err => reply.error(err));
   }
 });

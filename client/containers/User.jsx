@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -31,9 +30,10 @@ export class UserContainer extends Component {
     this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
   }
 
-  addToGroup(group) {
+  addToGroup(groups) {
+    const groupIds = Object.keys(groups).filter(key => groups[key] === true);
     this.props.cancelGroupPicker();
-    this.props.addGroupMembers(group._id, [ this.props.user.record.get('user_id') ], () => {
+    this.props.addUserToGroups(this.props.user.record.get('user_id'), groupIds, () => {
       this.props.fetchUserGroups(this.props.user.record.get('user_id'));
     });
   }
