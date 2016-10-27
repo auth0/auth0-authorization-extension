@@ -10,7 +10,7 @@ export function importConfigPrepare(file) {
       reader.readAsText(file, 'UTF-8');
       reader.onload = (evt) => {
         const result = JSON.parse(evt.target.result);
-        return dispatch(importConfig(result));
+        return dispatch(openPreview(result));
       };
       reader.onerror = (evt) => {
         dispatch(addError('Something went wrong.'));
@@ -18,6 +18,21 @@ export function importConfigPrepare(file) {
     } else {
       dispatch(addError('Incorrect file type.'));
     }
+  }
+}
+
+export function openPreview(text) {
+  return {
+    type: constants.OPEN_CONFIGURATION_PREVIEW,
+    meta: {
+      preview: text
+    }
+  }
+}
+
+export function closePreview() {
+  return {
+    type: constants.CLOSE_CONFIGURATION_PREVIEW
   }
 }
 

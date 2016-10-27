@@ -7,7 +7,8 @@ const initialState = {
   loading: false,
   error: null,
   record: { },
-  resourceserver: { }
+  resourceserver: { },
+  activeTab: 1
 };
 
 export const configuration = createReducer(fromJS(initialState), {
@@ -93,5 +94,9 @@ export const configuration = createReducer(fromJS(initialState), {
     state.merge({
       loading: false,
       resourceserver: { }
+    }),
+  [constants.SET_CONFIGURATION_TAB]: (state, action) =>
+    state.merge({
+      activeTab: action.meta.activeTab
     })
 });
