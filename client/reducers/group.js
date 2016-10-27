@@ -101,6 +101,27 @@ export const group = createReducer(fromJS(initialState), {
     state.merge({
       ...initialState
     }),
+
+  [constants.UPDATE_GROUP_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      validationErrors: Map()
+    }),
+  [constants.UPDATE_GROUP_REJECTED]: (state, action) => {
+    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
+
+    return state.merge({
+      loading: false,
+      validationErrors,
+      error: `An error occured while saving the group: ${errorMessage}`
+    });
+  },
+  [constants.UPDATE_GROUP_FULFILLED]: (state, action) =>
+    state.merge({
+      ...initialState
+    }),
+
   [constants.REQUEST_DELETE_GROUP]: (state, action) =>
     state.merge({
       isDelete: true,
@@ -208,6 +229,20 @@ export const group = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) =>
     state.merge({
       nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.CLOSE_UPDATE_GROUP]: (state) =>
+    state.merge({
+      isNew: false,
+      isEdit: false,
+      isDelete: false,
+      requesting: false
+    }),
+  [constants.CLOSE_DELETE_GROUP]: (state) =>
+    state.merge({
+      isNew: false,
+      isEdit: false,
+      isDelete: false,
+      requesting: false
     })
 });
 

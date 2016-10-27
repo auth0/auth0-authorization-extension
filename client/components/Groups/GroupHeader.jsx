@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { EntityHeader } from 'auth0-extension-ui';
-
+import { GroupDeleteDialog, GroupDialog } from './';
 import { Button, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 class GroupHeader extends Component {
@@ -24,6 +24,34 @@ class GroupHeader extends Component {
     return <span className="group-label group-head-description">{group.get('record').get('description')}</span>;
   }
 
+  editGroup = () => {
+    this.props.editGroup(this.props.groupJSON.record);
+  }
+
+  save = (group) => {
+    this.props.updateGroup(group, ()=> {
+      this.props.fetchGroup(this.props.id);
+    });
+  }
+
+  clear = () => {
+    this.props.closeUpdate();
+  }
+
+  requestDeleteGroup = () => {
+    this.props.requestDeleteGroup(this.props.groupJSON.record);
+  }
+
+  confirmDelete = (group) => {
+    this.props.deleteGroup(group, () => {
+      this.props.goToGroups();
+    });
+  }
+
+  cancelDelete = () => {
+    this.props.closeDelete();
+  }
+
   render() {
     const { group, members } = this.props;
 
@@ -32,29 +60,44 @@ class GroupHeader extends Component {
     }
 
     return (
-      <EntityHeader
-        imgSource={this.getPicture(group)}
-        primaryText={group.get('record').get('name') || group.get('record').get('_id')}
-        secondaryText={this.getDescription(group)}
-      >
-        <OverlayTrigger placement="top" overlay={<Tooltip id="edit-group">Edit group</Tooltip>}>
-          <Button className="table-action" bsSize="small">
-            <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
-          </Button>
-        </OverlayTrigger>
-        <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
-          <Button className="table-action" bsSize="small" style={{ marginLeft: '10px' }}>
-            <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
-          </Button>
-        </OverlayTrigger>
-      </ EntityHeader>
+      <div>
+        <GroupDialog group={group} onSave={this.save} onClose={this.clear} />
+        <GroupDeleteDialog group={group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
+        <EntityHeader
+          imgSource={this.getPicture(group)}
+          primaryText={group.get('record').get('name') || group.get('record').get('_id')}
+          secondaryText={this.getDescription(group)}
+        >
+          <OverlayTrigger placement="top" overlay={<Tooltip id="edit-group">Edit group</Tooltip>}>
+            <Button onClick={this.editGroup} className="table-action" bsSize="small">
+              <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
+            <Button onClick={this.requestDeleteGroup} className="table-action" bsSize="small"
+                    style={{ marginLeft: '10px' }}>
+              <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
+            </Button>
+          </OverlayTrigger>
+        </ EntityHeader>
+      </div>
     );
   }
 }
 
 GroupHeader.propTypes = {
   group: React.PropTypes.object.isRequired,
-  members: React.PropTypes.object.isRequired
+  members: React.PropTypes.object.isRequired,
+  groupJSON: React.PropTypes.object.isRequired,
+  editGroup: React.PropTypes.func.isRequired,
+  updateGroup: React.PropTypes.func.isRequired,
+  closeUpdate: React.PropTypes.func.isRequired,
+  requestDeleteGroup: React.PropTypes.func.isRequired,
+  deleteGroup: React.PropTypes.func.isRequired,
+  closeDelete: React.PropTypes.func.isRequired,
+  fetchGroup: React.PropTypes.func.isRequired,
+  id: React.PropTypes.string.isRequired,
+  goToGroups: React.PropTypes.func.isRequired
 };
 
 export default GroupHeader;

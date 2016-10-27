@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-
+import { push } from 'react-router-redux';
 import * as constants from '../constants';
 import { fetchGroupMembers, fetchGroupMembersNested } from './groupMember';
 import { fetchGroupMappings } from './groupMapping';
@@ -112,6 +112,37 @@ export function saveGroup(group) {
   };
 }
 
+/**
+ * update group from detail view
+ * @param group
+ * @param onSuccess
+ * @returns {function(*, *)}
+ */
+export function updateGroup(group, onSuccess) {
+  return (dispatch, getState) => {
+    const state = getState().group.toJS();
+    const groupData = _.pick(group, ['name', 'description']);
+
+    dispatch({
+      type: constants.UPDATE_GROUP,
+      payload: {
+        promise: axios({
+          method: 'put',
+          url: `/api/groups/${state.groupId}`,
+          data: groupData,
+          responseType: 'json'
+        })
+      },
+      meta: {
+        isNew: false,
+        groupData,
+        groupId: state.groupId || groupData.name,
+        onSuccess: onSuccess
+      }
+    });
+  };
+}
+
 /*
  * Request if we can delete the current group?
  */
@@ -136,7 +167,7 @@ export function cancelDeleteGroup() {
 /*
  * Delete the group.
  */
-export function deleteGroup(group) {
+export function deleteGroup(group, onSuccess) {
   return {
     type: constants.DELETE_GROUP,
     payload: {
@@ -146,9 +177,20 @@ export function deleteGroup(group) {
     },
     meta: {
       group,
-      groupId: group._id
+      groupId: group._id,
+      onSuccess: onSuccess ? onSuccess: null
     }
   };
+}
+
+/**
+ * go back to groups
+ * @returns {function(*)}
+ */
+export function goToGroups() {
+  return (dispatch) => {
+        dispatch(push('/groups'));
+  }
 }
 
 /*
@@ -157,5 +199,17 @@ export function deleteGroup(group) {
 export function clearGroup() {
   return {
     type: constants.CLEAR_GROUP
+  };
+}
+
+export function closeUpdate() {
+  return {
+    type: constants.CLOSE_UPDATE_GROUP
+  };
+}
+
+export function closeDelete() {
+  return {
+    type: constants.CLOSE_DELETE_GROUP
   };
 }
