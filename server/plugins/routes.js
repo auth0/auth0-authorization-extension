@@ -24,6 +24,10 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/groups-members/routes/get_members')(server));
   server.route(require('../api/groups-members/routes/get_nested_members')(server));
   server.route(require('../api/groups-members/routes/patch_members')(server));
+  server.route(require('../api/groups-roles/routes/delete_roles')(server));
+  server.route(require('../api/groups-roles/routes/get_roles')(server));
+  server.route(require('../api/groups-roles/routes/get_nested_roles')(server));
+  server.route(require('../api/groups-roles/routes/patch_roles')(server));
   server.route(require('../api/groups-nested/routes/delete_nested_groups')(server));
   server.route(require('../api/groups-nested/routes/get_nested_groups')(server));
   server.route(require('../api/groups-nested/routes/patch_nested_groups')(server));
