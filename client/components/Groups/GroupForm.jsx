@@ -41,7 +41,7 @@ export default createForm('group', class GroupForm extends Component {
           Cancel
         </Button>
         <Button bsSize="large" bsStyle="primary" disabled={loading || submitting} onClick={handleSubmit}>
-          Create
+          { isNew ? 'Create' : 'Save' }
         </Button>
       </Modal.Footer>
     </div>);
