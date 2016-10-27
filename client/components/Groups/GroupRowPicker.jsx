@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
+import { TableCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
 
 class GroupRowPicker extends Component {
   shouldComponentUpdate(nextProps) {
@@ -17,12 +16,12 @@ class GroupRowPicker extends Component {
   }
 
   render() {
-    const { group, index } = this.props;
+    const { group } = this.props;
 
     return (
       <TableRow>
         <TableCell>
-          <input type="checkbox" name="nested-groups" value="all" />
+          <input type="checkbox" name="nested-groups" value={group._id} onChange={this.props.setNested} />
         </TableCell>
         {this.renderGroupName(group)}
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
@@ -35,7 +34,8 @@ GroupRowPicker.propTypes = {
   loading: React.PropTypes.bool,
   index: React.PropTypes.number.isRequired,
   canOpenGroup: React.PropTypes.bool,
-  group: React.PropTypes.object.isRequired
+  group: React.PropTypes.object.isRequired,
+  setNested: React.PropTypes.func.isRequired
 };
 
 export default GroupRowPicker;

@@ -68,9 +68,10 @@ export class GroupContainer extends Component {
   }
 
   addNestedGroup(nestedGroup) {
+    const nestedIds = Object.keys(nestedGroup).filter(key => nestedGroup[key] === true);
     const groupId = this.props.group.get('groupId');
     this.props.cancelGroupPicker();
-    this.props.addNestedGroup(groupId, nestedGroup._id, () => {
+    this.props.addNestedGroup(groupId, nestedIds, () => {
       this.props.fetchNestedGroups(groupId, true);
       this.props.fetchGroupMembersNested(groupId, true);
     });
