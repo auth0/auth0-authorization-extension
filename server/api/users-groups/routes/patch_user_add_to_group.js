@@ -15,10 +15,7 @@ module.exports = (server) => ({
         id: Joi.string().required()
       },
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
-    },
-    pre: [
-      server.handlers.managementClient
-    ]
+    }
   },
   handler: (req, reply) => {
     const groupIds = req.payload;
