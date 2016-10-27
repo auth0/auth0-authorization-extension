@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import Joi from 'joi';
 
-module.exports = (server) => ({
+module.exports = () => ({
   method: 'PATCH',
   path: '/api/users/{id}/groups',
   config: {
@@ -19,28 +19,19 @@ module.exports = (server) => ({
   },
   handler: (req, reply) => {
     const groupIds = req.payload;
-    const recursiveUpdate = () => {
-      if (groupIds.length) {
-        const currentId = groupIds.pop();
 
-        return req.storage.getGroup(currentId)
-          .then(group => {
-            if (!group.members) {
-              group.members = [];
-            }
-            if (group.members.indexOf(req.params.id) === -1) {
-              group.members.push(req.params.id);
-            }
+    return Promise.mapSeries(groupIds, id => req.storage.getGroup(id)
+      .then(group => {
+        if (!group.members) {
+          group.members = []; // eslint-disable-line no-param-reassign
+        }
+        if (group.members.indexOf(req.params.id) === -1) {
+          group.members.push(req.params.id);
+        }
 
-            return req.storage.updateGroup(currentId, group)
-              .then(recursiveUpdate)
-              .catch(err => reply.error(err));
-          });
-      }
-
-      return reply().code(204);
-    };
-
-    recursiveUpdate();
+        return req.storage.updateGroup(id, group);
+      }))
+      .then(() => reply().code(204))
+      .catch(err => reply.error(err));
   }
 });
