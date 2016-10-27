@@ -152,6 +152,31 @@ export const getParentGroups = (groups, selectedGroups) => {
 };
 
 /*
+ * Resolve all roles for a list of groups.
+ */
+export const getRolesForGroups = (selectedGroups, selectedRoles) => {
+  const result = [];
+  const groups = { };
+  selectedGroups.forEach(group => {
+    if (group.roles) {
+      group.roles.forEach(role => {
+        if (!groups[role]) {
+          groups[role] = group;
+        }
+      });
+    }
+  });
+
+  selectedRoles.forEach(role => {
+    if (groups[role._id]) { // eslint-disable-line no-underscore-dangle
+      result.push({ role, group: groups[role._id] }); // eslint-disable-line no-underscore-dangle
+    }
+  });
+
+  return result;
+};
+
+/*
  * Resolve all users for a list of groups.
  */
 export const getMembers = (selectedGroups) => {
