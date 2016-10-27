@@ -28,21 +28,24 @@ class GroupHeader extends Component {
     this.props.editGroup(this.props.groupJSON.record);
   }
 
-  save = () => {
-    this.props.saveGroup(this.props.groupJSON.record);
+  save = (group) => {
+    this.props.updateGroup(group, ()=> {
+      this.props.fetchGroup(this.props.id);
+    });
   }
 
   clear = () => {
     this.props.closeUpdate();
   }
 
-
   requestDeleteGroup = () => {
     this.props.requestDeleteGroup(this.props.groupJSON.record);
   }
 
-  confirmDelete = () => {
-    this.props.deleteGroup(this.props.group.groupJSON.record);
+  confirmDelete = (group) => {
+    this.props.deleteGroup(group, () => {
+      this.props.goToGroups();
+    });
   }
 
   cancelDelete = () => {
@@ -84,7 +87,17 @@ class GroupHeader extends Component {
 
 GroupHeader.propTypes = {
   group: React.PropTypes.object.isRequired,
-  members: React.PropTypes.object.isRequired
+  members: React.PropTypes.object.isRequired,
+  groupJSON: React.PropTypes.object.isRequired,
+  editGroup: React.PropTypes.func.isRequired,
+  updateGroup: React.PropTypes.func.isRequired,
+  closeUpdate: React.PropTypes.func.isRequired,
+  requestDeleteGroup: React.PropTypes.func.isRequired,
+  deleteGroup: React.PropTypes.func.isRequired,
+  closeDelete: React.PropTypes.func.isRequired,
+  fetchGroup: React.PropTypes.func.isRequired,
+  id: React.PropTypes.string.isRequired,
+  goToGroups: React.PropTypes.func.isRequired
 };
 
 export default GroupHeader;

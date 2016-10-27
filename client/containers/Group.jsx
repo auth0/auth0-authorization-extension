@@ -117,11 +117,14 @@ export class GroupContainer extends Component {
               groupJSON={group.toJSON()}
               members={group.get('members')}
               editGroup={this.props.editGroup}
-              saveGroup={this.props.saveGroup}
+              updateGroup={this.props.updateGroup}
               closeUpdate={this.props.closeUpdate}
               requestDeleteGroup={this.props.requestDeleteGroup}
               deleteGroup={this.props.deleteGroup}
               closeDelete={this.props.closeDelete}
+              fetchGroup={this.props.fetchGroup}
+              id={this.props.params.id}
+              goToGroups={this.props.goToGroups}
             />
           </div>
         </div>
