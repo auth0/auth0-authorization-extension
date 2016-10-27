@@ -10,6 +10,6 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => deleteApi()
-    .then(() => reply())
+    .then(() => reply().code(204))
     .catch(err => reply.error(err))
 });

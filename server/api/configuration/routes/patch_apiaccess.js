@@ -17,6 +17,6 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => updateApi(req.payload.token_lifetime)
-    .then(() => reply())
+    .then(() => reply().code(204))
     .catch(err => reply.error(err))
 });
