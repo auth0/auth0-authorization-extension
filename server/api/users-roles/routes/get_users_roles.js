@@ -3,13 +3,13 @@ import _ from 'lodash';
 
 module.exports = () => ({
   method: 'GET',
-  path: '/api/users/{id}/groups',
+  path: '/api/users/{id}/roles',
   config: {
     auth: {
       strategies: [ 'jwt' ],
-      scope: [ 'read:groups' ]
+      scope: [ 'read:roles' ]
     },
-    description: 'Get the groups for a user.',
+    description: 'Get the roles for a user.',
     validate: {
       params: {
         id: Joi.string().required()

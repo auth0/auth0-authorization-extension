@@ -2,14 +2,14 @@ import Promise from 'bluebird';
 import Joi from 'joi';
 
 module.exports = () => ({
-  method: 'PATCH',
+  method: 'DELETE',
   path: '/api/users/{id}/roles',
   config: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:roles' ]
     },
-    description: 'Add a single user to roles.',
+    description: 'Remove a single user from roles.',
     validate: {
       params: {
         id: Joi.string().required()
@@ -25,8 +25,9 @@ module.exports = () => ({
         if (!role.users) {
           role.users = []; // eslint-disable-line no-param-reassign
         }
-        if (role.users.indexOf(req.params.id) === -1) {
-          role.users.push(req.params.id);
+        const index = role.users.indexOf(req.params.id);
+        if (index > -1) {
+          role.users.splice(index, 1);
         }
 
         return req.storage.updateRole(id, role);
