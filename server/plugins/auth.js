@@ -113,7 +113,7 @@ module.exports.register = (server, options, next) => {
           return callback(null, true, decoded);
         }
 
-        return callback(null, true);
+        return callback(null, false);
       },
 
       // Validate the audience and the issuer.

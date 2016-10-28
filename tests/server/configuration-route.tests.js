@@ -9,10 +9,8 @@ describe('configuration-route', () => {
   let storageData = null;
 
   before((done) => {
-    db.getConfiguration = () => Promise.resolve({
-      groupsInToken: false,
-      rolesInToken: true
-    });
+    db.getStatus = () => Promise.resolve({ size: 10, type: 'default' });
+    db.getConfiguration = () => Promise.resolve({ groupsInToken: false, rolesInToken: true });
     db.updateConfiguration = (data) => Promise.resolve(data);
     db.provider = {
       storageContext: {
@@ -65,6 +63,8 @@ describe('configuration-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.rule).to.be.an('object');
+        expect(response.result.database).to.be.an('object');
+        expect(response.result.database.size).to.be.equal(10);
         cb();
       });
     });
@@ -80,6 +80,21 @@ describe('configuration-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.key).to.equal('value');
+        cb();
+      });
+    });
+
+    it('should return resource-server data', (cb) => {
+      const options = {
+        method: 'GET',
+        url: '/api/configuration/resource-server',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.enabled).to.be.a('boolean');
         cb();
       });
     });
@@ -122,6 +137,25 @@ describe('configuration-route', () => {
         cb();
       });
     });
+
+    it('should update resource-server', (cb) => {
+      const options = {
+        method: 'PATCH',
+        url: '/api/configuration/resource-server',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        payload: {
+          apiAccess: true,
+          token_lifetime: 10
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.equal(204);
+        cb();
+      });
+    });
   });
 
   describe('#post', () => {
@@ -144,7 +178,7 @@ describe('configuration-route', () => {
       });
     });
 
-    it('should return update configuration', (cb) => {
+    it('should import configuration', (cb) => {
       const options = {
         method: 'POST',
         url: '/api/configuration/import',
@@ -160,8 +194,25 @@ describe('configuration-route', () => {
       };
 
       server.inject(options, (response) => {
-        expect(response.statusCode).to.equal(200);
+        expect(response.statusCode).to.equal(204);
         expect(storageData.configuration[0].persistRoles).to.equal(true);
+        cb();
+      });
+    });
+  });
+
+  describe('#delete', () => {
+    it('should delete resource-server', (cb) => {
+      const options = {
+        method: 'DELETE',
+        url: '/api/configuration/resource-server',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.equal(204);
         cb();
       });
     });

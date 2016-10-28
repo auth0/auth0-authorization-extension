@@ -14,6 +14,12 @@ describe('users-groups-route', () => {
 
   before((done) => {
     db.getGroups = () => Promise.resolve([ group ]);
+    db.getGroup = () => Promise.resolve(group);
+    db.updateGroup = (id, data) => {
+      group.id = id;
+      group.members = data.members;
+      return Promise.resolve();
+    };
     done();
   });
 
@@ -57,7 +63,6 @@ describe('users-groups-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result).to.be.a('array');
-        console.log(response.result);
         expect(response.result[0]._id).to.be.equal(group._id);
         expect(response.result[0].name).to.be.equal(group.name);
         cb();
@@ -76,6 +81,26 @@ describe('users-groups-route', () => {
       server.inject(options, (response) => {
         expect(response.result).to.be.a('array');
         expect(response.result.length).to.be.equal(0);
+        cb();
+      });
+    });
+  });
+
+  describe('#patch', () => {
+    it('should add user to groups', (cb) => {
+      const options = {
+        method: 'PATCH',
+        url: `/api/users/${userId}/groups`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        payload: [ group._id ]
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.equal(204);
+        expect(group.id).to.be.equal(group._id);
+        expect(group.members[0]).to.be.equal(userId);
         cb();
       });
     });
