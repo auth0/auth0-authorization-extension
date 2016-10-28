@@ -32,12 +32,12 @@ export default class RolesOverview extends Component {
         value: 'name',
         title: 'Name',
         filterBy: 'name'
-      },
-      {
-        value: 'application',
-        title: 'Application',
-        filterBy: 'applicationId' //TODO match with app name
-      }
+      }//,
+      // {
+      //   value: 'application',
+      //   title: 'Application',
+      //   filterBy: 'applicationId'
+      // }
     ];
 
     this.state = {

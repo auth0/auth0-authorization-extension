@@ -32,11 +32,11 @@ export default class PermissionsOverview extends Component {
         selected: true,
         filterBy: 'name'
       },
-      {
-        value: 'application',
-        title: 'Application',
-        filterBy: 'applicationId' //TODO match with app name
-      },
+      // {
+      //   value: 'application',
+      //   title: 'Application',
+      //   filterBy: 'applicationId'
+      // },
       {
         value: 'description',
         title: 'Description',
