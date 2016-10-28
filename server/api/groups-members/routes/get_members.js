@@ -1,7 +1,6 @@
-import _ from 'lodash';
 import Joi from 'joi';
 
-import { getUsersByIds } from '../../../lib/users';
+import { getUsersById } from '../../../lib/users';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -20,14 +19,14 @@ module.exports = (server) => ({
         id: Joi.string().guid().required()
       },
       query: {
-        per_page: Joi.number().integer().min(1).max(200).default(25),
+        per_page: Joi.number().integer().min(1).max(25).default(25),
         page: Joi.number().integer().min(0).default(0)
       }
     }
   },
   handler: (req, reply) =>
     req.storage.getGroup(req.params.id)
-      .then(group => getUsersByIds(req.pre.auth0, group.members || [], req.query.page, req.query.per_page))
+      .then(group => getUsersById(req.pre.auth0, group.members || [], req.query.page, req.query.per_page))
       .then(users => reply(users))
       .catch(err => reply.error(err))
 });
