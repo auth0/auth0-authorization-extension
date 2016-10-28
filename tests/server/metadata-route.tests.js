@@ -1,18 +1,8 @@
 import { expect } from 'chai';
-import createServer from '../../server';
-import { init as initDb } from '../../server/lib/storage/getdb';
+import { getServerData } from '../server';
 
 describe('metadata-route', () => {
-  let server = null;
-
-  before((done) => {
-    initDb({ });
-
-    createServer((err, s) => {
-      server = s;
-      done(err);
-    });
-  });
+  const { server } = getServerData();
 
   describe('#get', () => {
     it('should return the webtask.json file', (cb) => {

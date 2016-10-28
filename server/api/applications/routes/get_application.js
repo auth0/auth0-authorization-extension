@@ -11,7 +11,7 @@ module.exports = (server) => ({
     description: 'Get a single application based on its Client ID.',
     validate: {
       params: {
-        id: Joi.string().required()
+        clientId: Joi.string().required()
       }
     },
     pre: [

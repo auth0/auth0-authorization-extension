@@ -57,6 +57,7 @@
     "eslint-plugin-import": "^2.0.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.4.0",
+    "expect": "^1.20.2",
     "glob": "^7.0.3",
     "good": "^7.0.1",
     "good-console": "^6.1.2",
