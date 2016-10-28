@@ -15,7 +15,7 @@ export function login(returnUrl) {
 
 export function logout() {
   return (dispatch) => {
-    localStorage.removeItem('authz:token');
+    sessionStorage.removeItem('authz:token');
 
     dispatch({
       type: constants.LOGOUT_SUCCESS
@@ -25,14 +25,14 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    if (window.location.hash || localStorage.getItem('authz:token')) {
+    if (window.location.hash || sessionStorage.getItem('authz:token')) {
       const hash = parseHash(window.location.hash);
       let accessToken = null;
 
       if (hash && hash.accessToken) {
         accessToken = hash.accessToken;
-      } else if (localStorage.getItem('authz:token')) {
-        accessToken = localStorage.getItem('authz:token');
+      } else if (sessionStorage.getItem('authz:token')) {
+        accessToken = sessionStorage.getItem('authz:token');
       }
 
       if (accessToken) {
@@ -43,7 +43,7 @@ export function loadCredentials() {
 
         axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
 
-        localStorage.setItem('authz:token', accessToken);
+        sessionStorage.setItem('authz:token', accessToken);
 
         dispatch({
           type: constants.RECIEVED_TOKEN,
