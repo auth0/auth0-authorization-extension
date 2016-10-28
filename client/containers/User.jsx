@@ -80,7 +80,7 @@ export class UserContainer extends Component {
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Roles">
-                <UserRoles />
+                <UserRoles user={user.record} />
               </Tab>
             </Tabs>
           </div>

@@ -79,7 +79,7 @@ export function fetchUserAuthorization(user) {
 export function fetchUser(userId) {
   return (dispatch) => {
     dispatch(fetchUserDetail(userId, (payload) => {
-      dispatch(fetchUserAuthorization(payload.data.user));
+      dispatch(fetchUserAuthorization(payload.data));
     }));
     dispatch(fetchUserGroups(userId));
   };
