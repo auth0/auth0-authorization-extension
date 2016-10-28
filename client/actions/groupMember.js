@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import axios from 'axios';
 import * as constants from '../constants';
 
@@ -41,6 +42,8 @@ export function fetchGroupMembersNested(groupId, reload) {
  * Add the selected users members to a group.
  */
 export function addGroupMembers(groupId, members, callback) {
+  const membersIds = _.map(members, 'value');
+
   return (dispatch) => {
     dispatch({
       type: constants.ADD_GROUP_MEMBERS,
@@ -48,7 +51,7 @@ export function addGroupMembers(groupId, members, callback) {
         promise: axios({
           method: 'patch',
           url: `/api/groups/${groupId}/members`,
-          data: members,
+          data: membersIds,
           responseType: 'json'
         })
       },

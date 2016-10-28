@@ -1,48 +1,26 @@
-import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
-import connectContainer from 'redux-static';
 import { Multiselect } from 'auth0-extension-ui';
 
 import createForm from '../../utils/createForm';
-import UsersTablePicker from '../Users/UsersTablePicker';
-import { userActions } from '../../actions';
 
-export default createForm('groupMembers', connectContainer(class GroupMembersDialog extends React.Component {
+export default createForm('groupMembers', class GroupMembersDialog extends React.Component {
 
   static propTypes = {
     group: PropTypes.object.isRequired,
     onClose: PropTypes.func,
     fetchUsers: React.PropTypes.func.isRequired,
     totalUsers: React.PropTypes.number,
-    users: React.PropTypes.array
+    users: React.PropTypes.array,
+    loading: React.PropTypes.bool.isRequired,
+    submitting: React.PropTypes.bool,
+    handleSubmit: React.PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.getOptions = this.getOptions.bind(this);
-  }
-
-  static stateToProps = (state) => {
-    const stateUsers = state.users.get('records').toJS();
-    let users;
-    if (stateUsers && stateUsers.length) {
-      users = _.map(stateUsers, (user) => ({
-        value: user.user_id,
-        label: user.name,
-        email: user.email
-      }));
-    }
-
-    return {
-      totalUsers: state.users.get('total'),
-      users
-    };
-  };
-
-  static actionsToProps = {
-    ...userActions
   }
 
   getOptions(input, callback) {
@@ -64,7 +42,7 @@ export default createForm('groupMembers', connectContainer(class GroupMembersDia
 
   render() {
     const group = this.props.group.toJS();
-    const title = `Manage ${group.record.name} users`;
+    const title = `Add members to "${group.record.name}"`;
     const isVisible = group.isEditUsers;
 
     return (
@@ -73,24 +51,23 @@ export default createForm('groupMembers', connectContainer(class GroupMembersDia
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="modal-description">Add or remove members from this group.</p>
+          <p className="modal-description">Add members to this group.</p>
           <label>Add members</label>
           <Field
             name="members"
             component={Multiselect}
             loadOptions={this.getOptions}
           />
-        { /* @todo: Add UsersTablePicker component with users data  */}
         </Modal.Body>
         <Modal.Footer>
           <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting}> {/* @todo add handleSubmit */}
+          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.props.handleSubmit}>
             Save
           </Button>
         </Modal.Footer>
       </Modal>
     );
   }
-}));
+});

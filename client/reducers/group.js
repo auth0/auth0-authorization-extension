@@ -80,7 +80,7 @@ export const group = createReducer(fromJS(initialState), {
       ...initialState,
       isEditUsers: true,
       record: action.payload.group,
-      groupId: action.payload.group_id
+      groupId: action.payload.group._id
     }),
   [constants.SAVE_GROUP_PENDING]: (state) =>
     state.merge({
