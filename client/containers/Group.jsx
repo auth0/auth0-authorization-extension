@@ -33,7 +33,7 @@ export class GroupContainer extends Component {
   }
 
   addMember() {
-    this.props.openUserPicker(`Add members to "${this.props.group.get('record').get('name')}"`);
+    this.props.openUserPicker(`Add members to ${this.props.group.get('record').get('name')}`);
   }
 
   requestRemoveMember(user) {

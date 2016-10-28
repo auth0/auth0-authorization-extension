@@ -42,7 +42,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
 
   render() {
     const group = this.props.group.toJS();
-    const title = `Add members to "${group.record.name}"`;
+    const title = `Add members to ${group.record.name}`;
     const isVisible = group.isEditUsers;
 
     return (
