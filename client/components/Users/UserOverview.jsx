@@ -12,19 +12,51 @@ class UserOverview extends React.Component {
   constructor() {
     super();
 
-    this.onReset = this.onReset.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
+    this.searchBarOptions = [
+      {
+        value: 'user',
+        title: 'User',
+        filterBy: ''
+      },
+      {
+        value: 'email',
+        title: 'Email',
+        filterBy: 'email'
+      },
+      {
+        value: 'connection',
+        title: 'Connection',
+        filterBy: 'identities.connection'
+      }
+    ];
+
+    this.state = {
+      selectedFilter: this.searchBarOptions[0]
+    };
+
     this.renderActions = this.renderActions.bind(this);
+
+    // Searchbar.
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onHandleOptionChange = this.onHandleOptionChange.bind(this);
   }
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.props.onSearch(this.searchInput.value);
+      e.preventDefault();
+      this.props.onSearch(`${e.target.value}*`, this.state.selectedFilter.filterBy);
     }
   }
 
   onReset() {
     this.props.onReset();
+  }
+
+  onHandleOptionChange(option) {
+    this.setState({
+      selectedFilter: option
+    });
   }
 
   renderActions(user, index) {
@@ -79,22 +111,10 @@ class UserOverview extends React.Component {
             <div className="col-xs-12">
               <SearchBar
                 placeholder="Search for users"
-                searchOptions={[
-                  {
-                    value: 'user',
-                    title: 'User'
-                  },
-                  {
-                    value: 'email',
-                    title: 'Email'
-                  },
-                  {
-                    value: 'connection',
-                    title: 'Connection'
-                  }
-                ]}
-                handleKeyPress={() => { console.log('SearchBar key press'); }}
-                handleReset={() => { console.log('SearchBar handleReset'); }}
+                searchOptions={this.searchBarOptions}
+                handleKeyPress={this.onKeyPress}
+                handleReset={this.onReset}
+                handleOptionChange={this.onHandleOptionChange}
               />
             </div>
           </div>

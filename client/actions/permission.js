@@ -6,11 +6,15 @@ import * as constants from '../constants';
 /*
  * Load all available permissions.
  */
-export function fetchPermissions() {
+export function fetchPermissions(q = '', field = '') {
   return {
     type: constants.FETCH_PERMISSIONS,
     payload: {
       promise: axios.get('/api/permissions', {
+        params: {
+          q,
+          field
+        },
         responseType: 'json'
       })
     }

@@ -6,11 +6,15 @@ import * as constants from '../constants';
 /*
  * Load all available roles.
  */
-export function fetchRoles() {
+export function fetchRoles(q = '', field = '') {
   return {
     type: constants.FETCH_ROLES,
     payload: {
       promise: axios.get('/api/roles', {
+        params: {
+          q,
+          field
+        },
         responseType: 'json'
       })
     }
