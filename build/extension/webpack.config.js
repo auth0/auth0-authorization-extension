@@ -87,7 +87,8 @@ module.exports = externalModules.then((externals) => {
           CLIENT_VERSION: JSON.stringify(project.version),
           MAX_DB_SIZE: 512000,
           MAX_MULTISELECT_USERS: 10,
-          MAX_MULTISELECT_INPUT_CHAR: 2
+          MAX_MULTISELECT_INPUT_CHAR: 2,
+          PER_PAGE: 2
         }
       })
     ],

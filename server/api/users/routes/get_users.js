@@ -22,11 +22,12 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) => {
+    const page = (req.query.page - 1 < 0) ? 0 : req.query.page - 1;
     const options = {
       sort: 'last_login:-1',
       q: req.query.field ? `${req.query.field}:${req.query.q}` : req.query.q,
       per_page: req.query.per_page || 100,
-      page: req.query.page || 0,
+      page: page || 0,
       include_totals: true,
       fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked',
       search_engine: 'v2'
