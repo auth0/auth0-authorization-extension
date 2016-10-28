@@ -15,6 +15,8 @@ export function login(returnUrl) {
 
 export function logout() {
   return (dispatch) => {
+    localStorage.removeItem('apiToken');
+
     dispatch({
       type: constants.LOGOUT_SUCCESS
     });
@@ -23,33 +25,41 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    if (window.location.hash) {
+    if (window.location.hash || localStorage.getItem('apiToken')) {
       const hash = parseHash(window.location.hash);
+      let accessToken = null;
+
       if (hash && hash.accessToken) {
-        const decodedToken = decodeToken(hash.accessToken);
+        accessToken = hash.accessToken;
+      } else if (localStorage.getItem('apiToken')) {
+        accessToken = localStorage.getItem('apiToken');
+      }
+
+      if (accessToken) {
+        const decodedToken = decodeToken(accessToken);
         if (isTokenExpired(decodedToken)) {
           return;
         }
 
-        axios.defaults.headers.common.Authorization = `Bearer ${hash.accessToken}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+        localStorage.setItem('apiToken', accessToken);
 
         dispatch({
           type: constants.RECIEVED_TOKEN,
           payload: {
-            token: hash.access_token
+            token: accessToken
           }
         });
 
         dispatch({
           type: constants.LOGIN_SUCCESS,
           payload: {
-            token: hash.access_token,
+            token: accessToken,
             decodedToken,
             user: decodedToken
           }
         });
-
-        return;
       }
     }
   };
