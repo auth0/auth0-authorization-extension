@@ -96,7 +96,7 @@ module.exports = {
         MAX_DB_SIZE: 512000,
         MAX_MULTISELECT_USERS: 10,
         MAX_MULTISELECT_INPUT_CHAR: 2,
-        PER_PAGE: 2
+        PER_PAGE: 5
       },
       __CLIENT__: JSON.stringify(true),
       __SERVER__: JSON.stringify(false)

@@ -88,7 +88,7 @@ module.exports = externalModules.then((externals) => {
           MAX_DB_SIZE: 512000,
           MAX_MULTISELECT_USERS: 10,
           MAX_MULTISELECT_INPUT_CHAR: 2,
-          PER_PAGE: 2
+          PER_PAGE: 5
         }
       })
     ],
