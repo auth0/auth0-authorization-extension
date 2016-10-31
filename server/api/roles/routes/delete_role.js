@@ -5,7 +5,7 @@ module.exports = () => ({
   path: '/api/roles/{id}',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'delete:roles' ]
     },
     description: 'Delete a role.',

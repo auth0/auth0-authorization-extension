@@ -5,13 +5,14 @@ module.exports = (server) => ({
   path: '/api/users',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'read:users' ]
     },
     description: 'Get all users.',
     validate: {
       query: {
-        search: Joi.string().max(1000).allow('').default(''),
+        q: Joi.string().max(1000).allow('').default(''),
+        field: Joi.string().max(1000).allow('').default(''),
         per_page: Joi.number().integer().min(1).max(200).default(100),
         page: Joi.number().integer().min(0).default(0)
       }
@@ -23,7 +24,7 @@ module.exports = (server) => ({
   handler: (req, reply) => {
     const options = {
       sort: 'last_login:-1',
-      q: req.query.search,
+      q: req.query.field ? `${req.query.field}:${req.query.q}` : req.query.q,
       per_page: req.query.per_page || 100,
       page: req.query.page || 0,
       include_totals: true,

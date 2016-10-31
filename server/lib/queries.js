@@ -152,6 +152,49 @@ export const getParentGroups = (groups, selectedGroups) => {
 };
 
 /*
+ * Resolve all roles for a list of groups.
+ */
+export const getRolesForGroups = (selectedGroups, selectedRoles) => {
+  const result = [];
+  const groups = { };
+  selectedGroups.forEach(group => {
+    if (group.roles) {
+      group.roles.forEach(role => {
+        if (!groups[role]) {
+          groups[role] = group;
+        }
+      });
+    }
+  });
+
+  selectedRoles.forEach(role => {
+    if (groups[role._id]) { // eslint-disable-line no-underscore-dangle
+      result.push({ role, group: groups[role._id] }); // eslint-disable-line no-underscore-dangle
+    }
+  });
+
+  return result;
+};
+
+/*
+ * Get all roles for a user.
+ */
+export const getRolesForUser = (database, userId) =>
+  database.getGroups()
+    .then(groups => {
+      // get all groups user belong to
+      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+      return getParentGroups(groups, userGroups)
+        .filter(group => group.roles && group.roles.length)
+        .map(group => group.roles); // return roles for user's groups and their parents
+    })
+    .then(roles => _.uniq(_.flattenDeep(roles)))
+    .then(roleIds =>
+      database.getRoles()
+        .then(roles => _.filter(roles, role => _.includes(roleIds, role._id)))
+    );
+
+/*
  * Resolve all users for a list of groups.
  */
 export const getMembers = (selectedGroups) => {

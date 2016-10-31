@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import './Users.styl';
 
@@ -6,6 +6,9 @@ import * as actions from '../actions/user';
 import UserOverview from '../components/Users/UserOverview';
 
 class Users extends React.Component {
+  static propTypes = {
+    fetchUsers: PropTypes.func.isRequired
+  }
   constructor() {
     super();
 
@@ -17,12 +20,12 @@ class Users extends React.Component {
     this.props.fetchUsers();
   }
 
-  onSearch(query) {
-    this.props.fetchUsers(query);
+  onSearch(query, field) {
+    this.props.fetchUsers(query, field);
   }
 
   onReset() {
-    this.props.fetchUsers('', true);
+    this.props.fetchUsers('', '', true);
   }
 
   render() {
@@ -34,8 +37,13 @@ class Users extends React.Component {
 
     return (
       <div className="users-section">
-        <UserOverview onReset={this.onReset} onSearch={this.onSearch}
-          error={error} users={users} total={total} loading={loading}
+        <UserOverview
+          onReset={this.onReset}
+          onSearch={this.onSearch}
+          error={error}
+          users={users}
+          total={total}
+          loading={loading}
         />
       </div>
     );

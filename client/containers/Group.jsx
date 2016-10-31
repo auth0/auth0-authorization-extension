@@ -1,9 +1,10 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions } from '../actions';
+import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
 import GroupRoles from '../components/Groups/GroupRoles';
@@ -32,7 +33,7 @@ export class GroupContainer extends Component {
   }
 
   addMember() {
-    this.props.openUserPicker(`Add members to "${this.props.group.get('record').get('name')}"`);
+    this.props.openUserPicker(`Add members to ${this.props.group.get('record').get('name')}`);
   }
 
   requestRemoveMember(user) {
@@ -47,10 +48,10 @@ export class GroupContainer extends Component {
     this.props.removeGroupMember(groupId, userId);
   }
 
-  addMembers(users) {
+  addMembers(data) {
     const groupId = this.props.group.get('groupId');
     this.props.cancelUserPicker();
-    this.props.addGroupMembers(groupId, users, () => {
+    this.props.addGroupMembers(groupId, data.members, () => {
       this.props.fetchGroupMembers(groupId, true);
       this.props.fetchGroupMembersNested(groupId, true);
     });
@@ -85,6 +86,18 @@ export class GroupContainer extends Component {
     this.props.removeNestedGroup(groupId, nestedGroupId);
   }
 
+  getUserPickerDialogUsers(records) {
+    let users;
+    if (records && records.length) {
+      users = _.map(records, (user) => ({
+        value: user.user_id,
+        label: user.name,
+        email: user.email
+      }));
+    }
+    return users;
+  }
+
   renderLoading() {
     return (
       <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
@@ -94,7 +107,7 @@ export class GroupContainer extends Component {
   }
 
   render() {
-    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, addRoles } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users } = this.props;
 
     if (group.get('loading')) { return this.renderLoading(); }
 
@@ -103,7 +116,11 @@ export class GroupContainer extends Component {
         <div>
           <UserPickerDialog
             userPicker={userPicker} onSelectUser={this.props.selectUser} onUnselectUser={this.props.unselectUser}
-            onConfirm={this.addMembers} onCancel={this.props.cancelUserPicker} onReset={this.props.resetUserPicker} onSearch={this.props.searchUserPicker}
+            onSubmit={this.addMembers} onCancel={this.props.cancelUserPicker} onReset={this.props.resetUserPicker}
+            onSearch={this.props.searchUserPicker}
+            totalUsers={users.get('total')}
+            users={this.getUserPickerDialogUsers(users.get('records').toJS())}
+            fetchUsers={this.props.fetchUsers}
           />
           <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
           <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.saveGroupMapping} onClose={this.props.clearGroupMapping} />
@@ -131,12 +148,12 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group_tabs">
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
               <Tab eventKey={1} title="Members">
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <GroupRoles group={this.props.group} addRoles={addRoles} openAddRoles={this.props.openAddRoles} closeAddRoles={this.props.closeAddRoles} />
+                <GroupRoles />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
@@ -165,20 +182,22 @@ GroupContainer.propTypes = {
   requestDeleteGroupMapping: PropTypes.func.isRequired,
   deleteGroupMapping: PropTypes.func.isRequired,
   saveGroupMapping: PropTypes.func.isRequired,
-  clearGroupMapping: PropTypes.func.isRequired
+  clearGroupMapping: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     connections: state.connections,
     group: state.group,
-    addRoles: state.group.get('addRoles'),
     groupNested: state.groupNested,
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,
     groupPicker: state.groupPicker,
-    userPicker: state.userPicker
+    userPicker: state.userPicker,
+    users: state.users
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions })(GroupContainer);

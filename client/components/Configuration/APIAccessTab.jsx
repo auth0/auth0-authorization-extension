@@ -63,7 +63,7 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
       </div>
     );
   }
-});
+}, { enableReinitialize: true });
 
 // Decorate with connect to read form values
 const selector = formValueSelector('apiAccessForm');

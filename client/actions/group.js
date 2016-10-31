@@ -9,11 +9,15 @@ import { fetchNestedGroups } from './groupNested';
 /*
  * Load all available groups.
  */
-export function fetchGroups() {
+export function fetchGroups(q = '', field = '') {
   return {
     type: constants.FETCH_GROUPS,
     payload: {
       promise: axios.get('/api/groups', {
+        params: {
+          q,
+          field
+        },
         responseType: 'json'
       })
     }

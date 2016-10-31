@@ -45,7 +45,9 @@ describe('importExport reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the config: ERROR',
-        record: {}
+        record: {},
+        requesting: false,
+        preview: {}
       }
     );
   });

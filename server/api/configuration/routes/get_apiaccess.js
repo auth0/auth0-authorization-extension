@@ -5,11 +5,11 @@ module.exports = () => ({
   path: '/api/configuration/resource-server',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'read:resource-server' ]
     }
   },
   handler: (req, reply) => getApi(true)
-    .then((api) => reply({ enabled: !!api.identifier, token_lifetime: api.token_lifetime }))
+    .then((api) => reply({ apiAccess: !!api.identifier, token_lifetime: api.token_lifetime }))
     .catch(err => reply.error(err))
 });

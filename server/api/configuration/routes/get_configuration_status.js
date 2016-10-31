@@ -5,7 +5,7 @@ module.exports = (server) => ({
   path: '/api/configuration/status',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'read:configuration' ]
     },
     pre: [

@@ -1,14 +1,14 @@
+import 'good-console';
 import Hapi from 'hapi';
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
 import Blipp from 'blipp';
+import jwt from 'hapi-auth-jwt2';
 
-import 'good-console';
-
-import plugins from './plugins';
 import config from './lib/config';
 import logger from './lib/logger';
+import plugins from './plugins';
 
 export default (cb) => {
   const goodPlugin = {
@@ -39,7 +39,8 @@ export default (cb) => {
       }
     }
   });
-  server.register([ goodPlugin, Inert, Blipp, ...plugins ], (err) => {
+
+  server.register([ goodPlugin, Inert, Blipp, jwt, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
     }

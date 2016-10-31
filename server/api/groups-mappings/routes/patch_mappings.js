@@ -6,7 +6,7 @@ module.exports = () => ({
   path: '/api/groups/{id}/mappings',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'update:groups' ]
     },
     description: 'Create one or more mappings in a group.',

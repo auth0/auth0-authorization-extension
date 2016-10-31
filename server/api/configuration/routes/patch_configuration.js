@@ -8,7 +8,7 @@ module.exports = (server) => ({
   path: '/api/configuration',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'update:configuration' ]
     },
     pre: [

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Joi from 'joi';
 
 import { getUsersById } from '../../../lib/users';
@@ -8,7 +7,7 @@ module.exports = (server) => ({
   path: '/api/groups/{id}/members',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'read:groups' ]
     },
     description: 'Get the members for a group.',
@@ -18,13 +17,16 @@ module.exports = (server) => ({
     validate: {
       params: {
         id: Joi.string().guid().required()
+      },
+      query: {
+        per_page: Joi.number().integer().min(1).max(25).default(25),
+        page: Joi.number().integer().min(0).default(0)
       }
     }
   },
   handler: (req, reply) =>
     req.storage.getGroup(req.params.id)
-      .then(group => getUsersById(req.pre.auth0, group.members || [], {}))
-      .then(users => _.sortByOrder(users, [ 'last_login' ], [ false ]))
+      .then(group => getUsersById(req.pre.auth0, group.members || [], req.query.page, req.query.per_page))
       .then(users => reply(users))
       .catch(err => reply.error(err))
 });

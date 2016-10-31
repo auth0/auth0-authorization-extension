@@ -5,7 +5,7 @@ module.exports = () => ({
   path: '/api/configuration/import',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'update:configuration' ]
     },
     validate: {

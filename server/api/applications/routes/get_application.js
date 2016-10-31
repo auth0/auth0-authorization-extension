@@ -5,13 +5,13 @@ module.exports = (server) => ({
   path: '/api/applications/{clientId}',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'read:applications' ]
     },
     description: 'Get a single application based on its Client ID.',
     validate: {
       params: {
-        id: Joi.string().required()
+        clientId: Joi.string().required()
       }
     },
     pre: [

@@ -7,7 +7,7 @@ module.exports = () => ({
   path: '/api/groups/{id}/members',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'update:groups' ]
     },
     description: 'Add one or more members in a group.',

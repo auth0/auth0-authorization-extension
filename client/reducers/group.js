@@ -81,7 +81,7 @@ export const group = createReducer(fromJS(initialState), {
       ...initialState,
       isEditUsers: true,
       record: action.payload.group,
-      groupId: action.payload.group_id
+      groupId: action.payload.group._id
     }),
   [constants.SAVE_GROUP_PENDING]: (state) =>
     state.merge({
@@ -356,7 +356,8 @@ const groupMembers = createReducer(fromJS(initialState.members), {
   [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(action.payload.data.map(user => {
+      total: fromJS(action.payload.data.total),
+      records: fromJS(action.payload.data.users.map(user => {
         user.last_login_relative = moment(user.last_login).fromNow();
         return user;
       }))
@@ -406,6 +407,7 @@ const nestedMembers = createReducer(fromJS(initialState.nestedMembers), {
   [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(action.payload.data)
+      total: fromJS(action.payload.data.total),
+      records: fromJS(action.payload.data.nested)
     })
 });

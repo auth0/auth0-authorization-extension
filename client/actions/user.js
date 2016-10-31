@@ -6,16 +6,17 @@ import { fetchUserGroups } from './userGroup';
 /*
  * Search for users.
  */
-export function fetchUsers(search = '', reset = false, page = 0) {
+export function fetchUsers(q = '', field = '', reset = false, page = 0) {
   return (dispatch, getState) => {
     const users = getState().users.get('records');
-    if (reset || search !== '' || !users.size) {
+    if (reset || q !== '' || !users.size) {
       dispatch({
         type: constants.FETCH_USERS,
         payload: {
           promise: axios.get('/api/users', {
             params: {
-              search,
+              q,
+              field,
               page
             },
             responseType: 'json'

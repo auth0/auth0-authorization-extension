@@ -15,15 +15,16 @@ nconf
   .env()
   .file(path.join(__dirname, './server/config.json'))
   .defaults({
+    AUTH0_RTA: 'auth0.auth0.com',
     DATA_CACHE_MAX_AGE: 1000 * 10,
     NODE_ENV: 'development',
     HOSTING_ENV: 'default',
-    PORT: 3000,
+    PORT: 3001,
     USE_OAUTH2: false
   });
 
 // Start the server.
-require('./server/init')({ configProvider: (key) => nconf.get(key) }, (err, hapi) => {
+return require('./server/init')({ configProvider: (key) => nconf.get(key) }, (err, hapi) => {
   if (err) {
     return logger.error(err);
   }

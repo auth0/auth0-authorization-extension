@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import * as constants from '../constants';
 
-import { parseHash, isTokenExpired, decodeToken } from '../utils/auth';
+import { isTokenExpired, decodeToken } from '../utils/auth';
 import { show } from '../utils/lock';
 
 export function login(returnUrl) {
@@ -15,6 +15,8 @@ export function login(returnUrl) {
 
 export function logout() {
   return (dispatch) => {
+    sessionStorage.removeItem('authz:apiToken');
+
     dispatch({
       type: constants.LOGOUT_SUCCESS
     });
@@ -23,34 +25,32 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    if (window.location.hash) {
-      const hash = parseHash(window.location.hash);
-      if (hash && hash.accessToken) {
-        const decodedToken = decodeToken(hash.accessToken);
-        if (isTokenExpired(decodedToken)) {
-          return;
-        }
-
-        axios.defaults.headers.common.Authorization = `Bearer ${hash.accessToken}`;
-
-        dispatch({
-          type: constants.RECIEVED_TOKEN,
-          payload: {
-            token: hash.access_token
-          }
-        });
-
-        dispatch({
-          type: constants.LOGIN_SUCCESS,
-          payload: {
-            token: hash.access_token,
-            decodedToken,
-            user: decodedToken
-          }
-        });
-
+    const apiToken = sessionStorage.getItem('authz:apiToken');
+    if (apiToken) {
+      const decodedToken = decodeToken(apiToken);
+      if (isTokenExpired(decodedToken)) {
         return;
       }
+
+      axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
+
+      sessionStorage.setItem('authz:token', apiToken);
+
+      dispatch({
+        type: constants.RECIEVED_TOKEN,
+        payload: {
+          token: apiToken
+        }
+      });
+
+      dispatch({
+        type: constants.LOGIN_SUCCESS,
+        payload: {
+          token: apiToken,
+          decodedToken,
+          user: decodedToken
+        }
+      });
     }
   };
 }

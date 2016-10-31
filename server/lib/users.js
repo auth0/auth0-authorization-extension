@@ -1,14 +1,17 @@
 import async from 'async';
 import Promise from 'bluebird';
 
-export function getUsersById(client, users, options) {
+export function getUsersById(client, ids, page, limit) {
   return new Promise((resolve, reject) => {
-    const records = [];
+    const users = [];
+    const total = ids.length;
 
-    async.eachLimit(users, 10, (userId, cb) => {
+    ids = ids.splice(page * limit, limit); // eslint-disable-line no-param-reassign
+
+    async.eachLimit(ids, 10, (userId, cb) => {
       client.users.get({ id: userId })
         .then((user) => {
-          records.push(user);
+          users.push(user);
           cb();
         })
         .catch((err) => {
@@ -23,7 +26,7 @@ export function getUsersById(client, users, options) {
         return reject(err);
       }
 
-      return resolve(records);
+      return resolve({ total, users });
     });
   });
 }

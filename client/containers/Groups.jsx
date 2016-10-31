@@ -1,24 +1,22 @@
+import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Button, ButtonToolbar } from 'react-bootstrap';
-import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
 
-import { connectionActions } from '../actions';
+import { connectionActions, groupMemberActions, userActions } from '../actions';
 import * as actions from '../actions/group';
-import { GroupDeleteDialog, GroupDialog, GroupsTable } from '../components/Groups';
-import GroupMembersDialog from '../components/Groups/GroupMembersDialog';
-import GroupsIcon from '../components/Icons/GroupsIcon';
+import GroupsOverview from '../components/Groups/GroupsOverview';
 
 class GroupsContainer extends Component {
   constructor() {
     super();
 
-    this.refresh = this.refresh.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onSearch = this.onSearch.bind(this);
+
     this.save = this.save.bind(this);
     this.clear = this.clear.bind(this);
     this.confirmDelete = this.confirmDelete.bind(this);
     this.cancelDelete = this.cancelDelete.bind(this);
-    this.renderGroupActions = this.renderGroupActions.bind(this);
   }
 
   componentWillMount() {
@@ -26,8 +24,12 @@ class GroupsContainer extends Component {
     this.props.fetchConnections();
   }
 
-  refresh() {
-    this.props.fetchGroups(true);
+  onSearch(query, field) {
+    this.props.fetchGroups(query, field);
+  }
+
+  onReset() {
+    this.props.fetchGroups();
   }
 
   save(group) {
@@ -46,102 +48,30 @@ class GroupsContainer extends Component {
     this.props.cancelDeleteGroup(group);
   }
 
-  renderGroupActions(group) {
-    return (
-      <div>
-        <TableAction id={`manage-members-${group._id}`} type="default" title="Manage members" icon="299"
-          onClick={this.props.editGroupUsers} args={[ group ]} disabled={this.props.groups.loading || false}
-        />
-        <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
-          onClick={this.props.editGroup} args={[ group ]} disabled={this.props.groups.loading || false}
-        />
-        <TableAction id={`delete-${group._id}`} type="default" title="Delete Group" icon="264"
-          onClick={this.props.requestDeleteGroup} args={[ group ]} disabled={this.props.groups.loading || false}
-        />
-      </div>
-    );
-  }
-
-  renderLoading() {
-    return (
-      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
-        <div className="circle" />
-      </div>
-    );
-  }
-
-  renderEmptyState() {
-    return (
-      <BlankState
-        title="Groups"
-        iconImage={
-          <div className="no-content-image">
-            <GroupsIcon />
-          </div>
-        }
-        description="Create and manage groups in which you can add users to define dynamic group memberships."
-      >
-        <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
-          Read more
-        </a>
-        <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-          <i className="icon icon-budicon-473" /> Create your first group
-        </Button>
-      </BlankState>
-    );
-  }
-
-  renderBody() {
-    return (
-      <div>
-        <SectionHeader title="Groups" description="Create and manage groups in which you can add users and define dynamic group memberships.">
-          <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
-            <i className="icon icon-budicon-473" /> Create Group
-          </Button>
-        </SectionHeader>
-        <div className="row" style={{ marginBottom: '20px' }}>
-          <div className="col-xs-12">
-            <SearchBar
-              placeholder="Search for groups"
-              searchOptions={[
-                {
-                  value: 'name',
-                  title: 'Name'
-                }
-              ]}
-              handleKeyPress={() => { console.log('SearchBar key press'); }}
-              handleReset={() => { console.log('SearchBar handleReset'); }}
-            />
-          </div>
-        </div>
-        <div className="row">
-          <div className="col-xs-12">
-            <Error message={this.props.groups.error} />
-            <LoadingPanel show={this.props.groups.loading}>
-              <GroupsTable canOpenGroup groups={this.props.groups.records} loading={this.props.groups.loading} renderActions={this.renderGroupActions} />
-            </LoadingPanel>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   render() {
-    const { error, loading, records } = this.props.groups;
-
     if (this.props.children) {
       return this.props.children;
     }
 
-    if (loading) { return this.renderLoading(); }
-
     return (
       <div>
-        <GroupDialog group={this.props.group} onSave={this.save} onClose={this.clear} />
-        <GroupDeleteDialog group={this.props.group} onCancel={this.cancelDelete} onConfirm={this.confirmDelete} />
-        <GroupMembersDialog group={this.props.group} onClose={this.clear} />
-
-        { !error && !records.size ? this.renderEmptyState() : this.renderBody() }
+        <GroupsOverview
+          onReset={this.onReset}
+          onSearch={this.onSearch}
+          save={this.save}
+          clear={this.clear}
+          cancelDelete={this.cancelDelete}
+          confirmDelete={this.confirmDelete}
+          createGroup={this.props.createGroup}
+          editGroup={this.props.editGroup}
+          editGroupUsers={this.props.editGroupUsers}
+          requestDeleteGroup={this.props.requestDeleteGroup}
+          group={this.props.group}
+          groups={this.props.groups}
+          users={this.props.users}
+          addGroupMembers={this.props.addGroupMembers}
+          fetchUsers={this.props.fetchUsers}
+        />
       </div>
     );
   }
@@ -153,9 +83,17 @@ GroupsContainer.propTypes = {
   groups: React.PropTypes.object.isRequired,
   fetchConnections: PropTypes.func.isRequired,
   fetchGroups: PropTypes.func.isRequired,
+  saveGroup: PropTypes.func.isRequired,
+  clearGroup: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  cancelDeleteGroup: PropTypes.func.isRequired,
   createGroup: PropTypes.func.isRequired,
   editGroup: PropTypes.func.isRequired,
-  requestDeleteGroup: PropTypes.func.isRequired
+  editGroupUsers: PropTypes.func.isRequired,
+  requestDeleteGroup: PropTypes.func.isRequired,
+  addGroupMembers: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired
 };
 
 function mapStateToProps(state) {
@@ -165,8 +103,9 @@ function mapStateToProps(state) {
       error: state.groups.get('error'),
       loading: state.groups.get('loading'),
       records: state.groups.get('records')
-    }
+    },
+    users: state.users
   };
 }
 
-export default connect(mapStateToProps, { ...actions, ...connectionActions })(GroupsContainer);
+export default connect(mapStateToProps, { ...actions, ...connectionActions, ...groupMemberActions, ...userActions })(GroupsContainer);
