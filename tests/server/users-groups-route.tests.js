@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../token';
 
-describe('users-groups-route', () => {
+describe.only('users-groups-route', () => {
   let userId = null;
   const { db, server } = getServerData();
   const token = getToken();
@@ -81,6 +81,23 @@ describe('users-groups-route', () => {
       server.inject(options, (response) => {
         expect(response.result).to.be.a('array');
         expect(response.result.length).to.be.equal(0);
+        cb();
+      });
+    });
+
+    it('should return calculated groups', (cb) => {
+      const options = {
+        method: 'GET',
+        url: `/api/users/${userId}/groups/calculate`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result).to.be.a('array');
+        expect(response.result[0]._id).to.be.equal(group._id);
+        expect(response.result[0].name).to.be.equal(group.name);
         cb();
       });
     });

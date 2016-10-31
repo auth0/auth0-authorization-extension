@@ -4,7 +4,7 @@ import { getRolesForUser } from '../../../lib/queries';
 
 module.exports = () => ({
   method: 'GET',
-  path: '/api/users/{id}/roles/groups',
+  path: '/api/users/{id}/roles/calculate',
   config: {
     auth: {
       strategies: [ 'auth0-admins-jwt', 'jwt' ],
