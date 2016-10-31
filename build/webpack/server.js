@@ -11,9 +11,7 @@ const options = {
   historyApiFallback: true,
   proxy: [
     {
-      context: function(pathname, req) {
-        return true;
-      },
+      context: () => true,
       target: {
         port: 3001
       }
