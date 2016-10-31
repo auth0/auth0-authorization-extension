@@ -82,7 +82,7 @@ describe('users-groups-route', () => {
     it('should return user roles of groups', (cb) => {
       const options = {
         method: 'GET',
-        url: `/api/users/${userId}/roles/groups`,
+        url: `/api/users/${userId}/roles/calculate`,
         headers: {
           Authorization: `Bearer ${token}`
         }
