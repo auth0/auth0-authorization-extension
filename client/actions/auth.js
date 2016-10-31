@@ -15,6 +15,8 @@ export function login(returnUrl) {
 
 export function logout() {
   return (dispatch) => {
+    sessionStorage.removeItem('authz:token');
+
     dispatch({
       type: constants.LOGOUT_SUCCESS
     });
@@ -23,33 +25,41 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    if (window.location.hash) {
+    if (window.location.hash || sessionStorage.getItem('authz:token')) {
       const hash = parseHash(window.location.hash);
+      let accessToken = null;
+
       if (hash && hash.accessToken) {
-        const decodedToken = decodeToken(hash.accessToken);
+        accessToken = hash.accessToken;
+      } else if (sessionStorage.getItem('authz:token')) {
+        accessToken = sessionStorage.getItem('authz:token');
+      }
+
+      if (accessToken) {
+        const decodedToken = decodeToken(accessToken);
         if (isTokenExpired(decodedToken)) {
           return;
         }
 
-        axios.defaults.headers.common.Authorization = `Bearer ${hash.accessToken}`;
+        axios.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
+
+        sessionStorage.setItem('authz:token', accessToken);
 
         dispatch({
           type: constants.RECIEVED_TOKEN,
           payload: {
-            token: hash.access_token
+            token: accessToken
           }
         });
 
         dispatch({
           type: constants.LOGIN_SUCCESS,
           payload: {
-            token: hash.access_token,
+            token: accessToken,
             decodedToken,
             user: decodedToken
           }
         });
-
-        return;
       }
     }
   };
