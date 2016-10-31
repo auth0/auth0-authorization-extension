@@ -94,7 +94,7 @@ export class GroupContainer extends Component {
   }
 
   render() {
-    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, addRoles } = this.props;
 
     if (group.get('loading')) { return this.renderLoading(); }
 
@@ -131,12 +131,12 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group_tabs">
               <Tab eventKey={1} title="Members">
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <GroupRoles />
+                <GroupRoles group={this.props.group} addRoles={addRoles} openAddRoles={this.props.openAddRoles} closeAddRoles={this.props.closeAddRoles} />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
@@ -172,6 +172,7 @@ function mapStateToProps(state) {
   return {
     connections: state.connections,
     group: state.group,
+    addRoles: state.group.get('addRoles'),
     groupNested: state.groupNested,
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,

@@ -213,3 +213,30 @@ export function closeDelete() {
     type: constants.CLOSE_DELETE_GROUP
   };
 }
+
+export function openAddRoles() {
+  return {
+    type: constants.GROUP_ADD_ROLES_OPEN
+  }
+}
+
+export function closeAddRoles() {
+  return {
+    type: constants.GROUP_ADD_ROLES_CLOSE
+  }
+}
+
+export function saveRoles(userId, data, onSuccess) {
+  return {
+    type: constants.GROUP_SAVE_USER_ROLES,
+    meta: {
+      userId,
+      onSuccess
+    },
+    payload: {
+      promise: axios.post(`/api/users/${userId}`, data, {
+        responseType: 'json'
+      })
+    }
+  };
+}

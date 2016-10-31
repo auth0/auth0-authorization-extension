@@ -8,10 +8,10 @@ import { ScopeGroup } from 'auth0-extension-ui';
 import createForm from '../../utils/createForm';
 import { roleActions } from '../../actions';
 
-export default createForm('userRoles', connectContainer(class UserRolesDialog extends React.Component {
+export default createForm('groupRoles', connectContainer(class GroupRolesDialog extends React.Component {
 
   static propTypes = {
-    user: PropTypes.object.isRequired,
+    group: PropTypes.object.isRequired,
     onClose: PropTypes.func
   };
 
@@ -39,25 +39,25 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
   }
 
   saveRoles = () => {
-    this.props.addRoles(this.props.user.get('id'),[], () => {
+    this.props.addRoles(this.props.group.get('id'),[], () => {
       this.props.onClose();
     });
   }
 
   render() {
-    const user = this.props.user.toJS();
-    const title = `Manage ${user.name} roles`;
+    const group = this.props.group.toJS();
+    const title = `Manage ${group.name} roles`;
     const isVisible = this.props.addRoles;
     if(!this.props.roles) {
       return <div></div>;
     }
     return (
       <Modal show={isVisible} className="modal-overflow-visible" onHide={this.props.onClose}>
-        <Modal.Header closeButton={!user.loading} className="has-border">
+        <Modal.Header closeButton={!group.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="modal-description">Add or remove roles from this user.</p>
+          <p className="modal-description">Add or remove roles from this group.</p>
           <label>Add roles</label>
           <Field
             name="roles"
@@ -67,10 +67,10 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting} onClick={this.props.onClose}>
+          <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.saveRoles} >
+          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.saveRoles} >
             Save
           </Button>
         </Modal.Footer>

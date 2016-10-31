@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   error: null,
   userId: null,
+  addRoles: false,
   record: { },
   allGroups: {
     loading: false,
@@ -81,6 +82,15 @@ export const user = createReducer(fromJS(initialState), {
   [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) =>
     state.merge({
       allGroups: userAllGroups(state.get('allGroups'), action)
+    }),
+
+  [constants.ADD_ROLES_OPEN]: (state, action) =>
+    state.merge({
+      addRoles: true
+    }),
+  [constants.ADD_ROLES_CLOSE]: (state, action) =>
+    state.merge({
+      addRoles: false
     })
 });
 
