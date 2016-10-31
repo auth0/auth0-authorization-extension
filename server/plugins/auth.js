@@ -1,8 +1,10 @@
 import Boom from 'boom';
 import jwt from 'hapi-auth-jwt2';
 import jwksRsa from 'jwks-rsa';
+import * as tools from 'auth0-extension-hapi-tools';
 
 import config from '../lib/config';
+import { scopes } from '../lib/apiaccess';
 
 module.exports.register = (server, options, next) => {
   server.auth.scheme('extension-secret', () =>
@@ -51,7 +53,34 @@ module.exports.register = (server, options, next) => {
   });
   server.auth.default('jwt');
 
-  next();
+  const session = {
+    register: tools.plugins.dashboardAdminSession,
+    options: {
+      sessionStorageKey: 'authz:apiToken',
+      rta: config('AUTH0_RTA'),
+      domain: config('AUTH0_DOMAIN'),
+      scopes: 'create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs',
+      baseUrl: config('WT_URL'),
+      audience: 'urn:api-authz',
+      secret: config('EXTENSION_SECRET'),
+      clientName: 'Authorization Extension',
+      onLoginSuccess: (decoded, req, callback) => {
+        if (decoded) {
+          decoded.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
+          return callback(null, true, decoded);
+        }
+
+        return callback(null, false);
+      }
+    }
+  };
+  server.register(session, (err) => {
+    if (err) {
+      next(err);
+    }
+
+    next();
+  });
 };
 
 module.exports.register.attributes = {

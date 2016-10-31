@@ -28,7 +28,9 @@ const options = {
   },
 
   stats: { colors: true },
-  headers: { 'Access-Control-Allow-Origin': '*' }
+  headers: {
+    'Access-Control-Allow-Origin': '*'
+  }
 };
 
 new WebpackDevServer(webpack(config), options)

@@ -25,7 +25,7 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    const apiToken = sessionStorage.getItem('authz:token');
+    const apiToken = sessionStorage.getItem('authz:apiToken');
     if (apiToken) {
       const decodedToken = decodeToken(apiToken);
       if (isTokenExpired(decodedToken)) {
