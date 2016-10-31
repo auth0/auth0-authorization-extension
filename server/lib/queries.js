@@ -177,6 +177,24 @@ export const getRolesForGroups = (selectedGroups, selectedRoles) => {
 };
 
 /*
+ * Get all roles for a user.
+ */
+export const getRolesForUser = (database, userId) =>
+  database.getGroups()
+    .then(groups => {
+      // get all groups user belong to
+      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+      return getParentGroups(groups, userGroups)
+        .filter(group => group.roles && group.roles.length)
+        .map(group => group.roles); // return roles for user's groups and their parents
+    })
+    .then(roles => _.uniq(_.flattenDeep(roles)))
+    .then(roleIds =>
+      database.getRoles()
+        .then(roles => _.filter(roles, role => _.includes(roleIds, role._id)))
+    );
+
+/*
  * Resolve all users for a list of groups.
  */
 export const getMembers = (selectedGroups) => {

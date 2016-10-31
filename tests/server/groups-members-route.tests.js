@@ -46,7 +46,8 @@ describe('groups-members-route', () => {
 
       server.inject(options, (response) => {
         expect(response.statusCode).to.be.equal(200);
-        expect(response.result).to.be.a('array');
+        expect(response.result.users).to.be.a('array');
+        expect(response.result.total).to.be.a('number');
         cb();
       });
     });
@@ -63,25 +64,8 @@ describe('groups-members-route', () => {
 
       server.inject(options, (response) => {
         expect(response.statusCode).to.be.equal(200);
-        expect(response.result).to.be.a('array');
-        cb();
-      });
-    });
-
-    it('should return bad request error', (cb) => {
-      group.members.push(uid);
-
-      const options = {
-        method: 'GET',
-        url: `/api/groups/${guid}/members`,
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      };
-
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.error).to.be.equal('Bad Request');
+        expect(response.result.nested).to.be.a('array');
+        expect(response.result.total).to.be.a('number');
         cb();
       });
     });
