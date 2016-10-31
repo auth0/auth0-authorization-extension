@@ -84,3 +84,30 @@ export function fetchUser(userId) {
     dispatch(fetchUserGroups(userId));
   };
 }
+
+export function openAddRoles() {
+  return {
+    type: constants.ADD_ROLES_OPEN
+  }
+}
+
+export function closeAddRoles() {
+  return {
+    type: constants.ADD_ROLES_CLOSE
+  }
+}
+
+export function saveRoles(userId, data, onSuccess) {
+  return {
+    type: constants.SAVE_USER_ROLES,
+    meta: {
+      userId,
+      onSuccess
+    },
+    payload: {
+      promise: axios.post(`/api/users/${userId}`, data, {
+        responseType: 'json'
+      })
+    }
+  };
+}

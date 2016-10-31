@@ -119,7 +119,7 @@ export class GroupContainer extends Component {
 
 
   render() {
-    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users, addRoles } = this.props;
 
     if (group.get('loading')) { return this.renderLoading(); }
 
@@ -160,7 +160,7 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group_tabs">
               <Tab eventKey={1} title="Members">
                 <GroupMembers
                   groupId={group.get('groupId')} members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember}
@@ -168,7 +168,7 @@ export class GroupContainer extends Component {
                 />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <GroupRoles />
+                <GroupRoles group={this.props.group} addRoles={addRoles} openAddRoles={this.props.openAddRoles} closeAddRoles={this.props.closeAddRoles} />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
@@ -197,11 +197,7 @@ GroupContainer.propTypes = {
   requestDeleteGroupMapping: PropTypes.func.isRequired,
   deleteGroupMapping: PropTypes.func.isRequired,
   saveGroupMapping: PropTypes.func.isRequired,
-  clearGroupMapping: PropTypes.func.isRequired,
-  fetchUsers: PropTypes.func.isRequired,
-  users: PropTypes.object.isRequired,
-  fetchGroupMembers: PropTypes.func.isRequired,
-  fetchGroupMembersNested: PropTypes.func.isRequired
+  clearGroupMapping: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -212,9 +208,8 @@ function mapStateToProps(state) {
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,
     groupPicker: state.groupPicker,
-    userPicker: state.userPicker,
-    users: state.users
+    userPicker: state.userPicker
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions })(GroupContainer);
