@@ -23,34 +23,32 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    if (window.location.hash) {
-      const hash = parseHash(window.location.hash);
-      if (hash && hash.accessToken) {
-        const decodedToken = decodeToken(hash.accessToken);
-        if (isTokenExpired(decodedToken)) {
-          return;
-        }
-
-        axios.defaults.headers.common.Authorization = `Bearer ${hash.accessToken}`;
-
-        dispatch({
-          type: constants.RECIEVED_TOKEN,
-          payload: {
-            token: hash.access_token
-          }
-        });
-
-        dispatch({
-          type: constants.LOGIN_SUCCESS,
-          payload: {
-            token: hash.access_token,
-            decodedToken,
-            user: decodedToken
-          }
-        });
-
+    const token = sessionStorage.getItem('authz:apiToken');
+    if (token) {
+      const decodedToken = decodeToken(token);
+      if (isTokenExpired(decodedToken)) {
         return;
       }
+
+      axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+
+      dispatch({
+        type: constants.RECIEVED_TOKEN,
+        payload: {
+          token
+        }
+      });
+
+      dispatch({
+        type: constants.LOGIN_SUCCESS,
+        payload: {
+          token,
+          decodedToken,
+          user: decodedToken
+        }
+      });
+
+      return;
     }
   };
 }

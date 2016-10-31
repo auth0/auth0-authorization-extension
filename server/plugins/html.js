@@ -31,7 +31,7 @@ const assembleHtmlRoute = (link) => ({
       return reply(ejs.render(template, {
         config: cfg,
         assets: {
-          app: 'http://localhost:3001/app/bundle.js'
+          app: 'http://localhost:3000/app/bundle.js'
         }
       }));
     }

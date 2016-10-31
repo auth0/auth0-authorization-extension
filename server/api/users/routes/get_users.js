@@ -5,7 +5,7 @@ module.exports = (server) => ({
   path: '/api/users',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'read:users' ]
     },
     description: 'Get all users.',

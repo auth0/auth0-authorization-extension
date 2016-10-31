@@ -5,7 +5,7 @@ module.exports = () => ({
   path: '/api/groups/{id}/roles',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'update:groups' ]
     },
     description: 'Add one or more roles to a group.',

@@ -1,14 +1,16 @@
+import 'good-console';
 import Hapi from 'hapi';
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
 import Blipp from 'blipp';
+import jwt from 'hapi-auth-jwt2';
+import * as tools from 'auth0-extension-hapi-tools';
 
-import 'good-console';
-
-import plugins from './plugins';
 import config from './lib/config';
 import logger from './lib/logger';
+import plugins from './plugins';
+import { scopes } from './lib/apiaccess';
 
 export default (cb) => {
   const goodPlugin = {
@@ -39,7 +41,28 @@ export default (cb) => {
       }
     }
   });
-  server.register([ goodPlugin, Inert, Blipp, ...plugins ], (err) => {
+
+  const session = {
+    register: tools.plugins.dashboardAdminSession,
+    options: {
+      rta: config('AUTH0_RTA'),
+      domain: config('AUTH0_DOMAIN'),
+      scopes: 'create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs',
+      baseUrl: config('WT_URL'),
+      audience: 'urn:api-authz',
+      secret: config('EXTENSION_SECRET'),
+      clientName: 'Authorization Extension',
+      onLoginSuccess: (decoded, req, callback) => {
+        if (decoded) {
+          decoded.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
+          return callback(null, true, decoded);
+        }
+
+        return callback(null, false);
+      }
+    }
+  };
+  server.register([ goodPlugin, Inert, Blipp, jwt, session, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
     }
