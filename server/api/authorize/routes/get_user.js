@@ -1,11 +1,11 @@
 import Joi from 'joi';
 
 import schema from '../schemas/authorization_request';
-import { isApplicationAccessAllowed, getUserGroups } from '../../../lib/queries';
+import { getPermissionsForRoles, getRolesForUser, getUserGroups } from '../../../lib/queries';
 
 module.exports = (server) => ({
-  method: 'GET',
-  path: '/api/authorize/{userId}',
+  method: 'POST',
+  path: '/api/users/{userId}/calculate/{clientId}',
   config: {
     auth: {
       strategies: [
@@ -16,7 +16,8 @@ module.exports = (server) => ({
     description: 'Get the authorization context for a user.',
     validate: {
       params: {
-        userId: Joi.string().required()
+        userId: Joi.string().required(),
+        clientId: Joi.string().required()
       },
       payload: schema
     },
@@ -25,16 +26,24 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) => {
-    const { userId } = req.params;
-    const { connectionName, clientId, groups } = req.payload;
+    const { userId, clientId } = req.params;
+    const { connectionName, groups } = req.payload;
+    const result = {
+      groups: [],
+      roles: []
+    };
 
     getUserGroups(req.storage, userId, connectionName, groups)
-      .then((userGroups) => isApplicationAccessAllowed(req.storage, clientId, userGroups)
-        .then(isAccessAllowed => reply({
-          groups: userGroups.map((group) => group.name),
-          accessGranted: isAccessAllowed
-        }))
-      )
+      .then(userGroups => {
+        result.groups = userGroups.map(group => group.name);
+        return getRolesForUser(req.storage, userId);
+      })
+      .then(userRoles => {
+        const relevantRoles = userRoles.filter(role => role.applicationId === clientId);
+        result.roles = relevantRoles.map(role => role.name);
+        return getPermissionsForRoles(req.storage, relevantRoles);
+      })
+      .then(permissions => reply({ ...result, permissions }))
       .catch(err => reply.error(err));
   }
 });
