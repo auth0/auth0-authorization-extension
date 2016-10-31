@@ -194,6 +194,17 @@ export const getRolesForUser = (database, userId) =>
         .then(roles => _.filter(roles, role => _.includes(roleIds, role._id)))
     );
 
+
+/*
+ * Get all permissions for list of roles.
+ */
+export const getPermissionsForRoles = (database, userRoles) =>
+  database.getPermissions()
+    .then(permissions => {
+      const permIds = _.flattenDeep(_.map(userRoles, role => role.permissions));
+      return permissions.filter(permission => _.includes(permIds, permission._id));
+    });
+
 /*
  * Resolve all users for a list of groups.
  */

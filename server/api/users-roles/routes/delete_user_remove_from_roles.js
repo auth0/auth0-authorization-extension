@@ -6,7 +6,7 @@ module.exports = () => ({
   path: '/api/users/{id}/roles',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
+      strategies: [ 'auth0-admins-jwt', 'jwt' ],
       scope: [ 'update:roles' ]
     },
     description: 'Remove a single user from roles.',
