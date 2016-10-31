@@ -10,6 +10,6 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => getApi(true)
-    .then((api) => reply({ enabled: !!api.identifier, token_lifetime: api.token_lifetime }))
+    .then((api) => reply({ apiAccess: !!api.identifier, token_lifetime: api.token_lifetime }))
     .catch(err => reply.error(err))
 });

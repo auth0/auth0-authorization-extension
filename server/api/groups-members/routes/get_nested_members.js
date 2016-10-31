@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Joi from 'joi';
 
-import { getUsersByIds } from '../../../lib/users';
+import { getUsersById } from '../../../lib/users';
 import { getChildGroups, getMembers } from '../../../lib/queries';
 
 module.exports = (server) => ({
@@ -21,7 +21,7 @@ module.exports = (server) => ({
         id: Joi.string().guid().required()
       },
       query: {
-        per_page: Joi.number().integer().min(1).max(200).default(25),
+        per_page: Joi.number().integer().min(1).max(25).default(25),
         page: Joi.number().integer().min(0).default(0)
       }
     }
@@ -36,7 +36,7 @@ module.exports = (server) => ({
       .then(members => {
         const userIds = (members) ? members.map(member => member.userId) : [];
 
-        return getUsersByIds(req.pre.auth0, userIds, req.query.page, req.query.per_page)
+        return getUsersById(req.pre.auth0, userIds, req.query.page, req.query.per_page)
           .then(data => {
             const total = members.length;
             const users = data.users.map(u => {

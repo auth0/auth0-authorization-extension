@@ -28,6 +28,7 @@ class GroupsOverview extends React.Component {
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onReset = this.onReset.bind(this);
     this.onHandleOptionChange = this.onHandleOptionChange.bind(this);
+    this.clear = this.clear.bind(this);
   }
 
   onKeyPress(e) {
@@ -41,6 +42,10 @@ class GroupsOverview extends React.Component {
     this.props.onReset();
   }
 
+  clear() {
+    this.props.clear();
+  }
+
   onHandleOptionChange(option) {
     this.setState({
       selectedFilter: option
@@ -50,7 +55,7 @@ class GroupsOverview extends React.Component {
   renderGroupActions(group) {
     return (
       <div>
-        <TableAction id={`manage-members-${group._id}`} type="default" title="Manage members" icon="299"
+        <TableAction id={`manage-members-${group._id}`} type="default" title="Add members" icon="299"
           onClick={this.props.editGroupUsers} args={[ group ]} disabled={this.props.groups.loading || false}
         />
         <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
@@ -123,16 +128,44 @@ class GroupsOverview extends React.Component {
     );
   }
 
+  addGroupMembers(data) {
+    const groupId = this.props.group.get('groupId');
+    this.props.addGroupMembers(groupId, data.members, () => {
+      this.clear();
+      this.onReset();
+    });
+  }
+
+  getUserPickerDialogUsers(records) {
+    let users = [ ];
+    if (records && records.length) {
+      users = _.map(records, (user) => ({
+        value: user.user_id,
+        label: user.name,
+        email: user.email
+      }));
+    }
+    return users;
+  }
+
   render() {
     const { error, loading, records } = this.props.groups;
+    const users = this.props.users;
 
     if (loading) { return this.renderLoading(); }
 
     return (
       <div>
-        <GroupDialog group={this.props.group} onSave={this.props.save} onClose={this.props.clear} />
+        <GroupDialog group={this.props.group} onSave={this.props.save} onClose={this.clear} />
         <GroupDeleteDialog group={this.props.group} onCancel={this.props.cancelDelete} onConfirm={this.props.confirmDelete} />
-        <GroupMembersDialog group={this.props.group} onClose={this.props.clear} />
+        <GroupMembersDialog
+          group={this.props.group}
+          onClose={this.clear}
+          onSubmit={this.addGroupMembers.bind(this)}
+          totalUsers={users.get('total')}
+          users={this.getUserPickerDialogUsers(users.get('records').toJS())}
+          fetchUsers={this.props.fetchUsers}
+        />
 
         { !error && !records.size ? this.renderEmptyState() : this.renderBody() }
       </div>
@@ -153,7 +186,10 @@ GroupsOverview.propTypes = {
   save: PropTypes.func.isRequired,
   clear: PropTypes.func.isRequired,
   cancelDelete: PropTypes.func.isRequired,
-  confirmDelete: PropTypes.func.isRequired
+  confirmDelete: PropTypes.func.isRequired,
+  users: PropTypes.object.isRequired,
+  addGroupMembers: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired
 };
 
 export default GroupsOverview;

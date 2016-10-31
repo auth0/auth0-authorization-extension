@@ -17,7 +17,7 @@ const assembleHtmlRoute = (link) => ({
     const cfg = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
-      IS_ADMIN: req.path === '/admins',
+      IS_ADMIN: true, // req.path === '/admins',
       BASE_URL: url.format({
         protocol: config('NODE_ENV') !== 'production' ? 'http' : 'https',
         host: req.headers.host,
