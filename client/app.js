@@ -15,7 +15,7 @@ import routes from './routes';
 import configureStore from './store/configureStore';
 
 // Make axios aware of the base path.
-axios.defaults.baseURL = window.config.BASE_URL;
+axios.defaults.baseURL = window.config.API_BASE;
 
 // Make history aware of the base path.
 const history = useRouterHistory(createHistory)({

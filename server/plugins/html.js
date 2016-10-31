@@ -14,22 +14,27 @@ const assembleHtmlRoute = (link) => ({
     auth: false
   },
   handler: (req, reply) => {
+    const baseUrl = url.format({
+      protocol: config('NODE_ENV') !== 'production' ? 'http' : 'https',
+      host: req.headers.host,
+      pathname: url.parse(req.originalUrl || '/').pathname.replace(req.path, '')
+    });
     const cfg = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
       IS_ADMIN: true, // req.path === '/admins',
-      BASE_URL: url.format({
-        protocol: config('NODE_ENV') !== 'production' ? 'http' : 'https',
-        host: req.headers.host,
-        pathname: url.parse(req.originalUrl || '/').pathname.replace(req.path, '')
-      }),
+      BASE_URL: baseUrl,
+      API_BASE: baseUrl,
       BASE_PATH: url.parse(req.originalUrl || '/').pathname.replace(req.path, '') + (req.path === '/admins' ? '/admins' : '')
     };
 
     // Development.
     if (process.env.NODE_ENV === 'development') {
       return reply(ejs.render(template, {
-        config: cfg,
+        config: {
+          ...cfg,
+          API_BASE: 'http://localhost:3000/'
+        },
         assets: {
           app: 'http://localhost:3000/app/bundle.js'
         }

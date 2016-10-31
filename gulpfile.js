@@ -26,6 +26,6 @@ gulp.task('run', () => {
       ]
     });
 
-    setTimeout(() => open(url), 2000);
+    setTimeout(() => open(url.replace('https://', 'http://')), 2000);
   });
 });

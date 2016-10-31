@@ -45,7 +45,12 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['mime-types'] = true;
   externals.compatible['auth0@2.0.0'] = true;
   externals.compatible['webtask-tools'] = true;
-  // externals.compatible['validate.js'] = false;
+  externals.compatible['joi'] = true;
+  externals.compatible['hapi'] = true;
+  externals.compatible['boom'] = 'boom@3.2.2';
+  externals.compatible['good'] = true;
+  externals.compatible['good-console'] = true;
+  externals.compatible['hapi-auth-jwt2'] = true;
 
   // Transform to commonjs.
   Object.keys(externals.compatible).forEach(k => { externals.compatible[k] = 'commonjs ' + k; });
