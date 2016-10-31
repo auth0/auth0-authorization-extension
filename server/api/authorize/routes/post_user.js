@@ -9,6 +9,7 @@ module.exports = (server) => ({
   config: {
     auth: {
       strategies: [
+        'auth0-admins-jwt',
         'jwt',
         'extension-secret'
       ]
@@ -43,7 +44,7 @@ module.exports = (server) => ({
         result.roles = relevantRoles.map(role => role.name);
         return getPermissionsForRoles(req.storage, relevantRoles);
       })
-      .then(permissions => reply({ ...result, permissions }))
+      .then(permissions => reply({ ...result, permissions: permissions.map(permission => permission.name) }))
       .catch(err => reply.error(err));
   }
 });
