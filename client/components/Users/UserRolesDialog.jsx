@@ -12,7 +12,9 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
 
   static propTypes = {
     user: PropTypes.object.isRequired,
-    onClose: PropTypes.func
+    onClose: PropTypes.func.isRequired,
+    addRoles: PropTypes.bool.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -38,11 +40,6 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
     ...roleActions
   }
 
-  saveRoles = () => {
-    this.props.addRoles(this.props.user.get('id'),[], () => {
-      this.props.onClose();
-    });
-  }
 
   render() {
     const user = this.props.user.toJS();
@@ -70,7 +67,7 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
           <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.saveRoles} >
+          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.props.handleSubmit} >
             Save
           </Button>
         </Modal.Footer>

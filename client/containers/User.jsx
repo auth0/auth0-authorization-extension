@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../actions';
+import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions, applicationActions } from '../actions';
 
 import UserGroups from '../components/Users/UserGroups';
 import UserHeader from '../components/Users/UserHeader';
@@ -24,6 +24,8 @@ export class UserContainer extends Component {
 
   componentWillMount() {
     this.props.fetchUser(this.props.params.id);
+    this.props.fetchRulesForUser(this.props.params.id);
+    this.props.fetchApplications();
   }
 
   requestAddToGroup(user) {
@@ -60,9 +62,8 @@ export class UserContainer extends Component {
 
   render() {
     const { user, groups, allGroups, groupPicker, groupMember } = this.props;
-
+    console.log(user,111111111111);
     if (user.loading) { return this.renderLoading(); }
-    console.log(user.record.toJSON(),1111111111);
     return (
       <div>
         <div className="row">
@@ -80,7 +81,20 @@ export class UserContainer extends Component {
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Roles">
-                <UserRoles user={user.record} addRoles={this.props.addRoles} openAddRoles={this.props.openAddRoles} closeAddRoles={this.props.closeAddRoles} />
+                <UserRoles user={user.record}
+                           addRoles={this.props.addRoles}
+                           openAddRoles={this.props.openAddRoles}
+                           closeAddRoles={this.props.closeAddRoles}
+                           saveUserRoles={this.props.saveUserRoles}
+
+                           requestDeleteRole={this.props.requestDeleteUserRole}
+                           cancelDeleteRole={this.props.cancelDeleteUserRole}
+                           deleteRole={this.props.deleteUserRole}
+
+                           roles={this.props.roles}
+                           loading={user.loading}
+                           applications={this.props.applications}
+                />
               </Tab>
             </Tabs>
           </div>
@@ -102,9 +116,11 @@ function mapStateToProps(state) {
       loading: state.user.get('loading')
     },
     addRoles: state.user.get('addRoles'),
+    applications: state.applications,
+    roles: state.userRoles,
     allGroups: state.user.get('allGroups'),
     groups: state.user.get('groups')
   };
 }
 
-export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions, ...applicationActions })(UserContainer);

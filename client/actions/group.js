@@ -218,29 +218,62 @@ export function closeDelete() {
   };
 }
 
-export function openAddRoles() {
+export function groupOpenAddRoles() {
   return {
     type: constants.GROUP_ADD_ROLES_OPEN
   }
 }
 
-export function closeAddRoles() {
+export function groupCloseAddRoles() {
   return {
     type: constants.GROUP_ADD_ROLES_CLOSE
   }
 }
 
-export function saveRoles(userId, data, onSuccess) {
+export function saveGroupRoles(group, data, onSuccess) {
   return {
-    type: constants.GROUP_SAVE_USER_ROLES,
-    meta: {
-      userId,
-      onSuccess
-    },
+    type: constants.SAVE_GROUP_ROLES,
     payload: {
-      promise: axios.post(`/api/users/${userId}`, data, {
+      promise: axios({
+        method: 'patch',
+        url: `/api/groups/${group._id}/roles`,
+        data: data.roles,
         responseType: 'json'
       })
     }
   };
+}
+
+export function fetchRulesForGroup(groupId) {
+  return {
+    type: constants.FETCH_GROUP_ROLES,
+    payload: {
+      promise: axios.get('/api/groups/'+groupId+'/roles', {
+        params: {
+        },
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+export function requestDeleteGroupRole(role) {
+  return {
+    type: constants.REQUEST_DELETE_GROUP_ROLE,
+    meta: {
+      role
+    }
+  }
+}
+
+export function cancelDeleteGroupRole() {
+  return {
+    type: constants.CANCEL_DELETE_GROUP_ROLE
+  }
+}
+
+export function deleteGroupRole() {
+  return {
+    type: constants.DELETE_GROUP_ROLE
+  }
 }
