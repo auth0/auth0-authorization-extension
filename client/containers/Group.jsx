@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions } from '../actions';
+import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions, applicationActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
 import GroupRoles from '../components/Groups/GroupRoles';
@@ -30,6 +30,8 @@ export class GroupContainer extends Component {
 
   componentWillMount() {
     this.props.fetchGroup(this.props.params.id);
+    this.props.fetchRulesForGroup(this.props.params.id);
+    this.props.fetchApplications();
   }
 
   addMember() {
@@ -107,10 +109,9 @@ export class GroupContainer extends Component {
   }
 
   render() {
-    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users, addRoles } = this.props;
 
     if (group.get('loading')) { return this.renderLoading(); }
-
     return (
       <div>
         <div>
@@ -153,7 +154,20 @@ export class GroupContainer extends Component {
                 <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <GroupRoles />
+                <GroupRoles group={group.get('record')}
+                            addRoles={addRoles}
+                            openAddRoles={this.props.groupOpenAddRoles}
+                            closeAddRoles={this.props.groupCloseAddRoles}
+                            saveGroupRoles={this.props.saveGroupRoles}
+
+                            requestDeleteRole={this.props.requestDeleteGroupRole}
+                            cancelDeleteRole={this.props.cancelDeleteGroupRole}
+                            deleteRole={this.props.deleteGroupRole}
+
+                            roles={this.props.roles}
+                            loading={group.get('loading')}
+                            applications={this.props.applications}
+                />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
@@ -191,13 +205,16 @@ function mapStateToProps(state) {
   return {
     connections: state.connections,
     group: state.group,
+    addRoles: state.group.get('addRoles'),
+    roles: state.groupRoles,
     groupNested: state.groupNested,
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,
     groupPicker: state.groupPicker,
     userPicker: state.userPicker,
+    applications: state.applications,
     users: state.users
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions, ...applicationActions })(GroupContainer);

@@ -95,17 +95,50 @@ export function closeAddRoles() {
   }
 }
 
-export function saveRoles(userId, data, onSuccess) {
+export function saveUserRoles(user, data, onSuccess) {
   return {
     type: constants.SAVE_USER_ROLES,
-    meta: {
-      userId,
-      onSuccess
-    },
     payload: {
-      promise: axios.post(`/api/users/${userId}`, data, {
+      promise: axios({
+        method: 'patch',
+        url: `/api/users/${user.user_id}/roles`,
+        data: data.rules,
         responseType: 'json'
       })
     }
   };
+}
+
+export function fetchRulesForUser(userId) {
+  return {
+    type: constants.FETCH_USER_ROLES,
+    payload: {
+      promise: axios.get('/api/users/'+userId+'/roles', {
+        params: {
+        },
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+export function requestDeleteUserRole(role) {
+  return {
+    type: constants.REQUEST_DELETE_USER_ROLE,
+    meta: {
+      role
+    }
+  }
+}
+
+export function cancelDeleteUserRole() {
+  return {
+    type: constants.CANCEL_DELETE_USER_ROLE
+  }
+}
+
+export function deleteUserRole() {
+  return {
+    type: constants.DELETE_USER_ROLE
+  }
 }

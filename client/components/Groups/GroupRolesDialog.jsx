@@ -12,7 +12,9 @@ export default createForm('groupRoles', connectContainer(class GroupRolesDialog 
 
   static propTypes = {
     group: PropTypes.object.isRequired,
-    onClose: PropTypes.func
+    onClose: PropTypes.func.isRequired,
+    addRoles: PropTypes.bool.isRequired,
+    handleSubmit: React.PropTypes.func.isRequired
   };
 
   componentDidMount() {
@@ -36,12 +38,6 @@ export default createForm('groupRoles', connectContainer(class GroupRolesDialog 
 
   static actionsToProps = {
     ...roleActions
-  }
-
-  saveRoles = () => {
-    this.props.addRoles(this.props.group.get('id'),[], () => {
-      this.props.onClose();
-    });
   }
 
   render() {
@@ -70,7 +66,7 @@ export default createForm('groupRoles', connectContainer(class GroupRolesDialog 
           <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.saveRoles} >
+          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.props.handleSubmit} >
             Save
           </Button>
         </Modal.Footer>
