@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Joi from 'joi';
 
-import { getChildGroups, getRolesForGroups } from '../../../lib/queries';
+import { getParentGroups, getRolesForGroups } from '../../../lib/queries';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -25,7 +25,7 @@ module.exports = (server) => ({
     req.storage.getGroups()
       .then(groups => {
         const group = _.find(groups, { _id: req.params.id });
-        return getChildGroups(groups, [ group ]);
+        return getParentGroups(groups, [ group ]);
       })
       .then(groups => req.storage.getRoles()
         .then(roles => getRolesForGroups(groups, roles))

@@ -94,7 +94,7 @@ describe('configuration-route', () => {
       };
 
       server.inject(options, (response) => {
-        expect(response.result.enabled).to.be.a('boolean');
+        expect(response.result.apiAccess).to.be.a('boolean');
         cb();
       });
     });

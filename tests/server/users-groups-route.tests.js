@@ -84,6 +84,23 @@ describe('users-groups-route', () => {
         cb();
       });
     });
+
+    it('should return calculated groups', (cb) => {
+      const options = {
+        method: 'GET',
+        url: `/api/users/${userId}/groups/calculate`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result).to.be.a('array');
+        expect(response.result[0]._id).to.be.equal(group._id);
+        expect(response.result[0].name).to.be.equal(group.name);
+        cb();
+      });
+    });
   });
 
   describe('#patch', () => {
