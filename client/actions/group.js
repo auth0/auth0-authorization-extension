@@ -240,6 +240,9 @@ export function saveGroupRoles(group, data, onSuccess) {
         data: data.roles,
         responseType: 'json'
       })
+    },
+    meta: {
+      onSuccess: onSuccess
     }
   };
 }
@@ -272,8 +275,19 @@ export function cancelDeleteGroupRole() {
   }
 }
 
-export function deleteGroupRole() {
+export function deleteGroupRole(group, role, onSuccess) {
   return {
-    type: constants.DELETE_GROUP_ROLE
+    type: constants.DELETE_GROUP_ROLE,
+    payload: {
+      promise: axios({
+        method: 'delete',
+        url: `/api/groups/${group._id}/roles`,
+        data: [role._id],
+        responseType: 'json'
+      })
+    },
+    meta: {
+      onSuccess: onSuccess
+    }
   }
 }

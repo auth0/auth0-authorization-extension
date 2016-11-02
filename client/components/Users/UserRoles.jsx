@@ -6,11 +6,12 @@ import  ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 class UserRoles extends Component {
 
   save = (roles) => {
-    this.props.saveUserRoles(this.props.user.toJSON(), roles);
+    this.props.saveUserRoles(this.props.user.toJSON(), roles, () => {
+      this.props.fetchRulesForUser(this.props.userId);
+    });
   }
 
   getRolesIds = () => {
-    console.log(this.props.roles,111111111);
     const stateRoles = this.props.roles.get('records').toJS();
     let roles;
     if (stateRoles && stateRoles.length) {
@@ -46,6 +47,9 @@ class UserRoles extends Component {
             requestDeleteRole={this.props.requestDeleteRole}
             cancelDeleteRole={this.props.cancelDeleteRole}
             deleteRole={this.props.deleteRole}
+            item={this.props.user}
+            fetchRulesForItem={this.props.fetchRulesForUser}
+            itemId={this.props.userId}
           />
         </div>
       </div>
