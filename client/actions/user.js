@@ -107,6 +107,9 @@ export function saveUserRoles(user, data, onSuccess) {
         data: data.rules,
         responseType: 'json'
       })
+    },
+    meta: {
+      onSuccess: onSuccess
     }
   };
 }
@@ -115,9 +118,8 @@ export function fetchRulesForUser(userId) {
   return {
     type: constants.FETCH_USER_ROLES,
     payload: {
-      promise: axios.get('/api/users/'+userId+'/roles', {
-        params: {
-        },
+      promise: axios.get('/api/users/' + userId + '/roles', {
+        params: {},
         responseType: 'json'
       })
     }
@@ -139,8 +141,19 @@ export function cancelDeleteUserRole() {
   }
 }
 
-export function deleteUserRole() {
+export function deleteGroupRole(user, role, onSuccess) {
   return {
-    type: constants.DELETE_USER_ROLE
+    type: constants.DELETE_USER_ROLE,
+    payload: {
+      promise: axios({
+        method: 'delete',
+        url: `/api/groups/${user.user_id}/roles`,
+        data: [role._id],
+        responseType: 'json'
+      })
+    },
+    meta: {
+      onSuccess: onSuccess
+    }
   }
 }

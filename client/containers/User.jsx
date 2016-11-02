@@ -62,7 +62,6 @@ export class UserContainer extends Component {
 
   render() {
     const { user, groups, allGroups, groupPicker, groupMember } = this.props;
-    console.log(user,111111111111);
     if (user.loading) { return this.renderLoading(); }
     return (
       <div>
@@ -86,14 +85,14 @@ export class UserContainer extends Component {
                            openAddRoles={this.props.openAddRoles}
                            closeAddRoles={this.props.closeAddRoles}
                            saveUserRoles={this.props.saveUserRoles}
-
                            requestDeleteRole={this.props.requestDeleteUserRole}
                            cancelDeleteRole={this.props.cancelDeleteUserRole}
                            deleteRole={this.props.deleteUserRole}
-
                            roles={this.props.roles}
                            loading={user.loading}
                            applications={this.props.applications}
+                           fetchRulesForUser={this.props.fetchRulesForUser}
+                           userId={this.props.params.id}
                 />
               </Tab>
             </Tabs>

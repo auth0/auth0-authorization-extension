@@ -54,6 +54,12 @@ export default class ItemRolesOverview extends Component {
     });
   }
 
+  deleteRole = () => {
+    this.props.deleteRole(this.props.item.toJSON(), this.props.role.toJSON(), () => {
+      this.props.fetchRulesForItem(this.props.itemId);
+    });
+  }
+
   renderRoleActions = (role) => (
     <div>
       <TableAction
@@ -102,7 +108,7 @@ export default class ItemRolesOverview extends Component {
         {(record) ?
           <RoleDeleteDialog role={record}
                             onCancel={this.props.cancelDeleteRole}
-                            onConfirm={this.props.deleteRole}
+                            onConfirm={this.deleteRole}
                             deleting={deleting}
           />
           : '' }

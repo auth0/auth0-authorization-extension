@@ -174,14 +174,14 @@ export class GroupContainer extends Component {
                             openAddRoles={this.props.groupOpenAddRoles}
                             closeAddRoles={this.props.groupCloseAddRoles}
                             saveGroupRoles={this.props.saveGroupRoles}
-
                             requestDeleteRole={this.props.requestDeleteGroupRole}
                             cancelDeleteRole={this.props.cancelDeleteGroupRole}
                             deleteRole={this.props.deleteGroupRole}
-
                             roles={this.props.roles}
                             loading={group.get('loading')}
                             applications={this.props.applications}
+                            fetchRulesForGroup={this.props.fetchRulesForGroup}
+                            groupId={this.props.params.id}
                 />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">

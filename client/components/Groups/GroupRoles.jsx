@@ -6,7 +6,9 @@ import  ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 class GroupRoles extends React.Component {
 
   save = (roles) => {
-    this.props.saveGroupRoles(this.props.group.toJSON(), roles);
+    this.props.saveGroupRoles(this.props.group.toJSON(), roles, () => {
+      this.props.fetchRulesForGroup(this.props.groupId);
+    });
   }
 
   getRolesIds = () => {
@@ -45,6 +47,9 @@ class GroupRoles extends React.Component {
           requestDeleteRole={this.props.requestDeleteRole}
           cancelDeleteRole={this.props.cancelDeleteRole}
           deleteRole={this.props.deleteRole}
+          item={this.props.group}
+          fetchRulesForItem={this.props.fetchRulesForGroup}
+          itemId={this.props.groupId}
         />
       </div>
     );
