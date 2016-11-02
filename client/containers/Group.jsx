@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions, applicationActions } from '../actions';
+import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions, applicationActions, roleActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
 import GroupRoles from '../components/Groups/GroupRoles';
@@ -31,8 +31,9 @@ export class GroupContainer extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchGroup(this.props.params.id);
+    this.props.fetchRoles();
     this.props.fetchRulesForGroup(this.props.params.id);
+    this.props.fetchGroup(this.props.params.id);
     this.props.fetchApplications();
   }
 
@@ -179,6 +180,7 @@ export class GroupContainer extends Component {
                             cancelDeleteRole={this.props.cancelDeleteGroupRole}
                             deleteRole={this.props.deleteGroupRole}
                             roles={this.props.roles}
+                            groupRoles={this.props.groupRoles}
                             loading={group.get('loading')}
                             applications={this.props.applications}
                             fetchRulesForGroup={this.props.fetchRulesForGroup}
@@ -224,7 +226,8 @@ function mapStateToProps(state) {
     connections: state.connections,
     group: state.group,
     addRoles: state.group.get('addRoles'),
-    roles: state.groupRoles,
+    groupRoles: state.groupRoles,
+    roles: state.roles,
     groupNested: state.groupNested,
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,
@@ -235,4 +238,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions, ...applicationActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions, ...applicationActions, ...roleActions })(GroupContainer);

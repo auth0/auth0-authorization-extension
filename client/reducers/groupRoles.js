@@ -9,7 +9,8 @@ const initialState = {
   error: null,
   deleting: false,
   records: [],
-  record: null
+  record: null,
+  ids: []
 };
 
 export const groupRoles = createReducer(fromJS(initialState), {
@@ -23,12 +24,18 @@ export const groupRoles = createReducer(fromJS(initialState), {
       loading: false,
       error: `An error occured while loading the roles: ${action.errorMessage}`
     }),
-  [constants.FETCH_GROUP_ROLES_FULFILLED]: (state, action) =>
-    state.merge({
+  [constants.FETCH_GROUP_ROLES_FULFILLED]: (state, action) => {
+    const data = action.payload.data;
+    let roles = [];
+    if (data && data.length) {
+      roles = _.map(data, (role) => (role._id));
+    }
+    return state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, app => app.id))
-    }),
-
+      records: fromJS(data),
+      ids: roles
+    })
+  },
   [constants.REQUEST_DELETE_GROUP_ROLE]: (state, action) =>
     state.merge({
       deleting: true,
