@@ -12,6 +12,7 @@ export default createForm('userPicker', class UserPickerDialog extends Component
 
     this.renderActions = this.renderActions.bind(this);
     this.getOptions = this.getOptions.bind(this);
+    this.onCancel = this.onCancel.bind(this);
   }
 
   static propTypes = {
@@ -24,28 +25,35 @@ export default createForm('userPicker', class UserPickerDialog extends Component
     onUnselectUser: React.PropTypes.func.isRequired,
     fetchUsers: React.PropTypes.func.isRequired,
     totalUsers: React.PropTypes.number,
-    users: React.PropTypes.array
+    users: React.PropTypes.array,
+    reset: React.PropTypes.func.isRequired
   };
 
   getOptions(input, callback) {
-    if (this.props.totalUsers < process.env.MAX_MULTISELECT_USERS) {
-      callback(null, {
-        options: this.props.users,
-        complete: true
+    // TODO: this.props.totalUsers changes over time > what should be the solution?
+    // if (this.props.totalUsers < process.env.MAX_MULTISELECT_USERS) {
+    //   callback(null, {
+    //     options: this.props.users,
+    //     complete: true
+    //   });
+    // } else {
+      const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
+      this.props.fetchUsers(query, null, true, null, null, () => {
+        callback(null, {
+          options: this.props.users,
+          complete: false
+        });
       });
-    }
-
-    if (this.props.totalUsers > process.env.MAX_MULTISELECT_USERS &&
-      input.length >= process.env.MAX_MULTISELECT_INPUT_CHAR) {
-      this.props.fetchUsers(`name:${input}*`);
-      callback(null, {
-        options: this.props.users
-      });
-    }
+    // }
   }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.userPicker !== this.props.userPicker;
+  }
+
+  onCancel() {
+    this.props.reset();
+    this.props.onCancel();
   }
 
   renderActions(user, index) {
@@ -61,13 +69,13 @@ export default createForm('userPicker', class UserPickerDialog extends Component
   }
 
   render() {
-    const { onCancel, onReset, onSearch } = this.props;
+    const { onReset, onSearch } = this.props;
     const { title, error, records, selection, total, open, loading } = this.props.userPicker.toJS();
 
     const confirmMessage = selection.length ? `Add ${selection.length} Users` : 'Confirm';
 
     return (
-      <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={onCancel} onConfirm={this.props.handleSubmit}>
+      <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={this.onCancel} onConfirm={this.props.handleSubmit}>
         <Error message={error} />
         <p className="modal-description">
           Add members to this group.
@@ -76,7 +84,9 @@ export default createForm('userPicker', class UserPickerDialog extends Component
         <Field
           name="members"
           component={Multiselect}
-          loadOptions={this.getOptions}
+          loadOptions={_.debounce((input, callback) => {
+            return this.getOptions(input, callback);
+          }, process.env.MULTISELECT_DEBOUNCE_MS)}
         />
       </Confirm>
     );
