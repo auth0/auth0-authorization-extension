@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import Promise from 'bluebird';
 import { ArgumentError, ValidationError } from 'auth0-extension-tools';
 import config from '../config';
 
@@ -32,6 +34,19 @@ export default class Database {
     }
 
     return { size: null, type: config('DB_TYPE') };
+  }
+
+  canDeleteRecord(type, checkFor, id) {
+    return this.provider.getAll(type)
+      .then(items => _.filter(items, item => item[checkFor] && _.includes(item[checkFor], id)))
+      .then(items => {
+        if (items.length) {
+          const names = items.map(item => item.name).join(', ');
+          const message = `Unable to delete ${checkFor} while used in ${type}: ${names}`;
+          return Promise.reject(new ValidationError(message));
+        }
+        return Promise.resolve();
+      });
   }
 
   getConfiguration() {
@@ -87,8 +102,8 @@ export default class Database {
   }
 
   deletePermission(id) {
-    return this.provider
-      .delete('permissions', id);
+    return this.canDeleteRecord('roles', 'permissions', id)
+      .then(() => this.provider.delete('permissions', id));
   }
 
   getRoles() {
@@ -123,8 +138,8 @@ export default class Database {
   }
 
   deleteRole(id) {
-    return this.provider
-      .delete('roles', id);
+    return this.canDeleteRecord('groups', 'roles', id)
+      .then(() => this.provider.delete('roles', id));
   }
 
   getGroups() {
