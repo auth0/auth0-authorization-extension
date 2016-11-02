@@ -16,12 +16,14 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
     users: React.PropTypes.array,
     loading: React.PropTypes.bool.isRequired,
     submitting: React.PropTypes.bool,
-    handleSubmit: React.PropTypes.func.isRequired
+    handleSubmit: React.PropTypes.func.isRequired,
+    reset: React.PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
     this.getOptions = this.getOptions.bind(this);
+    this.onClose = this.onClose.bind(this);
   }
 
   getOptions(input, callback) {
@@ -42,13 +44,18 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
     // }
   }
 
+  onClose() {
+    this.props.reset();
+    this.props.onClose();
+  }
+
   render() {
     const group = this.props.group.toJS();
     const title = `Add members to ${group.record.name}`;
     const isVisible = group.isEditUsers;
 
     return (
-      <Modal show={isVisible} className="modal-overflow-visible" onHide={this.props.onClose}>
+      <Modal show={isVisible} className="modal-overflow-visible" onHide={this.onClose}>
         <Modal.Header closeButton={!group.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
@@ -64,7 +71,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
           />
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.props.onClose}>
+          <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.onClose}>
             Cancel
           </Button>
           <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.props.handleSubmit}>
