@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions, applicationActions } from '../actions';
+import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions, applicationActions, roleActions } from '../actions';
 
 import UserGroups from '../components/Users/UserGroups';
 import UserHeader from '../components/Users/UserHeader';
@@ -23,6 +23,7 @@ export class UserContainer extends Component {
   }
 
   componentWillMount() {
+    this.props.fetchRoles();
     this.props.fetchUser(this.props.params.id);
     this.props.fetchRulesForUser(this.props.params.id);
     this.props.fetchApplications();
@@ -89,6 +90,7 @@ export class UserContainer extends Component {
                            cancelDeleteRole={this.props.cancelDeleteUserRole}
                            deleteRole={this.props.deleteUserRole}
                            roles={this.props.roles}
+                           userRoles={this.props.userRoles}
                            loading={user.loading}
                            applications={this.props.applications}
                            fetchRulesForUser={this.props.fetchRulesForUser}
@@ -116,10 +118,11 @@ function mapStateToProps(state) {
     },
     addRoles: state.user.get('addRoles'),
     applications: state.applications,
-    roles: state.userRoles,
+    userRoles: state.userRoles,
+    roles: state.roles,
     allGroups: state.user.get('allGroups'),
     groups: state.user.get('groups')
   };
 }
 
-export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions, ...applicationActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions, ...applicationActions, ...roleActions })(UserContainer);

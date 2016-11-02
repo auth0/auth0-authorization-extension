@@ -7,7 +7,6 @@ import  RolesTable from './RolesTable';
 export default class ItemRolesOverview extends Component {
 
   static propTypes = {
-    role: PropTypes.object.isRequired,
     roles: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     applications: PropTypes.object.isRequired,

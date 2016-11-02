@@ -91,6 +91,22 @@ export const user = createReducer(fromJS(initialState), {
   [constants.ADD_ROLES_CLOSE]: (state, action) =>
     state.merge({
       addRoles: false
+    }),
+  [constants.SAVE_USER_ROLES_PENDING]: (state, action) =>
+    state.merge({
+      addRoles: true,
+      loading: true
+    }),
+  [constants.SAVE_USER_ROLES_REJECTED]: (state, action) =>
+    state.merge({
+      addRoles: false,
+      loading: false,
+      error: `Error during saving roles: ${action.errorMessage}`
+    }),
+  [constants.SAVE_USER_ROLES_FULFILLED]: (state, action) =>
+    state.merge({
+      addRoles: false,
+      loading: false
     })
 });
 

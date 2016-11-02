@@ -6,20 +6,14 @@ import connectContainer from 'redux-static';
 import { ScopeGroup } from 'auth0-extension-ui';
 
 import createForm from '../../utils/createForm';
-import { roleActions } from '../../actions';
 
 export default createForm('groupRoles', connectContainer(class GroupRolesDialog extends React.Component {
 
   static propTypes = {
     group: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
-    addRoles: PropTypes.bool.isRequired,
-    handleSubmit: React.PropTypes.func.isRequired
+    addRoles: PropTypes.bool.isRequired
   };
-
-  componentDidMount() {
-    this.props.fetchRoles();
-  }
 
   static stateToProps = (state) => {
     const stateRoles = state.roles.get('records').toJS();
@@ -31,14 +25,9 @@ export default createForm('groupRoles', connectContainer(class GroupRolesDialog 
       }));
     }
     return {
-      totalRoles: state.roles.get('total'),
       roles
     };
   };
-
-  static actionsToProps = {
-    ...roleActions
-  }
 
   render() {
     const group = this.props.group.toJS();
@@ -56,7 +45,7 @@ export default createForm('groupRoles', connectContainer(class GroupRolesDialog 
           <p className="modal-description">Add or remove roles from this group.</p>
           <label>Add roles</label>
           <Field
-            name="roles"
+            name="selectedRoles"
             component={ScopeGroup}
             label="Roles"
             options={this.props.roles}

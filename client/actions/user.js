@@ -141,13 +141,13 @@ export function cancelDeleteUserRole() {
   }
 }
 
-export function deleteGroupRole(user, role, onSuccess) {
+export function deleteUserRole(user, role, onSuccess) {
   return {
     type: constants.DELETE_USER_ROLE,
     payload: {
       promise: axios({
         method: 'delete',
-        url: `/api/groups/${user.user_id}/roles`,
+        url: `/api/user/${user.user_id}/roles`,
         data: [role._id],
         responseType: 'json'
       })
