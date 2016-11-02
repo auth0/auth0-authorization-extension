@@ -82,13 +82,13 @@ const clientRoutes = [
   '/configuration',
   '/configuration/rule',
   '/roles',
-  '/roles/:id',
+  '/roles/{id}',
   '/groups',
-  '/groups/:id',
+  '/groups/{id}',
   '/permissions',
-  '/permissions/:id',
+  '/permissions/{id}',
   '/users',
-  '/users/:id',
+  '/users/{id}',
   '/import-export'
 ];
 
