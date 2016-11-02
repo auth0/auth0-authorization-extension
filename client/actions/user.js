@@ -6,7 +6,7 @@ import { fetchUserGroups } from './userGroup';
 /*
  * Search for users.
  */
-export function fetchUsers(q = '', field = '', reset = false, per_page, page) {
+export function fetchUsers(q = '', field = '', reset = false, per_page, page, onSuccess) {
   return (dispatch, getState) => {
     const users = getState().users.get('records');
     if (reset || q !== '' || !users.size) {
@@ -24,7 +24,8 @@ export function fetchUsers(q = '', field = '', reset = false, per_page, page) {
           })
         },
         meta: {
-          page
+          page,
+          onSuccess
         }
       });
     }

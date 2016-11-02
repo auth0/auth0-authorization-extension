@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { PropTypes } from 'react';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
@@ -24,20 +25,21 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
   }
 
   getOptions(input, callback) {
-    if (this.props.totalUsers < process.env.MAX_MULTISELECT_USERS) {
-      callback(null, {
-        options: this.props.users,
-        complete: true
+    // TODO: this.props.totalUsers changes over time > what should be the solution?
+    // if (this.props.totalUsers < process.env.MAX_MULTISELECT_USERS) {
+    //   callback(null, {
+    //     options: this.props.users,
+    //     complete: true
+    //   });
+    // } else {
+      const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
+      this.props.fetchUsers(query, null, true, null, null, () => {
+        callback(null, {
+          options: this.props.users,
+          complete: false
+        });
       });
-    }
-
-    if (this.props.totalUsers > process.env.MAX_MULTISELECT_USERS &&
-      input.length >= process.env.MAX_MULTISELECT_INPUT_CHAR) {
-      this.props.fetchUsers(`name:${input}*`);
-      callback(null, {
-        options: this.props.users
-      });
-    }
+    // }
   }
 
   render() {
@@ -56,7 +58,9 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
           <Field
             name="members"
             component={Multiselect}
-            loadOptions={this.getOptions}
+            loadOptions={_.debounce((input, callback) => {
+              return this.getOptions(input, callback);
+            }, process.env.MULTISELECT_DEBOUNCE_MS)}
           />
         </Modal.Body>
         <Modal.Footer>

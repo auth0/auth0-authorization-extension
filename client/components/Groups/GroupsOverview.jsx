@@ -140,9 +140,8 @@ class GroupsOverview extends React.Component {
     let users = [ ];
     if (records && records.length) {
       users = _.map(records, (user) => ({
-        value: user.user_id,
-        label: user.name,
-        email: user.email
+        value: user.email,
+        label: user.name
       }));
     }
     return users;
