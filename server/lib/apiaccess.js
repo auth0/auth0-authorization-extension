@@ -51,7 +51,6 @@ export const getApi = () =>
   makeRequest('resource-servers', 'GET')
     .then(apis => {
       const api = apis.filter(item => item.identifier === apiIdentifier);
-
       return api[0] || {};
     });
 

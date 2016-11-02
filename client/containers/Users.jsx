@@ -14,18 +14,23 @@ class Users extends React.Component {
 
     this.onReset = this.onReset.bind(this);
     this.onSearch = this.onSearch.bind(this);
+    this.getUsersOnPage = this.getUsersOnPage.bind(this);
   }
 
   componentWillMount() {
-    this.props.fetchUsers();
+    this.props.fetchUsers('', '', false, process.env.PER_PAGE);
   }
 
   onSearch(query, field) {
-    this.props.fetchUsers(query, field);
+    this.props.fetchUsers(query, field, false, process.env.PER_PAGE);
   }
 
   onReset() {
-    this.props.fetchUsers('', '', true);
+    this.props.fetchUsers('', '', true, process.env.PER_PAGE);
+  }
+
+  getUsersOnPage(page) {
+    this.props.fetchUsers('', '', true, process.env.PER_PAGE, page);
   }
 
   render() {
@@ -44,6 +49,7 @@ class Users extends React.Component {
           users={users}
           total={total}
           loading={loading}
+          getUsersOnPage={this.getUsersOnPage}
         />
       </div>
     );

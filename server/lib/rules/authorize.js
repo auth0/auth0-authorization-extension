@@ -30,12 +30,11 @@ module.exports = `function (user, context, callback) {
   // Authorize the user.
   function authorizeUser(user, context, cb) {
     request.post({
-      url: EXTENSION_URL + "/api/authorize/" + user.user_id,
+      url: EXTENSION_URL + "/api/users/" + user.user_id + "/calculate/" + context.clientID,
       headers: {
         "x-api-key": "<%= apiKey %>"
       },
       json: {
-        clientId: context.clientID,
         connectionName: context.connection,
         groups: user.groups
       },

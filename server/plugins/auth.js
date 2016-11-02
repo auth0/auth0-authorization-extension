@@ -1,5 +1,4 @@
 import Boom from 'boom';
-import jwt from 'hapi-auth-jwt2';
 import jwksRsa from 'jwks-rsa';
 import * as tools from 'auth0-extension-hapi-tools';
 

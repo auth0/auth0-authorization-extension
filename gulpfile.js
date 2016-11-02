@@ -1,4 +1,5 @@
 const gulp = require('gulp');
+const util = require('gulp-util');
 const open = require('open');
 const ngrok = require('ngrok');
 const nodemon = require('gulp-nodemon');
@@ -26,6 +27,10 @@ gulp.task('run', () => {
       ]
     });
 
-    setTimeout(() => open(url.replace('https://', 'http://')), 2000);
+    setTimeout(() => {
+      const publicUrl = `${url.replace('https://', 'http://')}/login`;
+      open(publicUrl);
+      util.log('Public Url:', publicUrl);
+    }, 4000);
   });
 });
