@@ -47,10 +47,10 @@ export function fetchGroupDetails(groupId) {
 export function fetchGroup(groupId) {
   return (dispatch) => {
     dispatch(fetchGroupDetails(groupId));
-    dispatch(fetchGroupMembers(groupId));
+    dispatch(fetchGroupMembers(groupId, null, process.env.PER_PAGE));
     dispatch(fetchGroupMappings(groupId));
     dispatch(fetchNestedGroups(groupId));
-    dispatch(fetchGroupMembersNested(groupId));
+    dispatch(fetchGroupMembersNested(groupId, null, process.env.PER_PAGE));
   };
 }
 

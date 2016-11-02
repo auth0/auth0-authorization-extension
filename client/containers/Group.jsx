@@ -20,6 +20,8 @@ export class GroupContainer extends Component {
     this.requestRemoveMember = this.requestRemoveMember.bind(this);
     this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
     this.saveGroupMapping = this.saveGroupMapping.bind(this);
+    this.getGroupMembersOnPage = this.getGroupMembersOnPage.bind(this);
+    this.getAllNestedMembersOnPage = this.getAllNestedMembersOnPage.bind(this);
 
     // Nested groups.
     this.requestAddNestedGroup = this.requestAddNestedGroup.bind(this);
@@ -52,8 +54,8 @@ export class GroupContainer extends Component {
     const groupId = this.props.group.get('groupId');
     this.props.cancelUserPicker();
     this.props.addGroupMembers(groupId, data.members, () => {
-      this.props.fetchGroupMembers(groupId, true);
-      this.props.fetchGroupMembersNested(groupId, true);
+      this.props.fetchGroupMembers(groupId, true, process.env.PER_PAGE);
+      this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE);
     });
   }
 
@@ -74,7 +76,7 @@ export class GroupContainer extends Component {
     this.props.cancelGroupPicker();
     this.props.addNestedGroup(groupId, nestedIds, () => {
       this.props.fetchNestedGroups(groupId, true);
-      this.props.fetchGroupMembersNested(groupId, true);
+      this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE);
     });
   }
 
@@ -98,6 +100,16 @@ export class GroupContainer extends Component {
     return users;
   }
 
+  getGroupMembersOnPage(groupId, page) {
+    if (!groupId || !page) return;
+    this.props.fetchGroupMembers(groupId, true, process.env.PER_PAGE, page);
+  }
+
+  getAllNestedMembersOnPage(groupId, page) {
+    if (!groupId || !page) return;
+    this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE, page);
+  }
+
   renderLoading() {
     return (
       <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
@@ -105,6 +117,7 @@ export class GroupContainer extends Component {
       </div>
     );
   }
+
 
   render() {
     const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users } = this.props;
@@ -150,7 +163,10 @@ export class GroupContainer extends Component {
           <div className="col-xs-12">
             <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
               <Tab eventKey={1} title="Members">
-                <GroupMembers members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember} />
+                <GroupMembers
+                  groupId={group.get('groupId')} members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember}
+                  getGroupMembersOnPage={this.getGroupMembersOnPage} getAllNestedMembersOnPage={this.getAllNestedMembersOnPage}
+                />
               </Tab>
               <Tab eventKey={2} title="Roles">
                 <GroupRoles />
@@ -184,7 +200,9 @@ GroupContainer.propTypes = {
   saveGroupMapping: PropTypes.func.isRequired,
   clearGroupMapping: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired,
-  users: PropTypes.object.isRequired
+  users: PropTypes.object.isRequired,
+  fetchGroupMembers: PropTypes.func.isRequired,
+  fetchGroupMembersNested: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

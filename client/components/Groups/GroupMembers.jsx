@@ -1,21 +1,32 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
-import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from 'auth0-extension-ui';
+import { Pagination, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from 'auth0-extension-ui';
 
 class GroupMembers extends Component {
   constructor() {
     super();
-    this.renderActions = this.renderActions.bind(this);
     this.state = {
       showOnlyGroupMembers: true
     };
+
+    this.renderActions = this.renderActions.bind(this);
+    this.handleMembersPageChange = this.handleMembersPageChange.bind(this);
+    this.handleAllMembersPageChange = this.handleAllMembersPageChange.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.members !== this.props.members || nextProps.nestedMembers !== this.props.nestedMembers;
+  }
+
+  handleMembersPageChange(page) {
+    this.props.getGroupMembersOnPage(this.props.groupId, page);
+  }
+
+  handleAllMembersPageChange(page) {
+    this.props.getAllNestedMembersOnPage(this.props.groupId, page);
   }
 
   renderActions(user, index) {
@@ -57,6 +68,12 @@ class GroupMembers extends Component {
           )}
           </TableBody>
         </Table>
+
+        <Pagination
+          totalItems={nestedMembers.total}
+          handlePageChange={this.handleAllMembersPageChange}
+          perPage={process.env.PER_PAGE}
+        />
       </div>
     );
   }
@@ -76,7 +93,7 @@ class GroupMembers extends Component {
   }
 
   render() {
-    const { records, loading, error } = this.props.members.toJS();
+    const { records, loading, error, total } = this.props.members.toJS();
 
     return (
       <div>
@@ -110,6 +127,12 @@ class GroupMembers extends Component {
           </div>
           {this.renderMembers(loading, records)}
         </LoadingPanel>
+        <Pagination
+          totalItems={total}
+          handlePageChange={this.handleMembersPageChange}
+          perPage={process.env.PER_PAGE}
+        />
+
         {this.renderAllMembers(this.props.nestedMembers.toJS())}
       </div>
     );
@@ -120,7 +143,10 @@ GroupMembers.propTypes = {
   addMember: React.PropTypes.func.isRequired,
   removeMember: React.PropTypes.func.isRequired,
   members: React.PropTypes.object.isRequired,
-  nestedMembers: React.PropTypes.object.isRequired
+  nestedMembers: React.PropTypes.object.isRequired,
+  getGroupMembersOnPage: React.PropTypes.func.isRequired,
+  getAllNestedMembersOnPage: React.PropTypes.func.isRequired,
+  groupId: React.PropTypes.string.isRequired
 };
 
 export default GroupMembers;

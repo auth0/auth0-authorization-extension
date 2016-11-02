@@ -1,7 +1,7 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
 import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
-import { SectionHeader, BlankState, SearchBar, Error, TableTotals } from 'auth0-extension-ui';
+import { Pagination, SectionHeader, BlankState, SearchBar, Error, TableTotals, LoadingPanel } from 'auth0-extension-ui';
 
 import UserGeneral from './UserGeneral';
 import UserFederated from './UserFederated';
@@ -35,6 +35,7 @@ class UserOverview extends React.Component {
     };
 
     this.renderActions = this.renderActions.bind(this);
+    this.handleUsersPageChange = this.handleUsersPageChange.bind(this);
 
     // Searchbar.
     this.onKeyPress = this.onKeyPress.bind(this);
@@ -59,16 +60,12 @@ class UserOverview extends React.Component {
     });
   }
 
-  renderActions(user, index) {
-    return this.props.renderActions(user, index);
+  handleUsersPageChange(page) {
+    this.props.getUsersOnPage(page);
   }
 
-  renderLoading() {
-    return (
-      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
-        <div className="circle" />
-      </div>
-    );
+  renderActions(user, index) {
+    return this.props.renderActions(user, index);
   }
 
   renderEmptyState() {
@@ -92,13 +89,14 @@ class UserOverview extends React.Component {
   render() {
     const { loading, error, users, total, renderActions } = this.props;
 
-    if (loading) { return this.renderLoading(); }
+    if (!error && !users.length && !loading) { return this.renderEmptyState(); }
 
     return (
-      !error && !users.length ? this.renderEmptyState() : (
-        <div>
-          <Error message={error} />
-          <SectionHeader title="Users" description="Here you will find all the users." />
+      <div>
+        <Error message={error} />
+        <SectionHeader title="Users" description="Here you will find all the users." />
+
+        <LoadingPanel show={loading}>
           <Tabs defaultActiveKey={1} animation={false}>
             <Tab eventKey={1} title="Users">
               <UserGeneral />
@@ -124,13 +122,20 @@ class UserOverview extends React.Component {
               <UsersTable loading={loading} users={users} renderActions={renderActions} />
             </div>
           </div>
-          <div className="row">
-            <div className="col-xs-12">
+        </LoadingPanel>
+        <div className="row">
+          <div className="col-xs-12">
+            { process.env.PER_PAGE < total ?
+              <Pagination
+                totalItems={total}
+                handlePageChange={this.handleUsersPageChange}
+                perPage={process.env.PER_PAGE}
+              /> :
               <TableTotals currentCount={users.length} totalCount={total} />
-            </div>
+            }
           </div>
         </div>
-      )
+      </div>
     );
   }
 }
@@ -142,7 +147,8 @@ UserOverview.propTypes = {
   users: React.PropTypes.array.isRequired,
   total: React.PropTypes.number.isRequired,
   loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired
+  renderActions: React.PropTypes.func.isRequired,
+  getUsersOnPage: React.PropTypes.func.isRequired
 };
 
 export default UserOverview;
