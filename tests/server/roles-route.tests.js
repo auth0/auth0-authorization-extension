@@ -25,6 +25,7 @@ describe('roles-route', () => {
   };
 
   before((done) => {
+    db.canDeleteRecord = () => Promise.resolve();
     db.getPermissions = () => Promise.resolve([ permission ]);
     db.getRoles = () => Promise.resolve([ role ]);
     db.getRole = () => Promise.resolve(role);
