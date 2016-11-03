@@ -17,13 +17,13 @@ RUN set -x \
   && apt-get update && apt-get install -y $buildDeps --no-install-recommends && rm -rf /var/lib/apt/lists/* \
   && npm config set registry http://registry.npmjs.org/ \\
   && npm install --no-optional \
-  && npm run build:prod && npm prune --production \
+  && npm run client:build && npm prune --production \
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
   && npm cache clean \
   && rm -rf /var/cache/yum \
   && rm -rf /usr/lib/locale \
   && rm -rf /usr/lib/gcc \
-  && rm -rf /usr/share/locale
+  && rm -rf /usr/share/locale \
   && rm -rf /tmp/npm*
 
 # Data Directory
@@ -35,4 +35,4 @@ ENV JSONDB_PATH $DATA_DIR/db.json
 # Start
 ENV PORT 3000
 EXPOSE 3000
-CMD npm run serve:prod
+CMD npm run server:prod
