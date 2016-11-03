@@ -237,7 +237,7 @@ export function saveGroupRoles(group, data, onSuccess) {
       promise: axios({
         method: 'patch',
         url: `/api/groups/${group._id}/roles`,
-        data: data.roles,
+        data: data,
         responseType: 'json'
       })
     },

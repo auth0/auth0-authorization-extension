@@ -7,9 +7,11 @@ import { Error, LoadingPanel } from 'auth0-extension-ui';
 class UserRoles extends Component {
 
   save = (roles) => {
-    this.props.saveUserRoles(this.props.user.toJSON(), roles, () => {
-      this.props.fetchRulesForUser(this.props.userId);
-    });
+    if(roles.selectedRoles) {
+      this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
+        this.props.fetchRulesForUser(this.props.userId);
+      });
+    }
   }
 
   getRolesIds = () => {

@@ -5,10 +5,12 @@ import  ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 import { Error, LoadingPanel } from 'auth0-extension-ui';
 
 class GroupRoles extends React.Component {
-  save = (roles) => {
-    this.props.saveGroupRoles(this.props.group.toJSON(), roles, () => {
-      this.props.fetchRulesForGroup(this.props.groupId);
-    });
+  saveRoles = (roles) => {
+    if(roles.selectedRoles) {
+      this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
+        this.props.fetchRulesForGroup(this.props.groupId);
+      });
+    }
   }
 
   render() {
@@ -22,9 +24,9 @@ class GroupRoles extends React.Component {
                             addRoles={this.props.addRoles}
                             roles={this.props.roles}
                             onClose={this.props.closeAddRoles}
-                            onSubmit={this.save}
+                            onSubmit={this.saveRoles}
                             initialValues={{
-                              roles: this.props.groupRoles.get('ids').toJSON()
+                              roles: ["67b28c74-f935-4329-9c09-87357bf4be37", "20b0c7a5-ccd0-4a60-a904-ebf0c91e4b8f"]
                             }}
           />
           <div className="col-xs-8">

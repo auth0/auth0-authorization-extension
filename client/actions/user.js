@@ -103,7 +103,7 @@ export function saveUserRoles(user, data, onSuccess) {
       promise: axios({
         method: 'patch',
         url: `/api/users/${user.user_id}/roles`,
-        data: data.rules,
+        data: data,
         responseType: 'json'
       })
     },

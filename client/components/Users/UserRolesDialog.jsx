@@ -57,7 +57,7 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
           <p className="modal-description">Add or remove roles from this user.</p>
           <label>Add roles</label>
           <Field
-            name="roles"
+            name="selectedRoles"
             component={ScopeGroup}
             label="Roles"
             options={this.props.roles}
