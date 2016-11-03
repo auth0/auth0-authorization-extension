@@ -23,15 +23,23 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
 
   static stateToProps = (state) => {
     const stateRoles = state.roles.get('records').toJS();
-    let roles;
-    if (stateRoles && stateRoles.length) {
-      roles = _.map(stateRoles, (role) => ({
-        value: role._id,
-        text: role.name
-      }));
+    const selectedRoles = state.userRoles.get('records').toJS();
+    let roles = [];
+    for ( let i in stateRoles ) {
+      for ( let j in selectedRoles ) {
+        let needPush = true;
+        if (stateRoles[i]._id == selectedRoles[j]._id) {
+          needPush = false;
+          break;
+        }
+        if(needPush)
+          roles.push({
+            value: stateRoles[i]._id,
+            text: stateRoles[i].name
+          });
+      }
     }
     return {
-      totalRoles: state.roles.get('total'),
       roles
     };
   };
