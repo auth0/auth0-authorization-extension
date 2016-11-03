@@ -8,6 +8,7 @@ class UserRoles extends Component {
 
   save = (roles) => {
     if(roles.selectedRoles) {
+      alert(123);
       this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRulesForUser(this.props.userId);
       });
@@ -34,10 +35,8 @@ class UserRoles extends Component {
                            addRoles={this.props.addRoles}
                            onClose={this.props.closeAddRoles}
                            onSubmit={this.save}
-                           initialValues={{
-                             roles: this.props.userRoles.get('ids').toJSON()
-                           }
-                           }
+                           roles={this.props.roles}
+                           selectedRoles={this.props.userRoles.get('records').toJSON()}
           />
           <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-8">

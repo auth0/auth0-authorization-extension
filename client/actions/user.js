@@ -146,7 +146,7 @@ export function deleteUserRole(user, role, onSuccess) {
     payload: {
       promise: axios({
         method: 'delete',
-        url: `/api/user/${user.user_id}/roles`,
+        url: `/api/users/${user.user_id}/roles`,
         data: [role._id],
         responseType: 'json'
       })
