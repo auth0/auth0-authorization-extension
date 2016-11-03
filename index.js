@@ -24,7 +24,7 @@ nconf
   });
 
 // Start the server.
-return require('./server/init')({ configProvider: (key) => nconf.get(key) }, (err, hapi) => {
+return require('./server/init')((key) => nconf.get(key), null, (err, hapi) => {
   if (err) {
     return logger.error(err);
   }

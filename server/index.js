@@ -58,4 +58,6 @@ export default (cb) => {
 
     return cb(null, server);
   });
+
+  return server;
 };
