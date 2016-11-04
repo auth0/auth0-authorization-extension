@@ -124,7 +124,6 @@ export class GroupContainer extends Component {
     const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users, addRoles } = this.props;
 
     if (group.get('loading')) { return this.renderLoading(); }
-
     return (
       <div>
         <div>
