@@ -93,7 +93,8 @@ export class GroupContainer extends Component {
     if (records && records.length) {
       users = _.map(records, (user) => ({
         value: user.email,
-        label: user.name
+        label: user.name,
+        userId: user.user_id
       }));
     }
     return users;
