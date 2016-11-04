@@ -6,13 +6,13 @@ import UserRolesDialog from './UserRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class UserRoles extends Component {
-  saveUserRoles(roles) {
+  saveUserRoles = (roles) => {
     if (roles.selectedRoles) {
       this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRulesForUser(this.props.userId);
       });
     }
-  }
+  };
 
   render() {
     const error = this.props.user.get('error');

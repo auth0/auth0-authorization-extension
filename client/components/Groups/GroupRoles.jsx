@@ -6,13 +6,13 @@ import GroupRolesDialog from './GroupRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class GroupRoles extends React.Component {
-  saveGroupRoles(roles) {
+  saveGroupRoles = (roles) => {
     if (roles.selectedRoles) {
       this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRolesForGroup(this.props.groupId);
       });
     }
-  }
+  };
 
   render() {
     const error = this.props.group.get('error');
