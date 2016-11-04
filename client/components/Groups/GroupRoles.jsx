@@ -9,7 +9,7 @@ class GroupRoles extends React.Component {
   saveRoles = (roles) => {
     if (roles.selectedRoles) {
       this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
-        this.props.fetchRulesForGroup(this.props.groupId);
+        this.props.fetchRolesForGroup(this.props.groupId);
       });
     }
   };
@@ -47,7 +47,7 @@ class GroupRoles extends React.Component {
             cancelDeleteRole={this.props.cancelDeleteRole}
             deleteRole={this.props.deleteRole}
             item={this.props.group}
-            fetchRulesForItem={this.props.fetchRulesForGroup}
+            fetchRolesForItem={this.props.fetchRolesForGroup}
             itemId={this.props.groupId}
           />
         </LoadingPanel>

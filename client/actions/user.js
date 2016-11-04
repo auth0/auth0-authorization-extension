@@ -6,7 +6,7 @@ import { fetchUserGroups } from './userGroup';
 /*
  * Search for users.
  */
-export function fetchUsers(q = '', field = '', reset = false, per_page, page, onSuccess) {
+export function fetchUsers(q = '', field = '', reset = false, per_page, page, onSuccess) { // eslint-disable-line camelcase
   return (dispatch, getState) => {
     const users = getState().users.get('records');
     if (reset || q !== '' || !users.size) {
@@ -79,7 +79,7 @@ export function fetchUserAuthorization(user) {
 export function fetchUser(userId) {
   return (dispatch) => {
     dispatch(fetchUserDetail(userId, (payload) => {
-      dispatch(fetchUserAuthorization(payload.data));
+      dispatch(fetchUserAuthorization(payload.data.user));
     }));
     dispatch(fetchUserGroups(userId));
   };
@@ -88,13 +88,13 @@ export function fetchUser(userId) {
 export function openAddRoles() {
   return {
     type: constants.ADD_ROLES_OPEN
-  }
+  };
 }
 
 export function closeAddRoles() {
   return {
     type: constants.ADD_ROLES_CLOSE
-  }
+  };
 }
 
 export function saveUserRoles(user, data, onSuccess) {
@@ -104,12 +104,12 @@ export function saveUserRoles(user, data, onSuccess) {
       promise: axios({
         method: 'patch',
         url: `/api/users/${user.user_id}/roles`,
-        data: data,
+        data,
         responseType: 'json'
       })
     },
     meta: {
-      onSuccess: onSuccess
+      onSuccess
     }
   };
 }
@@ -118,7 +118,7 @@ export function fetchRulesForUser(userId) {
   return {
     type: constants.FETCH_USER_ROLES,
     payload: {
-      promise: axios.get('/api/users/' + userId + '/roles', {
+      promise: axios.get(`/api/users/${userId}/roles`, {
         params: {},
         responseType: 'json'
       })
@@ -132,13 +132,13 @@ export function requestDeleteUserRole(role) {
     meta: {
       role
     }
-  }
+  };
 }
 
 export function cancelDeleteUserRole() {
   return {
     type: constants.CANCEL_DELETE_USER_ROLE
-  }
+  };
 }
 
 export function deleteUserRole(user, role, onSuccess) {
@@ -148,12 +148,12 @@ export function deleteUserRole(user, role, onSuccess) {
       promise: axios({
         method: 'delete',
         url: `/api/users/${user.user_id}/roles`,
-        data: [role._id],
+        data: [ role._id ], // eslint-disable-line no-underscore-dangle
         responseType: 'json'
       })
     },
     meta: {
-      onSuccess: onSuccess
+      onSuccess
     }
-  }
+  };
 }

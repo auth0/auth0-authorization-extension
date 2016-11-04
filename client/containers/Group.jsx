@@ -32,7 +32,7 @@ export class GroupContainer extends Component {
 
   componentWillMount() {
     this.props.fetchRoles();
-    this.props.fetchRulesForGroup(this.props.params.id);
+    this.props.fetchRolesForGroup(this.props.params.id);
     this.props.fetchGroup(this.props.params.id);
     this.props.fetchApplications();
   }
@@ -181,7 +181,7 @@ export class GroupContainer extends Component {
                             groupRoles={this.props.groupRoles}
                             loading={group.get('loading')}
                             applications={this.props.applications}
-                            fetchRulesForGroup={this.props.fetchRulesForGroup}
+                            fetchRolesForGroup={this.props.fetchRolesForGroup}
                             groupId={this.props.params.id}
                 />
               </Tab>
