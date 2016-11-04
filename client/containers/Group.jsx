@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -169,20 +168,21 @@ export class GroupContainer extends Component {
                 />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <GroupRoles group={group.get('record')}
-                            addRoles={addRoles}
-                            openAddRoles={this.props.groupOpenAddRoles}
-                            closeAddRoles={this.props.groupCloseAddRoles}
-                            saveGroupRoles={this.props.saveGroupRoles}
-                            requestDeleteRole={this.props.requestDeleteGroupRole}
-                            cancelDeleteRole={this.props.cancelDeleteGroupRole}
-                            deleteRole={this.props.deleteGroupRole}
-                            roles={this.props.roles}
-                            groupRoles={this.props.groupRoles}
-                            loading={group.get('loading')}
-                            applications={this.props.applications}
-                            fetchRolesForGroup={this.props.fetchRolesForGroup}
-                            groupId={this.props.params.id}
+                <GroupRoles
+                  group={group.get('record')}
+                  addRoles={addRoles}
+                  openAddRoles={this.props.groupOpenAddRoles}
+                  closeAddRoles={this.props.groupCloseAddRoles}
+                  saveGroupRoles={this.props.saveGroupRoles}
+                  requestDeleteRole={this.props.requestDeleteGroupRole}
+                  cancelDeleteRole={this.props.cancelDeleteGroupRole}
+                  deleteRole={this.props.deleteGroupRole}
+                  roles={this.props.roles}
+                  groupRoles={this.props.groupRoles}
+                  loading={group.get('loading')}
+                  applications={this.props.applications}
+                  fetchRolesForGroup={this.props.fetchRolesForGroup}
+                  groupId={this.props.params.id}
                 />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">

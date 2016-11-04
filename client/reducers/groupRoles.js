@@ -34,14 +34,14 @@ export const groupRoles = createReducer(fromJS(initialState), {
       loading: false,
       records: fromJS(data),
       ids: roles
-    })
+    });
   },
   [constants.REQUEST_DELETE_GROUP_ROLE]: (state, action) =>
     state.merge({
       deleting: true,
       record: action.meta.role
     }),
-  [constants.CANCEL_DELETE_GROUP_ROLE]: (state, action) =>
+  [constants.CANCEL_DELETE_GROUP_ROLE]: (state) =>
     state.merge({
       deleting: false,
       record: null
@@ -54,9 +54,10 @@ export const groupRoles = createReducer(fromJS(initialState), {
   [constants.DELETE_GROUP_ROLE_REJECTED]: (state, action) =>
     state.merge({
       loading: false,
+      deleting: false,
       error: `An error occured while deleting the role: ${action.errorMessage}`
     }),
-  [constants.DELETE_GROUP_ROLE_FULFILLED]: (state, action) =>
+  [constants.DELETE_GROUP_ROLE_FULFILLED]: (state) =>
     state.merge({
       deleting: false,
       record: null

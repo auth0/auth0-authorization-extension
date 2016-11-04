@@ -60,9 +60,11 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
     const user = this.props.user.toJS();
     const title = `Manage ${user.name} roles`;
     const isVisible = this.props.addRoles;
+
     if (!this.props.roles) {
-      return <div></div>;
+      return <div />;
     }
+
     return (
       <Modal show={isVisible} className="modal-overflow-visible" onHide={this.props.onClose}>
         <Modal.Header closeButton={!user.loading} className="has-border">
@@ -70,12 +72,10 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
         </Modal.Header>
         {this.renderBody(this.props.allRoles, this.props.selectedRoles)}
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting}
-                  onClick={this.props.onClose}>
+          <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting}
-                  onClick={this.props.handleSubmit}>
+          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.props.handleSubmit} >
             Save
           </Button>
         </Modal.Footer>

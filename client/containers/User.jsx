@@ -30,7 +30,7 @@ export class UserContainer extends Component {
   }
 
   requestAddToGroup(user) {
-    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
+    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
   }
 
   addToGroup(groups) {
@@ -81,20 +81,21 @@ export class UserContainer extends Component {
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Roles">
-                <UserRoles user={user.record}
-                           addRoles={this.props.addRoles}
-                           openAddRoles={this.props.openAddRoles}
-                           closeAddRoles={this.props.closeAddRoles}
-                           saveUserRoles={this.props.saveUserRoles}
-                           requestDeleteRole={this.props.requestDeleteUserRole}
-                           cancelDeleteRole={this.props.cancelDeleteUserRole}
-                           deleteRole={this.props.deleteUserRole}
-                           roles={this.props.roles}
-                           userRoles={this.props.userRoles}
-                           loading={user.loading}
-                           applications={this.props.applications}
-                           fetchRulesForUser={this.props.fetchRulesForUser}
-                           userId={this.props.params.id}
+                <UserRoles
+                  user={user.record}
+                  addRoles={this.props.addRoles}
+                  openAddRoles={this.props.openAddRoles}
+                  closeAddRoles={this.props.closeAddRoles}
+                  saveUserRoles={this.props.saveUserRoles}
+                  requestDeleteRole={this.props.requestDeleteUserRole}
+                  cancelDeleteRole={this.props.cancelDeleteUserRole}
+                  deleteRole={this.props.deleteUserRole}
+                  roles={this.props.roles}
+                  userRoles={this.props.userRoles}
+                  loading={user.loading}
+                  applications={this.props.applications}
+                  fetchRulesForUser={this.props.fetchRulesForUser}
+                  userId={this.props.params.id}
                 />
               </Tab>
             </Tabs>

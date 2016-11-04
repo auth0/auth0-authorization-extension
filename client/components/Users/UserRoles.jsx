@@ -6,14 +6,13 @@ import UserRolesDialog from './UserRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class UserRoles extends Component {
-
-  save = (roles) => {
+  saveUserRoles(roles) {
     if (roles.selectedRoles) {
       this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRulesForUser(this.props.userId);
       });
     }
-  };
+  }
 
   render() {
     const error = this.props.user.get('error');
@@ -22,12 +21,13 @@ class UserRoles extends Component {
       <div>
         <Error message={error} />
         <LoadingPanel show={loading}>
-          <UserRolesDialog user={this.props.user}
-                           addRoles={this.props.addRoles}
-                           onClose={this.props.closeAddRoles}
-                           onSubmit={this.save}
-                           roles={this.props.roles}
-                           selectedRoles={this.props.userRoles.get('records').toJSON()}
+          <UserRolesDialog
+            user={this.props.user}
+            addRoles={this.props.addRoles}
+            onClose={this.props.closeAddRoles}
+            onSubmit={this.saveUserRoles}
+            roles={this.props.roles}
+            selectedRoles={this.props.userRoles.get('records').toJSON()}
           />
           <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-8">
@@ -56,9 +56,11 @@ class UserRoles extends Component {
     );
   }
 }
+
 UserRoles.propTypes = {
   roles: React.PropTypes.object,
   userRoles: React.PropTypes.object,
   applications: React.PropTypes.object
 };
+
 export default UserRoles;

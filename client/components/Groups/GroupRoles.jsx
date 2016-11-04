@@ -6,13 +6,13 @@ import GroupRolesDialog from './GroupRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class GroupRoles extends React.Component {
-  saveRoles = (roles) => {
+  saveGroupRoles(roles) {
     if (roles.selectedRoles) {
       this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRolesForGroup(this.props.groupId);
       });
     }
-  };
+  }
 
   render() {
     const error = this.props.group.get('error');
@@ -21,12 +21,13 @@ class GroupRoles extends React.Component {
       <div className="row">
         <Error message={error} />
         <LoadingPanel show={loading}>
-          <GroupRolesDialog group={this.props.group}
-                            addRoles={this.props.addRoles}
-                            roles={this.props.roles}
-                            onClose={this.props.closeAddRoles}
-                            onSubmit={this.saveRoles}
-                            selectedRoles={this.props.groupRoles.get('records').toJSON()}
+          <GroupRolesDialog
+            group={this.props.group}
+            addRoles={this.props.addRoles}
+            roles={this.props.roles}
+            onClose={this.props.closeAddRoles}
+            onSubmit={this.saveGroupRoles}
+            selectedRoles={this.props.groupRoles.get('records').toJSON()}
           />
           <div className="col-xs-8">
             <p>
@@ -55,9 +56,11 @@ class GroupRoles extends React.Component {
     );
   }
 }
+
 GroupRoles.propTypes = {
   roles: React.PropTypes.object,
   groupRoles: React.PropTypes.object,
   applications: React.PropTypes.object
 };
+
 export default GroupRoles;
