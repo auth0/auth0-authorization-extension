@@ -11,11 +11,6 @@ class GroupMembers extends Component {
     this.state = {
       showGroupMembers: true
     };
-
-    this.renderActions = this.renderActions.bind(this);
-    this.handleMembersPageChange = this.handleMembersPageChange.bind(this);
-    this.handleAllMembersPageChange = this.handleAllMembersPageChange.bind(this);
-    this.toggleShowGroupMembers = this.toggleShowGroupMembers.bind(this);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -24,21 +19,21 @@ class GroupMembers extends Component {
     nextState.showGroupMembers !== this.state.showGroupMembers;
   }
 
-  handleMembersPageChange(page) {
+  handleMembersPageChange = (page) => {
     this.props.getGroupMembersOnPage(this.props.groupId, page);
   }
 
-  handleAllMembersPageChange(page) {
+  handleAllMembersPageChange = (page) => {
     this.props.getAllNestedMembersOnPage(this.props.groupId, page);
   }
 
-  toggleShowGroupMembers() {
+  toggleShowGroupMembers = () => {
     this.setState({
       showGroupMembers: !this.state.showGroupMembers
     });
   }
 
-  renderActions(user, index) {
+  renderActions = (user, index) => {
     return <GroupMemberRemoveAction index={index} user={user} loading={this.props.members.get('loading')} onRemove={this.props.removeMember} />;
   }
 
