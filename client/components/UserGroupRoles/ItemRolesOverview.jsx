@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
+import { Error, LoadingPanel, TableAction } from 'auth0-extension-ui';
 import RoleDeleteDialog from './RoleDeleteDialog';
-import RolesTable from './RolesTable';
+import RolesTable from '../Roles/RolesTable';
 
 export default class ItemRolesOverview extends Component {
 
@@ -12,44 +12,6 @@ export default class ItemRolesOverview extends Component {
     requestDeleteRole: PropTypes.func.isRequired,
     cancelDeleteRole: PropTypes.func.isRequired,
     deleteRole: PropTypes.func.isRequired
-  }
-
-  constructor() {
-    super();
-
-    this.searchBarOptions = [
-      {
-        value: 'name',
-        title: 'Name',
-        filterBy: 'name'
-      }
-    ];
-
-    this.state = {
-      selectedFilter: this.searchBarOptions[0]
-    };
-
-    // Searchbar.
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onReset = this.onReset.bind(this);
-    this.onHandleOptionChange = this.onHandleOptionChange.bind(this);
-  }
-
-  onKeyPress(e) {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      this.props.onSearch(e.target.value, this.state.selectedFilter.filterBy);
-    }
-  }
-
-  onReset() {
-    this.props.onReset();
-  }
-
-  onHandleOptionChange(option) {
-    this.setState({
-      selectedFilter: option
-    });
   }
 
   deleteRole = () => {
@@ -67,7 +29,7 @@ export default class ItemRolesOverview extends Component {
     </div>
   );
 
-  renderBody(records, loading) {
+  renderBody(loading) {
     return (
       <div>
         <RolesTable
@@ -117,7 +79,7 @@ export default class ItemRolesOverview extends Component {
               <div className="col-xs-12">
                 <Error message={error} />
                 <LoadingPanel show={loading}>
-                  {this.renderBody(records, loading)}
+                  {this.renderBody(loading)}
                 </LoadingPanel>
               </div>
             </div>
