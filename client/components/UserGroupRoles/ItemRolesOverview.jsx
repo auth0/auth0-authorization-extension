@@ -7,10 +7,13 @@ export default class ItemRolesOverview extends Component {
 
   static propTypes = {
     roles: PropTypes.object.isRequired,
+    role: PropTypes.object.isRequired,
+    item: PropTypes.object.isRequired,
     loading: PropTypes.bool.isRequired,
     applications: PropTypes.object.isRequired,
     requestDeleteRole: PropTypes.func.isRequired,
     cancelDeleteRole: PropTypes.func.isRequired,
+    fetchRolesForItem: PropTypes.func.isRequired,
     deleteRole: PropTypes.func.isRequired
   }
 

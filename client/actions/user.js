@@ -119,7 +119,6 @@ export function fetchRolesForUser(userId) {
     type: constants.FETCH_USER_ROLES,
     payload: {
       promise: axios.get(`/api/users/${userId}/roles`, {
-        params: {},
         responseType: 'json'
       })
     }

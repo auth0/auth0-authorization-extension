@@ -58,9 +58,19 @@ class GroupRoles extends React.Component {
 }
 
 GroupRoles.propTypes = {
+  groupId: React.PropTypes.string,
   roles: React.PropTypes.object,
+  group: React.PropTypes.object,
   groupRoles: React.PropTypes.object,
-  applications: React.PropTypes.object
+  applications: React.PropTypes.object,
+  saveGroupRoles: React.PropTypes.func,
+  fetchRolesForGroup: React.PropTypes.func,
+  addRoles: React.PropTypes.func,
+  openAddRoles: React.PropTypes.func,
+  closeAddRoles: React.PropTypes.func,
+  deleteRole: React.PropTypes.func,
+  cancelDeleteRole: React.PropTypes.func,
+  requestDeleteRole: React.PropTypes.func
 };
 
 export default GroupRoles;

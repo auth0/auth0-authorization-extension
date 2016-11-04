@@ -252,7 +252,6 @@ export function fetchRolesForGroup(groupId) {
     type: constants.FETCH_GROUP_ROLES,
     payload: {
       promise: axios.get(`/api/groups/${groupId}/roles`, {
-        params: {},
         responseType: 'json'
       })
     }

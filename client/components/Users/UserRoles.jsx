@@ -58,9 +58,19 @@ class UserRoles extends Component {
 }
 
 UserRoles.propTypes = {
+  userId: React.PropTypes.string,
   roles: React.PropTypes.object,
   userRoles: React.PropTypes.object,
-  applications: React.PropTypes.object
+  applications: React.PropTypes.object,
+  user: React.PropTypes.object,
+  saveUserRoles: React.PropTypes.func,
+  fetchRolesForUser: React.PropTypes.func,
+  addRoles: React.PropTypes.func,
+  openAddRoles: React.PropTypes.func,
+  closeAddRoles: React.PropTypes.func,
+  deleteRole: React.PropTypes.func,
+  cancelDeleteRole: React.PropTypes.func,
+  requestDeleteRole: React.PropTypes.func
 };
 
 export default UserRoles;
