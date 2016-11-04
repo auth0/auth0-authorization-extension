@@ -59,6 +59,7 @@ export const groupRoles = createReducer(fromJS(initialState), {
     }),
   [constants.DELETE_GROUP_ROLE_FULFILLED]: (state) =>
     state.merge({
+      loading: false,
       deleting: false,
       record: null
     })

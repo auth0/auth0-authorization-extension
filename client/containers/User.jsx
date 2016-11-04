@@ -25,7 +25,7 @@ export class UserContainer extends Component {
   componentWillMount() {
     this.props.fetchRoles();
     this.props.fetchUser(this.props.params.id);
-    this.props.fetchRulesForUser(this.props.params.id);
+    this.props.fetchRolesForUser(this.props.params.id);
     this.props.fetchApplications();
   }
 
@@ -94,7 +94,7 @@ export class UserContainer extends Component {
                   userRoles={this.props.userRoles}
                   loading={user.loading}
                   applications={this.props.applications}
-                  fetchRulesForUser={this.props.fetchRulesForUser}
+                  fetchRolesForUser={this.props.fetchRolesForUser}
                   userId={this.props.params.id}
                 />
               </Tab>

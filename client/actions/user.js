@@ -114,7 +114,7 @@ export function saveUserRoles(user, data, onSuccess) {
   };
 }
 
-export function fetchRulesForUser(userId) {
+export function fetchRolesForUser(userId) {
   return {
     type: constants.FETCH_USER_ROLES,
     payload: {

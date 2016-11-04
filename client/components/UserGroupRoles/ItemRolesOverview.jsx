@@ -1,8 +1,7 @@
 import React, { Component, PropTypes } from 'react';
-import { Button } from 'react-bootstrap';
 import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
-import  RoleDeleteDialog from './RoleDeleteDialog';
-import  RolesTable from './RolesTable';
+import RoleDeleteDialog from './RoleDeleteDialog';
+import RolesTable from './RolesTable';
 
 export default class ItemRolesOverview extends Component {
 
@@ -55,18 +54,18 @@ export default class ItemRolesOverview extends Component {
 
   deleteRole = () => {
     this.props.deleteRole(this.props.item.toJSON(), this.props.role.toJSON(), () => {
-      this.props.fetchRulesForItem(this.props.itemId);
+      this.props.fetchRolesForItem(this.props.itemId);
     });
-  }
+  };
 
   renderRoleActions = (role) => (
     <div>
       <TableAction
         id={`delete-${role._id}`} title="Delete Role" icon="264"
-        onClick={this.props.requestDeleteRole} args={[role]} disabled={this.props.roles.get('loading') || false}
+        onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
     </div>
-  )
+  );
 
   renderBody(records, loading) {
     return (
@@ -91,7 +90,7 @@ export default class ItemRolesOverview extends Component {
 
   renderEmptyState() {
     return (
-      <div></div>
+      <div />
     );
   }
 
@@ -105,10 +104,11 @@ export default class ItemRolesOverview extends Component {
     return (
       <div>
         {(record) ?
-          <RoleDeleteDialog role={record}
-                            onCancel={this.props.cancelDeleteRole}
-                            onConfirm={this.deleteRole}
-                            deleting={deleting}
+          <RoleDeleteDialog
+            role={record}
+            onCancel={this.props.cancelDeleteRole}
+            onConfirm={this.deleteRole}
+            deleting={deleting}
           />
           : '' }
         { !error && !records.length ? this.renderEmptyState() : (
@@ -126,4 +126,4 @@ export default class ItemRolesOverview extends Component {
       </div>
     );
   }
-};
+}

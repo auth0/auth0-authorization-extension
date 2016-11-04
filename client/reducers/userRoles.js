@@ -59,6 +59,7 @@ export const userRoles = createReducer(fromJS(initialState), {
     }),
   [constants.DELETE_USER_ROLE_FULFILLED]: (state) =>
     state.merge({
+      loading: false,
       deleting: false,
       record: null
     })

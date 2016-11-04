@@ -9,7 +9,7 @@ class UserRoles extends Component {
   saveUserRoles = (roles) => {
     if (roles.selectedRoles) {
       this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
-        this.props.fetchRulesForUser(this.props.userId);
+        this.props.fetchRolesForUser(this.props.userId);
       });
     }
   };
@@ -47,7 +47,7 @@ class UserRoles extends Component {
               cancelDeleteRole={this.props.cancelDeleteRole}
               deleteRole={this.props.deleteRole}
               item={this.props.user}
-              fetchRulesForItem={this.props.fetchRulesForUser}
+              fetchRolesForItem={this.props.fetchRolesForUser}
               itemId={this.props.userId}
             />
           </div>
