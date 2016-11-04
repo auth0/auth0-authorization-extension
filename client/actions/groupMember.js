@@ -50,7 +50,7 @@ export function fetchGroupMembersNested(groupId, reload, per_page, page) {
  * Add the selected users members to a group.
  */
 export function addGroupMembers(groupId, members, callback) {
-  const membersIds = _.map(members, 'value');
+  const membersIds = _.map(members, 'userId');
 
   return (dispatch) => {
     dispatch({
