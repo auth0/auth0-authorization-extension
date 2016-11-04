@@ -97,14 +97,7 @@ class UserOverview extends React.Component {
         <SectionHeader title="Users" description="Here you will find all the users." />
 
         <LoadingPanel show={loading}>
-          <Tabs defaultActiveKey={1} animation={false}>
-            <Tab eventKey={1} title="Users">
-              <UserGeneral />
-            </Tab>
-            <Tab eventKey={2} title="Federated users (Pending login)">
-              <UserFederated loading={loading} />
-            </Tab>
-          </Tabs>
+          <UserGeneral />
           <div className="row" style={{ marginBottom: '20px' }}>
             <div className="col-xs-12">
               <SearchBar
