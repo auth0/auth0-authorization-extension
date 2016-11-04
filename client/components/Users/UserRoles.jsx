@@ -1,28 +1,19 @@
 import React, { Component } from 'react';
 import { Button } from 'react-bootstrap';
-import  UserRolesDialog from './UserRolesDialog';
-import  ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 import { Error, LoadingPanel } from 'auth0-extension-ui';
+
+import UserRolesDialog from './UserRolesDialog';
+import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class UserRoles extends Component {
 
   save = (roles) => {
-    if(roles.selectedRoles) {
-      alert(123);
+    if (roles.selectedRoles) {
       this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRulesForUser(this.props.userId);
       });
     }
-  }
-
-  getRolesIds = () => {
-    const stateRoles = this.props.roles.get('records').toJS();
-    let roles;
-    if (stateRoles && stateRoles.length) {
-      roles = _.map(stateRoles, (role) => (role._id));
-    }
-    return roles;
-  }
+  };
 
   render() {
     const error = this.props.user.get('error');

@@ -17,43 +17,39 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
     handleSubmit: React.PropTypes.func.isRequired
   };
 
-  componentDidMount() {
-    this.props.fetchRoles();
-  }
-
   static stateToProps = (state) => {
-      const allRoles = state.roles.get('records').toJS();
-      const selectedRoles = state.userRoles.get('records').toJS();
-      return { allRoles, selectedRoles };
-    };
+    const allRoles = state.roles.get('records').toJS();
+    const selectedRoles = state.userRoles.get('records').toJS();
+    return { allRoles, selectedRoles };
+  };
 
-    renderBody(all, selected) {
-      const selectedIds = _.map(selected, role => role._id);
-      const options = _.filter(all, role => !_.includes(selectedIds, role._id)).map(role => ({
-        value: role._id,
-        text: role.name
-      }));
+  renderBody(all, selected) {
+    const selectedIds = _.map(selected, role => role._id);
+    const options = _.filter(all, role => !_.includes(selectedIds, role._id)).map(role => ({
+      value: role._id,
+      text: role.name
+    }));
 
-      if (!options.length) {
-        return (
-          <Modal.Body>
-            <p className="modal-description">There are no roles you can add to this user.</p>
-          </Modal.Body>
-        );
-      }
-
+    if (!options.length) {
       return (
         <Modal.Body>
-          <p className="modal-description">Add or remove roles from this user.</p>
-          <Field
-            name="selectedRoles"
-            component={ScopeGroup}
-            label="Add roles"
-            options={options}
-          />
+          <p className="modal-description">There are no roles you can add to this user.</p>
         </Modal.Body>
       );
     }
+
+    return (
+      <Modal.Body>
+        <p className="modal-description">Add or remove roles from this user.</p>
+        <Field
+          name="selectedRoles"
+          component={ScopeGroup}
+          label="Add roles"
+          options={options}
+        />
+      </Modal.Body>
+    );
+  }
 
   static actionsToProps = {
     ...roleActions
@@ -64,7 +60,7 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
     const user = this.props.user.toJS();
     const title = `Manage ${user.name} roles`;
     const isVisible = this.props.addRoles;
-    if(!this.props.roles) {
+    if (!this.props.roles) {
       return <div></div>;
     }
     return (
@@ -74,10 +70,12 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
         </Modal.Header>
         {this.renderBody(this.props.allRoles, this.props.selectedRoles)}
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting} onClick={this.props.onClose}>
+          <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting}
+                  onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.props.handleSubmit} >
+          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting}
+                  onClick={this.props.handleSubmit}>
             Save
           </Button>
         </Modal.Footer>

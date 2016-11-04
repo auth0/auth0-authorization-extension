@@ -1,17 +1,18 @@
-import React, { PropTypes } from 'react'
+import React from 'react';
 import { Button } from 'react-bootstrap';
-import  GroupRolesDialog from './GroupRolesDialog';
-import  ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 import { Error, LoadingPanel } from 'auth0-extension-ui';
+
+import GroupRolesDialog from './GroupRolesDialog';
+import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class GroupRoles extends React.Component {
   saveRoles = (roles) => {
-    if(roles.selectedRoles) {
+    if (roles.selectedRoles) {
       this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
         this.props.fetchRulesForGroup(this.props.groupId);
       });
     }
-  }
+  };
 
   render() {
     const error = this.props.group.get('error');
