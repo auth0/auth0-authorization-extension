@@ -13,11 +13,12 @@ export default createForm('permission', class extends Component {
     handleSubmit: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     applications: PropTypes.object.isRequired,
+    isNew: PropTypes.bool,
     children: PropTypes.node
   };
 
   render() {
-    const { handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
     const applications = this.props.applications.map(app => ({
       value: app.client_id,
       text: `${app.name}`
@@ -49,7 +50,7 @@ export default createForm('permission', class extends Component {
         </Modal.Body>
         <Modal.Footer>
           <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
-          <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}> Create </Button>
+          <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}> { isNew ? 'Create' : 'Save' } </Button>
         </Modal.Footer>
       </div>
     );
