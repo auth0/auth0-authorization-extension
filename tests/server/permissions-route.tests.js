@@ -18,7 +18,7 @@ describe('permissions-route', () => {
   };
 
   before((done) => {
-    db.canDeleteRecord = () => Promise.resolve();
+    db.canTouchRecord = () => Promise.resolve();
     db.getPermissions = () => Promise.resolve([ permission ]);
     db.getPermission = () => Promise.resolve(permission);
     done();

@@ -36,13 +36,14 @@ export default class Database {
     return { size: null, type: config('DB_TYPE') };
   }
 
-  canDeleteRecord(type, checkFor, id) {
+  canTouchRecord(type, checkFor, id) {
+    console.log('type:', type, 'checkFor:', checkFor, 'id:', id)
     return this.provider.getAll(type)
       .then(items => _.filter(items, item => item[checkFor] && _.includes(item[checkFor], id)))
       .then(items => {
         if (items.length) {
           const names = items.map(item => item.name).join(', ');
-          const message = `Unable to delete ${checkFor} while used in ${type}: ${names}`;
+          const message = `Unable to touch ${checkFor} while used in ${type}: ${names}`;
           return Promise.reject(new ValidationError(message));
         }
         return Promise.resolve();
@@ -98,11 +99,13 @@ export default class Database {
           `Permission with name "${permission.name}" already exists for this application`,
           id
         ))
+      .then(() => this.canTouchRecord('roles', 'permissions', id))
+      .then(() => this.canTouchRecord('groups', 'permissions', id))
       .then(() => this.provider.update('permissions', id, permission));
   }
 
   deletePermission(id) {
-    return this.canDeleteRecord('roles', 'permissions', id)
+    return this.canTouchRecord('roles', 'permissions', id)
       .then(() => this.provider.delete('permissions', id));
   }
 
@@ -138,7 +141,7 @@ export default class Database {
   }
 
   deleteRole(id) {
-    return this.canDeleteRecord('groups', 'roles', id)
+    return this.canTouchRecord('groups', 'roles', id)
       .then(() => this.provider.delete('roles', id));
   }
 
