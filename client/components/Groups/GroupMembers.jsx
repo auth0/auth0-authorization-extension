@@ -19,18 +19,18 @@ class GroupMembers extends Component {
     nextState.showGroupMembers !== this.state.showGroupMembers;
   }
 
+  setShowGroupMembers = (showGroupMembers) => {
+    this.setState({
+      showGroupMembers
+    });
+  }
+
   handleMembersPageChange = (page) => {
     this.props.getGroupMembersOnPage(this.props.groupId, page);
   }
 
   handleAllMembersPageChange = (page) => {
     this.props.getAllNestedMembersOnPage(this.props.groupId, page);
-  }
-
-  toggleShowGroupMembers = () => {
-    this.setState({
-      showGroupMembers: !this.state.showGroupMembers
-    });
   }
 
   renderActions = (user, index) => {
@@ -134,10 +134,10 @@ class GroupMembers extends Component {
           <div className="col-xs-12">
             <ul className="nav nav-pills">
               <li className={this.state.showGroupMembers ? 'active' : null} >
-                <a onClick={this.toggleShowGroupMembers}>Members of this group</a>
+                <a onClick={() => this.setShowGroupMembers(true)}>Members of this group</a>
               </li>
               <li className={!this.state.showGroupMembers ? 'active' : null}>
-                <a onClick={this.toggleShowGroupMembers}>All members</a>
+                <a onClick={() => this.setShowGroupMembers(false)}>All members</a>
               </li>
             </ul>
           </div>

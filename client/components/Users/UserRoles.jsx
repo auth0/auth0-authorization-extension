@@ -14,6 +14,12 @@ class UserRoles extends Component {
     };
   }
 
+  setShowUserRoles = (showUserRoles) => {
+    this.setState({
+      showUserRoles
+    });
+  }
+
   saveUserRoles = (roles) => {
     if (roles.selectedRoles) {
       this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
@@ -22,12 +28,6 @@ class UserRoles extends Component {
       });
     }
   };
-
-  toggleShowUserRoles = () => {
-    this.setState({
-      showUserRoles: !this.state.showUserRoles
-    });
-  }
 
   renderUserRoles(error, loading, userRoles) {
     return (
@@ -103,10 +103,10 @@ class UserRoles extends Component {
             <div className="col-xs-12">
               <ul className="nav nav-pills">
                 <li className={this.state.showUserRoles ? 'active' : null} >
-                  <a onClick={this.toggleShowUserRoles}>Roles</a>
+                  <a onClick={() => this.setShowUserRoles(true)}>Roles</a>
                 </li>
                 <li className={!this.state.showUserRoles ? 'active' : null}>
-                  <a onClick={this.toggleShowUserRoles}>All Roles</a>
+                  <a onClick={() => this.setShowUserRoles(false)}>All Roles</a>
                 </li>
               </ul>
             </div>

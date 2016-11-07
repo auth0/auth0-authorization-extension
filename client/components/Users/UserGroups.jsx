@@ -31,18 +31,18 @@ class UserGroups extends Component {
     return <span>These are the explicit group memberships of the user where a user has directly been added to a group.</span>;
   }
 
+  setShowUserGroups = (showUserGroups) => {
+    this.setState({
+      showUserGroups
+    });
+  }
+
   addToGroup() {
     this.props.addToGroup(this.props.user.toJS());
   }
 
   removeFromGroup(group) {
     this.props.removeFromGroup(this.props.user.toJS(), group);
-  }
-
-  toggleShowUserGroups = () => {
-    this.setState({
-      showUserGroups: !this.state.showUserGroups
-    });
   }
 
   renderGroups(error, loading, groups, showIcon, actionRenderer) {
@@ -128,10 +128,10 @@ class UserGroups extends Component {
             <div className="col-xs-12">
               <ul className="nav nav-pills">
                 <li className={this.state.showUserGroups ? 'active' : null} >
-                  <a onClick={this.toggleShowUserGroups}>Groups</a>
+                  <a onClick={() => this.setShowUserGroups(true)}>Groups</a>
                 </li>
                 <li className={!this.state.showUserGroups ? 'active' : null}>
-                  <a onClick={this.toggleShowUserGroups}>Nested Groups</a>
+                  <a onClick={() => this.setShowUserGroups(false)}>Nested Groups</a>
                 </li>
               </ul>
             </div>
