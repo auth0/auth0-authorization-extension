@@ -30,5 +30,5 @@ module.exports = (cfg, storageContext, cb) => {
   initDb(new Database({ provider }));
 
   // Start the server.
-  createServer(cb);
+  return createServer(cb);
 };
