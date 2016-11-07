@@ -36,7 +36,7 @@ export default class Database {
     return { size: null, type: config('DB_TYPE') };
   }
 
-  canTouchRecord(type, checkFor, id) {
+  canChange(type, checkFor, id) {
     return this.provider.getAll(type)
       .then(items => _.filter(items, item => item[checkFor] && _.includes(item[checkFor], id)))
       .then(items => {
@@ -98,13 +98,13 @@ export default class Database {
           `Permission with name "${permission.name}" already exists for this application`,
           id
         ))
-      .then(() => this.canTouchRecord('roles', 'permissions', id))
-      .then(() => this.canTouchRecord('groups', 'permissions', id))
+      .then(() => this.canChange('roles', 'permissions', id))
+      .then(() => this.canChange('groups', 'permissions', id))
       .then(() => this.provider.update('permissions', id, permission));
   }
 
   deletePermission(id) {
-    return this.canTouchRecord('roles', 'permissions', id)
+    return this.canChange('roles', 'permissions', id)
       .then(() => this.provider.delete('permissions', id));
   }
 
@@ -140,7 +140,7 @@ export default class Database {
   }
 
   deleteRole(id) {
-    return this.canTouchRecord('groups', 'roles', id)
+    return this.canChange('groups', 'roles', id)
       .then(() => this.provider.delete('roles', id));
   }
 
