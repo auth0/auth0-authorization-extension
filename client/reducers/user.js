@@ -71,15 +71,15 @@ export const user = createReducer(fromJS(initialState), {
     state.merge({
       groups: userGroups(state.get('groups'), action)
     }),
-  [constants.FETCH_USER_AUTHORIZATION_PENDING]: (state, action) =>
+  [constants.FETCH_USER_NESTED_GROUPS_PENDING]: (state, action) =>
     state.merge({
       allGroups: userAllGroups(state.get('allGroups'), action)
     }),
-  [constants.FETCH_USER_AUTHORIZATION_REJECTED]: (state, action) =>
+  [constants.FETCH_USER_NESTED_GROUPS_REJECTED]: (state, action) =>
     state.merge({
       allGroups: userAllGroups(state.get('allGroups'), action)
     }),
-  [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) =>
+  [constants.FETCH_USER_NESTED_GROUPS_FULFILLED]: (state, action) =>
     state.merge({
       allGroups: userAllGroups(state.get('allGroups'), action)
     }),
@@ -151,19 +151,19 @@ const userGroups = createReducer(fromJS(initialState.groups), {
 });
 
 const userAllGroups = createReducer(fromJS(initialState.allGroups), {
-  [constants.FETCH_USER_AUTHORIZATION_PENDING]: (state) =>
+  [constants.FETCH_USER_NESTED_GROUPS_PENDING]: (state) =>
     state.merge({
       ...initialState.allGroups,
       loading: true
     }),
-  [constants.FETCH_USER_AUTHORIZATION_REJECTED]: (state, action) =>
+  [constants.FETCH_USER_NESTED_GROUPS_REJECTED]: (state, action) =>
     state.merge({
       ...initialState.allGroups,
       error: `An error occured while loading all groups (authorization): ${action.errorMessage}`
     }),
-  [constants.FETCH_USER_AUTHORIZATION_FULFILLED]: (state, action) =>
+  [constants.FETCH_USER_NESTED_GROUPS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(action.payload.data.groups || [])
+      records: fromJS(action.payload.data || [])
     })
 });
