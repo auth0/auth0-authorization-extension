@@ -74,6 +74,10 @@ export default class PermissionsOverview extends Component {
   renderPermissionActions = (permission) => (
     <div>
       <TableAction
+        id={`edit-${permission._id}`} title="Edit Permission" icon="274"
+        onClick={this.props.editPermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
+      />
+      <TableAction
         id={`delete-${permission._id}`} type="default" title="Delete Permission" icon="471"
         onClick={this.props.requestDeletePermission} args={[ permission ]} disabled={this.props.permissions.get('loading') || false}
       />

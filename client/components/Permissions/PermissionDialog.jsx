@@ -30,6 +30,7 @@ export default class PermissionDialog extends Component {
         <PermissionForm
           applications={applications.records} loading={permission.loading} initialValues={permission.record} validationErrors={permission.validationErrors}
           onClose={this.props.onClose} onSubmit={this.props.onSave}
+          isNew={permission.isNew}
         >
           <Error message={permission.error} />
         </PermissionForm>
