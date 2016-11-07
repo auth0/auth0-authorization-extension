@@ -17,3 +17,17 @@ export function fetchUserGroups(userId) {
     }
   };
 }
+
+export function fetchUserNestedGroups(userId) {
+  return {
+    type: constants.FETCH_USER_NESTED_GROUPS,
+    meta: {
+      userId
+    },
+    payload: {
+      promise: axios.get(`/api/users/${userId}/groups/calculate`, {
+        responseType: 'json'
+      })
+    }
+  };
+}

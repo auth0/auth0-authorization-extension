@@ -8,7 +8,8 @@ export default class RoleRow extends Component {
     index: PropTypes.number.isRequired,
     application: PropTypes.object,
     role: PropTypes.object.isRequired,
-    renderActions: PropTypes.func.isRequired
+    renderActions: PropTypes.func.isRequired,
+    showIcon: PropTypes.bool
   };
 
   shouldComponentUpdate(nextProps) {
@@ -17,9 +18,11 @@ export default class RoleRow extends Component {
 
   render() {
     const { application, role, index } = this.props;
+    const showIcon = this.props.showIcon;
 
     return (
       <TableRow>
+        { showIcon ? <TableIconCell color="green" icon="322" /> : null }
         <TableTextCell>{ role.name || 'N/A' }</TableTextCell>
         <TableTextCell>{ application ? application.name : role.applicationId }</TableTextCell>
         <TableTextCell>{ role.description || 'N/A' }</TableTextCell>

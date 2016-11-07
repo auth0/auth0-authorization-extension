@@ -1,7 +1,7 @@
 import axios from 'axios';
 import * as constants from '../constants';
 
-import { fetchUserGroups } from './userGroup';
+import { fetchUserGroups, fetchUserNestedGroups } from './userGroup';
 
 /*
  * Search for users.
@@ -51,37 +51,13 @@ export function fetchUserDetail(userId, onSuccess) {
 }
 
 /*
- * Fetch user authorization.
- */
-export function fetchUserAuthorization(user) {
-  return {
-    type: constants.FETCH_USER_AUTHORIZATION,
-    meta: {
-      userId: user.user_id
-    },
-    payload: {
-      promise: axios({
-        method: 'post',
-        url: `/api/authorize/${user.user_id}`,
-        data: {
-          connectionName: user.identities[0].connection,
-          groups: user.groups
-        },
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
  * Fetch the complete user object.
  */
 export function fetchUser(userId) {
   return (dispatch) => {
-    dispatch(fetchUserDetail(userId, (payload) => {
-      dispatch(fetchUserAuthorization(payload.data.user));
-    }));
+    dispatch(fetchUserDetail(userId));
     dispatch(fetchUserGroups(userId));
+    dispatch(fetchUserNestedGroups(userId));
   };
 }
 
@@ -119,6 +95,17 @@ export function fetchRolesForUser(userId) {
     type: constants.FETCH_USER_ROLES,
     payload: {
       promise: axios.get(`/api/users/${userId}/roles`, {
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+export function fetchAllRolesForUser(userId) {
+  return {
+    type: constants.FETCH_USER_ALL_ROLES,
+    payload: {
+      promise: axios.get(`/api/users/${userId}/roles/calculate`, {
         responseType: 'json'
       })
     }

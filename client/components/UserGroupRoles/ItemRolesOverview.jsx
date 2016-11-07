@@ -14,7 +14,8 @@ export default class ItemRolesOverview extends Component {
     requestDeleteRole: PropTypes.func.isRequired,
     cancelDeleteRole: PropTypes.func.isRequired,
     fetchRolesForItem: PropTypes.func.isRequired,
-    deleteRole: PropTypes.func.isRequired
+    deleteRole: PropTypes.func.isRequired,
+    showIcon: PropTypes.bool
   }
 
   deleteRole = () => {
@@ -23,16 +24,23 @@ export default class ItemRolesOverview extends Component {
     });
   };
 
-  renderRoleActions = (role) => (
-    <div>
-      <TableAction
-        id={`delete-${role._id}`} title="Delete Role" icon="264"
-        onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
-      />
-    </div>
-  );
+  renderRoleActions = (role) => {
 
-  renderBody(records, loading, error) {
+    if (this.props.requestDeleteRole) {
+      return (
+        <div>
+          <TableAction
+            id={`delete-${role._id}`} title="Delete Role" icon="471"
+            onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
+          />
+        </div>
+      );
+    }
+
+    return null;
+  };
+
+  renderBody(records, loading, error, showIcon) {
     if (!error && !records.length) {
       return (
         <div />
@@ -40,22 +48,19 @@ export default class ItemRolesOverview extends Component {
     }
 
     return (
-      <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <Error message={error} />
-            <LoadingPanel show={loading}>
-              <div>
-                <RolesTable
-                  applications={this.props.applications}
-                  roles={this.props.roles.get('records')}
-                  loading={loading}
-                  renderActions={this.renderRoleActions}
-                />
-              </div>
-            </LoadingPanel>
+      <div className="col-xs-12">
+        <Error message={error} />
+        <LoadingPanel show={loading}>
+          <div>
+            <RolesTable
+              showIcon={showIcon}
+              applications={this.props.applications}
+              roles={this.props.roles.get('records')}
+              loading={loading}
+              renderActions={this.renderRoleActions}
+            />
           </div>
-        </div>
+        </LoadingPanel>
       </div>
     );
   }
@@ -91,6 +96,7 @@ export default class ItemRolesOverview extends Component {
 
   render() {
     const { error, loading, records, deleting, record } = this.props.roles.toJS();
+    const showIcon = this.props.showIcon;
 
     if (loading) {
       return this.renderLoading();
@@ -99,7 +105,7 @@ export default class ItemRolesOverview extends Component {
     return (
       <div>
         { this.renderDeleteDialog(record, deleting, this.props.cancelDeleteRole, this.deleteRole) }
-        { this.renderBody(records, loading, error) }
+        { this.renderBody(records, loading, error, showIcon) }
       </div>
     );
   }

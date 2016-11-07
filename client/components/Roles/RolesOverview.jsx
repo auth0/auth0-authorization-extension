@@ -69,7 +69,7 @@ export default class RolesOverview extends Component {
         onClick={this.props.editRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
       <TableAction
-        id={`delete-${role._id}`} title="Delete Role" icon="264"
+        id={`delete-${role._id}`} title="Delete Role" icon="471"
         onClick={this.props.requestDeleteRole} args={[ role ]} disabled={this.props.roles.get('loading') || false}
       />
     </div>
@@ -79,6 +79,7 @@ export default class RolesOverview extends Component {
     return (
       <div>
         <RolesTable
+          showIcon={false}
           applications={this.props.applications}
           roles={this.props.roles.get('records')}
           loading={loading}

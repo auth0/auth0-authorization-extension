@@ -76,7 +76,7 @@ class GroupHeader extends Component {
           <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
             <Button onClick={this.requestDeleteGroup} className="table-action" bsSize="small"
                     style={{ marginLeft: '10px' }}>
-              <i className="icon icon-budicon-264" style={{ marginRight: 0 }} />
+              <i className="icon icon-budicon-471" style={{ marginRight: 0 }} />
             </Button>
           </OverlayTrigger>
         </ EntityHeader>
