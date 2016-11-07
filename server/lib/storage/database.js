@@ -84,7 +84,7 @@ export default class Database {
     return this.getPermissions()
       .then(permissions =>
         checkUnique(
-          permissions.filter(item => item.name === permission.name && item.applicationId === permission.applicationId),
+          permissions.filter(item => item.name.toLowerCase() === permission.name.toLowerCase() && item.applicationId === permission.applicationId),
           `Permission with name "${permission.name}" already exists for this application`
         ))
       .then(() => this.provider.create('permissions', permission));
@@ -94,7 +94,7 @@ export default class Database {
     return this.getPermissions()
       .then(permissions =>
         checkUnique(
-          permissions.filter(item => item.name === permission.name && item.applicationId === permission.applicationId),
+          permissions.filter(item => item.name.toLowerCase() === permission.name.toLowerCase() && item.applicationId === permission.applicationId),
           `Permission with name "${permission.name}" already exists for this application`,
           id
         ))
@@ -120,7 +120,7 @@ export default class Database {
     return this.getRoles()
       .then(roles =>
         checkUnique(
-          roles.filter(item => item.name === role.name && item.applicationId === role.applicationId),
+          roles.filter(item => item.name.toLowerCase() === role.name.toLowerCase() && item.applicationId === role.applicationId),
           `Role with name "${role.name}" already exists for this application`
         ))
       .then(() => this.provider.create('roles', role));
@@ -130,7 +130,7 @@ export default class Database {
     return this.getRoles()
       .then(roles =>
         checkUnique(
-          roles.filter(item => item.name === role.name && item.applicationId === role.applicationId),
+          roles.filter(item => item.name.toLowerCase() === role.name.toLowerCase() && item.applicationId === role.applicationId),
           `Role with name "${role.name}" already exists for this application`,
           id
         ))
@@ -156,7 +156,7 @@ export default class Database {
     return this.getGroups()
       .then(groups =>
         checkUnique(
-          groups.filter(item => (item.name === group.name)),
+          groups.filter(item => (item.name.toLowerCase() === group.name.toLowerCase())),
           `Group with name "${group.name}" already exists`
         ))
       .then(() => this.provider.create('groups', group));
@@ -166,7 +166,7 @@ export default class Database {
     return this.getGroups()
       .then(groups =>
         checkUnique(
-          groups.filter(item => (item.name === group.name)),
+          groups.filter(item => (item.name.toLowerCase() === group.name.toLowerCase())),
           `Group with name "${group.name}" already exists`,
           id
         ))
