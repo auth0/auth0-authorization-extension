@@ -73,7 +73,7 @@ export class UserContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="user_tabs">
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
               <Tab eventKey={1} title="Profile">
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>

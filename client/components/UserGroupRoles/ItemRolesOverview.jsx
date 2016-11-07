@@ -32,15 +32,30 @@ export default class ItemRolesOverview extends Component {
     </div>
   );
 
-  renderBody(loading) {
+  renderBody(records, loading, error) {
+    if (!error && !records.length) {
+      return (
+        <div />
+      );
+    }
+
     return (
       <div>
-        <RolesTable
-          applications={this.props.applications}
-          roles={this.props.roles.get('records')}
-          loading={loading}
-          renderActions={this.renderRoleActions}
-        />
+        <div className="row">
+          <div className="col-xs-12">
+            <Error message={error} />
+            <LoadingPanel show={loading}>
+              <div>
+                <RolesTable
+                  applications={this.props.applications}
+                  roles={this.props.roles.get('records')}
+                  loading={loading}
+                  renderActions={this.renderRoleActions}
+                />
+              </div>
+            </LoadingPanel>
+          </div>
+        </div>
       </div>
     );
   }
@@ -59,6 +74,21 @@ export default class ItemRolesOverview extends Component {
     );
   }
 
+  renderDeleteDialog(record, deleting, cancelDeleteRole, deleteRole) {
+    if (!record) {
+      return '';
+    }
+
+    return (
+      <RoleDeleteDialog
+        role={record}
+        onCancel={cancelDeleteRole}
+        onConfirm={deleteRole}
+        deleting={deleting}
+      />
+    );
+  }
+
   render() {
     const { error, loading, records, deleting, record } = this.props.roles.toJS();
 
@@ -68,26 +98,8 @@ export default class ItemRolesOverview extends Component {
 
     return (
       <div>
-        {(record) ?
-          <RoleDeleteDialog
-            role={record}
-            onCancel={this.props.cancelDeleteRole}
-            onConfirm={this.deleteRole}
-            deleting={deleting}
-          />
-          : '' }
-        { !error && !records.length ? this.renderEmptyState() : (
-          <div>
-            <div className="row">
-              <div className="col-xs-12">
-                <Error message={error} />
-                <LoadingPanel show={loading}>
-                  {this.renderBody(loading)}
-                </LoadingPanel>
-              </div>
-            </div>
-          </div>
-        ) }
+        { this.renderDeleteDialog(record, deleting, this.props.cancelDeleteRole, this.deleteRole) }
+        { this.renderBody(records, loading, error) }
       </div>
     );
   }

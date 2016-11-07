@@ -160,7 +160,7 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group_tabs">
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group-tabs">
               <Tab eventKey={1} title="Members">
                 <GroupMembers
                   groupId={group.get('groupId')} members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember}

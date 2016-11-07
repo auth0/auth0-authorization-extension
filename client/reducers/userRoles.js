@@ -49,6 +49,7 @@ export const userRoles = createReducer(fromJS(initialState), {
   [constants.DELETE_USER_ROLE_PENDING]: (state) =>
     state.merge({
       ...initialState,
+      deleting: true,
       loading: true
     }),
   [constants.DELETE_USER_ROLE_REJECTED]: (state, action) =>
