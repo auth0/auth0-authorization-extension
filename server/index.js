@@ -1,10 +1,10 @@
-import 'good-console';
 import Hapi from 'hapi';
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
+import GoodConsole from 'good-console';
 
 import config from './lib/config';
 import logger from './lib/logger';
@@ -19,7 +19,9 @@ export default (cb) => {
       },
       reporters: {
         console: [
-          { module: 'good-console', args: [ { format: '' } ] },
+          new GoodConsole({
+            color: !!config('LOG_COLOR')
+          }),
           'stdout'
         ]
       }
@@ -39,7 +41,6 @@ export default (cb) => {
       }
     }
   });
-
   server.register([ goodPlugin, Inert, Blipp, jwt, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
@@ -57,6 +58,14 @@ export default (cb) => {
     };
 
     return cb(null, server);
+  });
+
+  server.ext('onPreResponse', (request, reply) => {
+    if (request.response && request.response.isBoom && request.response.output) {
+      server.log([ 'error' ], `Error response: ${JSON.stringify(request.response.output.data || request.response.output, null, 2)}`);
+    }
+
+    return reply.continue();
   });
 
   return server;

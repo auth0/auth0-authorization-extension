@@ -20,7 +20,8 @@ nconf
     NODE_ENV: 'development',
     HOSTING_ENV: 'default',
     PORT: 3001,
-    USE_OAUTH2: false
+    USE_OAUTH2: false,
+    LOG_COLOR: true
   });
 
 // Start the server.
