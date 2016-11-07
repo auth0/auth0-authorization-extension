@@ -22,6 +22,7 @@ module.exports = () => ({
       .then(roles => roles.map((role) => ({
         _id: role._id,
         name: role.name,
+        applicationId: role.applicationId,
         description: role.description
       })))
       .then(groups => reply(groups))
