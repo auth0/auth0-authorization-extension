@@ -40,7 +40,6 @@ class UserGroups extends Component {
   }
 
   toggleShowUserGroups = () => {
-    debugger;
     this.setState({
       showUserGroups: !this.state.showUserGroups
     });
@@ -54,7 +53,7 @@ class UserGroups extends Component {
     return (
       <Table>
         <TableHeader>
-          { showIcon ? <TableColumn width="3%" /> : null}
+          { showIcon ? <TableColumn width="3%" /> : null }
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="60%">Description</TableColumn>
           { showIcon ? <TableColumn width="7%" /> : <TableColumn width="10%" /> }

@@ -101,6 +101,17 @@ export function fetchRolesForUser(userId) {
   };
 }
 
+export function fetchAllRolesForUser(userId) {
+  return {
+    type: constants.FETCH_USER_ALL_ROLES,
+    payload: {
+      promise: axios.get(`/api/users/${userId}/roles/calculate`, {
+        responseType: 'json'
+      })
+    }
+  };
+}
+
 export function requestDeleteUserRole(role) {
   return {
     type: constants.REQUEST_DELETE_USER_ROLE,

@@ -9,7 +9,8 @@ export default class RoleTable extends Component {
     loading: PropTypes.bool,
     roles: PropTypes.object.isRequired,
     applications: PropTypes.object.isRequired,
-    renderActions: PropTypes.func.isRequired
+    renderActions: PropTypes.func.isRequired,
+    showIcon: PropTypes.bool
   };
 
   shouldComponentUpdate(nextProps) {
@@ -19,13 +20,15 @@ export default class RoleTable extends Component {
   render() {
     const roles = this.props.roles.toJS();
     const applications = this.props.applications.toJS().records;
+    const showIcon = this.props.showIcon;
 
     return (
       <Table>
         <TableHeader>
+          { showIcon ? <TableColumn width="3%" /> : null }
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="30%">Application</TableColumn>
-          <TableColumn width="28%">Description</TableColumn>
+          { showIcon ? <TableColumn width="25%">Description</TableColumn> : <TableColumn width="28%">Description</TableColumn> }
           <TableColumn />
         </TableHeader>
         <TableBody>
@@ -33,6 +36,7 @@ export default class RoleTable extends Component {
             const application = applications.find(app => app.client_id === role.applicationId);
             return (
               <RoleRow
+                showIcon={showIcon}
                 key={index}
                 index={index}
                 application={application}

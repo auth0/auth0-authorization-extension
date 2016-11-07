@@ -26,6 +26,7 @@ export class UserContainer extends Component {
     this.props.fetchRoles();
     this.props.fetchUser(this.props.params.id);
     this.props.fetchRolesForUser(this.props.params.id);
+    this.props.fetchAllRolesForUser(this.props.params.id);
     this.props.fetchApplications();
   }
 
