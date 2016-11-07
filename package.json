@@ -28,7 +28,7 @@
   "dependencies": {
     "async": "^1.5.2",
     "auth0": "^2.4.0",
-    "auth0-extension-hapi-tools": "^0.3.0",
+    "auth0-extension-hapi-tools": "^0.5.0",
     "auth0-extension-tools": "^0.14.0",
     "auth0-extension-ui": "git+https://github.com/auth0-extensions/auth0-extension-ui",
     "auth0-extension-ui-redux": "git+https://github.com/auth0-extensions/auth0-extension-ui-redux",

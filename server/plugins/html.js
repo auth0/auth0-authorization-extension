@@ -1,7 +1,7 @@
 import fs from 'fs';
-import url from 'url';
 import ejs from 'ejs';
 import path from 'path';
+import { urlHelpers } from 'auth0-extension-hapi-tools';
 
 import config from '../lib/config';
 import template from '../views/index';
@@ -14,18 +14,12 @@ const assembleHtmlRoute = (link) => ({
     auth: false
   },
   handler: (req, reply) => {
-    const baseUrl = url.format({
-      protocol: config('NODE_ENV') !== 'production' ? 'http' : 'https',
-      host: req.headers.host,
-      pathname: url.parse(req.originalUrl || '/').pathname.replace(req.path, '')
-    });
     const cfg = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
-      IS_ADMIN: true, // req.path === '/admins',
-      BASE_URL: baseUrl,
-      API_BASE: baseUrl,
-      BASE_PATH: url.parse(req.originalUrl || '/').pathname.replace(req.path, '') + (req.path === '/admins' ? '/admins' : '')
+      BASE_URL: urlHelpers.getBaseUrl(req),
+      API_BASE: urlHelpers.getBaseUrl(req),
+      BASE_PATH: urlHelpers.getBasePath(req)
     };
 
     // Development.
