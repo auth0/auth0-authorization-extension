@@ -37,7 +37,6 @@ export default class Database {
   }
 
   canTouchRecord(type, checkFor, id) {
-    console.log('type:', type, 'checkFor:', checkFor, 'id:', id)
     return this.provider.getAll(type)
       .then(items => _.filter(items, item => item[checkFor] && _.includes(item[checkFor], id)))
       .then(items => {
