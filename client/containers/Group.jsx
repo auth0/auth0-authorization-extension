@@ -1,10 +1,9 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions } from '../actions';
+import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions, applicationActions, roleActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
 import GroupRoles from '../components/Groups/GroupRoles';
@@ -31,7 +30,10 @@ export class GroupContainer extends Component {
   }
 
   componentWillMount() {
+    this.props.fetchRoles();
+    this.props.fetchRolesForGroup(this.props.params.id);
     this.props.fetchGroup(this.props.params.id);
+    this.props.fetchApplications();
   }
 
   addMember() {
@@ -118,12 +120,10 @@ export class GroupContainer extends Component {
     );
   }
 
-
   render() {
-    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users } = this.props;
+    const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users, addRoles } = this.props;
 
     if (group.get('loading')) { return this.renderLoading(); }
-
     return (
       <div>
         <div>
@@ -161,7 +161,7 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group-tabs">
               <Tab eventKey={1} title="Members">
                 <GroupMembers
                   groupId={group.get('groupId')} members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember}
@@ -169,7 +169,22 @@ export class GroupContainer extends Component {
                 />
               </Tab>
               <Tab eventKey={2} title="Roles">
-                <GroupRoles />
+                <GroupRoles
+                  group={group.get('record')}
+                  addRoles={addRoles}
+                  openAddRoles={this.props.groupOpenAddRoles}
+                  closeAddRoles={this.props.groupCloseAddRoles}
+                  saveGroupRoles={this.props.saveGroupRoles}
+                  requestDeleteRole={this.props.requestDeleteGroupRole}
+                  cancelDeleteRole={this.props.cancelDeleteGroupRole}
+                  deleteRole={this.props.deleteGroupRole}
+                  roles={this.props.roles}
+                  groupRoles={this.props.groupRoles}
+                  loading={group.get('loading')}
+                  applications={this.props.applications}
+                  fetchRolesForGroup={this.props.fetchRolesForGroup}
+                  groupId={this.props.params.id}
+                />
               </Tab>
               <Tab eventKey={3} title="Nested Groups">
                 <NestedGroups nested={group.get('nested')} addNestedGroup={this.requestAddNestedGroup} removeNestedGroup={this.requestRemoveNestedGroup} />
@@ -198,24 +213,24 @@ GroupContainer.propTypes = {
   requestDeleteGroupMapping: PropTypes.func.isRequired,
   deleteGroupMapping: PropTypes.func.isRequired,
   saveGroupMapping: PropTypes.func.isRequired,
-  clearGroupMapping: PropTypes.func.isRequired,
-  fetchUsers: PropTypes.func.isRequired,
-  users: PropTypes.object.isRequired,
-  fetchGroupMembers: PropTypes.func.isRequired,
-  fetchGroupMembersNested: PropTypes.func.isRequired
+  clearGroupMapping: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
   return {
     connections: state.connections,
     group: state.group,
+    addRoles: state.group.get('addRoles'),
+    groupRoles: state.groupRoles,
+    roles: state.roles,
     groupNested: state.groupNested,
     groupMember: state.groupMember,
     groupMapping: state.groupMapping,
     groupPicker: state.groupPicker,
     userPicker: state.userPicker,
+    applications: state.applications,
     users: state.users
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions, ...applicationActions, ...roleActions })(GroupContainer);

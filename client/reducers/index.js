@@ -21,6 +21,8 @@ import { groupMapping } from './groupMapping';
 import { groups } from './groups';
 import { ruleStatus } from './ruleStatus';
 import { importExport } from './importExport';
+import { groupRoles } from './groupRoles';
+import { userRoles } from './userRoles';
 
 function lastAction(state = null, action) {
   return action;
@@ -47,6 +49,8 @@ export default combineReducers({
   groups,
   ruleStatus,
   importExport,
+  groupRoles,
+  userRoles,
   lastAction,
   form: formReducer
 });

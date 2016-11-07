@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../actions';
+import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions, applicationActions, roleActions } from '../actions';
 
 import UserGroups from '../components/Users/UserGroups';
 import UserHeader from '../components/Users/UserHeader';
@@ -23,11 +23,14 @@ export class UserContainer extends Component {
   }
 
   componentWillMount() {
+    this.props.fetchRoles();
     this.props.fetchUser(this.props.params.id);
+    this.props.fetchRolesForUser(this.props.params.id);
+    this.props.fetchApplications();
   }
 
   requestAddToGroup(user) {
-    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
+    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
   }
 
   addToGroup(groups) {
@@ -60,9 +63,7 @@ export class UserContainer extends Component {
 
   render() {
     const { user, groups, allGroups, groupPicker, groupMember } = this.props;
-
     if (user.loading) { return this.renderLoading(); }
-
     return (
       <div>
         <div className="row">
@@ -72,7 +73,7 @@ export class UserContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }}>
+            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
               <Tab eventKey={1} title="Profile">
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
@@ -80,7 +81,22 @@ export class UserContainer extends Component {
                 <UserGroups user={user.record} groups={groups} allGroups={allGroups} addToGroup={this.requestAddToGroup} removeFromGroup={this.requestRemoveMember} />
               </Tab>
               <Tab eventKey={3} title="Roles">
-                <UserRoles />
+                <UserRoles
+                  user={user.record}
+                  addRoles={this.props.addRoles}
+                  openAddRoles={this.props.openAddRoles}
+                  closeAddRoles={this.props.closeAddRoles}
+                  saveUserRoles={this.props.saveUserRoles}
+                  requestDeleteRole={this.props.requestDeleteUserRole}
+                  cancelDeleteRole={this.props.cancelDeleteUserRole}
+                  deleteRole={this.props.deleteUserRole}
+                  roles={this.props.roles}
+                  userRoles={this.props.userRoles}
+                  loading={user.loading}
+                  applications={this.props.applications}
+                  fetchRolesForUser={this.props.fetchRolesForUser}
+                  userId={this.props.params.id}
+                />
               </Tab>
             </Tabs>
           </div>
@@ -101,9 +117,13 @@ function mapStateToProps(state) {
       error: state.user.get('error'),
       loading: state.user.get('loading')
     },
+    addRoles: state.user.get('addRoles'),
+    applications: state.applications,
+    userRoles: state.userRoles,
+    roles: state.roles,
     allGroups: state.user.get('allGroups'),
     groups: state.user.get('groups')
   };
 }
 
-export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions, ...applicationActions, ...roleActions })(UserContainer);

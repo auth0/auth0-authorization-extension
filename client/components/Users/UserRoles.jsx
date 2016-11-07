@@ -1,23 +1,76 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
+import { Error, LoadingPanel } from 'auth0-extension-ui';
+
+import UserRolesDialog from './UserRolesDialog';
+import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class UserRoles extends Component {
+  saveUserRoles = (roles) => {
+    if (roles.selectedRoles) {
+      this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
+        this.props.fetchRolesForUser(this.props.userId);
+      });
+    }
+  };
+
   render() {
+    const error = this.props.user.get('error');
+    const loading = this.props.user.get('loading');
     return (
       <div>
-        <div className="row" style={{ marginBottom: '20px' }}>
-          <div className="col-xs-8">
-            <p>Roles description</p>
+        <Error message={error} />
+        <LoadingPanel show={loading}>
+          <UserRolesDialog
+            user={this.props.user}
+            addRoles={this.props.addRoles}
+            onClose={this.props.closeAddRoles}
+            onSubmit={this.saveUserRoles}
+            roles={this.props.roles}
+            selectedRoles={this.props.userRoles.get('records').toJSON()}
+          />
+          <div className="row" style={{ marginBottom: '20px' }}>
+            <div className="col-xs-8">
+              <p>Roles description</p>
+            </div>
+            <div className="col-xs-4">
+              <Button className="pull-right" bsStyle="success" onClick={this.props.openAddRoles}>
+                <i className="icon icon-budicon-473" /> Add role to user
+              </Button>
+            </div>
+            <ItemRolesOverview
+              roles={this.props.userRoles}
+              loading={false}
+              applications={this.props.applications}
+              role={this.props.userRoles.get('record')}
+              requestDeleteRole={this.props.requestDeleteRole}
+              cancelDeleteRole={this.props.cancelDeleteRole}
+              deleteRole={this.props.deleteRole}
+              item={this.props.user}
+              fetchRolesForItem={this.props.fetchRolesForUser}
+              itemId={this.props.userId}
+            />
           </div>
-          <div className="col-xs-4">
-            <Button className="pull-right" bsStyle="success" onClick={() => {}}>
-              <i className="icon icon-budicon-473" /> Add role to user
-            </Button>
-          </div>
-        </div>
+        </LoadingPanel>
       </div>
     );
   }
 }
+
+UserRoles.propTypes = {
+  userId: React.PropTypes.string,
+  roles: React.PropTypes.object,
+  userRoles: React.PropTypes.object,
+  applications: React.PropTypes.object,
+  user: React.PropTypes.object,
+  saveUserRoles: React.PropTypes.func,
+  fetchRolesForUser: React.PropTypes.func,
+  addRoles: React.PropTypes.func,
+  openAddRoles: React.PropTypes.func,
+  closeAddRoles: React.PropTypes.func,
+  deleteRole: React.PropTypes.func,
+  cancelDeleteRole: React.PropTypes.func,
+  requestDeleteRole: React.PropTypes.func
+};
 
 export default UserRoles;

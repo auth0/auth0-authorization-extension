@@ -14,6 +14,7 @@ const initialState = {
   isDelete: false,
   requesting: false,
   validationErrors: {},
+  addRoles: false,
   members: {
     loading: false,
     error: null,
@@ -243,6 +244,30 @@ export const group = createReducer(fromJS(initialState), {
       isEdit: false,
       isDelete: false,
       requesting: false
+    }),
+  [constants.GROUP_ADD_ROLES_OPEN]: (state, action) =>
+    state.merge({
+      addRoles: true
+    }),
+  [constants.GROUP_ADD_ROLES_CLOSE]: (state, action) =>
+    state.merge({
+      addRoles: false
+    }),
+  [constants.SAVE_GROUP_ROLES_PENDING]: (state, action) =>
+    state.merge({
+      addRoles: true,
+      loading: true
+    }),
+  [constants.SAVE_GROUP_ROLES_REJECTED]: (state, action) =>
+    state.merge({
+      addRoles: false,
+      loading: false,
+      error: `Error during saving roles: ${action.errorMessage}`
+    }),
+  [constants.SAVE_GROUP_ROLES_FULFILLED]: (state, action) =>
+    state.merge({
+      addRoles: false,
+      loading: false
     })
 });
 

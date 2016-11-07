@@ -125,7 +125,7 @@ export function saveGroup(group) {
 export function updateGroup(group, onSuccess) {
   return (dispatch, getState) => {
     const state = getState().group.toJS();
-    const groupData = _.pick(group, ['name', 'description']);
+    const groupData = _.pick(group, [ 'name', 'description' ]);
 
     dispatch({
       type: constants.UPDATE_GROUP,
@@ -141,7 +141,7 @@ export function updateGroup(group, onSuccess) {
         isNew: false,
         groupData,
         groupId: state.groupId || groupData.name,
-        onSuccess: onSuccess
+        onSuccess
       }
     });
   };
@@ -175,14 +175,14 @@ export function deleteGroup(group, onSuccess) {
   return {
     type: constants.DELETE_GROUP,
     payload: {
-      promise: axios.delete(`/api/groups/${group._id}`, {
+      promise: axios.delete(`/api/groups/${group._id}`, { // eslint-disable-line no-underscore-dangle
         responseType: 'json'
       })
     },
     meta: {
       group,
-      groupId: group._id,
-      onSuccess: onSuccess ? onSuccess: null
+      groupId: group._id, // eslint-disable-line no-underscore-dangle
+      onSuccess: onSuccess || null
     }
   };
 }
@@ -193,8 +193,8 @@ export function deleteGroup(group, onSuccess) {
  */
 export function goToGroups() {
   return (dispatch) => {
-        dispatch(push('/groups'));
-  }
+    dispatch(push('/groups'));
+  };
 }
 
 /*
@@ -215,5 +215,77 @@ export function closeUpdate() {
 export function closeDelete() {
   return {
     type: constants.CLOSE_DELETE_GROUP
+  };
+}
+
+export function groupOpenAddRoles() {
+  return {
+    type: constants.GROUP_ADD_ROLES_OPEN
+  };
+}
+
+export function groupCloseAddRoles() {
+  return {
+    type: constants.GROUP_ADD_ROLES_CLOSE
+  };
+}
+
+export function saveGroupRoles(group, data, onSuccess) {
+  return {
+    type: constants.SAVE_GROUP_ROLES,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: `/api/groups/${group._id}/roles`, // eslint-disable-line no-underscore-dangle
+        data,
+        responseType: 'json'
+      })
+    },
+    meta: {
+      onSuccess
+    }
+  };
+}
+
+export function fetchRolesForGroup(groupId) {
+  return {
+    type: constants.FETCH_GROUP_ROLES,
+    payload: {
+      promise: axios.get(`/api/groups/${groupId}/roles`, {
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+export function requestDeleteGroupRole(role) {
+  return {
+    type: constants.REQUEST_DELETE_GROUP_ROLE,
+    meta: {
+      role
+    }
+  };
+}
+
+export function cancelDeleteGroupRole() {
+  return {
+    type: constants.CANCEL_DELETE_GROUP_ROLE
+  };
+}
+
+export function deleteGroupRole(group, role, onSuccess) {
+  return {
+    type: constants.DELETE_GROUP_ROLE,
+    payload: {
+      promise: axios({
+        method: 'delete',
+        url: `/api/groups/${group._id}/roles`, // eslint-disable-line no-underscore-dangle
+        data: [ role._id ], // eslint-disable-line no-underscore-dangle
+        responseType: 'json'
+      })
+    },
+    meta: {
+      onSuccess
+    }
   };
 }
