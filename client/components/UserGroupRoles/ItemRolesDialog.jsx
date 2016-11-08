@@ -4,7 +4,18 @@ import { Button, Modal } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { Table, TableHeader, TableRow, TableColumn, TableBody, TableTextCell, TableCell } from 'auth0-extension-ui';
 
-export default connectContainer(class GroupRolesDialog extends React.Component {
+export default class ItemRolesDialog extends React.Component {
+
+  static propTypes = {
+    type: PropTypes.string.isRequired,
+    item: PropTypes.object.isRequired,
+    addRoles: PropTypes.bool.isRequired,
+    allRoles: PropTypes.object.isRequired,
+    selectedRoles: PropTypes.object.isRequired,
+    applications: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired
+  };
 
   constructor(props) {
     super(props);
@@ -12,20 +23,6 @@ export default connectContainer(class GroupRolesDialog extends React.Component {
       selectedRoles: []
     };
   }
-
-  static propTypes = {
-    group: PropTypes.object.isRequired,
-    onClose: PropTypes.func.isRequired,
-    addRoles: PropTypes.bool.isRequired,
-    applications: PropTypes.object.isRequired,
-    onSubmit: PropTypes.func.isRequired
-  };
-
-  static stateToProps = (state) => {
-    const allRoles = state.roles.get('records').toJS();
-    const selectedRoles = state.groupRoles.get('records').toJS();
-    return { allRoles, selectedRoles };
-  };
 
   getApplication(applications, applicationId) {
     return _.filter(applications, application => application.client_id === applicationId)
@@ -57,14 +54,14 @@ export default connectContainer(class GroupRolesDialog extends React.Component {
     if (!options.length) {
       return (
         <Modal.Body>
-          <p className="modal-description">There are no roles you can add to this group.</p>
+          <p className="modal-description">There are no roles you can add to this {this.props.type}.</p>
         </Modal.Body>
       );
     }
 
     return (
       <Modal.Body>
-        <p className="modal-description">Add or remove roles from this group.</p>
+        <p className="modal-description">Add or remove roles from this {this.props.type}.</p>
         <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
           <Table>
             <TableHeader>
@@ -94,28 +91,29 @@ export default connectContainer(class GroupRolesDialog extends React.Component {
   }
 
   render() {
-    const group = this.props.group.toJS();
-    const title = `Manage ${group.name} roles`;
+    const item = this.props.item.toJS();
+    const title = `Manage ${item.name} roles`;
     const isVisible = this.props.addRoles;
 
-    if (!this.props.roles) {
+    if (!this.props.allRoles) {
       return <div />;
     }
+
     return (
       <Modal show={isVisible} className="modal-overflow-visible" onHide={this.props.onClose}>
-        <Modal.Header closeButton={!group.loading} className="has-border">
+        <Modal.Header closeButton={!item.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         {this.renderBody(this.props.allRoles, this.props.selectedRoles)}
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.props.onClose}>
+          <Button bsSize="large" bsStyle="transparent" disabled={item.loading || item.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.handleSubmit} >
+          <Button bsSize="large" bsStyle="primary" disabled={item.loading || item.submitting} onClick={this.handleSubmit} >
             Save
           </Button>
         </Modal.Footer>
       </Modal>
     );
   }
-});
+}
