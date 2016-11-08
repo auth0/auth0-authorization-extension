@@ -75,6 +75,23 @@ const roleForm = createForm('role', class extends Component {
     });
   }
 
+  getPermissionsField() {
+    if (this.state.permissions && this.state.permissions.length) {
+      return (
+        <Field
+          name="permissions" component={ScopeGroup}
+          label="Permissions" options={this.state.permissions}
+        />
+      );
+    }
+
+    return (
+      <div>
+        <strong>Permissions</strong>
+        <p>No permissions were added for this application yet.</p>
+      </div>);
+  }
+
   getFields(validationErrors) {
     if (this.props.page === 'chooseApplication') {
       return (
@@ -110,10 +127,7 @@ const roleForm = createForm('role', class extends Component {
           name="description" component={InputText}
           label="Description" validationErrors={validationErrors}
         />
-        <Field
-          name="permissions" component={ScopeGroup}
-          label="Permissions" options={this.state.permissions}
-        />
+        { this.getPermissionsField() }
       </div>
     );
   }
