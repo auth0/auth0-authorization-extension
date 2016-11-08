@@ -4,8 +4,6 @@ import { Button, Modal } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { Table, TableHeader, TableRow, TableColumn, TableBody, TableTextCell, TableCell } from 'auth0-extension-ui';
 
-import { roleActions } from '../../actions';
-
 export default connectContainer(class UserRolesDialog extends React.Component {
 
   constructor(props) {
@@ -94,11 +92,6 @@ export default connectContainer(class UserRolesDialog extends React.Component {
       </Modal.Body>
     );
   }
-
-  static actionsToProps = {
-    ...roleActions
-  }
-
 
   render() {
     const user = this.props.user.toJS();
