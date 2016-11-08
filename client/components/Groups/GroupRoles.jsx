@@ -6,9 +6,9 @@ import GroupRolesDialog from './GroupRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class GroupRoles extends React.Component {
-  saveGroupRoles = (roles) => {
-    if (roles.selectedRoles) {
-      this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
+  saveGroupRoles = (selectedRoles) => {
+    if (selectedRoles) {
+      this.props.saveGroupRoles(this.props.group.toJSON(), selectedRoles, () => {
         this.props.fetchRolesForGroup(this.props.groupId);
       });
     }
@@ -22,9 +22,11 @@ class GroupRoles extends React.Component {
         <Error message={error} />
         <LoadingPanel show={loading}>
           <GroupRolesDialog
+            type="group"
             group={this.props.group}
             addRoles={this.props.addRoles}
             roles={this.props.roles}
+            applications={this.props.applications}
             onClose={this.props.closeAddRoles}
             onSubmit={this.saveGroupRoles}
             selectedRoles={this.props.groupRoles.get('records').toJSON()}

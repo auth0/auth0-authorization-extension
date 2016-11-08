@@ -33,6 +33,7 @@ class UserRoles extends Component {
     return (
       <div>
         <UserRolesDialog
+          type="user"
           user={this.props.user}
           addRoles={this.props.addRoles}
           onClose={this.props.closeAddRoles}
