@@ -175,9 +175,10 @@ export default class Database {
       .then(() => this.provider.update('groups', id, group));
   }
 
+
   deleteGroup(id) {
-    return this.provider
-      .delete('groups', id);
+    return this.canChange('groups', 'nested', id)
+      .then(() => this.provider.delete('groups', id));
   }
 
   getApplications() {
