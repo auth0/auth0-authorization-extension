@@ -20,9 +20,9 @@ class UserRoles extends Component {
     });
   }
 
-  saveUserRoles = (roles) => {
-    if (roles.selectedRoles) {
-      this.props.saveUserRoles(this.props.user.toJSON(), roles.selectedRoles, () => {
+  saveUserRoles = (selectedRoles) => {
+    if (selectedRoles) {
+      this.props.saveUserRoles(this.props.user.toJSON(), selectedRoles, () => {
         this.props.fetchRolesForUser(this.props.userId);
         this.props.fetchAllRolesForUser(this.props.userId);
       });
@@ -33,12 +33,12 @@ class UserRoles extends Component {
     return (
       <div>
         <UserRolesDialog
-          type="user"
           user={this.props.user}
           addRoles={this.props.addRoles}
           onClose={this.props.closeAddRoles}
           onSubmit={this.saveUserRoles}
           roles={this.props.roles}
+          applications={this.props.applications}
           selectedRoles={this.props.userRoles.get('records').toJSON()}
         />
         <div className="row" style={{ marginBottom: '20px' }}>

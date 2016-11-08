@@ -1,20 +1,26 @@
 import _ from 'lodash';
 import React, { PropTypes } from 'react';
-import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
 import connectContainer from 'redux-static';
-import { ScopeGroup } from 'auth0-extension-ui';
+import { Table, TableHeader, TableRow, TableColumn, TableBody, TableTextCell, TableCell } from 'auth0-extension-ui';
 
-import createForm from '../../utils/createForm';
 import { roleActions } from '../../actions';
 
-export default createForm('userRoles', connectContainer(class UserRolesDialog extends React.Component {
+export default connectContainer(class UserRolesDialog extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      selectedRoles: []
+    };
+  }
 
   static propTypes = {
     user: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
     addRoles: PropTypes.bool.isRequired,
-    handleSubmit: React.PropTypes.func.isRequired
+    applications: PropTypes.object.isRequired,
+    onSubmit: PropTypes.func.isRequired
   };
 
   static stateToProps = (state) => {
@@ -23,12 +29,32 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
     return { allRoles, selectedRoles };
   };
 
+  getApplication(applications, applicationId) {
+    return _.filter(applications, application => application.client_id === applicationId)
+            .map(application => application.name);
+  }
+
+  updateSelectedRoles = (ev) => {
+    const roles = this.state.selectedRoles;
+    roles.push(ev.target.value);
+    this.setState({
+      selectedRoles: roles
+    });
+  }
+
+  handleSubmit = () => {
+    this.props.onSubmit(this.state.selectedRoles);
+  }
+
   renderBody(all, selected) {
     const selectedIds = _.map(selected, role => role._id);
     const options = _.filter(all, role => !_.includes(selectedIds, role._id)).map(role => ({
-      value: role._id,
-      text: role.name
+      _id: role._id,
+      name: role.name,
+      applicationId: role.applicationId
     }));
+
+    const applications = this.props.applications.get('records').toJS();
 
     if (!options.length) {
       return (
@@ -41,12 +67,30 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
     return (
       <Modal.Body>
         <p className="modal-description">Add or remove roles from this user.</p>
-        <Field
-          name="selectedRoles"
-          component={ScopeGroup}
-          label="Add roles"
-          options={options}
-        />
+        <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
+          <Table>
+            <TableHeader>
+              <TableColumn width="5%" />
+              <TableColumn width="45%">Name</TableColumn>
+              <TableColumn width="50%">Application</TableColumn>
+            </TableHeader>
+            <TableBody>
+              {_.sortBy(options, 'name').map((option, index) =>
+                <TableRow>
+                  <TableCell>
+                    <input
+                      value={option._id}
+                      type="checkbox"
+                      onChange={this.updateSelectedRoles}
+                    />
+                  </TableCell>
+                  <TableTextCell>{ option.name}</TableTextCell>
+                  <TableTextCell>{ this.getApplication(applications, option.applicationId) }</TableTextCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </Modal.Body>
     );
   }
@@ -75,11 +119,11 @@ export default createForm('userRoles', connectContainer(class UserRolesDialog ex
           <Button bsSize="large" bsStyle="transparent" disabled={user.loading || user.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.props.handleSubmit} >
+          <Button bsSize="large" bsStyle="primary" disabled={user.loading || user.submitting} onClick={this.handleSubmit} >
             Save
           </Button>
         </Modal.Footer>
       </Modal>
     );
   }
-}));
+});

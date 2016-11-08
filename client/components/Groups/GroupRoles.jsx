@@ -22,7 +22,6 @@ class GroupRoles extends React.Component {
         <Error message={error} />
         <LoadingPanel show={loading}>
           <GroupRolesDialog
-            type="group"
             group={this.props.group}
             addRoles={this.props.addRoles}
             roles={this.props.roles}

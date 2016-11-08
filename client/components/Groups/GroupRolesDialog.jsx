@@ -4,8 +4,6 @@ import { Button, Modal } from 'react-bootstrap';
 import connectContainer from 'redux-static';
 import { Table, TableHeader, TableRow, TableColumn, TableBody, TableTextCell, TableCell } from 'auth0-extension-ui';
 
-import createForm from '../../utils/createForm';
-
 export default connectContainer(class GroupRolesDialog extends React.Component {
 
   constructor(props) {
@@ -14,6 +12,7 @@ export default connectContainer(class GroupRolesDialog extends React.Component {
       selectedRoles: []
     };
   }
+
   static propTypes = {
     group: PropTypes.object.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -75,17 +74,17 @@ export default connectContainer(class GroupRolesDialog extends React.Component {
             </TableHeader>
             <TableBody>
               {_.sortBy(options, 'name').map((option, index) =>
-              <TableRow>
-                <TableCell>
-                  <input
-                    value={option._id}
-                    type="checkbox"
-                    onChange={this.updateSelectedRoles}
-                  />
-                </TableCell>
-                <TableTextCell>{ option.name}</TableTextCell>
-                <TableTextCell>{ this.getApplication(applications, option.applicationId) }</TableTextCell>
-              </TableRow>
+                <TableRow>
+                  <TableCell>
+                    <input
+                      value={option._id}
+                      type="checkbox"
+                      onChange={this.updateSelectedRoles}
+                    />
+                  </TableCell>
+                  <TableTextCell>{ option.name}</TableTextCell>
+                  <TableTextCell>{ this.getApplication(applications, option.applicationId) }</TableTextCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>
