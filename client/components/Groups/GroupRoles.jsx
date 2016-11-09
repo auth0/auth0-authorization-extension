@@ -2,13 +2,13 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import { Error, LoadingPanel } from 'auth0-extension-ui';
 
-import GroupRolesDialog from './GroupRolesDialog';
+import ItemRolesDialog from '../UserGroupRoles/ItemRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
 
 class GroupRoles extends React.Component {
-  saveGroupRoles = (roles) => {
-    if (roles.selectedRoles) {
-      this.props.saveGroupRoles(this.props.group.toJSON(), roles.selectedRoles, () => {
+  saveGroupRoles = (selectedRoles) => {
+    if (selectedRoles) {
+      this.props.saveGroupRoles(this.props.group.toJSON(), selectedRoles, () => {
         this.props.fetchRolesForGroup(this.props.groupId);
       });
     }
@@ -21,13 +21,15 @@ class GroupRoles extends React.Component {
       <div className="row">
         <Error message={error} />
         <LoadingPanel show={loading}>
-          <GroupRolesDialog
-            group={this.props.group}
+          <ItemRolesDialog
+            type="group"
+            item={this.props.group}
             addRoles={this.props.addRoles}
-            roles={this.props.roles}
+            allRoles={this.props.roles.get('records').toJS()}
+            selectedRoles={this.props.groupRoles.get('records').toJS()}
+            applications={this.props.applications}
             onClose={this.props.closeAddRoles}
             onSubmit={this.saveGroupRoles}
-            selectedRoles={this.props.groupRoles.get('records').toJSON()}
           />
           <div className="col-xs-8">
             <p>
