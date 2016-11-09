@@ -15,10 +15,10 @@ export class UserContainer extends Component {
   constructor() {
     super();
 
-    this.requestAddToGroup   = this.requestAddToGroup.bind(this);
-    this.addToGroup          = this.addToGroup.bind(this);
-    this.cancelRemoveMember  = this.cancelRemoveMember.bind(this);
-    this.removeMember        = this.removeMember.bind(this);
+    this.requestAddToGroup = this.requestAddToGroup.bind(this);
+    this.addToGroup = this.addToGroup.bind(this);
+    this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
+    this.removeMember = this.removeMember.bind(this);
     this.requestRemoveMember = this.requestRemoveMember.bind(this);
   }
 
@@ -37,9 +37,11 @@ export class UserContainer extends Component {
   addToGroup(groups) {
     const groupIds = Object.keys(groups).filter(key => groups[key] === true);
     this.props.cancelGroupPicker();
-    this.props.addUserToGroups(this.props.user.record.get('user_id'), groupIds, () => {
-      this.props.fetchUserGroups(this.props.user.record.get('user_id'));
-    });
+    if (groupIds.length) {
+      this.props.addUserToGroups(this.props.user.record.get('user_id'), groupIds, () => {
+        this.props.fetchUserGroups(this.props.user.record.get('user_id'));
+      });
+    }
   }
 
   cancelRemoveMember() {
@@ -64,6 +66,7 @@ export class UserContainer extends Component {
 
   render() {
     const { user, groups, allGroups, groupPicker, groupMember } = this.props;
+    const excludedGroups = groups.get('records').toJS();
     if (user.loading) { return this.renderLoading(); }
     return (
       <div>
@@ -102,7 +105,7 @@ export class UserContainer extends Component {
             </Tabs>
           </div>
         </div>
-        <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addToGroup} onCancel={this.props.cancelGroupPicker} />
+        <GroupPickerDialog groupPicker={groupPicker} excludedGroups={excludedGroups} onConfirm={this.addToGroup} onCancel={this.props.cancelGroupPicker} />
         <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
       </div>
     );
@@ -126,5 +129,38 @@ function mapStateToProps(state) {
     groups: state.user.get('groups')
   };
 }
+
+UserContainer.propTypes = {
+  group: React.PropTypes.object,
+  fetchGroup: React.PropTypes.func,
+  fetchRoles: React.PropTypes.func.isRequired,
+  fetchUser: React.PropTypes.func.isRequired,
+  fetchAllRolesForUser: React.PropTypes.func.isRequired,
+  fetchApplications: React.PropTypes.func.isRequired,
+  openGroupPicker: React.PropTypes.func.isRequired,
+  addUserToGroups: React.PropTypes.func.isRequired,
+  fetchUserGroups: React.PropTypes.func.isRequired,
+  cancelRemoveGroupMember: React.PropTypes.func.isRequired,
+  removeGroupMember: React.PropTypes.func.isRequired,
+  requestRemoveGroupMember: React.PropTypes.func.isRequired,
+  addRoles: React.PropTypes.func.isRequired,
+  openAddRoles: React.PropTypes.func.isRequired,
+  closeAddRoles: React.PropTypes.func.isRequired,
+  saveUserRoles: React.PropTypes.func.isRequired,
+  requestDeleteUserRole: React.PropTypes.func.isRequired,
+  cancelDeleteUserRole: React.PropTypes.func.isRequired,
+  deleteUserRole: React.PropTypes.func.isRequired,
+  fetchRolesForUser: React.PropTypes.func.isRequired,
+  cancelGroupPicker: React.PropTypes.func.isRequired,
+  roles: React.PropTypes.object.isRequired,
+  userRoles: React.PropTypes.object.isRequired,
+  applications: React.PropTypes.object.isRequired,
+  params: React.PropTypes.object.isRequired,
+  user: React.PropTypes.object.isRequired,
+  groups: React.PropTypes.object.isRequired,
+  allGroups: React.PropTypes.object.isRequired,
+  groupPicker: React.PropTypes.object.isRequired,
+  groupMember: React.PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions, ...applicationActions, ...roleActions })(UserContainer);

@@ -9,8 +9,30 @@ class GroupsTablePicker extends Component {
     return nextProps.groups !== this.props.groups;
   }
 
+  getRelevantGroups(all, selected) {
+    if (!all || !all.length) {
+      return [];
+    }
+
+    if (!selected || !selected.length) {
+      return all;
+    }
+
+    const selectedIds = _.map(selected, group => group._id);
+    return _.filter(all, group => !_.includes(selectedIds, group._id));
+  }
+
   render() {
-    const groups = this.props.groups.toJS();
+    const { groups, excludedGroups } = this.props;
+    const relevantGroups = this.getRelevantGroups(groups.toJS(), excludedGroups);
+
+    if (!relevantGroups.length) {
+      return (
+        <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
+          <p className="modal-description">There are no groups you can add right now.</p>
+        </div>
+      );
+    }
 
     return (
       <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
@@ -21,7 +43,7 @@ class GroupsTablePicker extends Component {
             <TableColumn width="50%">Description</TableColumn>
           </TableHeader>
           <TableBody>
-            {_.sortBy(groups, 'name').map((group, index) =>
+            {_.sortBy(relevantGroups, 'name').map((group, index) =>
               <GroupRowPicker
                 key={index}
                 canOpenGroup={this.props.canOpenGroup}
@@ -40,9 +62,10 @@ class GroupsTablePicker extends Component {
 
 GroupsTablePicker.propTypes = {
   groups: React.PropTypes.object.isRequired,
+  excludedGroups: React.PropTypes.object.isRequired,
   canOpenGroup: React.PropTypes.bool,
   loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired,
+  renderActions: React.PropTypes.func,
   setNested: React.PropTypes.func.isRequired
 };
 

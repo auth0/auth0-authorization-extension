@@ -58,7 +58,9 @@ class GroupPickerDialog extends Component {
         </p>
         <LoadingPanel show={loading}>
           <GroupsTablePicker
-            canOpenGroup={false} groups={this.props.groupPicker.get('records')}
+            canOpenGroup={false}
+            groups={this.props.groupPicker.get('records')}
+            excludedGroups={this.props.excludedGroups}
             loading={loading} setNested={this.setNested}
           />
         </LoadingPanel>
@@ -68,6 +70,7 @@ class GroupPickerDialog extends Component {
 }
 
 GroupPickerDialog.propTypes = {
+  excludedGroups: React.PropTypes.object.isRequired,
   groupPicker: React.PropTypes.object.isRequired,
   onConfirm: React.PropTypes.func.isRequired,
   onCancel: React.PropTypes.func.isRequired

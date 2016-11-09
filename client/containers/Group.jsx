@@ -36,16 +36,54 @@ export class GroupContainer extends Component {
     this.props.fetchApplications();
   }
 
-  addMember() {
-    this.props.openUserPicker(`Add members to ${this.props.group.get('record').get('name')}`);
+  getUserPickerDialogUsers(records) {
+    let users;
+    if (records && records.length) {
+      users = _.map(records, (user) => ({
+        value: user.email,
+        label: user.name,
+        userId: user.user_id
+      }));
+    }
+    return users;
+  }
+
+  getGroupMembersOnPage(groupId, page) {
+    if (!groupId || !page) return;
+    this.props.fetchGroupMembers(groupId, true, process.env.PER_PAGE, page);
+  }
+
+  getAllNestedMembersOnPage(groupId, page) {
+    if (!groupId || !page) return;
+    this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE, page);
   }
 
   requestRemoveMember(user) {
     this.props.requestRemoveGroupMember(this.props.group.get('record').toJS(), user);
   }
 
-  cancelRemoveMember() {
-    this.props.cancelRemoveGroupMember();
+  requestRemoveNestedGroup(nestedGroup) {
+    this.props.requestRemoveNestedGroup(this.props.group.get('record').toJS(), nestedGroup);
+  }
+
+  removeNestedGroup(groupId, nestedGroupId) {
+    this.props.removeNestedGroup(groupId, nestedGroupId);
+  }
+
+  addMember() {
+    this.props.openUserPicker(`Add members to ${this.props.group.get('record').get('name')}`);
+  }
+
+  addNestedGroup(nestedGroup) {
+    const nestedIds = Object.keys(nestedGroup).filter(key => nestedGroup[key] === true);
+    const groupId = this.props.group.get('groupId');
+    this.props.cancelGroupPicker();
+    if (nestedIds.length) {
+      this.props.addNestedGroup(groupId, nestedIds, () => {
+        this.props.fetchNestedGroups(groupId, true);
+        this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE);
+      });
+    }
   }
 
   removeMember(groupId, userId) {
@@ -72,44 +110,8 @@ export class GroupContainer extends Component {
     this.props.openGroupPicker(`Add a nested group to "${this.props.group.get('record').get('name')}"`);
   }
 
-  addNestedGroup(nestedGroup) {
-    const nestedIds = Object.keys(nestedGroup).filter(key => nestedGroup[key] === true);
-    const groupId = this.props.group.get('groupId');
-    this.props.cancelGroupPicker();
-    this.props.addNestedGroup(groupId, nestedIds, () => {
-      this.props.fetchNestedGroups(groupId, true);
-      this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE);
-    });
-  }
-
-  requestRemoveNestedGroup(nestedGroup) {
-    this.props.requestRemoveNestedGroup(this.props.group.get('record').toJS(), nestedGroup);
-  }
-
-  removeNestedGroup(groupId, nestedGroupId) {
-    this.props.removeNestedGroup(groupId, nestedGroupId);
-  }
-
-  getUserPickerDialogUsers(records) {
-    let users;
-    if (records && records.length) {
-      users = _.map(records, (user) => ({
-        value: user.email,
-        label: user.name,
-        userId: user.user_id
-      }));
-    }
-    return users;
-  }
-
-  getGroupMembersOnPage(groupId, page) {
-    if (!groupId || !page) return;
-    this.props.fetchGroupMembers(groupId, true, process.env.PER_PAGE, page);
-  }
-
-  getAllNestedMembersOnPage(groupId, page) {
-    if (!groupId || !page) return;
-    this.props.fetchGroupMembersNested(groupId, true, process.env.PER_PAGE, page);
+  cancelRemoveMember() {
+    this.props.cancelRemoveGroupMember();
   }
 
   renderLoading() {
@@ -122,6 +124,8 @@ export class GroupContainer extends Component {
 
   render() {
     const { connections, group, groupMember, groupMapping, userPicker, groupPicker, groupNested, users, addRoles } = this.props;
+    const excludedGroups = group.get('nested').get('records').toJS();
+    excludedGroups.push({ _id: this.props.params.id });
 
     if (group.get('loading')) { return this.renderLoading(); }
     return (
@@ -135,7 +139,7 @@ export class GroupContainer extends Component {
             users={this.getUserPickerDialogUsers(users.get('records').toJS())}
             fetchUsers={this.props.fetchUsers}
           />
-          <GroupPickerDialog groupPicker={groupPicker} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
+          <GroupPickerDialog groupPicker={groupPicker} excludedGroups={excludedGroups} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
           <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.saveGroupMapping} onClose={this.props.clearGroupMapping} />
           <GroupMappingRemoveDialog group={group} groupMapping={groupMapping} onConfirm={this.props.deleteGroupMapping} onCancel={this.props.cancelDeleteGroupMapping} />
           <GroupMemberRemoveDialog groupMember={groupMember} onConfirm={this.removeMember} onCancel={this.cancelRemoveMember} />
@@ -201,19 +205,63 @@ export class GroupContainer extends Component {
 }
 
 GroupContainer.propTypes = {
-  group: React.PropTypes.object,
-  groupMapping: React.PropTypes.object,
-  groupMember: React.PropTypes.object,
-  groupNested: React.PropTypes.object,
-  userPicker: React.PropTypes.object,
-  params: React.PropTypes.object.isRequired,
-  fetchGroup: React.PropTypes.func.isRequired,
-  fetchGroupMappings: React.PropTypes.func.isRequired,
-  createGroupMapping: React.PropTypes.func.isRequired,
+  group: PropTypes.object,
+  roles: PropTypes.object,
+  connections: PropTypes.object,
+  groupPicker: PropTypes.object,
+  users: PropTypes.object,
+  addRoles: PropTypes.object,
+  groupMapping: PropTypes.object,
+  groupMember: PropTypes.object,
+  groupNested: PropTypes.object,
+  userPicker: PropTypes.object,
+  params: PropTypes.object.isRequired,
+  applications: PropTypes.object.isRequired,
+  groupRoles: PropTypes.object.isRequired,
+  fetchGroup: PropTypes.func.isRequired,
+  fetchGroupMappings: PropTypes.func.isRequired,
+  fetchRolesForGroup: PropTypes.func.isRequired,
+  createGroupMapping: PropTypes.func.isRequired,
   requestDeleteGroupMapping: PropTypes.func.isRequired,
+  requestDeleteGroupRole: PropTypes.func.isRequired,
+  deleteGroupRole: PropTypes.func.isRequired,
+  saveGroupRoles: PropTypes.func.isRequired,
+  cancelDeleteGroupRole: PropTypes.func.isRequired,
   deleteGroupMapping: PropTypes.func.isRequired,
   saveGroupMapping: PropTypes.func.isRequired,
-  clearGroupMapping: PropTypes.func.isRequired
+  groupCloseAddRoles: PropTypes.func.isRequired,
+  groupOpenAddRoles: PropTypes.func.isRequired,
+  clearGroupMapping: PropTypes.func.isRequired,
+  fetchRoles: PropTypes.func.isRequired,
+  fetchApplications: PropTypes.func.isRequired,
+  openUserPicker: PropTypes.func.isRequired,
+  requestRemoveGroupMember: PropTypes.func.isRequired,
+  cancelRemoveGroupMember: PropTypes.func.isRequired,
+  removeGroupMember: PropTypes.func.isRequired,
+  cancelUserPicker: PropTypes.func.isRequired,
+  addGroupMembers: PropTypes.func.isRequired,
+  fetchGroupMembers: PropTypes.func.isRequired,
+  fetchGroupMembersNested: PropTypes.func.isRequired,
+  openGroupPicker: PropTypes.func.isRequired,
+  cancelGroupPicker: PropTypes.func.isRequired,
+  addNestedGroup: PropTypes.func.isRequired,
+  fetchNestedGroups: PropTypes.func.isRequired,
+  requestRemoveNestedGroup: PropTypes.func.isRequired,
+  removeNestedGroup: PropTypes.func.isRequired,
+  editGroup: PropTypes.func.isRequired,
+  updateGroup: PropTypes.func.isRequired,
+  closeUpdate: PropTypes.func.isRequired,
+  requestDeleteGroup: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  closeDelete: PropTypes.func.isRequired,
+  goToGroups: PropTypes.func.isRequired,
+  unselectUser: PropTypes.func.isRequired,
+  resetUserPicker: PropTypes.func.isRequired,
+  cancelDeleteGroupMapping: PropTypes.func.isRequired,
+  cancelRemoveNestedGroup: PropTypes.func.isRequired,
+  selectUser: PropTypes.func.isRequired,
+  searchUserPicker: PropTypes.func.isRequired,
+  fetchUsers: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
