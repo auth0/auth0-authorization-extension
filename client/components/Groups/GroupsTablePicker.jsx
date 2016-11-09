@@ -16,11 +16,7 @@ class GroupsTablePicker extends Component {
       <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
         <Table>
           <TableHeader>
-            <TableColumn width="5%" onClick={() => {
-              console.log('Select all records');
-            }}>
-              <input type="checkbox" name="nested-groups" value="all" />
-            </TableColumn>
+            <TableColumn width="5%" />
             <TableColumn width="45%">Name</TableColumn>
             <TableColumn width="50%">Description</TableColumn>
           </TableHeader>
