@@ -13,9 +13,12 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    req.pre.auth0.clients.getAll({ fields: 'client_id,name,callbacks,global' })
+    req.pre.auth0.clients.getAll({ fields: 'client_id,name,callbacks,global,app_type' })
       .then(clients => _.chain(clients)
-        .filter({ global: false })
+        .filter(client =>
+          !client.global &&
+          (client.app_type === 'spa' || client.app_type === 'native' || client.app_type === 'regular_web')
+        )
         .sortBy((client) => client.name.toLowerCase())
         .value())
       .then(applications => reply(applications))
