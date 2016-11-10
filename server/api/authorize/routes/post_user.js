@@ -9,7 +9,6 @@ module.exports = (server) => ({
   config: {
     auth: {
       strategies: [
-        'auth0-admins-jwt',
         'jwt',
         'extension-secret'
       ]

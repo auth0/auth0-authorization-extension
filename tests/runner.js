@@ -1,15 +1,19 @@
 import path from 'path';
 import nconf from 'nconf';
 import config from '../server/lib/config';
+
+import certs from './mocks/certs.json';
+import { wellKnownEndpoint } from './mocks/tokens';
 import { initServer } from './server';
-import { generateToken } from './token';
 
 nconf
   .argv()
   .env()
-  .file(path.join(__dirname, '../server/config.json'))
   .defaults({
-    AUTH0_DOMAIN: 'foo.auth0.com',
+    AUTH0_CLIENT_ID: '111',
+    AUTH0_CLIENT_SECRET: '222',
+    AUTH0_RTA: 'auth0.auth0.local',
+    AUTH0_DOMAIN: 'foo.auth0.local',
     WT_URL: 'http://foo',
     EXTENSION_SECRET: 'abc',
     NODE_ENV: 'test',
@@ -19,5 +23,6 @@ nconf
 
 config.setProvider((key) => nconf.get(key));
 
+
+wellKnownEndpoint(config('AUTH0_DOMAIN'), certs.bar.cert, 'key2');
 initServer();
-generateToken();

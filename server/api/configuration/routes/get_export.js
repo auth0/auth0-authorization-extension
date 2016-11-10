@@ -3,7 +3,7 @@ module.exports = () => ({
   path: '/api/configuration/export',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'read:configuration' ]
     }
   },

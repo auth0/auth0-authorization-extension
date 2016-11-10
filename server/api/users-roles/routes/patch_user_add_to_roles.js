@@ -6,7 +6,7 @@ module.exports = () => ({
   path: '/api/users/{id}/roles',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'update:roles' ]
     },
     description: 'Add a single user to roles.',

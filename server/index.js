@@ -19,14 +19,18 @@ export default (cb) => {
       },
       reporters: {
         console: [
-          new GoodConsole({
-            color: !!config('LOG_COLOR')
-          }),
-          'stdout'
+
         ]
       }
     }
   };
+
+  if (process.env.NODE_ENV !== 'test') {
+    goodPlugin.options.reporters.console.push(
+      new GoodConsole({ color: !!config('LOG_COLOR') })
+    );
+    goodPlugin.options.reporters.console.push('stdout');
+  }
 
   const relishPlugin = Relish({ });
 

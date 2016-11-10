@@ -7,7 +7,7 @@ module.exports = (server) => ({
   path: '/api/groups/{id}/members',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]
     },
     description: 'Get the members for a group.',

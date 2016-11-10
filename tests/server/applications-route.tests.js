@@ -1,11 +1,10 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
-import { getToken } from '../token';
+import { getToken } from '../mocks/tokens';
 
 describe('applications-route', () => {
   let clientId = null;
   const { server } = getServerData();
-  const token = getToken();
 
   describe('#get', () => {
     it('should return 401 if no token provided', (cb) => {
@@ -21,6 +20,7 @@ describe('applications-route', () => {
     });
 
     it('should return list of applications', (cb) => {
+      const token = getToken('read:applications');
       const options = {
         method: 'GET',
         url: '/api/applications',
@@ -40,6 +40,7 @@ describe('applications-route', () => {
     });
 
     it('should return application data', (cb) => {
+      const token = getToken('read:applications');
       const options = {
         method: 'GET',
         url: `/api/applications/${clientId}`,

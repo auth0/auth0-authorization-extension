@@ -7,7 +7,7 @@ module.exports = () => ({
   path: '/api/groups/{id}/nested',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]
     },
     description: 'Add one or more nested groups in a group.',

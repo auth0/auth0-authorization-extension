@@ -6,7 +6,7 @@ module.exports = () => ({
   path: '/api/roles',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'read:roles' ]
     },
     description: 'Get all roles in the system.',

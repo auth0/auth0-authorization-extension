@@ -7,7 +7,7 @@ module.exports = () => ({
   path: '/api/users/{id}/roles/calculate',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'read:roles' ]
     },
     description: 'Get the roles of groups for a user.',

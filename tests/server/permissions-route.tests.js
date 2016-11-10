@@ -1,7 +1,7 @@
 import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
-import { getToken } from '../token';
+import { getToken } from '../mocks/tokens';
 import config from '../../server/lib/config';
 
 describe('permissions-route', () => {

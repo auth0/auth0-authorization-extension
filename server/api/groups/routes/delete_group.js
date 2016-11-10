@@ -5,7 +5,7 @@ module.exports = () => ({
   path: '/api/groups/{id}',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'delete:groups' ]
     },
     description: 'Delete a group.',

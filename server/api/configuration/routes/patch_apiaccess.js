@@ -6,7 +6,7 @@ module.exports = () => ({
   path: '/api/configuration/resource-server',
   config: {
     auth: {
-      strategies: [ 'auth0-admins-jwt', 'jwt' ],
+      strategies: [ 'jwt' ],
       scope: [ 'update:resource-server' ]
     },
     validate: {

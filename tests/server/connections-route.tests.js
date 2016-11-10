@@ -1,6 +1,6 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
-import { getToken } from '../token';
+import { getToken } from '../mocks/tokens';
 
 describe('connections-route', () => {
   const { server } = getServerData();
