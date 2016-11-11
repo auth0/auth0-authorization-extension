@@ -6,6 +6,7 @@ const initialState = {
   loading: false,
   error: null,
   userId: null,
+  addRoles: false,
   record: {},
   allGroups: {
     loading: false,
@@ -41,6 +42,7 @@ describe('user reducer', () => {
         loading: true,
         error: null,
         userId: 1,
+        addRoles: false,
         record: {},
         allGroups: {
           loading: false,
@@ -67,6 +69,7 @@ describe('user reducer', () => {
         loading: false,
         error: 'An error occured while loading the user: ERROR',
         userId: null,
+        addRoles: false,
         record: {},
         allGroups: {
           loading: false,
@@ -98,6 +101,7 @@ describe('user reducer', () => {
         loading: false,
         error: null,
         userId: null,
+        addRoles: false,
         record: {
 
         },
@@ -111,6 +115,85 @@ describe('user reducer', () => {
           error: null,
           records: []
         }
+      }
+    );
+  });
+
+  it('should handle ADD_ROLES_OPEN', () => {
+    expect(
+      user({
+        addRoles: false
+      }, {
+        type: constants.ADD_ROLES_OPEN
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: true
+      }
+    );
+  });
+
+  it('should handle ADD_ROLES_CLOSE', () => {
+    expect(
+      user({
+        addRoles: true
+      }, {
+        type: constants.ADD_ROLES_CLOSE
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: false
+      }
+    );
+  });
+
+  it('should handle SAVE_USER_ROLES_PENDING', () => {
+    expect(
+      user({
+        addRoles: true,
+        loading: false
+      }, {
+        type: constants.SAVE_USER_ROLES_PENDING
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: true,
+        loading: true
+      }
+    );
+  });
+
+  it('should handle SAVE_USER_ROLES_REJECTED', () => {
+    expect(
+      user({
+        addRoles: true,
+        loading: false
+      }, {
+        type: constants.SAVE_USER_ROLES_REJECTED,
+        errorMessage: 'ERROR'
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: false,
+        loading: false,
+        error: 'Error during saving roles: ERROR'
+      }
+    );
+  });
+
+
+  it('should handle SAVE_USER_ROLES_FULFILLED', () => {
+    expect(
+      user({
+        addRoles: true,
+        loading: false
+      }, {
+        type: constants.SAVE_USER_ROLES_FULFILLED
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: false,
+        loading: false
       }
     );
   });
