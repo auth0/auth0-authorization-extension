@@ -7,6 +7,11 @@ const initialState = {
   error: null,
   deleting: false,
   records: [],
+  allRoles: {
+    loading: false,
+    error: null,
+    records: []
+  },
   record: null,
   ids: []
 };
@@ -31,6 +36,11 @@ describe('user roles reducer', () => {
         error: null,
         deleting: false,
         records: [],
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: null,
         ids: []
       }
@@ -40,7 +50,7 @@ describe('user roles reducer', () => {
   it('should handle FETCH_USER_ROLES_REJECTED', () => {
     expect(
       userRoles(initialState, {
-        type: constants.FETCH_GROUPS_REJECTED,
+        type: constants.FETCH_USER_ROLES_REJECTED,
         errorMessage: 'ERROR'
       }).toJSON()
     ).toEqual(
@@ -49,6 +59,11 @@ describe('user roles reducer', () => {
         error: 'An error occured while loading the roles: ERROR',
         deleting: false,
         records: [],
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: null,
         ids: []
       }
@@ -61,8 +76,8 @@ describe('user roles reducer', () => {
         type: constants.FETCH_USER_ROLES_FULFILLED,
         payload: {
           data: [
-            { id: 2, name: 'test2' },
-            { id: 1, name: 'test1' }
+            { _id: 1, name: 'test1' },
+            { _id: 2, name: 'test2' }
           ]
         }
       }).toJSON()
@@ -71,11 +86,16 @@ describe('user roles reducer', () => {
         loading: false,
         error: null,
         deleting: false,
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: null,
         ids: [1, 2],
         records: [
-          { id: 1, name: 'test1' },
-          { id: 2, name: 'test2' }
+          { _id: 1, name: 'test1' },
+          { _id: 2, name: 'test2' }
         ]
 
       }
@@ -97,6 +117,11 @@ describe('user roles reducer', () => {
         error: null,
         deleting: true,
         records: [],
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: 1,
         ids: []
       }
@@ -114,6 +139,11 @@ describe('user roles reducer', () => {
         error: null,
         deleting: false,
         records: [],
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: null,
         ids: []
       }
@@ -129,8 +159,13 @@ describe('user roles reducer', () => {
       {
         loading: true,
         error: null,
-        deleting: false,
+        deleting: true,
         records: [],
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: null,
         ids: []
       }
@@ -149,6 +184,11 @@ describe('user roles reducer', () => {
         error: 'An error occured while deleting the role: ERROR',
         deleting: false,
         records: [],
+        allRoles: {
+          loading: false,
+          error: null,
+          records: []
+        },
         record: null,
         ids: []
       }
