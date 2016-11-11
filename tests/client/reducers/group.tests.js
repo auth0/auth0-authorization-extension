@@ -13,6 +13,7 @@ const initialState = {
   isDelete: false,
   requesting: false,
   validationErrors: {},
+  addRoles: false,
   members: {
     loading: false,
     error: null,
@@ -64,6 +65,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -106,6 +108,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -143,6 +146,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -186,6 +190,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -223,6 +228,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -266,6 +272,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -318,6 +325,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -368,6 +376,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -419,6 +428,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -460,6 +470,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -506,6 +517,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: { field_1: 'test' },
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -548,6 +560,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -591,6 +604,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -651,6 +665,7 @@ describe('group reducer', () => {
         isDelete: true,
         requesting: true,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -702,6 +717,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -745,6 +761,7 @@ describe('group reducer', () => {
         isDelete: false,
         requesting: false,
         validationErrors: {},
+        addRoles: false,
         members: {
           loading: false,
           error: null,
@@ -823,11 +840,14 @@ describe('group reducer', () => {
       }, {
         type: constants.FETCH_GROUP_MEMBERS_FULFILLED,
         payload: {
-          data: [
-            {
-              name: 'test'
-            }
-          ]
+          data: {
+            users: [
+              {
+                name: 'test'
+              }
+            ],
+            total: 1
+          }
         }
       }).toJSON()
     ).toEqual(
@@ -839,8 +859,88 @@ describe('group reducer', () => {
               last_login_relative: 'a few seconds ago',
               name: 'test'
             }
-          ]
+          ],
+          total: 1
         }
+      }
+    );
+  });
+
+  it('should handle GROUP_ADD_ROLES_OPEN', () => {
+    expect(
+      group({
+        addRoles: false
+      }, {
+        type: constants.GROUP_ADD_ROLES_OPEN
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: true
+      }
+    );
+  });
+
+  it('should handle GROUP_ADD_ROLES_CLOSE', () => {
+    expect(
+      group({
+        addRoles: true
+      }, {
+        type: constants.GROUP_ADD_ROLES_CLOSE
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: false
+      }
+    );
+  });
+
+  it('should handle SAVE_GROUP_ROLES_PENDING', () => {
+    expect(
+      group({
+        addRoles: true,
+        loading: false
+      }, {
+        type: constants.SAVE_GROUP_ROLES_PENDING
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: true,
+        loading: true
+      }
+    );
+  });
+
+  it('should handle SAVE_GROUP_ROLES_REJECTED', () => {
+    expect(
+      group({
+        addRoles: true,
+        loading: false
+      }, {
+        type: constants.SAVE_GROUP_ROLES_REJECTED,
+        errorMessage: 'ERROR'
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: false,
+        loading: false,
+        error: 'Error during saving roles: ERROR'
+      }
+    );
+  });
+
+
+  it('should handle SAVE_GROUP_ROLES_FULFILLED', () => {
+    expect(
+      group({
+        addRoles: true,
+        loading: false
+      }, {
+        type: constants.SAVE_GROUP_ROLES_FULFILLED
+      }).toJSON()
+    ).toEqual(
+      {
+        addRoles: false,
+        loading: false
       }
     );
   });
