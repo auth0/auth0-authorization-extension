@@ -40,7 +40,7 @@ describe('group roles reducer', () => {
   it('should handle FETCH_GROUP_ROLES_REJECTED', () => {
     expect(
       groupRoles(initialState, {
-        type: constants.FETCH_GROUPS_REJECTED,
+        type: constants.FETCH_GROUP_ROLES_REJECTED,
         errorMessage: 'ERROR'
       }).toJSON()
     ).toEqual(
@@ -61,8 +61,8 @@ describe('group roles reducer', () => {
         type: constants.FETCH_GROUP_ROLES_FULFILLED,
         payload: {
           data: [
-            { id: 2, name: 'test2' },
-            { id: 1, name: 'test1' }
+            { _id: 1, name: 'test1' },
+            { _id: 2, name: 'test2' }
           ]
         }
       }).toJSON()
@@ -74,8 +74,8 @@ describe('group roles reducer', () => {
         record: null,
         ids: [1, 2],
         records: [
-          { id: 1, name: 'test1' },
-          { id: 2, name: 'test2' }
+          { _id: 1, name: 'test1' },
+          { _id: 2, name: 'test2' }
         ]
 
       }
