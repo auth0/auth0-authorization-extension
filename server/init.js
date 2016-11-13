@@ -25,7 +25,8 @@ module.exports = (cfg, storageContext, cb) => {
     : new FileStorageContext(path.join(__dirname, './data.json'), { mergeWrites: true });
   const provider = new BlobRecordProvider(context);
 
-  config.setProvider(cfg);
+  // Set configuration provider.
+  config.setProvider((key) => cfg(key) || process.env[key]);
 
   initDb(new Database({ provider }));
 
