@@ -20,7 +20,7 @@ module.exports = () => ({
   handler: (req, reply) => {
     const groupIds = req.payload;
 
-    return Promise.mapSeries(groupIds, id => req.storage.getGroup(id)
+    return Promise.each(groupIds, id => req.storage.getGroup(id)
       .then(group => {
         if (!group.members) {
           group.members = []; // eslint-disable-line no-param-reassign

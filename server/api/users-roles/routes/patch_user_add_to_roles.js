@@ -20,7 +20,7 @@ module.exports = () => ({
   handler: (req, reply) => {
     const roleIds = req.payload;
 
-    return Promise.mapSeries(roleIds, id => req.storage.getRole(id)
+    return Promise.each(roleIds, id => req.storage.getRole(id)
       .then(role => {
         if (!role.users) {
           role.users = []; // eslint-disable-line no-param-reassign
