@@ -6,8 +6,8 @@ module.exports = () => ({
   path: '/api/groups',
   config: {
     auth: {
-      strategies: ['jwt'],
-      scope: ['read:groups']
+      strategies: [ 'jwt' ],
+      scope: [ 'read:groups' ]
     },
     description: 'Get all groups in the system.',
     validate: {
