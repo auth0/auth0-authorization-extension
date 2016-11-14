@@ -20,6 +20,7 @@ class App extends Component {
     ruleStatus: PropTypes.object,
     logout: PropTypes.func,
     goToRules: PropTypes.func,
+    goToAPI: PropTypes.func,
     goToConfiguration: PropTypes.func,
     goToImportExport: PropTypes.func
   };
@@ -27,7 +28,13 @@ class App extends Component {
   render() {
     return (
       <div>
-        <Header user={this.props.user} issuer={this.props.issuer} onLogout={this.props.logout} openConfiguration={this.props.goToConfiguration} />
+        <Header
+          user={this.props.user}
+          issuer={this.props.issuer}
+          onLogout={this.props.logout}
+          openAPI={this.props.goToAPI}
+          openConfiguration={this.props.goToConfiguration}
+        />
         <div className="container">
           <div className="row">
             <Sidebar>

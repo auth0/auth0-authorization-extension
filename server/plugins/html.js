@@ -73,6 +73,7 @@ const assembleHtmlRoute = (link) => ({
 
 const clientRoutes = [
   '/',
+  '/api',
   '/configuration',
   '/configuration/rule',
   '/roles',

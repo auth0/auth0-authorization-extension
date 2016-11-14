@@ -3,14 +3,12 @@ import { Tabs, Tab } from 'react-bootstrap';
 import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
 
 import RuleConfigurationTab from './RuleConfigurationTab';
-import APIAccessTab from './APIAccessTab';
 import ImportExportTab from './ImportExportTab';
 
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
-    saveConfigurationResourceServer: PropTypes.func.isRequired,
     importConfigPrepare: PropTypes.func.isRequired,
     importConfig: PropTypes.func.isRequired,
     closePreview: PropTypes.func.isRequired,
@@ -22,7 +20,7 @@ export default class RuleSettings extends Component {
   }
 
   render() {
-    const { loading, error, record, resourceserver, activeTab } = this.props.configuration.toJS();
+    const { loading, error, record, activeTab } = this.props.configuration.toJS();
     const importExport = this.props.importExport;
     return (
       <div>
@@ -41,10 +39,7 @@ export default class RuleSettings extends Component {
                   <Tab eventKey={1} title="Rule Configuration">
                     <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
-                  <Tab eventKey={2} title="API Access">
-                    <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
-                  </Tab>
-                  <Tab eventKey={3} title="Import / Export">
+                  <Tab eventKey={2} title="Import / Export">
                     <ImportExportTab
                       importConfigPrepare={this.props.importConfigPrepare}
                       importConfig={this.props.importConfig}

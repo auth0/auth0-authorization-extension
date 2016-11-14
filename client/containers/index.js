@@ -1,4 +1,5 @@
 export App from './App.jsx';
+export API from './API';
 export ConfigurationRule from './ConfigurationRule';
 export Group from './Group';
 export Groups from './Groups';
