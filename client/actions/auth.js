@@ -16,6 +16,7 @@ export function login(returnUrl) {
 export function logout() {
   return (dispatch) => {
     sessionStorage.removeItem('authz:apiToken');
+    window.location.href = window.config.BASE_URL + '/logout';
 
     dispatch({
       type: constants.LOGOUT_SUCCESS
