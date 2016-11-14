@@ -138,7 +138,7 @@ export default class PermissionsOverview extends Component {
   }
 
   render() {
-    const { error, loading, records } = this.props.permissions.toJS();
+    const { error, loading, records, fetchQuery } = this.props.permissions.toJS();
 
     if (loading) { return this.renderLoading(); }
 
@@ -147,7 +147,7 @@ export default class PermissionsOverview extends Component {
         <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
         <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
 
-        { !error && !records.length ? this.renderEmptyState() : (
+        { !error && !records.length && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
           <div>
             <SectionHeader
               title="Permissions"

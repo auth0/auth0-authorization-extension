@@ -119,7 +119,7 @@ export default class RolesOverview extends Component {
   }
 
   render() {
-    const { error, loading, records } = this.props.roles.toJS();
+    const { error, loading, records, fetchQuery } = this.props.roles.toJS();
 
     if (loading) { return this.renderLoading(); }
 
@@ -128,7 +128,7 @@ export default class RolesOverview extends Component {
         <RoleDialog onApplicationSelected={this.props.roleApplicationSelected} applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
         <RoleDeleteDialog role={this.props.role} onCancel={this.props.cancelDeleteRole} onConfirm={this.props.deleteRole} />
 
-        { !error && !records.length ? this.renderEmptyState() : (
+        { !error && !records.length && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
           <div>
             <SectionHeader title="Roles" description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups.">
               <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>

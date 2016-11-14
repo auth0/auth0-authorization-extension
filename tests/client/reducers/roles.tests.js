@@ -5,7 +5,8 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  fetchQuery: null
 };
 
 describe('roles reducer', () => {
@@ -26,7 +27,8 @@ describe('roles reducer', () => {
       {
         loading: true,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
@@ -41,7 +43,8 @@ describe('roles reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the roles: ERROR',
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
@@ -64,11 +67,40 @@ describe('roles reducer', () => {
         records: [
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
 
+  it('should handle FETCH_ROLES_FULFILLED', () => {
+    expect(
+      roles(initialState, {
+        type: constants.FETCH_ROLES_FULFILLED,
+        payload: {
+          data: [
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
+          ],
+          config: {
+            params: {
+              q: 'test'
+            }
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
+        ],
+        fetchQuery: 'test'
+      }
+    );
+  });
 
   it('should handle SAVE_ROLE_FULFILLED', () => {
     expect(
@@ -93,7 +125,8 @@ describe('roles reducer', () => {
             _id:1,
             name: 'test'
           }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
@@ -121,7 +154,8 @@ describe('roles reducer', () => {
             _id:1,
             name: 'test'
           }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
@@ -135,7 +169,8 @@ describe('roles reducer', () => {
       {
         loading: false,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });

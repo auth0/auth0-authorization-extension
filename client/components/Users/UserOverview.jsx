@@ -87,9 +87,9 @@ class UserOverview extends React.Component {
   }
 
   render() {
-    const { loading, error, users, total, renderActions } = this.props;
+    const { loading, error, users, total, fetchQuery, renderActions } = this.props;
 
-    if (!error && !users.length && !loading) { return this.renderEmptyState(); }
+    if (!error && !users.length && !loading && ((!fetchQuery || !fetchQuery.length) && !total)) { return this.renderEmptyState(); }
 
     return (
       <div>
