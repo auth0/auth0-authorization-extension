@@ -5,7 +5,8 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0
 };
 
 describe('groups reducer', () => {
@@ -27,7 +28,8 @@ describe('groups reducer', () => {
       {
         loading: true,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
@@ -42,7 +44,8 @@ describe('groups reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the groups: ERROR',
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
@@ -52,10 +55,13 @@ describe('groups reducer', () => {
       groups(initialState, {
         type: constants.FETCH_GROUPS_FULFILLED,
         payload: {
-          data: [
-            { id: 2, name: 'test2' },
-            { id: 1, name: 'test1' }
-          ]
+          data: {
+            groups: [
+              { id: 2, name: 'test2' },
+              { id: 1, name: 'test1' }
+            ],
+            total: 2
+          }
         }
       }).toJSON()
     ).toEqual(
@@ -65,7 +71,8 @@ describe('groups reducer', () => {
         records: [
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
-        ]
+        ],
+        total: 2
       }
     );
   });
@@ -76,7 +83,8 @@ describe('groups reducer', () => {
       groups({
         loading: false,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }, {
         type: constants.SAVE_GROUP_FULFILLED,
         payload: {
@@ -98,7 +106,8 @@ describe('groups reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }
     );
   });
@@ -113,7 +122,8 @@ describe('groups reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }, {
         type: constants.SAVE_GROUP_FULFILLED,
         payload: {
@@ -135,7 +145,8 @@ describe('groups reducer', () => {
             _id: 2,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }
     );
   });
@@ -149,7 +160,8 @@ describe('groups reducer', () => {
       {
         loading: false,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }
     );
   });

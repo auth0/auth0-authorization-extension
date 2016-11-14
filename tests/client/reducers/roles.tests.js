@@ -5,7 +5,8 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0
 };
 
 describe('roles reducer', () => {
@@ -26,7 +27,8 @@ describe('roles reducer', () => {
       {
         loading: true,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
@@ -41,7 +43,8 @@ describe('roles reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the roles: ERROR',
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
@@ -51,10 +54,13 @@ describe('roles reducer', () => {
       roles(initialState, {
         type: constants.FETCH_ROLES_FULFILLED,
         payload: {
-          data: [
-            { id: 2, name: 'test2' },
-            { id: 1, name: 'test1' }
-          ]
+          data: {
+            roles: [
+              { id: 2, name: 'test2' },
+              { id: 1, name: 'test1' }
+            ],
+            total: 2
+          }
         }
       }).toJSON()
     ).toEqual(
@@ -64,7 +70,8 @@ describe('roles reducer', () => {
         records: [
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
-        ]
+        ],
+        total: 2
       }
     );
   });
@@ -93,7 +100,8 @@ describe('roles reducer', () => {
             _id:1,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }
     );
   });
@@ -121,7 +129,8 @@ describe('roles reducer', () => {
             _id:1,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }
     );
   });
@@ -135,7 +144,8 @@ describe('roles reducer', () => {
       {
         loading: false,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }
     );
   });

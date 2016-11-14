@@ -7,7 +7,8 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0
 };
 
 export const groups = createReducer(fromJS(initialState), {
@@ -24,7 +25,8 @@ export const groups = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUPS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, app => app.id))
+      records: fromJS(_.sortBy(action.payload.data.groups, app => app.id)),
+      total: action.payload.data.total
     }),
 
   [constants.SAVE_GROUP_FULFILLED]: (state, action) => {
