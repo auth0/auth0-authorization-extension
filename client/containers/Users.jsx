@@ -38,7 +38,7 @@ class Users extends React.Component {
       return this.props.children;
     }
 
-    const { loading, error, users, total } = this.props;
+    const { loading, error, users, total, fetchQuery } = this.props;
 
     return (
       <div className="users-section">
@@ -48,6 +48,7 @@ class Users extends React.Component {
           error={error}
           users={users}
           total={total}
+          fetchQuery={fetchQuery}
           loading={loading}
           getUsersOnPage={this.getUsersOnPage}
         />
@@ -62,6 +63,7 @@ function mapStateToProps(state) {
     loading: state.users.get('loading'),
     users: state.users.get('records').toJS(),
     total: state.users.get('total'),
+    fetchQuery: state.users.get('fetchQuery'),
     nextPage: state.users.get('nextPage')
   };
 }

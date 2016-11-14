@@ -69,6 +69,7 @@ class GroupsContainer extends Component {
           group={this.props.group}
           groups={this.props.groups}
           users={this.props.users}
+          fetchQuery={this.props.fetchQuery}
           addGroupMembers={this.props.addGroupMembers}
           fetchUsers={this.props.fetchUsers}
         />
@@ -102,7 +103,8 @@ function mapStateToProps(state) {
     groups: {
       error: state.groups.get('error'),
       loading: state.groups.get('loading'),
-      records: state.groups.get('records')
+      records: state.groups.get('records'),
+      fetchQuery: state.groups.get('fetchQuery')
     },
     users: state.users
   };

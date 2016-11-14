@@ -7,7 +7,8 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  fetchQuery: null
 };
 
 export const roles = createReducer(fromJS(initialState), {
@@ -24,7 +25,8 @@ export const roles = createReducer(fromJS(initialState), {
   [constants.FETCH_ROLES_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, role => role.id))
+      records: fromJS(_.sortBy(action.payload.data, role => role.id)),
+      fetchQuery: action.payload.config && action.payload.config.params ? action.payload.config.params.q : null
     }),
 
   [constants.SAVE_ROLE_FULFILLED]: (state, action) => {

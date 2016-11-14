@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   error: null,
   records: [],
-  total: 0
+  total: 0,
+  fetchQuery: null
 };
 
 describe('user reducer', () => {
@@ -31,7 +32,8 @@ describe('user reducer', () => {
         loading: true,
         error: null,
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -42,7 +44,8 @@ describe('user reducer', () => {
         loading: false,
         error: null,
         records: [ 1, 2 ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }, {
         type: constants.FETCH_USERS_PENDING,
         meta: {
@@ -54,7 +57,8 @@ describe('user reducer', () => {
         loading: true,
         error: null,
         records: [ 1, 2 ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -70,7 +74,8 @@ describe('user reducer', () => {
         loading: false,
         error: 'An error occured while loading the users: ERROR',
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -95,11 +100,42 @@ describe('user reducer', () => {
         error: null,
         records: [],
         total: 100,
-        nextPage: 2
+        nextPage: 2,
+        fetchQuery: null
       }
     );
   });
 
+  it('should handle FETCH_USERS_FULFILLED', () => {
+    expect(
+      users(initialState, {
+        type: constants.FETCH_USERS_FULFILLED,
+        payload: {
+          data: {
+            total: 100,
+            users: []
+          },
+          config: {
+            params: {
+              q: 'test'
+            }
+          }
+        },
+        meta: {
+          page: 1
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [],
+        total: 100,
+        nextPage: 2,
+        fetchQuery: 'test'
+      }
+    );
+  });
 
   it('should handle BLOCK_USER_FULFILLED', () => {
     expect(
@@ -112,7 +148,8 @@ describe('user reducer', () => {
             blocked: false
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }, {
         type: constants.BLOCK_USER_FULFILLED,
         meta: {
@@ -129,7 +166,8 @@ describe('user reducer', () => {
             blocked: true
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -145,7 +183,8 @@ describe('user reducer', () => {
             blocked: true
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }, {
         type: constants.UNBLOCK_USER_FULFILLED,
         meta: {
@@ -162,7 +201,8 @@ describe('user reducer', () => {
             blocked: false
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -179,7 +219,8 @@ describe('user reducer', () => {
             multifactor: []
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }, {
         type: constants.REMOVE_MULTIFACTOR_FULFILLED,
         meta: {
@@ -197,7 +238,8 @@ describe('user reducer', () => {
             multifactor: []
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });

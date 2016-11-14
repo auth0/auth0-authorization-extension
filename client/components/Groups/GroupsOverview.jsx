@@ -149,7 +149,7 @@ class GroupsOverview extends React.Component {
   }
 
   render() {
-    const { error, loading, records } = this.props.groups;
+    const { error, loading, records, fetchQuery } = this.props.groups;
     const users = this.props.users;
 
     if (loading) { return this.renderLoading(); }
@@ -167,7 +167,7 @@ class GroupsOverview extends React.Component {
           fetchUsers={this.props.fetchUsers}
         />
 
-        { !error && !records.size ? this.renderEmptyState() : this.renderBody() }
+        { !error && !records.size && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : this.renderBody() }
       </div>
     );
   }

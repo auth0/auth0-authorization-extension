@@ -5,7 +5,8 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  fetchQuery: null
 };
 
 describe('permissions reducer', () => {
@@ -26,7 +27,8 @@ describe('permissions reducer', () => {
       {
         loading: true,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
@@ -41,7 +43,8 @@ describe('permissions reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the permissions: ERROR',
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
@@ -64,7 +67,37 @@ describe('permissions reducer', () => {
         records: [
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
-        ]
+        ],
+        fetchQuery: null
+      }
+    );
+  });
+
+  it('should handle FETCH_PERMISSIONS_FULFILLED', () => {
+    expect(
+      permissions(initialState, {
+        type: constants.FETCH_PERMISSIONS_FULFILLED,
+        payload: {
+          data: [
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
+          ],
+          config: {
+            params: {
+              q: 'test'
+            }
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
+        ],
+        fetchQuery: 'test'
       }
     );
   });
@@ -93,7 +126,8 @@ describe('permissions reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
@@ -106,7 +140,8 @@ describe('permissions reducer', () => {
         records: [{
           _id: 1,
           name: 'test'
-        }]
+        }],
+        fetchQuery: null
       }, {
         type: constants.SAVE_PERMISSION_FULFILLED,
         payload: {
@@ -128,7 +163,8 @@ describe('permissions reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
@@ -142,7 +178,8 @@ describe('permissions reducer', () => {
       {
         loading: false,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });

@@ -5,7 +5,8 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  fetchQuery: null
 };
 
 describe('groups reducer', () => {
@@ -27,7 +28,8 @@ describe('groups reducer', () => {
       {
         loading: true,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
@@ -42,7 +44,8 @@ describe('groups reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the groups: ERROR',
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
@@ -65,18 +68,48 @@ describe('groups reducer', () => {
         records: [
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
 
+  it('should handle FETCH_GROUPS_FULFILLED', () => {
+    expect(
+      groups(initialState, {
+        type: constants.FETCH_GROUPS_FULFILLED,
+        payload: {
+          data: [
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
+          ],
+          config: {
+            params: {
+              q: 'test'
+            }
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
+        ],
+        fetchQuery: 'test'
+      }
+    );
+  });
 
   it('should handle SAVE_GROUP_FULFILLED', () => {
     expect(
       groups({
         loading: false,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }, {
         type: constants.SAVE_GROUP_FULFILLED,
         payload: {
@@ -98,7 +131,8 @@ describe('groups reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        fetchQuery: null
       }
     );
   });
@@ -149,7 +183,8 @@ describe('groups reducer', () => {
       {
         loading: false,
         error: null,
-        records: []
+        records: [],
+        fetchQuery: null
       }
     );
   });
