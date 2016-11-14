@@ -6,8 +6,8 @@ module.exports = () => ({
   path: '/api/groups',
   config: {
     auth: {
-      strategies: [ 'jwt' ],
-      scope: [ 'read:groups' ]
+      strategies: ['jwt'],
+      scope: ['read:groups']
     },
     description: 'Get all groups in the system.',
     validate: {
@@ -25,13 +25,16 @@ module.exports = () => ({
         currentGroup.members = currentGroup.members || [];
         return currentGroup;
       }))
-      .then(groups => _.filter(groups, (item) => {
-        // if exists, filter by search value
-        const searchQuery = req.query.q;
-        if (!searchQuery) return true;
+      .then(groups => ({
+        groups: _.filter(groups, (item) => {
+          // if exists, filter by search value
+          const searchQuery = req.query.q;
+          if (!searchQuery) return true;
 
-        const field = req.query.field;
-        return _.includes(item[field].toLowerCase(), searchQuery.toLowerCase());
+          const field = req.query.field;
+          return _.includes(item[field].toLowerCase(), searchQuery.toLowerCase());
+        }),
+        total: groups.length
       }))
       .then(groups => reply(groups))
       .catch(err => reply.error(err))

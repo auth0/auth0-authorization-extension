@@ -19,13 +19,16 @@ module.exports = () => ({
   },
   handler: (req, reply) =>
     req.storage.getPermissions()
-      .then(permissions => _.filter(permissions, (item) => {
-        // if exists, filter by search value
-        const searchQuery = req.query.q;
-        if (!searchQuery) return true;
+      .then(permissions => ({
+        permissions: _.filter(permissions, (item) => {
+          // if exists, filter by search value
+          const searchQuery = req.query.q;
+          if (!searchQuery) return true;
 
-        const field = req.query.field;
-        return _.includes(item[field].toLowerCase(), searchQuery.toLowerCase());
+          const field = req.query.field;
+          return _.includes(item[field].toLowerCase(), searchQuery.toLowerCase());
+        }),
+        total: permissions.length
       }))
       .then(permissions => reply(permissions))
       .catch(err => reply.error(err))
