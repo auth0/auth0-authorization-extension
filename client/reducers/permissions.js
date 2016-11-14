@@ -7,7 +7,8 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0
 };
 
 export const permissions = createReducer(fromJS(initialState), {
@@ -24,7 +25,8 @@ export const permissions = createReducer(fromJS(initialState), {
   [constants.FETCH_PERMISSIONS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, permission => permission.id))
+      records: fromJS(_.sortBy(action.payload.data.permissions, permission => permission.id)),
+      total: action.payload.data.total
     }),
 
   [constants.SAVE_PERMISSION_FULFILLED]: (state, action) => {

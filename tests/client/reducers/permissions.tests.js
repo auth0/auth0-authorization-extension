@@ -5,7 +5,8 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0
 };
 
 describe('permissions reducer', () => {
@@ -26,7 +27,8 @@ describe('permissions reducer', () => {
       {
         loading: true,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
@@ -41,7 +43,8 @@ describe('permissions reducer', () => {
       {
         loading: false,
         error: 'An error occured while loading the permissions: ERROR',
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
@@ -51,10 +54,13 @@ describe('permissions reducer', () => {
       permissions(initialState, {
         type: constants.FETCH_PERMISSIONS_FULFILLED,
         payload: {
-          data: [
-            { id: 2, name: 'test2' },
-            { id: 1, name: 'test1' }
-          ]
+          data: {
+            permissions: [
+              { id: 2, name: 'test2' },
+              { id: 1, name: 'test1' }
+            ],
+            total: 2
+          }
         }
       }).toJSON()
     ).toEqual(
@@ -64,7 +70,8 @@ describe('permissions reducer', () => {
         records: [
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
-        ]
+        ],
+        total: 2
       }
     );
   });
@@ -93,7 +100,8 @@ describe('permissions reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }
     );
   });
@@ -106,7 +114,8 @@ describe('permissions reducer', () => {
         records: [{
           _id: 1,
           name: 'test'
-        }]
+        }],
+        total: 0
       }, {
         type: constants.SAVE_PERMISSION_FULFILLED,
         payload: {
@@ -128,7 +137,8 @@ describe('permissions reducer', () => {
             _id: 1,
             name: 'test'
           }
-        ]
+        ],
+        total: 0
       }
     );
   });
@@ -142,7 +152,8 @@ describe('permissions reducer', () => {
       {
         loading: false,
         error: null,
-        records: []
+        records: [],
+        total: 0
       }
     );
   });
