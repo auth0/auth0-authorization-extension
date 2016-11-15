@@ -97,7 +97,7 @@ module.exports.register = (server, options, next) => {
       sessionStorageKey: 'authz:apiToken',
       rta: config('AUTH0_RTA'),
       domain: config('AUTH0_DOMAIN'),
-      scopes: 'picture create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs',
+      scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users',
       baseUrl: config('WT_URL'),
       audience: 'urn:api-authz',
       secret: config('EXTENSION_SECRET'),

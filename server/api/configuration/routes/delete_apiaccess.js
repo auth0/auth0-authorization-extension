@@ -9,7 +9,7 @@ module.exports = () => ({
       scope: [ 'delete:resource-server' ]
     }
   },
-  handler: (req, reply) => deleteApi()
+  handler: (req, reply) => deleteApi(req)
     .then(() => reply().code(204))
     .catch(err => reply.error(err))
 });

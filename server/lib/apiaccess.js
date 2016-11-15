@@ -28,12 +28,18 @@ const allScopes = [
   { value: 'delete:resource-server' }
 ];
 
-const getToken = () =>
-  managementApi.getAccessTokenCached(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'));
+const getToken = (req) => {
+  const isAdministrator = req.auth && req.auth.credentials && req.auth.credentials.access_token && req.auth.credentials.access_token.length;
+  if (isAdministrator) {
+    return Promise.resolve(req.auth.credentials.access_token);
+  }
 
-const makeRequest = (path, method, payload) =>
+  return managementApi.getAccessTokenCached(config('AUTH0_DOMAIN'), config('AUTH0_CLIENT_ID'), config('AUTH0_CLIENT_SECRET'));
+};
+
+const makeRequest = (req, path, method, payload) =>
   new Promise((resolve, reject) =>
-    getToken().then(token => {
+    getToken(req).then(token => {
       request(method, `https://${config('AUTH0_DOMAIN')}/api/v2/${path}`)
         .send(payload || {})
         .set('Content-Type', 'application/json')
@@ -47,14 +53,14 @@ const makeRequest = (path, method, payload) =>
         });
     }));
 
-export const getApi = () =>
-  makeRequest('resource-servers', 'GET')
+export const getApi = (req) =>
+  makeRequest(req, 'resource-servers', 'GET')
     .then(apis => {
       const api = apis.filter(item => item.identifier === apiIdentifier);
       return api[0] || {};
     });
 
-export const createApi = (lifeTime) => {
+export const createApi = (req, lifeTime) => {
   const payload = {
     name: 'auth0-authorization-extension-api',
     identifier: apiIdentifier,
@@ -63,30 +69,30 @@ export const createApi = (lifeTime) => {
     token_lifetime: lifeTime
   };
 
-  return makeRequest('resource-servers', 'POST', payload);
+  return makeRequest(req, 'resource-servers', 'POST', payload);
 };
 
-export const updateApi = (lifeTime) =>
-  getApi()
+export const updateApi = (req, lifeTime) =>
+  getApi(req)
     .then(api => {
       const defaultLifetimeValue = 86400;
 
       if (!api.id) {
-        return createApi(lifeTime || defaultLifetimeValue);
+        return createApi(req, lifeTime || defaultLifetimeValue);
       }
 
-      return makeRequest(`resource-servers/${api.id}`, 'PATCH', { token_lifetime: lifeTime || defaultLifetimeValue });
+      return makeRequest(req, `resource-servers/${api.id}`, 'PATCH', { token_lifetime: lifeTime || defaultLifetimeValue });
     });
 
 
-export const deleteApi = () =>
-  getApi()
+export const deleteApi = (req) =>
+  getApi(req)
     .then(api => {
       if (!api.id) {
         return Promise.reject(new Error('Unable to disable resource-server. Is it enabled?'));
       }
 
-      return makeRequest(`resource-servers/${api.id}`, 'DELETE');
+      return makeRequest(req, `resource-servers/${api.id}`, 'DELETE');
     });
 
 export const scopes = allScopes;

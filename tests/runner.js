@@ -1,4 +1,3 @@
-import path from 'path';
 import nconf from 'nconf';
 import config from '../server/lib/config';
 

@@ -9,7 +9,7 @@ module.exports = () => ({
       scope: [ 'create:resource-server' ]
     }
   },
-  handler: (req, reply) => createApi()
+  handler: (req, reply) => createApi(req)
     .then(api => reply(api))
     .catch(err => reply.error(err))
 });

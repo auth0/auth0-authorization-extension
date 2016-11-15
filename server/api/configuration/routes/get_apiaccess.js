@@ -9,7 +9,7 @@ module.exports = () => ({
       scope: [ 'read:resource-server' ]
     }
   },
-  handler: (req, reply) => getApi(true)
+  handler: (req, reply) => getApi(req)
     .then((api) => reply({ apiAccess: !!api.identifier, token_lifetime: api.token_lifetime }))
     .catch(err => reply.error(err))
 });

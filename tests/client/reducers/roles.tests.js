@@ -115,7 +115,7 @@ describe('roles reducer', () => {
         type: constants.SAVE_ROLE_FULFILLED,
         payload: {
           data: {
-            _id:1,
+            _id: 1,
             name: 'test'
           }
         },
@@ -129,7 +129,7 @@ describe('roles reducer', () => {
         error: null,
         records: [
           {
-            _id:1,
+            _id: 1,
             name: 'test'
           }
         ],
@@ -145,7 +145,7 @@ describe('roles reducer', () => {
         type: constants.SAVE_ROLE_FULFILLED,
         payload: {
           data: {
-            _id:1,
+            _id: 1,
             name: 'test'
           }
         },
@@ -159,7 +159,7 @@ describe('roles reducer', () => {
         error: null,
         records: [
           {
-            _id:1,
+            _id: 1,
             name: 'test'
           }
         ],
