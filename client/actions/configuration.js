@@ -19,7 +19,7 @@ export function goToConfiguration() {
  */
 export function goToAPI() {
   return (dispatch) => {
-    dispatch(push('/api'));
+    dispatch(push('/configuration/api'));
   };
 }
 
