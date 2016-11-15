@@ -19,8 +19,11 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
   renderAPIAccessDetails(apiAccess) {
     if (apiAccess) {
       return (
-        <div>
-          <Field name="token_lifetime" component={InputText} type="number" label="Token Expiration (Seconds)" />
+        <div style={{ marginTop: '25px' }}>
+          <h4>API Settings</h4>
+          <div>
+            <Field name="token_lifetime" component={InputText} type="number" label="Token Expiration (Seconds)" />
+          </div>
         </div>);
     }
     return null;
@@ -31,34 +34,22 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
 
     return (
       <div>
+        <div data-columns="1" className="switchboard switchboard-responsive">
+          { this.renderSwitchItem({
+            title: 'API Access',
+            description: (<span>By enabling API access an API (Resource Server) will be created in your Auth0 account. This will allow you to define non interactive clients which can access the Authorization API.</span>),
+            name: 'apiAccess'
+          }) }
+          { this.renderAPIAccessDetails(this.props.apiAccess) }
+        </div>
         <div className="row">
-          <div className="col-xs-10">
-            <div className="cues-container">
-              <div className="use-case-box is-active">
-                <div className="explainer-text">
-                  <span className="explainer-text-content">
-                    API access description
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-xs-2">
+          <div className="col-xs-12">
             <div className="pull-right">
               <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
                 Save
               </Button>
             </div>
           </div>
-        </div>
-
-        <div data-columns="1" className="switchboard switchboard-responsive">
-          { this.renderSwitchItem({
-            title: 'API Access',
-            description: (<span>lorem ipsum.</span>),
-            name: 'apiAccess'
-          }) }
-          { this.renderAPIAccessDetails(this.props.apiAccess) }
         </div>
       </div>
     );

@@ -16,13 +16,13 @@ export default class RuleSettings extends Component {
 
   render() {
     const { loading, error, resourceserver } = this.props.configuration.toJS();
+    const initialValues = { token_lifetime: 86400, ...(resourceserver || { }) };
     return (
       <div>
         <SectionHeader
           title="API"
-          description="API Settings."
+          description="The Authorization Dashboard can optionally enable API access which will allow you to automate provisioning and query the authorization context of your users in real time."
         />
-
         <div className="row">
           <div className="col-xs-12">
             <Error message={error} />
@@ -30,7 +30,7 @@ export default class RuleSettings extends Component {
               <div>
                 <Tabs animation={false}>
                   <Tab eventKey={1} title="Settings">
-                    <APIAccessTab initialValues={resourceserver} onSubmit={this.props.saveConfigurationResourceServer} />
+                    <APIAccessTab initialValues={initialValues} onSubmit={this.props.saveConfigurationResourceServer} />
                   </Tab>
                 </Tabs>
               </div>

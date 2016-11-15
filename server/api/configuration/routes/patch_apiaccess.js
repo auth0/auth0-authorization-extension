@@ -1,5 +1,5 @@
 import Joi from 'joi';
-import { getApi, createApi, updateApi } from '../../../lib/apiaccess';
+import { getApi, createApi, updateApi, deleteApi } from '../../../lib/apiaccess';
 
 module.exports = () => ({
   method: 'PATCH',
@@ -16,8 +16,14 @@ module.exports = () => ({
       }
     }
   },
-  handler: (req, reply) =>
-    getApi(req)
+  handler: (req, reply) => {
+    if (!req.payload.apiAccess) {
+      return deleteApi(req)
+        .then(() => reply().code(204))
+        .catch(err => reply.error(err));
+    }
+
+    return getApi(req)
       .then(resourceServer => {
         if (resourceServer) {
           return updateApi(req, req.payload.token_lifetime);
@@ -26,5 +32,6 @@ module.exports = () => ({
         return createApi(req, req.payload.token_lifetime);
       })
       .then(() => reply().code(204))
-      .catch(err => reply.error(err))
+      .catch(err => reply.error(err));
+  }
 });

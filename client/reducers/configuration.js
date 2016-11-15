@@ -75,8 +75,7 @@ export const configuration = createReducer(fromJS(initialState), {
   },
   [constants.SAVE_CONFIGURATION_RESOURCESERVER_FULFILLED]: (state, action) =>
     state.merge({
-      loading: false,
-      resourceserver: fromJS(action.payload.data)
+      loading: false
     }),
   [constants.REMOVE_CONFIGURATION_RESOURCESERVER_PENDING]: (state) =>
     state.merge({

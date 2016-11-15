@@ -51,7 +51,7 @@ export function setActiveTab(activeTab) {
     meta: {
       activeTab
     }
-  }
+  };
 }
 
 /*
@@ -127,17 +127,20 @@ export function saveConfigurationResourceServer(config) {
     'apiAccess', 'token_lifetime'
   ]);
 
-  return {
+  return (dispatch) => ({
     type: constants.SAVE_CONFIGURATION_RESOURCESERVER,
     payload: {
       promise: axios({
         method: 'patch',
         url: '/api/configuration/resource-server',
         data: configData,
-        responseType: 'json'
+        responseType: 'json',
+        onSuccess: () => {
+          dispatch(fetchConfigurationResourceServer());
+        }
       })
     }
-  };
+  });
 }
 
 /*
