@@ -26,7 +26,7 @@ export default (history) =>
       <Route path="users" component={containers.Users}>
         <Route path=":id" component={containers.User} />
       </Route>
-      <Route path="/api" component={containers.API} />
+      <Route path="/configuration/api" component={containers.API} />
     </Route>
     <Route path="/login" component={containers.Login} />
   </Router>;

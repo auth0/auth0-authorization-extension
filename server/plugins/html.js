@@ -76,6 +76,7 @@ const clientRoutes = [
   '/api',
   '/configuration',
   '/configuration/rule',
+  '/configuration/api',
   '/roles',
   '/roles/{id}',
   '/groups',
