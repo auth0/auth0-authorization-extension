@@ -7,14 +7,16 @@
   "type": "application",
   "logoUrl": "https://cdn.auth0.com/extensions/auth0-authz/assets/logo.svg",
   "initialUrlPath": "/admins/login",
+  "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
   "repository": "https://github.com/auth0/auth0-authz",
   "keywords": [
     "auth0",
     "extension"
   ],
   "auth0": {
+    "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
     "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
-    "scopes": "create:resource_servers read:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs"
+    "scopes": "read:resource_servers update:resource_servers read:clients delete:clients"
   }
 }
