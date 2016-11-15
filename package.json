@@ -11,7 +11,7 @@
     "client:build": "npm run clean && cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
-    "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/mocha.js ./tests/**/*.tests.js",
+    "test": "npm run test:pre && cross-env NODE_ENV=test mocha tests/mocha.js ./tests/**/*.tests.js",
     "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/mocha.js ./tests/**/*.tests.js --watch",
     "test:pre": "npm run test:clean",
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
