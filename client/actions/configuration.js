@@ -15,6 +15,15 @@ export function goToConfiguration() {
 }
 
 /*
+ * Open the API tab.
+ */
+export function goToAPI() {
+  return (dispatch) => {
+    dispatch(push('/api'));
+  };
+}
+
+/*
  * Open the rules page.
  */
 export function goToRules() {

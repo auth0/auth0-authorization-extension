@@ -6,6 +6,7 @@ export default class Header extends Component {
     user: PropTypes.object,
     issuer: PropTypes.string,
     onLogout: PropTypes.func.isRequired,
+    openAPI: PropTypes.func.isRequired,
     openConfiguration: PropTypes.func.isRequired
   }
 
@@ -14,7 +15,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { user, issuer, onLogout, openConfiguration } = this.props;
+    const { user, issuer, onLogout, openAPI, openConfiguration } = this.props;
     return (<header className="extension-header">
       <nav role="navigation" className="navbar navbar-default">
         <div className="container">
@@ -42,6 +43,12 @@ export default class Header extends Component {
                   <li role="presentation">
                     <a role="menuitem" tabIndex="-1" onClick={openConfiguration}>
                       Configuration
+                    </a>
+                  </li>
+                  <li role="presentation" className="divider" />
+                  <li role="presentation">
+                    <a role="menuitem" tabIndex="-1" onClick={openAPI}>
+                      API
                     </a>
                   </li>
                   <li role="presentation" className="divider" />
