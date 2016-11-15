@@ -26,9 +26,10 @@ module.exports = (server) => ({
 
     req.pre.auth0.rules.getAll()
       .then(rules => {
+        const userName = req.auth.credentials.email || 'unknown';
         const payload = {
           name: 'auth0-authorization-extension',
-          script: compileRule(config),
+          script: compileRule(config, userName),
           enabled: true
         };
 
