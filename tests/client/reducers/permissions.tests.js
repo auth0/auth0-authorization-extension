@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   error: null,
   records: [],
-  total: 0
+  total: 0,
+  fetchQuery: null
 };
 
 describe('permissions reducer', () => {
@@ -28,7 +29,8 @@ describe('permissions reducer', () => {
         loading: true,
         error: null,
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -44,7 +46,8 @@ describe('permissions reducer', () => {
         loading: false,
         error: 'An error occured while loading the permissions: ERROR',
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -60,6 +63,11 @@ describe('permissions reducer', () => {
               { id: 1, name: 'test1' }
             ],
             total: 2
+          },
+          config: {
+            params: {
+              q: 'test'
+            }
           }
         }
       }).toJSON()
@@ -71,11 +79,11 @@ describe('permissions reducer', () => {
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
         ],
-        total: 2
+        total: 2,
+        fetchQuery: 'test'
       }
     );
   });
-
 
   it('should handle SAVE_PERMISSION_FULFILLED', () => {
     expect(
@@ -101,7 +109,8 @@ describe('permissions reducer', () => {
             name: 'test'
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -115,7 +124,8 @@ describe('permissions reducer', () => {
           _id: 1,
           name: 'test'
         }],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }, {
         type: constants.SAVE_PERMISSION_FULFILLED,
         payload: {
@@ -138,7 +148,8 @@ describe('permissions reducer', () => {
             name: 'test'
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -153,7 +164,8 @@ describe('permissions reducer', () => {
         loading: false,
         error: null,
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });

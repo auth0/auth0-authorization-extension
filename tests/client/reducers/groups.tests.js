@@ -6,7 +6,8 @@ const initialState = {
   loading: false,
   error: null,
   records: [],
-  total: 0
+  total: 0,
+  fetchQuery: null
 };
 
 describe('groups reducer', () => {
@@ -29,7 +30,8 @@ describe('groups reducer', () => {
         loading: true,
         error: null,
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -45,7 +47,8 @@ describe('groups reducer', () => {
         loading: false,
         error: 'An error occured while loading the groups: ERROR',
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -72,11 +75,40 @@ describe('groups reducer', () => {
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
         ],
-        total: 2
+        total: 2,
+        fetchQuery: null
       }
     );
   });
 
+  it('should handle FETCH_GROUPS_FULFILLED', () => {
+    expect(
+      groups(initialState, {
+        type: constants.FETCH_GROUPS_FULFILLED,
+        payload: {
+          data: [
+            { id: 2, name: 'test2' },
+            { id: 1, name: 'test1' }
+          ],
+          config: {
+            params: {
+              q: 'test'
+            }
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [
+          { id: 1, name: 'test1' },
+          { id: 2, name: 'test2' }
+        ],
+        fetchQuery: 'test'
+      }
+    );
+  });
 
   it('should handle SAVE_GROUP_FULFILLED', () => {
     expect(
@@ -84,7 +116,8 @@ describe('groups reducer', () => {
         loading: false,
         error: null,
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }, {
         type: constants.SAVE_GROUP_FULFILLED,
         payload: {
@@ -107,7 +140,8 @@ describe('groups reducer', () => {
             name: 'test'
           }
         ],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
@@ -161,7 +195,8 @@ describe('groups reducer', () => {
         loading: false,
         error: null,
         records: [],
-        total: 0
+        total: 0,
+        fetchQuery: null
       }
     );
   });
