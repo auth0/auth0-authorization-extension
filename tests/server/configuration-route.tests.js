@@ -236,6 +236,7 @@ describe('configuration-route', () => {
     it('should update resource-server', (cb) => {
       const token = getToken('update:resource-server');
       auth0.get('/api/v2/resource-servers', resourceServers);
+      auth0.get('/api/v2/resource-servers', resourceServers);
       auth0.patch('/api/v2/resource-servers/rsid');
       const options = {
         method: 'PATCH',

@@ -285,16 +285,10 @@ describe('configuration reducer', () => {
       configuration(initialState, {
         type: constants.SAVE_CONFIGURATION_RESOURCESERVER_FULFILLED,
         payload: {
-          data: [
-            {
-              id: 'con_test123',
-              name: 'my-custom-db'
-            },
-            {
-              id: 'con_test1234',
-              name: 'my-custom-db_2'
-            }
-          ]
+          data: {
+            apiAccess: true,
+            token_lifetime: 10
+          }
         }
       }).toJSON()
     ).toEqual(
@@ -302,16 +296,7 @@ describe('configuration reducer', () => {
         loading: false,
         error: null,
         record: { },
-        resourceserver: [
-          {
-            id: 'con_test123',
-            name: 'my-custom-db'
-          },
-          {
-            id: 'con_test1234',
-            name: 'my-custom-db_2'
-          }
-        ],
+        resourceserver: { },
         activeTab: 1
       }
     );
