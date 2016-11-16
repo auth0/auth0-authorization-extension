@@ -16,7 +16,8 @@
   "auth0": {
     "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
+    "onUpdatePath": "/.extensions/on-update",
     "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
-    "scopes": "read:resource_servers update:resource_servers read:clients delete:clients"
+    "scopes": "read:resource_servers update:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
   }
 }
