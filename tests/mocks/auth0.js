@@ -1,10 +1,10 @@
 import nock from 'nock';
 
-module.exports.get = (route, data = {}) =>
+module.exports.get = (route, data, code = 200) =>
    nock('https://foo.auth0.local')
     .get(route)
     .query(() => true)
-    .reply(200, data)
+    .reply(code, data)
 ;
 
 module.exports.patch = (route) =>

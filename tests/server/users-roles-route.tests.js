@@ -3,17 +3,17 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('users-groups-route', () => {
-  let userId = null;
   const { db, server } = getServerData();
-  const token = getToken();
   const group = {
     _id: 'A56a418065aa426ca9455fd21deC0538',
     name: 'test-group',
-    roles: [ 'C56a418065aa426ca9455fd21deC0538' ]
+    roles: [ 'C56a418065aa426ca9455fd21deC0538' ],
+    members: [ 'userId' ]
   };
   const role = {
     _id: 'B56a418065aa426ca9455fd21deC0538',
-    name: 'test-role'
+    name: 'test-role',
+    users: [ 'userId' ]
   };
   const groupRole = {
     _id: 'C56a418065aa426ca9455fd21deC0538',
@@ -32,28 +32,11 @@ describe('users-groups-route', () => {
     done();
   });
 
-  before((done) => {
-    const options = {
-      method: 'GET',
-      url: '/api/users',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
-
-    server.inject(options, (response) => {
-      userId = response.result.users[0].user_id;
-      role.users = [ userId ];
-      group.members = [ userId ];
-      done();
-    });
-  });
-
   describe('#get', () => {
     it('should return 401 if no token provided', (cb) => {
       const options = {
         method: 'GET',
-        url: `/api/users/${userId}/roles`
+        url: '/api/users/userId/roles'
       };
 
       server.inject(options, (response) => {
@@ -62,10 +45,27 @@ describe('users-groups-route', () => {
       });
     });
 
-    it('should return user roles', (cb) => {
+    it('should return 403 if scope is missing (list of roles)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'GET',
-        url: `/api/users/${userId}/roles`,
+        url: '/api/users/userId/roles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should return user roles', (cb) => {
+      const token = getToken('read:roles');
+      const options = {
+        method: 'GET',
+        url: '/api/users/userId/roles',
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -79,10 +79,27 @@ describe('users-groups-route', () => {
       });
     });
 
-    it('should return user roles of groups', (cb) => {
+    it('should return 403 if scope is missing (list of nested roles)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'GET',
-        url: `/api/users/${userId}/roles/calculate`,
+        url: '/api/users/userId/roles/calculate',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should return user roles of groups', (cb) => {
+      const token = getToken('read:roles');
+      const options = {
+        method: 'GET',
+        url: '/api/users/userId/roles/calculate',
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -97,6 +114,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return empty array', (cb) => {
+      const token = getToken('read:roles');
       const options = {
         method: 'GET',
         url: '/api/users/test-auth|no-such-user/roles',
@@ -114,10 +132,27 @@ describe('users-groups-route', () => {
   });
 
   describe('#patch', () => {
-    it('should add user to role', (cb) => {
+    it('should return 403 if scope is missing (update roles)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'PATCH',
-        url: `/api/users/${userId}/roles`,
+        url: '/api/users/userId/roles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should add user to role', (cb) => {
+      const token = getToken('update:roles');
+      const options = {
+        method: 'PATCH',
+        url: '/api/users/userId/roles',
         headers: {
           Authorization: `Bearer ${token}`
         },
@@ -127,17 +162,34 @@ describe('users-groups-route', () => {
       server.inject(options, (response) => {
         expect(response.statusCode).to.equal(204);
         expect(groupRole.id).to.be.equal(groupRole._id);
-        expect(groupRole.users[0]).to.be.equal(userId);
+        expect(groupRole.users[0]).to.be.equal('userId');
         cb();
       });
     });
   });
 
   describe('#delete', () => {
-    it('should remove user from role', (cb) => {
+    it('should return 403 if scope is missing (delete roles)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'DELETE',
-        url: `/api/users/${userId}/roles`,
+        url: '/api/users/userId/roles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should remove user from role', (cb) => {
+      const token = getToken('update:roles');
+      const options = {
+        method: 'DELETE',
+        url: '/api/users/userId/roles',
         headers: {
           Authorization: `Bearer ${token}`
         },
