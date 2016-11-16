@@ -33,9 +33,9 @@ export default class Header extends Component {
               </li>
               <li className="dropdown">
                 <span role="button" data-toggle="dropdown" data-target="#" className="btn-username">
-                  <img src={this.getPicture(issuer)} className="avatar" />
+                  <img src={this.getPicture(window.config.AUTH0_DOMAIN)} className="avatar" />
                   <span className="username-text">
-                    { issuer || user.get('nickname') || user.get('email')}
+                    { window.config.AUTH0_DOMAIN }
                   </span>
                   <i className="icon-budicon-460 toggle-icon" />
                 </span>

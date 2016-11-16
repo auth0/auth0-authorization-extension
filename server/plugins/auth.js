@@ -11,7 +11,7 @@ module.exports.register = (server, options, next) => {
     ({
       authenticate: (request, reply) => {
         const apiKey = request.headers['x-api-key'];
-        if (apiKey && apiKey === config('AUTHORIZE_API_KEY')) {
+        if (apiKey && apiKey === config('EXTENSION_SECRET')) {
           return reply.continue({
             credentials: {
               user: 'rule'

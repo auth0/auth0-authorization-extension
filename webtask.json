@@ -6,7 +6,7 @@
   "description": "This extension gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
   "logoUrl": "https://cdn.auth0.com/extensions/auth0-authz/assets/logo.svg",
-  "initialUrlPath": "/admins/login",
+  "initialUrlPath": "/login",
   "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
   "repository": "https://github.com/auth0/auth0-authz",
   "keywords": [
@@ -16,7 +16,6 @@
   "auth0": {
     "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
-    "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
     "scopes": "read:resource_servers update:resource_servers read:clients delete:clients"
   }
 }

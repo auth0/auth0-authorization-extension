@@ -4,8 +4,8 @@ import authorizeRule from './rules/authorize';
 
 export default (configuration = { }, userName = '') =>
   ejs.render(authorizeRule, {
-    extensionUrl: config('WT_URL'),
-    apiKey: config('AUTHORIZE_API_KEY'),
+    extensionUrl: config('WT_URL').replace(/\/$/g, ''),
+    apiKey: config('EXTENSION_SECRET'),
     updateTime: () => new Date().toISOString(),
     config: configuration,
     userName
