@@ -138,6 +138,7 @@ export class GroupContainer extends Component {
             totalUsers={users.get('total')}
             users={this.getUserPickerDialogUsers(users.get('records').toJS())}
             fetchUsers={this.props.fetchUsers}
+            resetFetchUsers={this.props.resetFetchUsers}
           />
           <GroupPickerDialog groupPicker={groupPicker} excludedGroups={excludedGroups} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
           <GroupMappingDialog group={group} connections={connections} groupMapping={groupMapping} onSave={this.saveGroupMapping} onClose={this.props.clearGroupMapping} />
@@ -261,7 +262,8 @@ GroupContainer.propTypes = {
   cancelRemoveNestedGroup: PropTypes.func.isRequired,
   selectUser: PropTypes.func.isRequired,
   searchUserPicker: PropTypes.func.isRequired,
-  fetchUsers: PropTypes.func.isRequired
+  fetchUsers: PropTypes.func.isRequired,
+  resetFetchUsers: React.PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {

@@ -12,6 +12,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
     group: PropTypes.object.isRequired,
     onClose: PropTypes.func,
     fetchUsers: React.PropTypes.func.isRequired,
+    resetFetchUsers: React.PropTypes.func.isRequired,
     totalUsers: React.PropTypes.number,
     users: React.PropTypes.array,
     loading: React.PropTypes.bool.isRequired,
@@ -47,6 +48,12 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
   onClose() {
     this.props.reset();
     this.props.onClose();
+    this.props.resetFetchUsers();
+  }
+
+  handleSubmit = () => {
+    this.props.handleSubmit();
+    this.props.resetFetchUsers();
   }
 
   render() {
@@ -74,7 +81,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
           <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.props.handleSubmit}>
+          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.handleSubmit}>
             Save
           </Button>
         </Modal.Footer>

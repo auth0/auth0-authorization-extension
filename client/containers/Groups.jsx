@@ -72,6 +72,7 @@ class GroupsContainer extends Component {
           fetchQuery={this.props.fetchQuery}
           addGroupMembers={this.props.addGroupMembers}
           fetchUsers={this.props.fetchUsers}
+          resetFetchUsers={this.props.resetFetchUsers}
         />
       </div>
     );
@@ -94,6 +95,7 @@ GroupsContainer.propTypes = {
   requestDeleteGroup: PropTypes.func.isRequired,
   addGroupMembers: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired,
+  resetFetchUsers: PropTypes.func.isRequired,
   users: PropTypes.object.isRequired
 };
 

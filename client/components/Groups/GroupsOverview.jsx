@@ -165,6 +165,7 @@ class GroupsOverview extends React.Component {
           totalUsers={users.get('total')}
           users={this.getUserPickerDialogUsers(users.get('records').toJS())}
           fetchUsers={this.props.fetchUsers}
+          resetFetchUsers={this.props.resetFetchUsers}
         />
 
         { !error && !records.size && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : this.renderBody() }
@@ -189,7 +190,8 @@ GroupsOverview.propTypes = {
   confirmDelete: PropTypes.func.isRequired,
   users: PropTypes.object.isRequired,
   addGroupMembers: PropTypes.func.isRequired,
-  fetchUsers: PropTypes.func.isRequired
+  fetchUsers: PropTypes.func.isRequired,
+  resetFetchUsers: PropTypes.func.isRequired
 };
 
 export default GroupsOverview;

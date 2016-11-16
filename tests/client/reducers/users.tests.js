@@ -137,6 +137,28 @@ describe('user reducer', () => {
     );
   });
 
+  it('should handle RESET_FETCH_USERS', () => {
+    expect(
+      users({
+        loading: false,
+        error: null,
+        records: [ 1, 2 ],
+        total: 0,
+        fetchQuery: null
+      }, {
+        type: constants.RESET_FETCH_USERS,
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        records: [],
+        total: 0,
+        fetchQuery: null
+      }
+    );
+  });
+
   it('should handle BLOCK_USER_FULFILLED', () => {
     expect(
       users({

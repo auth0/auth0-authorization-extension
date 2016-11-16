@@ -24,6 +24,7 @@ export default createForm('userPicker', class UserPickerDialog extends Component
     onSelectUser: React.PropTypes.func.isRequired,
     onUnselectUser: React.PropTypes.func.isRequired,
     fetchUsers: React.PropTypes.func.isRequired,
+    resetFetchUsers: React.PropTypes.func.isRequired,
     totalUsers: React.PropTypes.number,
     users: React.PropTypes.array,
     reset: React.PropTypes.func.isRequired
@@ -54,6 +55,12 @@ export default createForm('userPicker', class UserPickerDialog extends Component
   onCancel() {
     this.props.reset();
     this.props.onCancel();
+    this.props.resetFetchUsers();
+  }
+
+  handleSubmit = () => {
+    this.props.handleSubmit();
+    this.props.resetFetchUsers();
   }
 
   renderActions(user, index) {
@@ -75,7 +82,7 @@ export default createForm('userPicker', class UserPickerDialog extends Component
     const confirmMessage = selection.length ? `Add ${selection.length} Users` : 'Confirm';
 
     return (
-      <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={this.onCancel} onConfirm={this.props.handleSubmit}>
+      <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={this.onCancel} onConfirm={this.handleSubmit}>
         <Error message={error} />
         <p className="modal-description">
           Add members to this group.
