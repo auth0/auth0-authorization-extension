@@ -76,7 +76,10 @@ describe('groupPicker reducer', () => {
       groupPicker(initialState, {
         type: constants.LOAD_GROUP_PICKER_FULFILLED,
         payload: {
-          data: [ { id: 1 }, { id: 2 } ]
+          data: {
+            groups: [ { id: 1 }, { id: 2 } ],
+            total: 2
+          }
         }
       }).toJSON()
     ).toEqual(

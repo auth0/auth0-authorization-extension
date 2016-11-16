@@ -86,10 +86,13 @@ describe('groups reducer', () => {
       groups(initialState, {
         type: constants.FETCH_GROUPS_FULFILLED,
         payload: {
-          data: [
-            { id: 2, name: 'test2' },
-            { id: 1, name: 'test1' }
-          ],
+          data: {
+            groups: [
+              { id: 2, name: 'test2' },
+              { id: 1, name: 'test1' }
+            ],
+            total: 2
+          },
           config: {
             params: {
               q: 'test'
@@ -105,6 +108,7 @@ describe('groups reducer', () => {
           { id: 1, name: 'test1' },
           { id: 2, name: 'test2' }
         ],
+        total: 2,
         fetchQuery: 'test'
       }
     );
