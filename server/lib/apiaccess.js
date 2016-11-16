@@ -85,14 +85,18 @@ export const updateApi = (req, lifeTime) =>
     });
 
 
-export const deleteApi = (req) =>
+export const deleteApi = (req, silent) =>
   getApi(req)
     .then(api => {
-      if (!api.id) {
+      if (api.id) {
+        return makeRequest(req, `resource-servers/${api.id}`, 'DELETE');
+      }
+
+      if (!api.id && !silent) {
         return Promise.reject(new Error('Unable to disable resource-server. Is it enabled?'));
       }
 
-      return makeRequest(req, `resource-servers/${api.id}`, 'DELETE');
+      return Promise.resolve();
     });
 
 export const scopes = allScopes;
