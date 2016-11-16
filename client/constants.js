@@ -303,6 +303,9 @@ export const FETCH_USERS_PENDING = 'FETCH_USERS_PENDING';
 export const FETCH_USERS_REJECTED = 'FETCH_USERS_REJECTED';
 export const FETCH_USERS_FULFILLED = 'FETCH_USERS_FULFILLED';
 
+// Reset Fetched Users.
+export const RESET_FETCH_USERS = 'RESET_FETCH_USERS';
+
 // Fetch single.
 export const FETCH_USER = 'FETCH_USER';
 export const FETCH_USER_PENDING = 'FETCH_USER_PENDING';

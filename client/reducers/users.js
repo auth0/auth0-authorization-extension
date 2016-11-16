@@ -36,6 +36,10 @@ export const users = createReducer(fromJS(initialState), {
       fetchQuery: action.payload.config && action.payload.config.params ? action.payload.config.params.q : null
     });
   },
+  [constants.RESET_FETCH_USERS]: (state, action) =>
+    state.merge({
+      records: []
+    }),
   [constants.BLOCK_USER_FULFILLED]: (state, action) =>
     state.updateIn(
       [ 'records', state.get('records').findIndex(p => p.get('user_id') === action.meta.userId), 'blocked' ], () => true

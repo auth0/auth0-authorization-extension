@@ -32,6 +32,12 @@ export function fetchUsers(q = '', field = '', reset = false, per_page, page, on
   };
 }
 
+export function resetFetchUsers() {
+  return {
+    type: constants.RESET_FETCH_USERS
+  };
+}
+
 /*
  * Fetch the user details.
  */
