@@ -5,7 +5,6 @@ import { getToken } from '../mocks/tokens';
 
 describe('groups-nested-route', () => {
   const { db, server } = getServerData();
-  const token = getToken();
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const ngid = 'B56a418065aa426ca9455fd21deC0538';
   const groupName = 'test-group';
@@ -42,7 +41,24 @@ describe('groups-nested-route', () => {
       });
     });
 
+    it('should return 403 if scope is missing (list of nested groups)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'GET',
+        url: `/api/groups/${guid}/nested`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return nested groups', (cb) => {
+      const token = getToken('read:groups');
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/nested`,
@@ -61,7 +77,24 @@ describe('groups-nested-route', () => {
   });
 
   describe('#delete', () => {
+    it('should return 403 if scope is missing (delete nested groups)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'DELETE',
+        url: `/api/groups/${guid}/nested`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:groups');
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/nested`,
@@ -79,7 +112,7 @@ describe('groups-nested-route', () => {
 
     it('should delete nested', (cb) => {
       let updatedGroup = null;
-
+      const token = getToken('update:groups');
       db.updateGroup = (id, data) => {
         updatedGroup = data;
         updatedGroup._id = id;
@@ -107,7 +140,24 @@ describe('groups-nested-route', () => {
   });
 
   describe('#patch', () => {
+    it('should return 403 if scope is missing (update nested groups)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'PATCH',
+        url: `/api/groups/${guid}/nested`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:groups');
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/nested`,
@@ -124,6 +174,7 @@ describe('groups-nested-route', () => {
     });
 
     it('should update nested', (cb) => {
+      const token = getToken('update:groups');
       let updatedGroup = null;
       db.updateGroup = (id, data) => {
         updatedGroup = data;

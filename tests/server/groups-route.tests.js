@@ -7,7 +7,6 @@ describe('groups-route', () => {
   let newGroup = null;
   const groupName = 'test-group';
   const { db, server } = getServerData();
-  const token = getToken();
   const guid = 'C56a418065aa426ca9455fd21deC0538';
   const group = {
     _id: guid,
@@ -35,7 +34,8 @@ describe('groups-route', () => {
       });
     });
 
-    it('should return list of groups', (cb) => {
+    it('should return 403 if scope is missing (list of groups)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/groups',
@@ -45,14 +45,48 @@ describe('groups-route', () => {
       };
 
       server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result[0].members).to.be.a('array');
-        expect(response.result[0].name).to.be.equal(groupName);
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should return list of groups', (cb) => {
+      const token = getToken('read:groups');
+      const options = {
+        method: 'GET',
+        url: '/api/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.total).to.be.equal(1);
+        expect(response.result.groups).to.be.a('array');
+        expect(response.result.groups[0].members).to.be.a('array');
+        expect(response.result.groups[0].name).to.be.equal(groupName);
+        cb();
+      });
+    });
+
+    it('should return 403 if scope is missing (single groups)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'GET',
+        url: `/api/groups/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
         cb();
       });
     });
 
     it('should return group data', (cb) => {
+      const token = getToken('read:groups');
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}`,
@@ -71,7 +105,24 @@ describe('groups-route', () => {
   });
 
   describe('#delete', () => {
+    it('should return 403 if scope is missing (delete group)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'DELETE',
+        url: `/api/groups/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('delete:groups');
       const options = {
         method: 'DELETE',
         url: '/api/groups/invalid_id',
@@ -88,6 +139,7 @@ describe('groups-route', () => {
     });
 
     it('should delete group', (cb) => {
+      const token = getToken('delete:groups');
       let removedId = null;
       db.deleteGroup = (id) => {
         removedId = id;
@@ -111,7 +163,24 @@ describe('groups-route', () => {
   });
 
   describe('#post', () => {
+    it('should return 403 if scope is missing (create group)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'POST',
+        url: '/api/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('create:groups');
       const options = {
         method: 'POST',
         url: '/api/groups',
@@ -131,6 +200,7 @@ describe('groups-route', () => {
     });
 
     it('should create group', (cb) => {
+      const token = getToken('create:groups');
       db.createGroup = (data) => {
         newGroup = data;
         return Promise.resolve();
@@ -157,7 +227,24 @@ describe('groups-route', () => {
   });
 
   describe('#put', () => {
+    it('should return 403 if scope is missing (update group)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'PUT',
+        url: `/api/groups/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:groups');
       const options = {
         method: 'PUT',
         url: `/api/groups/${guid}`,
@@ -178,6 +265,7 @@ describe('groups-route', () => {
     });
 
     it('should update group', (cb) => {
+      const token = getToken('update:groups');
       db.updateGroup = (id, data) => {
         newGroup = data;
         newGroup.id = id;

@@ -6,7 +6,6 @@ import config from '../../server/lib/config';
 
 describe('permissions-route', () => {
   const { db, server } = getServerData();
-  const token = getToken();
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const permissionName = 'test-permission';
   const permission = {
@@ -37,7 +36,8 @@ describe('permissions-route', () => {
       });
     });
 
-    it('should return list of permissions', (cb) => {
+    it('should return 403 if scope is missing (list of permissions)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/permissions',
@@ -47,14 +47,48 @@ describe('permissions-route', () => {
       };
 
       server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result[0]._id).to.be.equal(guid);
-        expect(response.result[0].name).to.be.equal(permissionName);
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should return list of permissions', (cb) => {
+      const token = getToken('read:permissions');
+      const options = {
+        method: 'GET',
+        url: '/api/permissions',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.total).to.be.equal(1);
+        expect(response.result.permissions).to.be.a('array');
+        expect(response.result.permissions[0]._id).to.be.equal(guid);
+        expect(response.result.permissions[0].name).to.be.equal(permissionName);
+        cb();
+      });
+    });
+
+    it('should return 403 if scope is missing (single permission)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'GET',
+        url: `/api/permissions/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
         cb();
       });
     });
 
     it('should return permission data', (cb) => {
+      const token = getToken('read:permissions');
       const options = {
         method: 'GET',
         url: `/api/permissions/${guid}`,
@@ -73,9 +107,25 @@ describe('permissions-route', () => {
   });
 
   describe('#delete', () => {
+    it('should return 403 if scope is missing (delete permission)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'DELETE',
+        url: `/api/permissions/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should delete permission', (cb) => {
       let deletedId = null;
-
+      const token = getToken('delete:permissions');
       db.deletePermission = (id) => {
         deletedId = id;
         return Promise.resolve();
@@ -98,7 +148,24 @@ describe('permissions-route', () => {
   });
 
   describe('#post', () => {
+    it('should return 403 if scope is missing (create permission)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'POST',
+        url: '/api/permissions',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('create:permissions');
       const options = {
         method: 'POST',
         url: '/api/permissions',
@@ -115,6 +182,7 @@ describe('permissions-route', () => {
     });
 
     it('should create permission', (cb) => {
+      const token = getToken('create:permissions');
       const payload = {
         name: 'new-permission',
         description: 'description',
@@ -142,7 +210,24 @@ describe('permissions-route', () => {
   });
 
   describe('#put', () => {
+    it('should return 403 if scope is missing (update permission)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'PUT',
+        url: `/api/permissions/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:permissions');
       const options = {
         method: 'PUT',
         url: `/api/permissions/${guid}`,
@@ -159,6 +244,7 @@ describe('permissions-route', () => {
     });
 
     it('should update permission', (cb) => {
+      const token = getToken('update:permissions');
       let updatedPermission = null;
       db.updatePermission = (id, data) => {
         updatedPermission = data;

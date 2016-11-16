@@ -6,7 +6,6 @@ import config from '../../server/lib/config';
 
 describe('roles-route', () => {
   const { db, server } = getServerData();
-  const token = getToken();
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const roleName = 'test-role';
   const role = {
@@ -45,7 +44,8 @@ describe('roles-route', () => {
       });
     });
 
-    it('should return list of roles', (cb) => {
+    it('should return 403 if scope is missing (list of roles)', (cb) => {
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/roles',
@@ -55,14 +55,48 @@ describe('roles-route', () => {
       };
 
       server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result[0]._id).to.be.equal(guid);
-        expect(response.result[0].name).to.be.equal(roleName);
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
+    it('should return list of roles', (cb) => {
+      const token = getToken('read:roles');
+      const options = {
+        method: 'GET',
+        url: '/api/roles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.total).to.be.equal(1);
+        expect(response.result.roles).to.be.a('array');
+        expect(response.result.roles[0]._id).to.be.equal(guid);
+        expect(response.result.roles[0].name).to.be.equal(roleName);
+        cb();
+      });
+    });
+
+    it('should return 403 if scope is missing (single role)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'GET',
+        url: `/api/roles/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
         cb();
       });
     });
 
     it('should return role data', (cb) => {
+      const token = getToken('read:roles');
       const options = {
         method: 'GET',
         url: `/api/roles/${guid}`,
@@ -81,7 +115,24 @@ describe('roles-route', () => {
   });
 
   describe('#delete', () => {
+    it('should return 403 if scope is missing (delete role)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'DELETE',
+        url: `/api/roles/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should delete role', (cb) => {
+      const token = getToken('delete:roles');
       let deletedId = null;
 
       db.deleteRole = (id) => {
@@ -106,7 +157,24 @@ describe('roles-route', () => {
   });
 
   describe('#post', () => {
+    it('should return 403 if scope is missing (create role)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'POST',
+        url: '/api/roles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('create:roles');
       const options = {
         method: 'POST',
         url: '/api/roles',
@@ -123,6 +191,7 @@ describe('roles-route', () => {
     });
 
     it('should create role', (cb) => {
+      const token = getToken('create:roles');
       const payload = {
         name: 'new-role',
         description: 'description',
@@ -150,7 +219,24 @@ describe('roles-route', () => {
   });
 
   describe('#put', () => {
+    it('should return 403 if scope is missing (update role)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'PUT',
+        url: `/api/roles/${guid}`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:roles');
       const options = {
         method: 'PUT',
         url: `/api/roles/${guid}`,
@@ -167,6 +253,7 @@ describe('roles-route', () => {
     });
 
     it('should update role', (cb) => {
+      const token = getToken('update:roles');
       let updatedRole = null;
       db.updateRole = (id, data) => {
         updatedRole = data;

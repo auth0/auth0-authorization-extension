@@ -5,7 +5,6 @@ import { getToken } from '../mocks/tokens';
 describe('users-route', () => {
   const { db, server } = getServerData();
   const token = getToken();
-  let userId = null;
   const clientId = 'client_id';
   const permissions = [
     {
@@ -50,7 +49,7 @@ describe('users-route', () => {
     {
       _id: 'C66a418065aa426ca9455fd21deC0538',
       name: 'create-role',
-      users: [],
+      users: [ '1' ],
       applicationId: clientId,
       permissions: [ permissions[2]._id ]
     },
@@ -77,7 +76,7 @@ describe('users-route', () => {
     {
       _id: 'B56a418065aa426ca9455fd21deC0538',
       name: 'sub',
-      members: [],
+      members: [ '1' ],
       roles: [ roles[1]._id, roles[4]._id ]
     },
     {
@@ -93,32 +92,18 @@ describe('users-route', () => {
   ];
 
   before((done) => {
-    const options = {
-      method: 'GET',
-      url: '/api/users',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    };
+    db.getGroups = () => Promise.resolve(groups);
+    db.getRoles = () => Promise.resolve(roles);
+    db.getPermissions = () => Promise.resolve(permissions);
 
-    server.inject(options, (response) => {
-      userId = response.result.users[0].user_id;
-      groups[1].members.push(userId);
-      roles[2].users.push(userId);
-
-      db.getGroups = () => Promise.resolve(groups);
-      db.getRoles = () => Promise.resolve(roles);
-      db.getPermissions = () => Promise.resolve(permissions);
-
-      done();
-    });
+    done();
   });
 
   describe('#POST', () => {
     it('should return 401 if no token provided', (cb) => {
       const options = {
         method: 'POST',
-        url: `/api/users/${userId}/calculate/${clientId}`
+        url: `/api/users/1/calculate/${clientId}`
       };
 
       server.inject(options, (response) => {
@@ -130,7 +115,7 @@ describe('users-route', () => {
     it('should return groups, roles and permissions for user', (cb) => {
       const options = {
         method: 'POST',
-        url: `/api/users/${userId}/calculate/${clientId}`,
+        url: `/api/users/1/calculate/${clientId}`,
         payload: {
           groups: [ 'google-group' ],
           connectionName: 'google-oauth2'

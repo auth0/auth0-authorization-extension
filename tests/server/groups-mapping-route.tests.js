@@ -1,11 +1,11 @@
 import Promise from 'bluebird';
 import { expect } from 'chai';
+import * as auth0 from '../mocks/auth0';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('groups-mapping-route', () => {
   const { db, server } = getServerData();
-  const token = getToken();
   const guid = 'C56a418065aa426ca9455fd21deC0538';
   const mid = 'A56a418065aa426ca9455fd21deC0538';
   const connectionName = 'Username-Password-Authentication';
@@ -37,7 +37,25 @@ describe('groups-mapping-route', () => {
       });
     });
 
+    it('should return 403 if scope is missing (list of mappings)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'GET',
+        url: `/api/groups/${guid}/mappings`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return mappings for group', (cb) => {
+      const token = getToken('read:groups');
+      auth0.get('/api/v2/connections', [ { name: connectionName, id: 'cid', strategy: 'default' } ]);
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/mappings`,
@@ -55,7 +73,24 @@ describe('groups-mapping-route', () => {
   });
 
   describe('#delete', () => {
+    it('should return 403 if scope is missing (delete mappings)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'DELETE',
+        url: `/api/groups/${guid}/mappings`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:groups');
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/mappings`,
@@ -73,7 +108,7 @@ describe('groups-mapping-route', () => {
 
     it('should delete mappings', (cb) => {
       let updatedGroup = null;
-
+      const token = getToken('update:groups');
       db.updateGroup = (id, data) => {
         updatedGroup = data;
         updatedGroup._id = id;
@@ -101,7 +136,24 @@ describe('groups-mapping-route', () => {
   });
 
   describe('#patch', () => {
+    it('should return 403 if scope is missing (update mappings)', (cb) => {
+      const token = getToken();
+      const options = {
+        method: 'PATCH',
+        url: `/api/groups/${guid}/mappings`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(403);
+        cb();
+      });
+    });
+
     it('should return validation error', (cb) => {
+      const token = getToken('update:groups');
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/mappings`,
@@ -118,6 +170,7 @@ describe('groups-mapping-route', () => {
     });
 
     it('should update mappings', (cb) => {
+      const token = getToken('update:groups');
       let updatedGroup = null;
       db.updateGroup = (id, data) => {
         updatedGroup = data;
