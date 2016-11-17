@@ -42,7 +42,7 @@ module.exports.register = (server, options, next) => {
       }),
       verifyOptions: {
         audience: 'urn:auth0-authz-api',
-        issuer: `https://${config('AUTH0_RTA')}/`,
+        issuer: `https://${config('AUTH0_DOMAIN')}/`,
         algorithms: [ 'RS256' ]
       }
     }
@@ -60,7 +60,7 @@ module.exports.register = (server, options, next) => {
       const header = req.headers.authorization;
       if (header && header.indexOf('Bearer ') === 0) {
         const token = header.split(' ')[1];
-        if (decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_RTA')}/`) {
+        if (decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_DOMAIN')}/`) {
           return jwtOptions.resourceServer.key(decoded, (keyErr, key) => {
             if (keyErr) {
               return callback(Boom.wrap(keyErr), null, null);
@@ -69,6 +69,10 @@ module.exports.register = (server, options, next) => {
             return jwt.verify(token, key, jwtOptions.resourceServer.verifyOptions, (err) => {
               if (err) {
                 return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
+              }
+
+              if (decoded.payload.scope && typeof decoded.payload.scope === 'string') {
+                decoded.payload.scope = decoded.payload.scope.split(' '); // eslint-disable-line no-param-reassign
               }
 
               return callback(null, true, decoded.payload);
@@ -80,7 +84,7 @@ module.exports.register = (server, options, next) => {
               return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
             }
 
-            decoded.payload.scope = scopes.map(scope => scope.value);
+            decoded.payload.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
             return callback(null, true, decoded.payload);
           });
         }
