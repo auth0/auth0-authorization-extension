@@ -10,7 +10,6 @@ module.exports = `<!DOCTYPE html>
   <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styles/zocial.min.css">
   <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/styleguide/4.8.10/index.min.css" />
   <link rel="stylesheet" type="text/css" href="https://cdn.auth0.com/manage/v0.3.1672/css/index.min.css">
-  <% if (assets.style) { %><link rel="stylesheet" type="text/css" href="/app/<%= assets.style %>"><% } %>
   <% if (assets.version) { %><link rel="stylesheet" type="text/css" href="https://s3.amazonaws.com/assets.auth0.com/extensions/develop/auth0-authz/assets/auth0-authz.ui.<%= assets.version %>.css"><% } %>
 </head>
 <body>
