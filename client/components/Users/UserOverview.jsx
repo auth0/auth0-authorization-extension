@@ -96,20 +96,20 @@ class UserOverview extends React.Component {
         <Error message={error} />
         <SectionHeader title="Users" description="Here you will find all the users." />
 
-        <LoadingPanel show={loading}>
-          <UserGeneral />
-          <div className="row" style={{ marginBottom: '20px' }}>
-            <div className="col-xs-12">
-              <SearchBar
-                placeholder="Search for users"
-                searchOptions={this.searchBarOptions}
-                handleKeyPress={this.onKeyPress}
-                handleReset={this.onReset}
-                handleOptionChange={this.onHandleOptionChange}
-              />
-            </div>
+        <UserGeneral />
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-12">
+            <SearchBar
+              placeholder="Search for users"
+              searchOptions={this.searchBarOptions}
+              handleKeyPress={this.onKeyPress}
+              handleReset={this.onReset}
+              handleOptionChange={this.onHandleOptionChange}
+            />
           </div>
+        </div>
 
+        <LoadingPanel show={loading}>
           <div className="row">
             <div className="col-xs-12">
               <UsersTable loading={loading} users={users} renderActions={renderActions} />

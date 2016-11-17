@@ -89,14 +89,6 @@ export default class RolesOverview extends Component {
     );
   }
 
-  renderLoading() {
-    return (
-      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
-        <div className="circle" />
-      </div>
-    );
-  }
-
   renderEmptyState() {
     return (
       <BlankState
@@ -121,14 +113,12 @@ export default class RolesOverview extends Component {
   render() {
     const { error, loading, records, fetchQuery } = this.props.roles.toJS();
 
-    if (loading) { return this.renderLoading(); }
-
     return (
       <div>
         <RoleDialog onApplicationSelected={this.props.roleApplicationSelected} applications={this.props.applications} permissions={this.props.permissions} role={this.props.role} onSave={this.props.saveRole} onClose={this.props.clearRole} />
         <RoleDeleteDialog role={this.props.role} onCancel={this.props.cancelDeleteRole} onConfirm={this.props.deleteRole} />
 
-        { !error && !records.length && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
+        { !error && !records.length && !loading && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
           <div>
             <SectionHeader title="Roles" description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups.">
               <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>

@@ -68,14 +68,6 @@ class GroupsOverview extends React.Component {
     );
   }
 
-  renderLoading() {
-    return (
-      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
-        <div className="circle" />
-      </div>
-    );
-  }
-
   renderEmptyState() {
     return (
       <BlankState
@@ -152,8 +144,6 @@ class GroupsOverview extends React.Component {
     const { error, loading, records, fetchQuery } = this.props.groups;
     const users = this.props.users;
 
-    if (loading) { return this.renderLoading(); }
-
     return (
       <div>
         <GroupDialog group={this.props.group} onSave={this.props.save} onClose={this.clear} />
@@ -168,7 +158,7 @@ class GroupsOverview extends React.Component {
           resetFetchUsers={this.props.resetFetchUsers}
         />
 
-        { !error && !records.size && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : this.renderBody() }
+        { !error && !records.size && !loading && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : this.renderBody() }
       </div>
     );
   }

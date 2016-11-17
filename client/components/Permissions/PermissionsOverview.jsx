@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
-import { Error, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
+import { Error, TableAction, SectionHeader, BlankState, SearchBar, LoadingPanel } from 'auth0-extension-ui';
 
 import { PermissionDeleteDialog, PermissionDialog, PermissionsTable } from './';
 import PermissionsIcon from '../Icons/PermissionsIcon';
@@ -108,14 +108,6 @@ export default class PermissionsOverview extends Component {
     );
   }
 
-  renderLoading() {
-    return (
-      <div className="spinner spinner-lg is-auth0" style={{ margin: '200px auto 0' }}>
-        <div className="circle" />
-      </div>
-    );
-  }
-
   renderEmptyState() {
     return (
       <BlankState
@@ -140,14 +132,12 @@ export default class PermissionsOverview extends Component {
   render() {
     const { error, loading, records, fetchQuery } = this.props.permissions.toJS();
 
-    if (loading) { return this.renderLoading(); }
-
     return (
       <div>
         <PermissionDialog applications={this.props.applications} permission={this.props.permission} onSave={this.props.savePermission} onClose={this.props.clearPermission} />
         <PermissionDeleteDialog permission={this.props.permission} onCancel={this.props.cancelDeletePermission} onConfirm={this.props.deletePermission} />
 
-        { !error && !records.length && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
+        { !error && !records.length && !loading && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
           <div>
             <SectionHeader
               title="Permissions"
@@ -161,7 +151,9 @@ export default class PermissionsOverview extends Component {
             <div className="row">
               <div className="col-xs-12">
                 <Error message={error} />
-                {this.renderBody(records, loading)}
+                <LoadingPanel show={loading}>
+                  {this.renderBody(records, loading)}
+                </LoadingPanel>
               </div>
             </div>
           </div>
