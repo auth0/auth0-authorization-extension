@@ -25,7 +25,7 @@ module.exports.sign = (cert, kid, payload) =>
 
 module.exports.getToken = (scope) =>
    module.exports.sign(certs.bar.private, 'key2', {
-     iss: `https://${config('AUTH0_RTA')}/`,
+     iss: `https://${config('AUTH0_DOMAIN')}/`,
      aud: 'urn:auth0-authz-api',
      sub: 'foo',
      scope
