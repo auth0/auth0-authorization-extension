@@ -8,9 +8,18 @@ function (user, context, callback) {
 
   // Reach out to the extension.
   authorizeUser(user, context, function(err, res, data) {
-     if (err) {
-      return callback(new Error(err));
+    if (err) {
+      console.log('Error from Authorization Extension:', err);
+      return callback(new UnauthorizedError('Authorization Extension: ' + err.message));
     }
+
+    if (res.statusCode !== 200) {
+      console.log('Error from Authorization Extension:', res.body || res.statusCode);
+      return callback(
+        new UnauthorizedError('Authorization Extension: ' + ((res.body && (res.body.message || res.body) || res.statusCode)))
+      );
+    }
+
     // Update the outgoing token.<% if (config.groupsInToken && !config.groupsPassthrough) { %>
     user.groups = data.groups;<% } %><% if (config.groupsInToken && config.groupsPassthrough) { %>
     user.groups = mergeGroups(user.groups, data.groups);<% } %><% if (config.rolesInToken) { %>
@@ -19,7 +28,7 @@ function (user, context, callback) {
 <% if (config.persistGroups || config.persistRoles || config.persistPermissions) { %>
     // Store this in the user profile.
     saveToMetadata(user, data.groups, data.roles, data.permissions, function(err) {
-      return callback(null, user, context);
+      return callback(err, user, context);
     });
 <% } else { %>
     return callback(null, user, context);

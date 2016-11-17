@@ -65,7 +65,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           <div className="col-xs-2">
             <div className="pull-right">
               <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
-                Save
+                Publish Rule
               </Button>
             </div>
           </div>
