@@ -18,5 +18,56 @@
     "onUninstallPath": "/.extensions/on-uninstall",
     "onUpdatePath": "/.extensions/on-update",
     "scopes": "read:resource_servers update:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
+  },
+  "secrets": {
+    "DB_TYPE": {
+      "description": "Type of database",
+      "type": "select",
+      "required": true,
+      "default": "default",
+      "allowMultiple": false,
+      "options": [
+        {
+          "value": "default",
+          "text": "Webtask Storage (Default)"
+        }, {
+          "value": "s3",
+          "text": "Amazon S3"
+        },
+        {
+          "value": "mongodb",
+          "text": "MongoDB"
+        }
+      ]
+    },
+    "S3_BUCKET": {
+      "description": "S3 bucket",
+      "required": true,
+      "visibleIf": {
+        "DB_TYPE": "s3"
+      }
+    },
+    "S3_KEY": {
+      "description": "S3 KeyID",
+      "required": true,
+      "visibleIf": {
+        "DB_TYPE": "s3"
+      }
+    },
+    "S3_SECRET": {
+      "description": "S3 Key Secret",
+      "required": true,
+      "visibleIf": {
+        "DB_TYPE": "s3"
+      }
+    },
+    "MONGO_CONNECTION": {
+      "description": "MongoDB connection string",
+      "example": "mongodb://foo.bar.tld:1000",
+      "required": true,
+      "visibleIf": {
+        "DB_TYPE": "mongodb"
+      }
+    }
   }
 }

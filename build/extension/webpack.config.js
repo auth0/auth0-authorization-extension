@@ -56,6 +56,8 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['auth0-oauth2-express'] = true;
   externals.compatible['good-console'] = 'good-console@6.1.2';
   externals.compatible['auth0-extension-tools'] = true;
+  externals.compatible['auth0-extension-s3-tools'] = true;
+  externals.compatible['auth0-extension-mongo-tools'] = true;
 
   // Transform to commonjs.
   Object.keys(externals.compatible).forEach(k => { externals.compatible[k] = `commonjs ${k}`; });
