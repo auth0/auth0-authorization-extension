@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Joi from 'joi';
 
 import schema from '../schemas/authorization_request';
@@ -51,7 +52,8 @@ module.exports = (server) => ({
 
         return getPermissionsForRoles(req.storage, relevantRoles);
       })
-      .then(permissions => reply({ ...result, permissions: permissions.map(permission => permission.name) }))
+      .then(permissions => ({ ...result, permissions: permissions.map(permission => permission.name) }))
+      .then(data => reply({ groups: _.uniq(data.groups), permissions: _.uniq(data.permissions), roles: _.uniq(data.roles) }))
       .catch(err => reply.error(err));
   }
 });
