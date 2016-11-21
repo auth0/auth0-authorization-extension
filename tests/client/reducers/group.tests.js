@@ -897,15 +897,13 @@ describe('group reducer', () => {
   it('should handle SAVE_GROUP_ROLES_PENDING', () => {
     expect(
       group({
-        addRoles: true,
-        loading: false
+        addRoles: false
       }, {
         type: constants.SAVE_GROUP_ROLES_PENDING
       }).toJSON()
     ).toEqual(
       {
-        addRoles: true,
-        loading: true
+        addRoles: true
       }
     );
   });
@@ -913,8 +911,7 @@ describe('group reducer', () => {
   it('should handle SAVE_GROUP_ROLES_REJECTED', () => {
     expect(
       group({
-        addRoles: true,
-        loading: false
+        addRoles: true
       }, {
         type: constants.SAVE_GROUP_ROLES_REJECTED,
         errorMessage: 'ERROR'
@@ -922,7 +919,6 @@ describe('group reducer', () => {
     ).toEqual(
       {
         addRoles: false,
-        loading: false,
         error: 'Error during saving roles: ERROR'
       }
     );
@@ -932,15 +928,13 @@ describe('group reducer', () => {
   it('should handle SAVE_GROUP_ROLES_FULFILLED', () => {
     expect(
       group({
-        addRoles: true,
-        loading: false
+        addRoles: true
       }, {
         type: constants.SAVE_GROUP_ROLES_FULFILLED
       }).toJSON()
     ).toEqual(
       {
-        addRoles: false,
-        loading: false
+        addRoles: false
       }
     );
   });
