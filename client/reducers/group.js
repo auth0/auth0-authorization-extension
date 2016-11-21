@@ -255,19 +255,16 @@ export const group = createReducer(fromJS(initialState), {
     }),
   [constants.SAVE_GROUP_ROLES_PENDING]: (state, action) =>
     state.merge({
-      addRoles: true,
-      loading: true
+      addRoles: true
     }),
   [constants.SAVE_GROUP_ROLES_REJECTED]: (state, action) =>
     state.merge({
       addRoles: false,
-      loading: false,
       error: `Error during saving roles: ${action.errorMessage}`
     }),
   [constants.SAVE_GROUP_ROLES_FULFILLED]: (state, action) =>
     state.merge({
-      addRoles: false,
-      loading: false
+      addRoles: false
     })
 });
 
