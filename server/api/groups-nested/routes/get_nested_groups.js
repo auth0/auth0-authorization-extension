@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'read:groups' ]
     },
     description: 'Get the nested groups for a group.',
+    tags: ['api'],
     validate: {
       params: {
         id: Joi.string().guid().required()

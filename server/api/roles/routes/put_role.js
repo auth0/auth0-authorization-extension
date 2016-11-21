@@ -11,6 +11,7 @@ module.exports = () => ({
       scope: [ 'update:roles' ]
     },
     description: 'Update a role.',
+    tags: ['api'],
     validate: {
       options: {
         allowUnknown: false

@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'update:roles' ]
     },
     description: 'Add a single user to roles.',
+    tags: ['api'],
     validate: {
       params: {
         id: Joi.string().required()

@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'update:permissions' ]
     },
     description: 'Update a permission.',
+    tags: ['api'],
     validate: {
       options: {
         allowUnknown: false

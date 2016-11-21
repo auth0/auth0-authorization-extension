@@ -5,6 +5,7 @@ import Relish from 'relish';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
 import GoodConsole from 'good-console';
+import HapiSwagger from 'hapi-swagger';
 
 import config from './lib/config';
 import logger from './lib/logger';
@@ -24,6 +25,14 @@ export default (cb) => {
       }
     }
   };
+
+  const hapiSwaggerPlugin = {
+    register: HapiSwagger,
+    options: {
+      documentationPage: false,
+      swaggerUI: false
+    }
+  }
 
   if (process.env.NODE_ENV !== 'test') {
     goodPlugin.options.reporters.console.push(
@@ -45,7 +54,7 @@ export default (cb) => {
       }
     }
   });
-  server.register([ goodPlugin, Inert, Blipp, jwt, ...plugins ], (err) => {
+  server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
     }

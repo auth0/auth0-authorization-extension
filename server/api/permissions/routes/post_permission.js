@@ -9,6 +9,7 @@ module.exports = () => ({
       scope: [ 'create:permissions' ]
     },
     description: 'Create a new permission.',
+    tags: ['api'],
     validate: {
       options: {
         allowUnknown: false

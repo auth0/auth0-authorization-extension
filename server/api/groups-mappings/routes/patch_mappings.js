@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'update:groups' ]
     },
     description: 'Create one or more mappings in a group.',
+    tags: ['api'],
     validate: {
       options: {
         allowUnknown: false

@@ -9,6 +9,7 @@ module.exports = () => ({
       scope: [ 'create:groups' ]
     },
     description: 'Create a new group.',
+    tags: ['api'],
     validate: {
       options: {
         allowUnknown: false

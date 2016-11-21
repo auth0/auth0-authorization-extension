@@ -9,6 +9,7 @@ module.exports = () => ({
       scope: [ 'read:permissions' ]
     },
     description: 'Get a single permission based on its unique identifier.',
+    tags: ['api'],
     validate: {
       params: {
         id: Joi.string().guid().required()

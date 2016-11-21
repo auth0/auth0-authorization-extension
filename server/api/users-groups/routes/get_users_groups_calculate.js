@@ -12,6 +12,7 @@ module.exports = () => ({
       scope: [ 'read:groups' ]
     },
     description: 'Get the groups for a user.',
+    tags: ['api'],
     validate: {
       params: {
         id: Joi.string().required()
