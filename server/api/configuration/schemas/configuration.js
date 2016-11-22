@@ -7,5 +7,7 @@ export default Joi.object().keys({
   persistGroups: Joi.boolean(),
   persistRoles: Joi.boolean(),
   persistPermissions: Joi.boolean(),
-  groupsPassthrough: Joi.boolean()
+  groupsPassthrough: Joi.boolean(),
+  rolesPassthrough: Joi.boolean(),
+  permissionsPassthrough: Joi.boolean()
 });

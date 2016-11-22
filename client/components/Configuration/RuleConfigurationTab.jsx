@@ -41,6 +41,23 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           description: (<span>Persist <strong>description</strong> in the user's application metadata.</span>),
           name: 'persistPermissions'
         }
+      ],
+      passthrough: [
+        {
+          title: 'Groups Passthrough',
+          description: (<span>Merge the user's groups with groups originating from the IdP.</span>),
+          name: 'groupsPassthrough'
+        },
+        {
+          title: 'Roles Passthrough',
+          description: (<span>Merge the user's roles with roles originating from the IdP.</span>),
+          name: 'rolesPassthrough'
+        },
+        {
+          title: 'Permissions Passthrough',
+          description: (<span>Merge the user's permissions with permissions originating from the IdP.</span>),
+          name: 'permissionsPassthrough'
+        }
       ]
     };
   }
@@ -101,12 +118,8 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           </div>
         </div>
 
-        <div data-columns="1" className="switchboard switchboard-responsive">
-          { this.renderSwitchItem({
-            title: 'Groups Passthrough',
-            description: (<span>Merge the user's groups with groups originating from the IdP.</span>),
-            name: 'groupsPassthrough'
-          }) }
+        <div data-columns="3" className="switchboard switchboard-responsive">
+          { this.tabSwitchItems.passthrough.map(item => this.renderSwitchItem(item)) }
         </div>
 
         <h4>Persistence</h4>
