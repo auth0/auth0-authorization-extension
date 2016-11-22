@@ -77,6 +77,10 @@ function (user, context, callback) {
     idpRecords = idpRecords || [ ];
     extensionRecords = extensionRecords || [ ];
 
+    if (!Array.isArray(idpRecords)) {
+      idpRecords = idpRecords.replace(/,/g, ' ').replace(/\\s+/g, ' ').split(' ');
+    }
+
     return _.uniq(_.union(idpRecords, extensionRecords));
   }<% } %>
 }`;
