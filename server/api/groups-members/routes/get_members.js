@@ -11,7 +11,7 @@ module.exports = (server) => ({
       scope: [ 'read:groups' ]
     },
     description: 'Get the members for a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     pre: [
       server.handlers.managementClient
     ],

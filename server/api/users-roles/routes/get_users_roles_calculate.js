@@ -11,7 +11,7 @@ module.exports = () => ({
       scope: [ 'read:roles' ]
     },
     description: 'Get the roles of groups for a user.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       params: {
         id: Joi.string().required()

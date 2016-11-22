@@ -9,7 +9,7 @@ module.exports = () => ({
       scope: [ 'delete:permissions' ]
     },
     description: 'Delete a permission.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

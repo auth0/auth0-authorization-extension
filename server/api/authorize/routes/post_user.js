@@ -15,7 +15,7 @@ module.exports = (server) => ({
       ]
     },
     description: 'Get the authorization context for a user.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       params: {
         userId: Joi.string().required(),

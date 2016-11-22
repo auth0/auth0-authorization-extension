@@ -10,7 +10,7 @@ module.exports = () => ({
       scope: [ 'update:roles' ]
     },
     description: 'Remove a single user from roles.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       params: {
         id: Joi.string().required()

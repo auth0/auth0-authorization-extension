@@ -10,7 +10,7 @@ module.exports = () => ({
       scope: [ 'update:groups' ]
     },
     description: 'Update a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

@@ -12,7 +12,7 @@ module.exports = (server) => ({
       scope: [ 'read:groups' ]
     },
     description: 'Get the nested roles for a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     pre: [
       server.handlers.managementClient
     ],

@@ -9,7 +9,7 @@ module.exports = () => ({
       scope: [ 'read:groups' ]
     },
     description: 'Get a single group based on its unique identifier.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       params: {
         id: Joi.string().guid().required()

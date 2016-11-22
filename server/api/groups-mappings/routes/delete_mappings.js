@@ -12,7 +12,7 @@ module.exports = () => ({
       scope: [ 'update:groups' ]
     },
     description: 'Delete one or more group mappings from a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

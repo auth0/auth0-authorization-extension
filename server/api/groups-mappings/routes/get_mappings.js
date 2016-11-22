@@ -10,7 +10,7 @@ module.exports = (server) => ({
       scope: [ 'read:groups' ]
     },
     description: 'Get the mappings for a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     pre: [
       server.handlers.managementClient
     ],

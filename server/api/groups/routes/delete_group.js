@@ -9,7 +9,7 @@ module.exports = () => ({
       scope: [ 'delete:groups' ]
     },
     description: 'Delete a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

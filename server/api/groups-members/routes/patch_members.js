@@ -11,7 +11,7 @@ module.exports = () => ({
       scope: [ 'update:groups' ]
     },
     description: 'Add one or more members in a group.',
-    tags: ['api'],
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

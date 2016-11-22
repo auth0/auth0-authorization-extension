@@ -1,5 +1,7 @@
 import _ from 'lodash';
 import React, { Component, PropTypes } from 'react';
+import uuid from 'node-uuid';
+import './APIExplorerTab.styl';
 
 export default class APIExplorer extends Component {
   static propTypes = {
@@ -20,18 +22,18 @@ export default class APIExplorer extends Component {
 
     if (type === 'array' || type === 'object') {
       return (
-        <span key={key}>{name}: {this.renderRoutesBody(path, parameter, name, definitions, name)}{extra}</span>
+        <span key={key} className="prop">{name}: {this.renderRoutesBody(path, parameter, name, definitions, name)}{extra}</span>
       );
     }
 
     return (
-      <span key={key}>{name}: {this.renderType(name, type)}{extra}</span>
+      <span key={key} className="prop">{name}: {this.renderType(name, type)}{extra}</span>
     );
   }
 
   renderType(name, type) {
     if (name === 'guid') {
-      return 'uuid.v4()';
+      return `"${uuid.v4()}"`;
     } else if (type === 'string') {
       return `"My ${name}"`;
     } else if (type === 'integer') {
@@ -116,9 +118,9 @@ export default class APIExplorer extends Component {
 
   renderPath(path) {
     // replace ids by uuid.v4()
-    return path.replace('{id}', '{uuid.v4()}')
-        .replace('{clientId}', '{uuid.v4()}')
-        .replace('{userId}', '{uuid.v4()}');
+    return path.replace('{id}', uuid.v4())
+        .replace('{clientId}', uuid.v4())
+        .replace('{userId}', uuid.v4());
   }
 
   renderEndpoints(paths, definitions) {
@@ -133,8 +135,7 @@ export default class APIExplorer extends Component {
               {_.map(routes, route => {
                 return (
                   <div key={`${path}-${route}`}>
-                    <code className="prettyprint">{route.toUpperCase()} {this.renderPath(path)}</code>
-                    <p className="help-block">{paths[path][route].summary}</p>
+                    <code className="prettyprint">{route.toUpperCase()} {this.renderPath(path)}</code> <span className="route-description">{paths[path][route].summary}</span>
                     {
                       _.map(paths[path][route].parameters, (parameter, idx) => {
                         if (!parameter.schema) {
@@ -153,6 +154,7 @@ export default class APIExplorer extends Component {
                         }
                       })
                     }
+                    <hr />
                   </div>
                 );
               })}
