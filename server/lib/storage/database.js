@@ -33,7 +33,7 @@ export default class Database {
         }));
     }
 
-    return { size: null, type: config('DB_TYPE') };
+    return Promise.resolve({ size: null, type: config('DB_TYPE') });
   }
 
   canChange(type, checkFor, id) {
