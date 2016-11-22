@@ -5,8 +5,9 @@ import * as constants from '../../../client/constants';
 const initialState = {
   loading: false,
   error: null,
-  record: {},
+  record: { },
   resourceserver: { },
+  explorer: { },
   activeTab: 1
 };
 
@@ -30,6 +31,7 @@ describe('configuration reducer', () => {
         error: null,
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -48,6 +50,7 @@ describe('configuration reducer', () => {
         error: 'An error occured while loading the configuration: ERROR',
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -73,6 +76,7 @@ describe('configuration reducer', () => {
           name: 'my-custom-db'
         },
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -89,6 +93,7 @@ describe('configuration reducer', () => {
         error: null,
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -107,6 +112,7 @@ describe('configuration reducer', () => {
         error: 'An error occured while saving the configuration: ERROR',
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -124,6 +130,7 @@ describe('configuration reducer', () => {
         error: 'An error occured while saving the configuration: Validation Error',
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -145,6 +152,7 @@ describe('configuration reducer', () => {
         error: 'An error occured while saving the configuration: FORBIDDEN',
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -182,6 +190,7 @@ describe('configuration reducer', () => {
           }
         ],
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -198,6 +207,7 @@ describe('configuration reducer', () => {
         error: null,
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -216,6 +226,7 @@ describe('configuration reducer', () => {
         error: 'An error occured while loading the resource server configuration: ERROR',
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -241,6 +252,7 @@ describe('configuration reducer', () => {
           id: 'con_test123',
           name: 'my-custom-db'
         },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -257,6 +269,7 @@ describe('configuration reducer', () => {
         error: null,
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -275,6 +288,7 @@ describe('configuration reducer', () => {
         error: 'An error occured while saving the resource server configuration: ERROR',
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -297,6 +311,7 @@ describe('configuration reducer', () => {
         error: null,
         record: { },
         resourceserver: { },
+        explorer: { },
         activeTab: 1
       }
     );
@@ -316,7 +331,70 @@ describe('configuration reducer', () => {
         error: null,
         record: {},
         resourceserver: { },
+        explorer: { },
         activeTab: 2
+      }
+    );
+  });
+
+  it('should handle FETCH_CONFIGURATION_EXPLORER_PENDING', () => {
+    expect(
+      configuration(initialState, {
+        type: constants.FETCH_CONFIGURATION_EXPLORER_PENDING
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: true,
+        error: null,
+        record: {},
+        resourceserver: { },
+        explorer: { },
+        activeTab: 1
+      }
+    );
+  });
+
+  it('should handle FETCH_CONFIGURATION_EXPLORER_REJECTED', () => {
+    expect(
+      configuration(initialState, {
+        type: constants.FETCH_CONFIGURATION_EXPLORER_REJECTED,
+        errorMessage: 'ERROR',
+        payload: {}
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: 'An error occured while loading the api explorer configuration: ERROR',
+        record: {},
+        resourceserver: { },
+        explorer: { },
+        activeTab: 1
+      }
+    );
+  });
+
+  it('should handle FETCH_CONFIGURATION_EXPLORER_FULFILLED', () => {
+    expect(
+      configuration(initialState, {
+        type: constants.FETCH_CONFIGURATION_EXPLORER_FULFILLED,
+        payload: {
+          data: {
+            id: '/api',
+            name: 'my-test-api'
+          }
+        }
+      }).toJSON()
+    ).toEqual(
+      {
+        loading: false,
+        error: null,
+        record: { },
+        resourceserver: { },
+        explorer: {
+          id: '/api',
+          name: 'my-test-api'
+        },
+        activeTab: 1
       }
     );
   });
