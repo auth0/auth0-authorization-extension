@@ -19,7 +19,7 @@ module.exports = (server) => ({
       .then(rules => {
         const rule = _.find(rules, { name: 'auth0-authorization-extension' });
         if (rule) {
-          return req.auth0.rules.delete({ id: rule.id });
+          return req.pre.auth0.rules.delete({ id: rule.id });
         }
 
         return Promise.resolve();
