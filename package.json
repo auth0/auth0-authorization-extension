@@ -50,7 +50,7 @@
     "lowdb": "^0.12.5",
     "lru-memoizer": "^1.1.0",
     "moment": "^2.12.0",
-    "mongo-getdb": "^2.0.0",
+    "mongo-getdb": "^3.0.0",
     "mongodb-uri": "^0.9.7",
     "morgan": "^1.7.0",
     "nconf": "^0.8.4",
