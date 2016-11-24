@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'update:groups' ]
     },
     description: 'Add a single user to groups.',
+    tags: [ 'api' ],
     validate: {
       params: {
         id: Joi.string().required()

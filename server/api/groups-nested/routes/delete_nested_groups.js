@@ -11,6 +11,7 @@ module.exports = () => ({
       scope: [ 'update:groups' ]
     },
     description: 'Delete one or more nested groups from a group.',
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

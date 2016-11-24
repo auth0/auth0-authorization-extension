@@ -9,6 +9,7 @@ module.exports = () => ({
       scope: [ 'read:roles' ]
     },
     description: 'Get a single role based on its unique identifier.',
+    tags: [ 'api' ],
     validate: {
       params: {
         id: Joi.string().guid().required()

@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'create:roles' ]
     },
     description: 'Create a new role.',
+    tags: [ 'api' ],
     validate: {
       options: {
         allowUnknown: false

@@ -10,6 +10,7 @@ module.exports = () => ({
       scope: [ 'read:roles' ]
     },
     description: 'Get all roles in the system.',
+    tags: [ 'api' ],
     validate: {
       query: {
         q: Joi.string().max(1000).allow('').default(''),

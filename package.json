@@ -45,6 +45,7 @@
     "good-console": "6.1.2",
     "hapi": "13.5.0",
     "hapi-auth-jwt2": "7.0.1",
+    "hapi-swagger": "^7.4.0",
     "inert": "^4.0.1",
     "joi": "9.0.4",
     "json-loader": "^0.5.4",
