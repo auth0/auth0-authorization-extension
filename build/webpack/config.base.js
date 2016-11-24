@@ -85,8 +85,8 @@ module.exports = {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
-      'React': 'react',
-      'Promise': 'imports?this=>global!exports?global.Promise!bluebird'
+      React: 'react',
+      Promise: 'imports?this=>global!exports?global.Promise!bluebird'
     }),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
