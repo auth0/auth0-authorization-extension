@@ -22,9 +22,11 @@ function (user, context, callback) {
 
     // Update the outgoing token.<% if (config.groupsInToken && !config.groupsPassthrough) { %>
     user.groups = data.groups;<% } %><% if (config.groupsInToken && config.groupsPassthrough) { %>
-    user.groups = mergeGroups(user.groups, data.groups);<% } %><% if (config.rolesInToken) { %>
-    user.roles = data.roles;<% } %><% if (config.permissionsInToken) { %>
-    user.permissions = data.permissions;<% } %>
+    user.groups = mergeRecords(user.groups, data.groups);<% } %><% if (config.rolesInToken && !config.rolesPassthrough) { %>
+    user.roles = data.roles;<% } %><% if (config.rolesInToken && config.rolesPassthrough) { %>
+    user.roles = mergeRecords(user.roles, data.roles);<% } %><% if (config.permissionsInToken && !config.permissionsPassthrough) { %>
+    user.permissions = data.permissions;<% } %><% if (config.permissionsInToken && config.permissionsPassthrough) { %>
+    user.permissions = mergeRecords(user.permissions, data.permissions);<% } %>
 <% if (config.persistGroups || config.persistRoles || config.persistPermissions) { %>
     // Store this in the user profile.
     saveToMetadata(user, data.groups, data.roles, data.permissions, function(err) {
@@ -54,9 +56,11 @@ function (user, context, callback) {
     user.app_metadata = user.app_metadata || {};
     user.app_metadata.authorization = {<% if (config.persistGroups && !config.groupsPassthrough) { %>
       groups: groups,<% } %><% if (config.persistGroups && config.groupsPassthrough) { %>
-      groups: mergeGroups(user.groups, groups),<% } %><% if (config.persistRoles) { %>
-      roles: roles,<% } %><% if (config.persistPermissions) { %>
-      permissions: permissions<% } %>
+      groups: mergeRecords(user.groups, groups),<% } %><% if (config.persistRoles && !config.rolesPassthrough) { %>
+      roles: roles,<% } %><% if (config.persistRoles && config.rolesPassthrough) { %>
+      roles: mergeRecords(user.roles, roles),<% } %><% if (config.persistPermissions && !config.permissionsPassthrough) { %>
+      permissions: permissions<% } %><% if (config.persistPermissions && config.permissionsPassthrough) { %>
+      permissions: mergeRecords(user.permissions, permissions)<% } %>
     };
 
     auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
@@ -66,13 +70,17 @@ function (user, context, callback) {
     .catch(function(err){
       cb(err);
     });
-  }<% } %><% if ((config.persistGroups || config.groupsInToken)&& config.groupsPassthrough) { %>
+  }<% } %><% if (config.groupsPassthrough || config.rolesPassthrough || config.permissionsPassthrough) { %>
 
-  // Merge the IdP groups with the groups of the extension.
-  function mergeGroups(idpGroups, extensionGroups) {
-    idpGroups = idpGroups || [ ];
-    extensionGroups = extensionGroups || [ ];
+  // Merge the IdP records with the records of the extension.
+  function mergeRecords(idpRecords, extensionRecords) {
+    idpRecords = idpRecords || [ ];
+    extensionRecords = extensionRecords || [ ];
 
-    return _.uniq(_.union(idpGroups, extensionGroups));
+    if (!Array.isArray(idpRecords)) {
+      idpRecords = idpRecords.replace(/,/g, ' ').replace(/\\s+/g, ' ').split(' ');
+    }
+
+    return _.uniq(_.union(idpRecords, extensionRecords));
   }<% } %>
 }`;

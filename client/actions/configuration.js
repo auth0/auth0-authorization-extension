@@ -89,9 +89,8 @@ export function saveConfiguration(config) {
   const configData = _.pick(config, [
     'groupsInToken', 'rolesInToken', 'permissionsInToken',
     'persistGroups', 'persistRoles', 'persistPermissions',
-    'groupsPassthrough'
+    'groupsPassthrough', 'rolesPassthrough', 'permissionsPassthrough'
   ]);
-
   return {
     type: constants.SAVE_CONFIGURATION,
     payload: {
