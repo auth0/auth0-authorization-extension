@@ -88,7 +88,7 @@ const roleForm = createForm('role', class extends Component {
     return (
       <div>
         <strong>Permissions</strong>
-        <p>No permissions were added for this application yet.</p>
+        <p>No permissions were created for this application yet.</p>
       </div>);
   }
 
@@ -97,7 +97,7 @@ const roleForm = createForm('role', class extends Component {
       return (
         <div>
           <p className="modal-description">
-            Give a name, description (optional) and permissions for this role.
+            Select the application for which you want to define a role for.
           </p>
           <Field
             name="applicationId" component={InputCombo}
@@ -112,7 +112,7 @@ const roleForm = createForm('role', class extends Component {
     return (
       <div>
         <p className="modal-description">
-          Select the application you want to create the role for.
+          Give the role a name and a description (optional). You can also assing permissions to it.
         </p>
         <Field
           name="applicationId" component={InputCombo}

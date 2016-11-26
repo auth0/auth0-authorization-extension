@@ -25,7 +25,6 @@ export default class ItemRolesOverview extends Component {
   };
 
   renderRoleActions = (role) => {
-
     if (this.props.requestDeleteRole) {
       return (
         <div>

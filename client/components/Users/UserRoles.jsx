@@ -44,7 +44,7 @@ class UserRoles extends Component {
         />
         <div className="row" style={{ marginBottom: '20px' }}>
           <div className="col-xs-8">
-            <p>Roles description</p>
+            <p>These are the roles that have been directly assigned to the user.</p>
           </div>
           <div className="col-xs-4">
             <Button className="pull-right" bsStyle="success" onClick={this.props.openAddRoles}>
@@ -73,10 +73,10 @@ class UserRoles extends Component {
     return (
       <div className="row" style={{ marginBottom: '20px' }}>
         <div className="col-xs-12">
-          <p>All roles description</p>
+          <p>These are all roles the user has been assigned to. Including roles originating from group memberships.</p>
         </div>
         <ItemRolesOverview
-          showIcon={true}
+          showIcon
           roles={allRoles}
           loading={loading}
           applications={this.props.applications}

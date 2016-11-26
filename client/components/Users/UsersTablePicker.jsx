@@ -18,8 +18,7 @@ class UsersTablePicker extends Component {
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="29%">Email</TableColumn>
         </TableHeader>
-        <TableBody>
-        </TableBody>
+        <TableBody />
       </Table>
     );
   }

@@ -29,7 +29,6 @@ export default class RuleSettings extends Component {
           description="Configure how the authorization extension has to behave during
           a login transaction. This is done by creating a rule in your Auth0 account."
         />
-
         <div className="row">
           <div className="col-xs-12">
             <Error message={error} />

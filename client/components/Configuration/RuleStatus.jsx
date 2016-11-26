@@ -59,9 +59,9 @@ export default class RuleStatus extends Component {
 
     if (record && record.database &&
       record.database.type === 'default' &&
-      record.database.size > process.env.MAX_DB_SIZE) {
+      record.database.size > process.env.WARN_DB_SIZE) {
       return this.renderWarning({
-        message: `Database size is higher than permited (max ${process.env.MAX_DB_SIZE} bytes).`,
+        message: 'You\'ve almost reached the storage limit of 500 KB.',
         action: (<button onClick={this.props.goToImportExport} className="btn btn-sm btn-warning">Go to Import/Export</button>)
       });
     }

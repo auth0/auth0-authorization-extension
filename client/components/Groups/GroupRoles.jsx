@@ -33,7 +33,7 @@ class GroupRoles extends React.Component {
           />
           <div className="col-xs-8">
             <p>
-              Add or remove roles to this group to manage users permissions to your applications.
+              Add or remove roles to this group. Any member of this group will also be assigned to these roles.
             </p>
           </div>
           <div className="col-xs-4">

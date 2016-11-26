@@ -94,7 +94,7 @@ class UserOverview extends React.Component {
     return (
       <div>
         <Error message={error} />
-        <SectionHeader title="Users" description="Here you will find all the users." />
+        <SectionHeader title="Users" description="Open a user to add them to a group or assign them to a role." />
 
         <UserGeneral />
         <div className="row" style={{ marginBottom: '20px' }}>
@@ -124,7 +124,7 @@ class UserOverview extends React.Component {
                 handlePageChange={this.handleUsersPageChange}
                 perPage={process.env.PER_PAGE}
               /> :
-              <TableTotals currentCount={users.length} totalCount={total} />
+                <TableTotals currentCount={users.length} totalCount={total} />
             }
           </div>
         </div>

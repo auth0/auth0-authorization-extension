@@ -1,11 +1,13 @@
 import Boom from 'boom';
+import logger from '../lib/logger';
 
 function notFound(message) {
   return this.response(Boom.notFound(message));
 }
 
 function error(err) {
-  return this.response(Boom.badRequest(err.message || err.code || err.name));
+  logger.error(err);
+  return this.response(Boom.badRequest(err.message || err.code || err.name || err.text || err.description || err));
 }
 
 function unauthorized(message) {

@@ -31,21 +31,13 @@ export default createForm('userPicker', class UserPickerDialog extends Component
   };
 
   getOptions(input, callback) {
-    // TODO: this.props.totalUsers changes over time > what should be the solution?
-    // if (this.props.totalUsers < process.env.MAX_MULTISELECT_USERS) {
-    //   callback(null, {
-    //     options: this.props.users,
-    //     complete: true
-    //   });
-    // } else {
-      const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
-      this.props.fetchUsers(query, null, true, null, null, () => {
-        callback(null, {
-          options: this.props.users,
-          complete: false
-        });
+    const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
+    this.props.fetchUsers(query, null, true, null, null, () => {
+      callback(null, {
+        options: this.props.users,
+        complete: false
       });
-    // }
+    });
   }
 
   shouldComponentUpdate(nextProps) {
@@ -91,9 +83,7 @@ export default createForm('userPicker', class UserPickerDialog extends Component
         <Field
           name="members"
           component={Multiselect}
-          loadOptions={_.debounce((input, callback) => {
-            return this.getOptions(input, callback);
-          }, process.env.MULTISELECT_DEBOUNCE_MS)}
+          loadOptions={_.debounce((input, callback) => this.getOptions(input, callback), process.env.MULTISELECT_DEBOUNCE_MS)}
         />
       </Confirm>
     );

@@ -129,7 +129,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
               <span className="explainer-text-content">
                 In addition to storing the authorization context in the token you can also choose to persist the information in the user profile.
                 This is especially useful if your authorization context is pretty large (eg: many groups or many permissions).
-                The data will be stored in the user's app_metadata and you can then use the Management API or the Token Info endpoint to retrieve this information after the user has logged in.
+                The data will be stored in the user's <code>app_metadata</code> and you can then use the Management API or the Token Info endpoint to retrieve this information after the user has logged in.
               </span>
             </div>
           </div>
@@ -137,6 +137,10 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
 
         <div data-columns="3" className="switchboard switchboard-responsive">
           { this.tabSwitchItems.persistence.map(item => this.renderSwitchItem(item)) }
+        </div>
+
+        <div className="alert alert-warning">
+          <strong>Heads up!</strong> There is no synchronization taking place between the data in the Authorization Extension and the user's profile. Any changes made here will only be visible in the user's metadata next time they log in.
         </div>
       </div>
     );

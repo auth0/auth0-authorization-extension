@@ -49,15 +49,13 @@ export default class APIExplorer extends Component {
         {'{'}
         <br />
         {
-          _.map(Object.keys(definition.properties), (prop, idx, array) => {
-            return this.renderRow(
+          _.map(Object.keys(definition.properties), (prop, idx, array) => this.renderRow(
               prop,
               definition.properties[prop].type, idx === array.length - 1,
               `${path}-${prop}-${idx}`,
               path,
               definition.properties,
-              definitions);
-          })
+              definitions))
         }
         <br />
         {'}'}
@@ -80,7 +78,7 @@ export default class APIExplorer extends Component {
   renderSimpleArray(definition, path, parentName) {
     return (
       <span>
-        {'['}
+        {'[ '}
         { this.isGUID('guid', definition) ?
           this.renderType('guid', definition.items.type) :
           parentName ?
@@ -89,25 +87,25 @@ export default class APIExplorer extends Component {
           this.renderType('member', definition.items.type) :
           this.renderType('value', definition.items.type)
         }
-        {']'}
+        {' ]'}
       </span>
     );
   }
 
   renderRoutesBody = (path, parameter, refParent, definitions, parentName) => {
     if (!path || !parameter || !refParent || !definitions ||
-    !parameter[refParent] || !parameter[refParent]['$ref']) {
+    !parameter[refParent] || !parameter[refParent].$ref) {
       return null;
     }
 
-    const ref = parameter[refParent]['$ref'].split('/');
+    const ref = parameter[refParent].$ref.split('/');
     const def = ref[ref.length - 1];
     const definition = definitions[def];
 
     if (definition && definition.properties) {
       // object
       return this.renderObject(definition, path, definitions);
-    } else if (definition.items && definition.items['$ref']) {
+    } else if (definition.items && definition.items.$ref) {
       // array with objects
       return this.renderItemsArray(definition, path, definitions, parentName);
     } else if (definition.items) {
@@ -132,18 +130,17 @@ export default class APIExplorer extends Component {
           const routes = Object.keys(paths[path]);
           return (
             <div key={path}>
-              {_.map(routes, route => {
-                return (
-                  <div key={`${path}-${route}`}>
-                    <code className="prettyprint">{route.toUpperCase()} {this.renderPath(path)}</code> <span className="route-description">{paths[path][route].summary}</span>
-                    {
+              {_.map(routes, route => (
+                <div key={`${path}-${route}`}>
+                  <code className="prettyprint">{route.toUpperCase()} {this.renderPath(path)}</code> <span className="route-description">{paths[path][route].summary}</span>
+                  {
                       _.map(paths[path][route].parameters, (parameter, idx) => {
                         if (!parameter.schema) {
                           // query params
                           return null;
                         } else {
                           // body
-                          if (parameter.schema['$ref']) {
+                          if (parameter.schema.$ref) {
                             return (
                               <pre key={`${path}-${route}-${idx}`}>
                                 { this.renderRoutesBody(path, parameter, 'schema', definitions, null) }
@@ -154,10 +151,9 @@ export default class APIExplorer extends Component {
                         }
                       })
                     }
-                    <hr />
-                  </div>
-                );
-              })}
+                  <hr />
+                </div>
+                ))}
             </div>
           );
         })

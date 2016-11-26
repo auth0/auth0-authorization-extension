@@ -32,11 +32,6 @@ export default class PermissionsOverview extends Component {
         selected: true,
         filterBy: 'name'
       },
-      // {
-      //   value: 'application',
-      //   title: 'Application',
-      //   filterBy: 'applicationId'
-      // },
       {
         value: 'description',
         title: 'Description',
@@ -141,7 +136,7 @@ export default class PermissionsOverview extends Component {
           <div>
             <SectionHeader
               title="Permissions"
-              description="Define permissions for your apps that you can then group in Roles and assign to users."
+              description="Define permissions for your applications. These can be grouped together using roles."
             >
               <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Create Permission
@@ -161,4 +156,4 @@ export default class PermissionsOverview extends Component {
       </div>
     );
   }
-};
+}

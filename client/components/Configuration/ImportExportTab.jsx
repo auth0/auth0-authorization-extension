@@ -19,9 +19,9 @@ export default class ImportExportTab extends Component {
   }
 
   exportConfig = () => {
-    var element = document.createElement('a');
-    let text = JSON.stringify(this.props.record.toJSON());
-    element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+    const element = document.createElement('a');
+    const text = JSON.stringify(this.props.record.toJSON());
+    element.setAttribute('href', `data:text/plain;charset=utf-8,${encodeURIComponent(text)}`);
     element.setAttribute('download', 'data.json');
     element.style.display = 'none';
     document.body.appendChild(element);
@@ -34,7 +34,7 @@ export default class ImportExportTab extends Component {
   }
 
   importConfig = (e) => {
-    var file = this.refs.file.files[0];
+    const file = this.refs.file.files[0];
     if (file) {
       this.props.importConfigPrepare(file);
     }
@@ -42,7 +42,7 @@ export default class ImportExportTab extends Component {
 
   confirmImport = () => {
     const preview = this.props.preview;
-    this.props.importConfig(preview.toJSON())
+    this.props.importConfig(preview.toJSON());
   }
 
   closeImport = () => {
@@ -51,23 +51,29 @@ export default class ImportExportTab extends Component {
   }
 
   render() {
-    const {error, loading, record, children, requesting, preview} = this.props;
+    const { error, loading, record, children, requesting, preview } = this.props;
     if (this.props.children) {
       return children;
     }
     return (
       <div>
-        <Confirm title='Are you sure?' show={requesting} loading={loading}
-                 onCancel={this.closeImport} onConfirm={this.confirmImport} confirmMessage="Import">
+        <Confirm
+          title="Are you sure?" show={requesting} loading={loading}
+          onCancel={this.closeImport} onConfirm={this.confirmImport} confirmMessage="Import"
+        >
           <Json jsonObject={preview.toJSON()} />
         </Confirm>
         <LoadingPanel show={loading}>
           <Error message={error} onDismiss={this.closeError} dismissAfter={10000} />
+          <p>This page allows you to export all of your data to a JSON file, which you can then import in a different environment (eg: moving from <strong>development</strong> to <strong>test</strong>).</p>
+          <p>Take into account that roles and permissions are linked to specific clients. If you import these in a different environment, you will need to change the <strong>applicationId</strong> for these records first.</p>
           <Json jsonObject={record.toJSON()} />
           <button className="btn btn-transparent btn-md" onClick={this.exportConfig}>Export</button>
-          <button style={{float: 'right'}} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
-          <input ref="file" type="file" id="fileLoader" name="files" title="Load File"
-                 style={{display: 'none'}} onChange={this.importConfig.bind(this)} />
+          <button style={{ float: 'right' }} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
+          <input
+            ref="file" type="file" id="fileLoader" name="files" title="Load File"
+            style={{ display: 'none' }} onChange={this.importConfig.bind(this)}
+          />
         </LoadingPanel>
       </div>
     );

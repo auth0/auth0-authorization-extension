@@ -54,7 +54,7 @@ class GroupPickerDialog extends Component {
         <p className="modal-description">
           Select the groups you want to add as nested groups.
           <br />
-          All members of the selected groups will become members of this group also.
+          All members of the selected groups will also become members of this group.
         </p>
         <LoadingPanel show={loading}>
           <GroupsTablePicker

@@ -55,13 +55,16 @@ class GroupsOverview extends React.Component {
   renderGroupActions(group) {
     return (
       <div>
-        <TableAction id={`manage-members-${group._id}`} type="default" title="Add members" icon="299"
+        <TableAction
+          id={`manage-members-${group._id}`} type="default" title="Add members" icon="299"
           onClick={this.props.editGroupUsers} args={[ group ]} disabled={this.props.groups.loading || false}
         />
-        <TableAction id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
+        <TableAction
+          id={`edit-${group._id}`} type="default" title="Edit Group" icon="272"
           onClick={this.props.editGroup} args={[ group ]} disabled={this.props.groups.loading || false}
         />
-        <TableAction id={`delete-${group._id}`} type="default" title="Delete Group" icon="471"
+        <TableAction
+          id={`delete-${group._id}`} type="default" title="Delete Group" icon="471"
           onClick={this.props.requestDeleteGroup} args={[ group ]} disabled={this.props.groups.loading || false}
         />
       </div>
@@ -77,7 +80,7 @@ class GroupsOverview extends React.Component {
             <GroupsIcon />
           </div>
         }
-        description="Create and manage groups in which you can add users to define dynamic group memberships."
+        description="Create and manage groups in which you can add users, roles and nested groups."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
           Read more
@@ -92,7 +95,7 @@ class GroupsOverview extends React.Component {
   renderBody() {
     return (
       <div>
-        <SectionHeader title="Groups" description="Create and manage groups in which you can add users and define dynamic group memberships.">
+        <SectionHeader title="Groups" description="Create and manage groups in which you can add users, roles and nested groups.">
           <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
             <i className="icon icon-budicon-473" /> Create Group
           </Button>

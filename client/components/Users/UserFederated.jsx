@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
-class UserFederated extends React.Component{
+class UserFederated extends React.Component {
   render() {
     const { loading } = this.props;
     return (

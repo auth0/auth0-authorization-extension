@@ -59,15 +59,15 @@ class UserGroups extends Component {
           { showIcon ? <TableColumn width="7%" /> : <TableColumn width="10%" /> }
         </TableHeader>
         <TableBody>
-        {groups.map((group, index) =>
-          <TableRow key={index}>
-            { showIcon ? <TableIconCell color="green" icon="322" /> : null }
-            <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
-            <TableTextCell>{group.description}</TableTextCell>
-            <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
-              { actionRenderer ? actionRenderer(group, index) : null }
-            </TableCell>
-          </TableRow>
+          {groups.map((group, index) =>
+            <TableRow key={index}>
+              { showIcon ? <TableIconCell color="green" icon="322" /> : null }
+              <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
+              <TableTextCell>{group.description}</TableTextCell>
+              <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
+                { actionRenderer ? actionRenderer(group, index) : null }
+              </TableCell>
+            </TableRow>
         )}
         </TableBody>
       </Table>

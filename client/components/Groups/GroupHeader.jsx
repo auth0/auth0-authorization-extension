@@ -18,7 +18,7 @@ class GroupHeader extends Component {
 
   getDescription(group) {
     if (!group.get('record').get('description')) {
-      return <div></div>;
+      return <div />;
     }
 
     return <span className="group-label group-head-description">{group.get('record').get('description')}</span>;
@@ -29,7 +29,7 @@ class GroupHeader extends Component {
   }
 
   save = (group) => {
-    this.props.updateGroup(group, ()=> {
+    this.props.updateGroup(group, () => {
       this.props.fetchGroup(this.props.id);
     });
   }
@@ -56,7 +56,7 @@ class GroupHeader extends Component {
     const { group, members } = this.props;
 
     if (!group || group.get('loading') || group.get('error')) {
-      return <div></div>;
+      return <div />;
     }
 
     return (
@@ -74,8 +74,10 @@ class GroupHeader extends Component {
             </Button>
           </OverlayTrigger>
           <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
-            <Button onClick={this.requestDeleteGroup} className="table-action" bsSize="small"
-                    style={{ marginLeft: '10px' }}>
+            <Button
+              onClick={this.requestDeleteGroup} className="table-action" bsSize="small"
+              style={{ marginLeft: '10px' }}
+            >
               <i className="icon icon-budicon-471" style={{ marginRight: 0 }} />
             </Button>
           </OverlayTrigger>

@@ -33,9 +33,7 @@ class GroupMembers extends Component {
     this.props.getAllNestedMembersOnPage(this.props.groupId, page);
   }
 
-  renderActions = (user, index) => {
-    return <GroupMemberRemoveAction index={index} user={user} loading={this.props.members.get('loading')} onRemove={this.props.removeMember} />;
-  }
+  renderActions = (user, index) => <GroupMemberRemoveAction index={index} user={user} loading={this.props.members.get('loading')} onRemove={this.props.removeMember} />
 
   renderAllMembers(nestedMembers) {
     if (nestedMembers.error) {
@@ -62,12 +60,12 @@ class GroupMembers extends Component {
             <TableColumn width="45%">Source</TableColumn>
           </TableHeader>
           <TableBody>
-          {nestedMembers.records.map((record, index) =>
-            <TableRow key={index}>
-              <TableIconCell color="green" icon="322" />
-              <TableRouteCell route={`/users/${record.user.user_id}`}>{ record.user.name || record.user.email || record.user.user_id }</TableRouteCell>
-              <TableRouteCell route={`/groups/${record.group._id}`}>{ record.group.name || 'N/A' }</TableRouteCell>
-            </TableRow>
+            {nestedMembers.records.map((record, index) =>
+              <TableRow key={index}>
+                <TableIconCell color="green" icon="322" />
+                <TableRouteCell route={`/users/${record.user.user_id}`}>{ record.user.name || record.user.email || record.user.user_id }</TableRouteCell>
+                <TableRouteCell route={`/groups/${record.group._id}`}>{ record.group.name || 'N/A' }</TableRouteCell>
+              </TableRow>
           )}
           </TableBody>
         </Table>

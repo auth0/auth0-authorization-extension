@@ -98,7 +98,7 @@ export default class RolesOverview extends Component {
             <RolesIcon />
           </div>
         }
-        description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups."
+        description="Create and manage roles (collection of permissions) for your applications. These can then be assigned to users and groups."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
           Read more

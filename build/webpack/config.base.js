@@ -93,7 +93,7 @@ module.exports = {
       'process.env': {
         BROWSER: JSON.stringify(true),
         NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-        MAX_DB_SIZE: 512000,
+        WARN_DB_SIZE: 409600,
         MAX_MULTISELECT_USERS: 5,
         MULTISELECT_DEBOUNCE_MS: 250,
         PER_PAGE: 10

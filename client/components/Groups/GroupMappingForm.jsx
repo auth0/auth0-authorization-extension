@@ -31,8 +31,7 @@ export default createForm('groupMapping', class GroupMappingForm extends Compone
           {this.props.children}
           <LoadingPanel show={loading} spinnerStyle={{ height: '16px', width: '16px' }} animationStyle={{ paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '10px' }}>
             <p className="modal-description">
-              When creating a mapping if users log in with the selected connection and belongs
-              to the specified Incomming group then they will be part of this group also.
+              When users log in with the selected connection and belong to the selected group then they will also become an implicit member of this groupi.
             </p>
 
             <Field
