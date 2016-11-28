@@ -20,6 +20,10 @@ config.module.loaders.push({
   test: /\.css$/,
   loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
 });
+config.module.loaders.push({
+  test: /\.styl/,
+  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')
+});
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([

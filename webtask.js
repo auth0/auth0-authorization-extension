@@ -15,5 +15,6 @@ tools.urlHelpers.getBaseUrl = (req) => {
 
 module.exports = tools.createServer((config, storage) => {
   logger.info('Starting Authorization Extension - Version:', process.env.CLIENT_VERSION);
+  logger.info(' > WT_URL:', config('WT_URL'));
   return hapiApp(config, storage);
 });
