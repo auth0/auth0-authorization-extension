@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz-extension",
-  "version": "2.0.0",
+  "version": "2.0.3",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "5.9.0"
@@ -17,7 +17,7 @@
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "extension:build": "webpack -p --config ./build/extension/webpack.config.js",
     "extension:size": "cross-env NODE_ENV=production webpack -p --config ./build/extension/webpack.config.js --json > ./build/extension/bundle-size.json && node ./build/extension/bundle-size.js",
-    "build": "npm run clean && npm run client:build && npm run extension:build",
+    "build": "npm run clean && npm run client:build && npm run extension:build && cp ./dist/auth0-authz.extension.$npm_package_version.js ./build/bundle.js",
     "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack ."
   },
   "keywords": [

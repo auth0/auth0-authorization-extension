@@ -8,7 +8,7 @@ module.exports = (server) => ({
   config: {
     auth: false,
     pre: [
-      server.handlers.validateHookToken('/meta'),
+      server.handlers.validateHookToken('/.extensions/on-uninstall'),
       server.handlers.managementClient
     ]
   },

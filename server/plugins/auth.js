@@ -94,12 +94,11 @@ module.exports.register = (server, options, next) => {
     }
   });
   server.auth.default('jwt');
-
   const session = {
-    register: tools.plugins.dashboardAdminSession,
+    register: require('./session'),
     options: {
       sessionStorageKey: 'authz:apiToken',
-      rta: config('AUTH0_RTA'),
+      rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
       scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users',
       baseUrl: config('WT_URL'),
