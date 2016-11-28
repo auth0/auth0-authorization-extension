@@ -32,7 +32,7 @@ export default (cb) => {
       documentationPage: false,
       swaggerUI: false
     }
-  }
+  };
 
   if (process.env.NODE_ENV !== 'test') {
     goodPlugin.options.reporters.console.push(
@@ -75,7 +75,7 @@ export default (cb) => {
 
   server.ext('onPreResponse', (request, reply) => {
     if (request.response && request.response.isBoom && request.response.output) {
-      server.log([ 'error' ], `Error response: ${JSON.stringify(request.response.output.data || request.response.output, null, 2)}`);
+      server.log([ 'error' ], `Error response: ${JSON.stringify(request.response, null, 2)}`);
     }
 
     return reply.continue();
