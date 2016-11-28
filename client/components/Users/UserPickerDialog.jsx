@@ -77,9 +77,8 @@ export default createForm('userPicker', class UserPickerDialog extends Component
       <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={this.onCancel} onConfirm={this.handleSubmit}>
         <Error message={error} />
         <p className="modal-description">
-          Add members to this group.
+          Select one or more users you wish to add.
         </p>
-        <label htmlFor="">Add Members</label>
         <Field
           name="members"
           component={Multiselect}

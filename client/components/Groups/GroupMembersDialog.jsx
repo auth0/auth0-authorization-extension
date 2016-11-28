@@ -59,8 +59,9 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p className="modal-description">Add members to this group.</p>
-          <label>Add members</label>
+          <p className="modal-description">
+            Select one or more users you wish to add to this group.
+          </p>
           <Field
             name="members"
             component={Multiselect}

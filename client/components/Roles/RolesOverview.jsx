@@ -120,7 +120,7 @@ export default class RolesOverview extends Component {
 
         { !error && !records.length && !loading && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
           <div>
-            <SectionHeader title="Roles" description="Create and manage Roles (collection of permissions) for your applications which can then be added to groups.">
+            <SectionHeader title="Roles" description="Create and manage roles (collection of permissions) for your applications. These can then be assigned to users and groups.">
               <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Create Role
               </Button>

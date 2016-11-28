@@ -51,11 +51,6 @@ class GroupPickerDialog extends Component {
         loading={loading} onCancel={onCancel} onConfirm={this.onConfirm} confirmMessage="Add"
       >
         <Error message={error} />
-        <p className="modal-description">
-          Select the groups you want to add as nested groups.
-          <br />
-          All members of the selected groups will also become members of this group.
-        </p>
         <LoadingPanel show={loading}>
           <GroupsTablePicker
             canOpenGroup={false}

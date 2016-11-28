@@ -31,7 +31,7 @@ export class UserContainer extends Component {
   }
 
   requestAddToGroup(user) {
-    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to groups`);
+    this.props.openGroupPicker(`Add ${user.nickname || user.email || 'user'} to one or more groups`);
   }
 
   addToGroup(groups) {
@@ -77,7 +77,7 @@ export class UserContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
+            <Tabs defaultActiveKey={2} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
               <Tab eventKey={1} title="Profile">
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>

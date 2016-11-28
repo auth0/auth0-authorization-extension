@@ -112,7 +112,7 @@ const roleForm = createForm('role', class extends Component {
     return (
       <div>
         <p className="modal-description">
-          Give the role a name and a description (optional). You can also assing permissions to it.
+          Give the role a name, a description and add permissions to it.
         </p>
         <Field
           name="applicationId" component={InputCombo}

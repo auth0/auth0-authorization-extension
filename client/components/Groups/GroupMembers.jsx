@@ -50,7 +50,7 @@ class GroupMembers extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <span className="pull-left">The following table lists <strong>all</strong> users for this group and nested groups.</span>
+            <span className="pull-left">The following table lists <strong>all</strong> users for this group and its nested groups.</span>
           </div>
         </div>
         <Table>

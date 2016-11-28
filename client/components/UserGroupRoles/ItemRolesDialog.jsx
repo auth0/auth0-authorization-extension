@@ -54,14 +54,13 @@ export default class ItemRolesDialog extends React.Component {
     if (!options.length) {
       return (
         <Modal.Body>
-          <p className="modal-description">There are no roles you can add to this {this.props.type}.</p>
+          <p className="modal-description">There are no roles you that can be assigned to <strong>{this.props.type}</strong>.</p>
         </Modal.Body>
       );
     }
 
     return (
       <Modal.Body>
-        <p className="modal-description">Add or remove roles from this {this.props.type}.</p>
         <div style={{ maxHeight: '600px', overflowY: 'auto' }}>
           <Table>
             <TableHeader>

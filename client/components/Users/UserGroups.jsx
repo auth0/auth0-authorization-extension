@@ -28,7 +28,7 @@ class UserGroups extends Component {
       return <span>This user does not belong to any groups.</span>;
     }
 
-    return <span>These are the explicit group memberships of the user where a user has directly been added to a group.</span>;
+    return <span>This is the list of groups to which a user has directly been added to.</span>;
   }
 
   setShowUserGroups = (showUserGroups) => {
@@ -83,7 +83,7 @@ class UserGroups extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <span className="pull-left">The following table lists <strong>all</strong> group memberships for the user. This includes both explicit memberships and dynamic group memberships as the result of a mapping. <strong>Heads up:</strong> This list is cached for performance reasons and it could take a few seconds before changes are visible here.</span>
+            <span className="pull-left">The following table lists <strong>all</strong> group memberships for the user. This includes both direct memberships and indirect memberships as the result of a mapping or nested groups. <strong>Heads up:</strong> This list is cached for performance reasons and it could take a few seconds before changes are visible here.</span>
           </div>
         </div>
         { this.renderGroups(allGroups.error, allGroups.loading, allGroups.records, true) }
