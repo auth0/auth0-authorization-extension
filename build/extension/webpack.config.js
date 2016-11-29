@@ -51,13 +51,13 @@ module.exports = externalModules.then((externals) => {
   externals.compatible.boom = 'boom@3.2.2';
   externals.compatible.good = true;
   externals.compatible['lru-memoizer'] = 'lru-memoizer@1.10.0';
+  externals.compatible['auth0-extension-tools'] = 'auth0-extension-tools@1.0.0';
   externals.compatible['hapi-auth-jwt2'] = true;
   externals.compatible['jwks-rsa'] = true;
   externals.compatible['json-loader'] = true;
   externals.compatible['auth0-oauth2-express'] = true;
   externals.compatible['good-console'] = 'good-console@6.1.2';
   externals.compatible['hapi-swagger'] = 'hapi-swagger@7.4.0';
-  externals.compatible['auth0-extension-tools'] = 'auth0-extension-tools@1.0.0';
   externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.0.0';
 
   // Transform to commonjs.

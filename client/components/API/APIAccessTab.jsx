@@ -1,3 +1,4 @@
+import path from 'path';
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { Field, formValueSelector } from 'redux-form';
@@ -21,8 +22,21 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
       return (
         <div style={{ marginTop: '25px' }}>
           <h4>API Settings</h4>
-          <div>
-            <Field name="token_lifetime" component={InputText} type="number" label="Token Expiration (Seconds)" />
+          <div className="row">
+            <div className="col-xs-6">
+              <Field name="token_lifetime" component={InputText} type="number" label="Token Expiration (Seconds)" />
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-xs-6">
+              <InputText label="Token Issuer" input={{ value: `https://${window.config.AUTH0_DOMAIN}/`, readOnly: true }} />
+            </div>
+            <div className="col-xs-6">
+              <InputText label="Token Audience" input={{ value: 'urn:auth0-authz-api', readOnly: true }} />
+            </div>
+            <div className="col-xs-12">
+              <InputText label="Url" input={{ value: `${path.join(window.config.API_BASE, 'api').replace('https:/', 'https://').replace('http:/', 'http://')}`, readOnly: true }} />
+            </div>
           </div>
         </div>);
     }
@@ -40,8 +54,8 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
             description: (<span>By enabling API access an API (Resource Server) will be created in your Auth0 account. This will allow you to define non interactive clients which can access the Authorization API.</span>),
             name: 'apiAccess'
           }) }
-          { this.renderAPIAccessDetails(this.props.apiAccess) }
         </div>
+        { this.renderAPIAccessDetails(this.props.apiAccess) }
         <div className="row">
           <div className="col-xs-12">
             <div className="pull-right">
