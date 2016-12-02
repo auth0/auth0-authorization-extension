@@ -22,12 +22,12 @@ export default class APIExplorer extends Component {
 
     if (type === 'array' || type === 'object') {
       return (
-        <span key={key} className="prop">{name}: {this.renderRoutesBody(path, parameter, name, definitions, name)}{extra}</span>
+        <span key={key} className="prop"> {name}: {this.renderRoutesBody(path, parameter, name, definitions, name)}{extra}</span>
       );
     }
 
     return (
-      <span key={key} className="prop">{name}: {this.renderType(name, type)}{extra}</span>
+      <span key={key} className="prop"> {name}: {this.renderType(name, type)}{extra}</span>
     );
   }
 
@@ -132,7 +132,8 @@ export default class APIExplorer extends Component {
             <div key={path}>
               {_.map(routes, route => (
                 <div key={`${path}-${route}`}>
-                  <code className="prettyprint">{route.toUpperCase()} {this.renderPath(path)}</code> <span className="route-description">{paths[path][route].summary}</span>
+                  <span className="route-description">{paths[path][route].summary}</span><br />
+                  <code className="route-url prettyprint">{route.toUpperCase()} {this.renderPath(path)}</code>
                   {
                       _.map(paths[path][route].parameters, (parameter, idx) => {
                         if (!parameter.schema) {
@@ -142,7 +143,7 @@ export default class APIExplorer extends Component {
                           // body
                           if (parameter.schema.$ref) {
                             return (
-                              <pre key={`${path}-${route}-${idx}`}>
+                              <pre style={{ marginTop: '8px' }} key={`${path}-${route}-${idx}`}>
                                 { this.renderRoutesBody(path, parameter, 'schema', definitions, null) }
                               </pre>
                             );
