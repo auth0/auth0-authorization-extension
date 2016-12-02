@@ -53,6 +53,12 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/users-roles/routes/get_users_roles_calculate')(server));
   server.route(require('../api/users-roles/routes/delete_user_remove_from_roles')(server));
   server.route(require('../api/users-roles/routes/patch_user_add_to_roles')(server));
+  server.route({
+    method: 'GET',
+    path: '/admins/login',
+    config: { auth: false },
+    handler: (request, reply) => reply('Redirecting to login page...').redirect('/login')
+  });
   next();
 };
 

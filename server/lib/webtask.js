@@ -33,9 +33,21 @@ module.exports.getUrl = (req) => {
   const requestPath = url.parse(requestUrl || '').pathname;
 
   const originalUrl = url.parse(requestOriginalUrl || '').pathname || '';
-  return url.format({
+  let webtaskUrl = url.format({
     protocol: 'https',
     host: req.headers.host,
     pathname: originalUrl.replace(requestPath, '').replace(/\/$/g, '')
   });
+
+  if (req.x_wt) {
+    if (webtaskUrl.indexOf('https://sandbox.it.auth0.com') === 0) {
+      webtaskUrl = webtaskUrl.replace(`https://sandbox.it.auth0.com/api/run/${req.x_wt.container}/`, `https://${req.x_wt.container}.us.webtask.io/`);
+    } else if (webtaskUrl.indexOf('https://sandbox-eu.it.auth0.com') === 0) {
+      webtaskUrl = webtaskUrl.replace(`https://sandbox-eu.it.auth0.com/api/run/${req.x_wt.container}/`, `https://${req.x_wt.container}.eu.webtask.io/`);
+    } else if (webtaskUrl.indexOf('https://sandbox-au.it.auth0.com') === 0) {
+      webtaskUrl = webtaskUrl.replace(`https://sandbox-au.it.auth0.com/api/run/${req.x_wt.container}/`, `https://${req.x_wt.container}.au.webtask.io/`);
+    }
+  }
+
+  return webtaskUrl;
 };

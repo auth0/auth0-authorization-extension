@@ -103,6 +103,7 @@ module.exports.register = (server, options, next) => {
   const session = {
     register: tools.plugins.dashboardAdminSession,
     options: {
+      stateKey: 'authz-state',
       sessionStorageKey: 'authz:apiToken',
       rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
