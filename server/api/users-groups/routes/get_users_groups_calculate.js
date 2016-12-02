@@ -11,7 +11,7 @@ module.exports = () => ({
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]
     },
-    description: 'Get the groups for a user.',
+    description: 'Calculate the group memberships for a user (including nested groups).',
     tags: [ 'api' ],
     validate: {
       params: {

@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import Joi from 'joi';
 
-import schema from '../schemas/authorization_request';
+import schema from '../schemas/policy_request';
 import { getPermissionsForRoles, getRolesForGroups, getUserGroups } from '../../../lib/queries';
 
 module.exports = (server) => ({
   method: 'POST',
-  path: '/api/users/{userId}/calculate/{clientId}',
+  path: '/api/users/{userId}/policy/{clientId}',
   config: {
     auth: {
       strategies: [
@@ -14,7 +14,7 @@ module.exports = (server) => ({
         'extension-secret'
       ]
     },
-    description: 'Get the authorization context for a user.',
+    description: 'Execute the authorization policy for a user in the context of a client. This will return the user\'s groups but also roles and permissions that apply to the current client.',
     tags: [ 'api' ],
     validate: {
       params: {

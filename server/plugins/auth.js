@@ -1,4 +1,5 @@
 import Boom from 'boom';
+import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
 import * as tools from 'auth0-extension-hapi-tools';
@@ -6,12 +7,17 @@ import * as tools from 'auth0-extension-hapi-tools';
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
 
+const hashApiKey = () => crypto.createHmac('sha256', config('PUBLIC_WT_URL'))
+    .update(config('EXTENSION_SECRET'))
+    .digest('hex');
+
 module.exports.register = (server, options, next) => {
+  const apiKeyHash = hashApiKey();
   server.auth.scheme('extension-secret', () =>
     ({
       authenticate: (request, reply) => {
         const apiKey = request.headers['x-api-key'];
-        if (apiKey && apiKey === config('EXTENSION_SECRET')) {
+        if (apiKey && apiKey === apiKeyHash) {
           return reply.continue({
             credentials: {
               user: 'rule'

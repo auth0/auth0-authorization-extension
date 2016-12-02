@@ -10,7 +10,7 @@ module.exports = () => ({
       strategies: [ 'jwt' ],
       scope: [ 'read:roles' ]
     },
-    description: 'Get the roles of groups for a user.',
+    description: 'Calculate the roles assigned to the user (including through group memberships).',
     tags: [ 'api' ],
     validate: {
       params: {

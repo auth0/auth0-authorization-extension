@@ -6,8 +6,7 @@ function (user, context, callback) {
   var _ = require('lodash');
   var EXTENSION_URL = "<%= extensionUrl %>";
 
-  // Reach out to the extension.
-  authorizeUser(user, context, function(err, res, data) {
+  getPolicy(user, context, function(err, res, data) {
     if (err) {
       console.log('Error from Authorization Extension:', err);
       return callback(new UnauthorizedError('Authorization Extension: ' + err.message));
@@ -20,7 +19,7 @@ function (user, context, callback) {
       );
     }
 
-    // Update the outgoing token.<% if (config.groupsInToken && !config.groupsPassthrough) { %>
+    // Update the user object.<% if (config.groupsInToken && !config.groupsPassthrough) { %>
     user.groups = data.groups;<% } %><% if (config.groupsInToken && config.groupsPassthrough) { %>
     user.groups = mergeRecords(user.groups, data.groups);<% } %><% if (config.rolesInToken && !config.rolesPassthrough) { %>
     user.roles = data.roles;<% } %><% if (config.rolesInToken && config.rolesPassthrough) { %>
@@ -28,7 +27,7 @@ function (user, context, callback) {
     user.permissions = data.permissions;<% } %><% if (config.permissionsInToken && config.permissionsPassthrough) { %>
     user.permissions = mergeRecords(user.permissions, data.permissions);<% } %>
 <% if (config.persistGroups || config.persistRoles || config.persistPermissions) { %>
-    // Store this in the user profile.
+    // Store this in the user profile (app_metadata).
     saveToMetadata(user, data.groups, data.roles, data.permissions, function(err) {
       return callback(err, user, context);
     });
@@ -36,10 +35,10 @@ function (user, context, callback) {
     return callback(null, user, context);
 <% } %>  });
 
-  // Authorize the user.
-  function authorizeUser(user, context, cb) {
+  // Get the policy for the user.
+  function getPolicy(user, context, cb) {
     request.post({
-      url: EXTENSION_URL + "/api/users/" + user.user_id + "/calculate/" + context.clientID,
+      url: EXTENSION_URL + "/api/users/" + user.user_id + "/policy/" + context.clientID,
       headers: {
         "x-api-key": "<%= apiKey %>"
       },

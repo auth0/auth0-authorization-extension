@@ -75,7 +75,8 @@ export default (cb) => {
 
   server.ext('onPreResponse', (request, reply) => {
     if (request.response && request.response.isBoom && request.response.output) {
-      server.log([ 'error' ], `Error response: ${JSON.stringify(request.response, null, 2)}`);
+      server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.url.path}`);
+      server.log([ 'error' ], `Response: ${JSON.stringify(request.response, null, 2)}`);
     }
 
     return reply.continue();

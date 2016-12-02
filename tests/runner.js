@@ -18,7 +18,8 @@ nconf
     EXTENSION_SECRET: 'abc',
     NODE_ENV: 'test',
     DATA_CACHE_MAX_AGE: 0,
-    DUMMY_KEY: 'DUMMY_VALUE'
+    DUMMY_KEY: 'DUMMY_VALUE',
+    PUBLIC_WT_URL: 'http://foo'
   });
 
 config.setProvider((key) => nconf.get(key));

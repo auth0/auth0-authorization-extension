@@ -103,7 +103,7 @@ describe('users-route', () => {
     it('should return 401 if no token provided', (cb) => {
       const options = {
         method: 'POST',
-        url: `/api/users/1/calculate/${clientId}`
+        url: `/api/users/1/policy/${clientId}`
       };
 
       server.inject(options, (response) => {
@@ -115,7 +115,7 @@ describe('users-route', () => {
     it('should return groups, roles and permissions for user', (cb) => {
       const options = {
         method: 'POST',
-        url: `/api/users/1/calculate/${clientId}`,
+        url: `/api/users/1/policy/${clientId}`,
         payload: {
           groups: [ 'google-group' ],
           connectionName: 'google-oauth2'
