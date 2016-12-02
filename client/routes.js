@@ -2,28 +2,31 @@ import React from 'react';
 import { Router, Route, IndexRedirect } from 'react-router';
 
 import * as containers from './containers';
-import { RequireAuthentication } from './containers/RequireAuthentication';
 
 export default (history) =>
   <Router history={history}>
-    <Route path="/" component={RequireAuthentication(containers.App)}>
+    <Route path="/" component={containers.RequireAuthentication(containers.App)}>
       <IndexRedirect to="/users" />
-      <Route path="applications" component={containers.ApplicationsContainer}>
-        <Route path=":id" component={containers.ApplicationContainer} />
+      <Route path="configuration">
+        <Route path="rule" component={containers.ConfigurationRule} />
+        <Route path="import-export" component={containers.ConfigurationRule} />
       </Route>
-      <Route path="roles" component={containers.RolesContainer}>
-        <Route path=":id" component={containers.RoleContainer} />
+      <Route path="roles" component={containers.Roles}>
+        <Route path=":id" component={containers.Role} />
       </Route>
-      <Route path="groups" component={containers.GroupsContainer}>
-        <Route path=":id" component={containers.GroupContainer} />
+      <Route path="groups" component={containers.Groups}>
+        <Route path=":id" component={containers.Group} />
       </Route>
-      <Route path="permissions" component={containers.PermissionsContainer}>
-        <Route path=":id" component={containers.PermissionContainer} />
+      <Route path="roles" component={containers.Roles}>
+        <Route path=":id" component={containers.Role} />
       </Route>
-      <Route path="logs" component={containers.LogsContainer} />
-      <Route path="users" component={containers.UsersContainer}>
-        <Route path=":id" component={containers.UserContainer} />
+      <Route path="permissions" component={containers.Permissions}>
+        <Route path=":id" component={containers.Permission} />
       </Route>
+      <Route path="users" component={containers.Users}>
+        <Route path=":id" component={containers.User} />
+      </Route>
+      <Route path="/configuration/api" component={containers.API} />
     </Route>
-    <Route path="/login" component={containers.LoginContainer} />
+    <Route path="/login" component={containers.Login} />
   </Router>;

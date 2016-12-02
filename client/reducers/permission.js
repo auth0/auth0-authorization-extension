@@ -6,16 +6,38 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  record: Map(),
+  record: { },
   permissionId: null,
   isNew: false,
   isEdit: false,
   isDelete: false,
   requesting: false,
-  validationErrors: Map()
+  validationErrors: { }
 };
 
 export const permission = createReducer(fromJS(initialState), {
+  [constants.FETCH_PERMISSION_PENDING]: (state, action) =>
+    state.merge({
+      loading: true,
+      permissionId: action.meta.permissionId
+    }),
+  [constants.FETCH_PERMISSION_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while loading the permissions: ${action.errorMessage}`
+    }),
+  [constants.FETCH_PERMISSION_FULFILLED]: (state, action) => {
+    const { data } = action.payload;
+    if (data._id !== state.get('permissionId')) {
+      return state;
+    }
+
+    return state.merge({
+      loading: false,
+      record: fromJS(data)
+    });
+  },
+
   [constants.CLEAR_PERMISSION]: (state) =>
     state.merge({
       ...initialState
@@ -30,7 +52,7 @@ export const permission = createReducer(fromJS(initialState), {
       ...initialState,
       isEdit: true,
       record: action.payload.permission,
-      permissionId: action.payload.permission.name
+      permissionId: action.payload.permission._id
     }),
   [constants.SAVE_PERMISSION_PENDING]: (state) =>
     state.merge({
@@ -38,12 +60,12 @@ export const permission = createReducer(fromJS(initialState), {
       validationErrors: Map()
     }),
   [constants.SAVE_PERMISSION_REJECTED]: (state, action) => {
-    const validationErrors = action.payload.data && action.payload.data.errors && Map(action.payload.data.errors) || Map();
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,
-      validationErrors: validationErrors,
+      validationErrors,
       error: `An error occured while saving the permission: ${errorMessage}`
     });
   },
@@ -54,7 +76,8 @@ export const permission = createReducer(fromJS(initialState), {
   [constants.REQUEST_DELETE_PERMISSION]: (state, action) =>
     state.merge({
       isDelete: true,
-      permissionId: action.payload.permission.name,
+      record: action.payload.permission,
+      permissionId: action.payload.permission._id,
       requesting: true
     }),
   [constants.CANCEL_DELETE_PERMISSION]: (state) =>

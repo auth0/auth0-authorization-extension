@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { TableAction } from '../Dashboard';
+import { TableAction } from 'auth0-extension-ui';
 
 class GroupMemberRemoveAction extends Component {
   constructor() {
@@ -14,7 +14,8 @@ class GroupMemberRemoveAction extends Component {
   render() {
     const { index, loading } = this.props;
     return (
-      <TableAction id={`remove-user-${index}`} type="success" title="Remove" icon="296"
+      <TableAction
+        id={`remove-user-${index}`} type="default" title="Remove user from group" icon="471"
         onClick={this.onRemove} disabled={loading || false}
       />
     );

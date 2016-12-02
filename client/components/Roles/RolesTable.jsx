@@ -1,50 +1,52 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
-import { ButtonToolbar } from 'react-bootstrap';
-import { Table, TableCell, TableAction, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import React, { PropTypes, Component } from 'react';
+import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
 
-class RolesTable extends Component {
+import RoleRow from './RoleRow';
+
+export default class RoleTable extends Component {
+  static propTypes = {
+    loading: PropTypes.bool,
+    roles: PropTypes.object.isRequired,
+    applications: PropTypes.object.isRequired,
+    renderActions: PropTypes.func.isRequired,
+    showIcon: PropTypes.bool
+  };
+
   shouldComponentUpdate(nextProps) {
     return nextProps.roles !== this.props.roles || nextProps.applications !== this.props.applications;
   }
 
   render() {
     const roles = this.props.roles.toJS();
+    const applications = this.props.applications.toJS().records;
+    const showIcon = this.props.showIcon;
 
-    return <Table>
-      <TableHeader>
-        <TableColumn width="3%"></TableColumn>
-        <TableColumn width="27%">Name</TableColumn>
-        <TableColumn width="55%">Description</TableColumn>
-        <TableColumn width="15%"></TableColumn>
-      </TableHeader>
-      <TableBody>
-        {_.sortBy(roles, 'name').map((role, index) => {
-          return <TableRow key={index}>
-              <TableIconCell icon="549" />
-              <TableTextCell>{ role.name || 'N/A' }</TableTextCell>
-              <TableTextCell>{ role.description || 'N/A' }</TableTextCell>
-              <TableCell>
-                <ButtonToolbar style={{ marginBottom: '0px' }}>
-                  <TableAction id={`edit-${index}`} type="default" title="Edit Role" icon="266"
-                    onClick={() => this.props.onEdit(role)} disabled={this.props.loading || false} />
-                  <TableAction id={`delete-${index}`} type="success" title="Delete Role" icon="263"
-                    onClick={() => this.props.onDelete(role)} disabled={this.props.loading || false} />
-                </ButtonToolbar>
-              </TableCell>
-            </TableRow>;
-        })
-      }
-      </TableBody>
-    </Table>;
+    return (
+      <Table>
+        <TableHeader>
+          { showIcon ? <TableColumn width="3%" /> : null }
+          <TableColumn width="30%">Name</TableColumn>
+          <TableColumn width="30%">Application</TableColumn>
+          { showIcon ? <TableColumn width="25%">Description</TableColumn> : <TableColumn width="28%">Description</TableColumn> }
+          <TableColumn />
+        </TableHeader>
+        <TableBody>
+          {_.sortBy(roles, 'name').map((role, index) => {
+            const application = applications.find(app => app.client_id === role.applicationId);
+            return (
+              <RoleRow
+                showIcon={showIcon}
+                key={index}
+                index={index}
+                application={application}
+                role={role}
+                renderActions={this.props.renderActions}
+              />
+            );
+          })}
+        </TableBody>
+      </Table>
+    );
   }
 }
-
-RolesTable.propTypes = {
-  onEdit: React.PropTypes.func.isRequired,
-  onDelete: React.PropTypes.func.isRequired,
-  roles: React.PropTypes.object.isRequired,
-  loading: React.PropTypes.bool.isRequired
-};
-
-export default RolesTable;

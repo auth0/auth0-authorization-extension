@@ -1,5 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
+const poststylus = require('poststylus');
+const autoprefixer = require('autoprefixer');
+const postcssReporter = require('postcss-reporter');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
@@ -66,6 +69,14 @@ module.exports = {
       {
         test: /\.(woff|woff2|eot)/,
         loader: 'url?limit=100000'
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+      {
+        test: /\.styl$/,
+        loader: 'style-loader!css-loader!stylus-loader'
       }
     ]
   },
@@ -74,14 +85,18 @@ module.exports = {
   plugins: [
     new webpack.NoErrorsPlugin(),
     new webpack.ProvidePlugin({
-      'React': 'react',
-      'Promise': 'imports?this=>global!exports?global.Promise!bluebird'
+      React: 'react',
+      Promise: 'imports?this=>global!exports?global.Promise!bluebird'
     }),
     new webpack.DefinePlugin({
       __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
       'process.env': {
         BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development')
+        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+        WARN_DB_SIZE: 409600,
+        MAX_MULTISELECT_USERS: 5,
+        MULTISELECT_DEBOUNCE_MS: 250,
+        PER_PAGE: 10
       },
       __CLIENT__: JSON.stringify(true),
       __SERVER__: JSON.stringify(false)
@@ -89,16 +104,12 @@ module.exports = {
   ],
 
   // Postcss configuration.
-  postcss: () => {
-    return [
-      require('postcss-simple-vars')(),
-      require('postcss-focus')(),
-      require('autoprefixer')({
-        browsers: [ 'last 2 versions', 'IE > 8' ]
-      }),
-      require('postcss-reporter')({
-        clearMessages: true
-      })
-    ];
+  stylus: {
+    use: [
+      poststylus([
+        autoprefixer({ browsers: [ 'last 2 versions', 'IE > 8' ] }),
+        postcssReporter({ clearMessages: true })
+      ])
+    ]
   }
 };

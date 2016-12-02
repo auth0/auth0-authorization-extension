@@ -1,9 +1,9 @@
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-import { push } from 'react-router-redux';
 
 import * as constants from '../constants';
-import { show, parseHash, getProfile } from '../utils/lock';
+
+import { isTokenExpired, decodeToken } from '../utils/auth';
+import { show } from '../utils/lock';
 
 export function login(returnUrl) {
   show(returnUrl);
@@ -15,8 +15,8 @@ export function login(returnUrl) {
 
 export function logout() {
   return (dispatch) => {
-    localStorage.removeItem('apiToken');
-    sessionStorage.removeItem('apiToken');
+    sessionStorage.removeItem('authz:apiToken');
+    window.location.href = window.config.BASE_URL + '/logout';
 
     dispatch({
       type: constants.LOGOUT_SUCCESS
@@ -26,111 +26,32 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    if (window.location.hash) {
-      const hash = parseHash(window.location.hash);
-      if (hash && hash.id_token) {
-        axios.defaults.headers.common['Authorization'] = `Bearer ${hash.id_token}`;
-
-        dispatch({
-          type: constants.RECIEVED_TOKEN,
-          payload: {
-            id_token: hash.id_token
-          }
-        });
-
-        dispatch({
-          type: constants.LOGIN_PENDING
-        });
-
-        getProfile(hash.id_token, (err, profile) => {
-          if (err) {
-            return dispatch({
-              type: constants.LOGIN_FAILED,
-              payload: {
-                error: err.message
-              }
-            });
-          }
-
-          localStorage.setItem('apiToken', hash.id_token);
-          localStorage.setItem('userProfile', JSON.stringify(profile));
-
-          dispatch({
-            type: constants.LOGIN_SUCCESS,
-            payload: {
-              id_token: hash.id_token,
-              user: profile
-            }
-          });
-
-          if (hash.state) {
-            dispatch(push(hash.state));
-          }
-        });
-
-        return;
-      }
-    }
-
-    const id_token = localStorage.getItem('apiToken');
-    const profile = localStorage.getItem('userProfile');
-    if (id_token && profile) {
-      const decodedToken = jwtDecode(id_token);
-      if (isExpired(decodedToken)) {
-        return;
-      }
-
-      axios.defaults.headers.common['Authorization'] = `Bearer ${id_token}`;
-
-      dispatch({
-        type: constants.LOADED_TOKEN,
-        payload: {
-          id_token
-        }
-      });
-
-      dispatch({
-        type: constants.LOGIN_SUCCESS,
-        payload: {
-          id_token,
-          user: JSON.parse(profile)
-        }
-      });
-      return;
-    }
-
-    // Webtask support.
-    const apiToken = sessionStorage.getItem('apiToken');
+    const apiToken = sessionStorage.getItem('authz:apiToken');
     if (apiToken) {
-      const decodedToken = jwtDecode(apiToken);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${apiToken}`;
+      const decodedToken = decodeToken(apiToken);
+      if (isTokenExpired(decodedToken)) {
+        return;
+      }
+
+      axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
+
+      sessionStorage.setItem('authz:token', apiToken);
 
       dispatch({
-        type: constants.LOADED_TOKEN,
+        type: constants.RECIEVED_TOKEN,
         payload: {
-          apiToken
+          token: apiToken
         }
       });
 
       dispatch({
         type: constants.LOGIN_SUCCESS,
         payload: {
-          apiToken,
+          token: apiToken,
+          decodedToken,
           user: decodedToken
         }
       });
-      return;
     }
   };
-}
-
-function isExpired(decodedToken) {
-  if(typeof decodedToken.exp === 'undefined') {
-    return true;
-  }
-
-  let d = new Date(0);
-  d.setUTCSeconds(decodedToken.exp);
-
-  return !(d.valueOf() > (new Date().valueOf() + (1000)));
 }

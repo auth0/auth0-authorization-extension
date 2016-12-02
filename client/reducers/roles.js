@@ -5,9 +5,11 @@ import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-  loading : false,
+  loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0,
+  fetchQuery: null
 };
 
 export const roles = createReducer(fromJS(initialState), {
@@ -24,17 +26,18 @@ export const roles = createReducer(fromJS(initialState), {
   [constants.FETCH_ROLES_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, app => app.name))
+      records: fromJS(_.sortBy(action.payload.data.roles, role => role.id)),
+      total: action.payload.data.total,
+      fetchQuery: action.payload.config && action.payload.config.params ? action.payload.config.params.q : null
     }),
 
   [constants.SAVE_ROLE_FULFILLED]: (state, action) => {
     let records = state.get('records');
-    const record = fromJS(action.meta.role);
-    const index = records.findIndex((perm) => perm.get('name') === action.meta.roleId);
+    const record = fromJS(action.payload.data);
+    const index = records.findIndex((role) => role.get('_id') === action.meta.roleId);
     if (index >= 0) {
       records = records.splice(index, 1, record);
-    }
-    else {
+    } else {
       records = records.unshift(record);
     }
 
@@ -45,7 +48,7 @@ export const roles = createReducer(fromJS(initialState), {
 
   [constants.DELETE_ROLE_FULFILLED]: (state, action) => {
     const records = state.get('records');
-    const index = records.findIndex((perm) => perm.get('name') === action.meta.roleId);
+    const index = records.findIndex((role) => role.get('_id') === action.meta.roleId);
     return state.merge({
       loading: false,
       records: records.delete(index)

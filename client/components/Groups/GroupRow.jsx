@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from '../Dashboard';
+import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
 
 class GroupRow extends Component {
   shouldComponentUpdate(nextProps) {
@@ -21,13 +21,12 @@ class GroupRow extends Component {
 
     return (
       <TableRow>
-        <TableIconCell icon="322" />
         {this.renderGroupName(group)}
         <TableTextCell>{ group.description || 'N/A' }</TableTextCell>
         <TableTextCell>{ (group.members && group.members.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.nested && group.nested.length) || '0' }</TableTextCell>
         <TableTextCell>{ (group.mappings && group.mappings.length) || '0' }</TableTextCell>
-        <TableCell>
+        <TableCell style={{ paddingRight: 0, paddingLeft: 0, textAlign: 'right' }}>
           {this.props.renderActions(group, index)}
         </TableCell>
       </TableRow>

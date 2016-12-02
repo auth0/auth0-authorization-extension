@@ -1,24 +1,39 @@
 import React, { Component } from 'react';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button } from 'react-bootstrap';
 
-import { LoadingPanel, Error } from '../Dashboard';
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
-import { Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Pagination, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from 'auth0-extension-ui';
 
 class GroupMembers extends Component {
   constructor() {
     super();
-    this.renderActions = this.renderActions.bind(this);
+    this.state = {
+      showGroupMembers: true
+    };
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.members !== this.props.members || nextProps.nestedMembers !== this.props.nestedMembers;
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.members !== this.props.members ||
+    nextProps.nestedMembers !== this.props.nestedMembers ||
+    nextState.showGroupMembers !== this.state.showGroupMembers;
   }
 
-  renderActions(user, index) {
-    return <GroupMemberRemoveAction index={index} user={user} loading={this.props.members.get('loading')} onRemove={this.props.removeMember} />;
+  setShowGroupMembers = (showGroupMembers) => {
+    this.setState({
+      showGroupMembers
+    });
   }
+
+  handleMembersPageChange = (page) => {
+    this.props.getGroupMembersOnPage(this.props.groupId, page);
+  }
+
+  handleAllMembersPageChange = (page) => {
+    this.props.getAllNestedMembersOnPage(this.props.groupId, page);
+  }
+
+  renderActions = (user, index) => <GroupMemberRemoveAction index={index} user={user} loading={this.props.members.get('loading')} onRemove={this.props.removeMember} />
 
   renderAllMembers(nestedMembers) {
     if (nestedMembers.error) {
@@ -35,8 +50,7 @@ class GroupMembers extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h4>All Members</h4>
-            <span className="pull-left">The following table lists <strong>all</strong> users for this group and nested groups.</span>
+            <span className="pull-left">The following table lists <strong>all</strong> users for this group and its nested groups.</span>
           </div>
         </div>
         <Table>
@@ -46,15 +60,21 @@ class GroupMembers extends Component {
             <TableColumn width="45%">Source</TableColumn>
           </TableHeader>
           <TableBody>
-          {nestedMembers.records.map((record, index) =>
-            <TableRow key={index}>
-              <TableIconCell color="green" icon="322" />
-              <TableRouteCell route={`/users/${record.user.user_id}`}>{ record.user.name || record.user.email || record.user.user_id }</TableRouteCell>
-              <TableRouteCell route={`/groups/${record.group._id}`}>{ record.group.name || 'N/A' }</TableRouteCell>
-            </TableRow>
+            {nestedMembers.records.map((record, index) =>
+              <TableRow key={index}>
+                <TableIconCell color="green" icon="322" />
+                <TableRouteCell route={`/users/${record.user.user_id}`}>{ record.user.name || record.user.email || record.user.user_id }</TableRouteCell>
+                <TableRouteCell route={`/groups/${record.group._id}`}>{ record.group.name || 'N/A' }</TableRouteCell>
+              </TableRow>
           )}
           </TableBody>
         </Table>
+
+        <Pagination
+          totalItems={nestedMembers.total}
+          handlePageChange={this.handleAllMembersPageChange}
+          perPage={process.env.PER_PAGE}
+        />
       </div>
     );
   }
@@ -73,31 +93,56 @@ class GroupMembers extends Component {
     return <div />;
   }
 
-  render() {
-    const { records, loading, error } = this.props.members.toJS();
-
+  renderGroupMembers(loading, records, total) {
     return (
       <div>
         <LoadingPanel show={loading}>
-          <div className="row">
-            <div className="col-xs-12">
-              <Error message={error} />
+          <div className="row" style={{ marginBottom: '20px' }}>
+            <div className="col-xs-8">
+              <p>Add members to or remove them from the group.</p>
             </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12">
-              <h4>Members</h4>
-              <span className="pull-left">Add members to or remove them from the group.</span>
-              <ButtonToolbar className="pull-right">
-                <Button bsStyle="primary" bsSize="xsmall" onClick={this.props.addMember} disabled={loading}>
-                  <i className="icon icon-budicon-337"></i> Add
-                </Button>
-              </ButtonToolbar>
+            <div className="col-xs-4">
+              <Button className="pull-right" bsStyle="success" onClick={this.props.addMember} disabled={loading}>
+                <i className="icon icon-budicon-292" /> Add members
+              </Button>
             </div>
           </div>
           {this.renderMembers(loading, records)}
         </LoadingPanel>
-        {this.renderAllMembers(this.props.nestedMembers.toJS())}
+        <Pagination
+          totalItems={total}
+          handlePageChange={this.handleMembersPageChange}
+          perPage={process.env.PER_PAGE}
+        />
+      </div>
+    );
+  }
+
+  render() {
+    const { records, loading, error, total } = this.props.members.toJS();
+
+    return (
+      <div>
+        <div className="row">
+          <div className="col-xs-12">
+            <Error message={error} />
+          </div>
+        </div>
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-12">
+            <ul className="nav nav-pills">
+              <li className={this.state.showGroupMembers ? 'active' : null} >
+                <a onClick={() => this.setShowGroupMembers(true)}>Members of this group</a>
+              </li>
+              <li className={!this.state.showGroupMembers ? 'active' : null}>
+                <a onClick={() => this.setShowGroupMembers(false)}>All members</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        { this.state.showGroupMembers ?
+          this.renderGroupMembers(loading, records, total) :
+          this.renderAllMembers(this.props.nestedMembers.toJS()) }
       </div>
     );
   }
@@ -107,7 +152,10 @@ GroupMembers.propTypes = {
   addMember: React.PropTypes.func.isRequired,
   removeMember: React.PropTypes.func.isRequired,
   members: React.PropTypes.object.isRequired,
-  nestedMembers: React.PropTypes.object.isRequired
+  nestedMembers: React.PropTypes.object.isRequired,
+  getGroupMembersOnPage: React.PropTypes.func.isRequired,
+  getAllNestedMembersOnPage: React.PropTypes.func.isRequired,
+  groupId: React.PropTypes.string.isRequired
 };
 
 export default GroupMembers;

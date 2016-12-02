@@ -1,34 +1,29 @@
-'use latest';
+const url = require('url');
+const tools = require('auth0-extension-hapi-tools');
 
-const nconf = require('nconf');
-const Webtask = require('webtask-tools');
+const hapiApp = require('./server/init');
+const config = require('./server/lib/config');
 const logger = require('./server/lib/logger');
-logger.info('Starting webtask.');
+const webtask = require('./server/lib/webtask');
 
-module.exports = Webtask.fromExpress((req, res) => {
-  nconf
-    .defaults({
-      AUTHORIZE_API_KEY: req.webtaskContext.secrets.EXTENSION_SECRET,
-      AUTH0_DOMAIN: req.webtaskContext.secrets.AUTH0_DOMAIN,
-      AUTH0_CLIENT_ID: req.webtaskContext.secrets.AUTH0_CLIENT_ID,
-      AUTH0_CLIENT_SECRET: req.webtaskContext.secrets.AUTH0_CLIENT_SECRET,
-      AUTH0_SCOPES: req.webtaskContext.secrets.AUTH0_SCOPES,
-      EXTENSION_SECRET: req.webtaskContext.secrets.EXTENSION_SECRET,
-      DATA_CACHE_MAX_AGE: 1000 * 30,
-      NODE_ENV: 'production',
-      HOSTING_ENV: 'webtask',
-      CLIENT_VERSION: process.env.CLIENT_VERSION,
-      USE_OAUTH2: true,
-      WT_URL: req.webtaskContext.secrets.WT_URL
-    });
-
-  // Start the server.
-  const StorageProviders = require('./server/lib/storage/providers');
-  const initServer = require('./server');
-  const app = initServer({
-    storageProvider: new StorageProviders.WebtaskStorageProvider({
-      storageContext: req.webtaskContext.storage
-    })
+tools.urlHelpers.getBaseUrl = (req) => {
+  const originalUrl = url.parse(req.originalUrl || '').pathname || '';
+  return url.format({
+    protocol: 'https',
+    host: req.headers.host,
+    pathname: originalUrl.replace(req.path, '').replace(/\/$/g, '')
   });
-  return app(req, res);
+};
+
+const createServer = tools.createServer((wtConfig, wtStorage) => {
+  logger.info('Starting Authorization Extension - Version:', process.env.CLIENT_VERSION);
+  logger.info(' > WT_URL:', wtConfig('WT_URL'));
+  logger.info(' > PUBLIC_WT_URL:', config('PUBLIC_WT_URL'));
+  return hapiApp(wtConfig, wtStorage);
 });
+
+
+module.exports = (context, req, res) => {
+  config.setValue('PUBLIC_WT_URL', webtask.getUrl(req));
+  createServer(context, req, res);
+};

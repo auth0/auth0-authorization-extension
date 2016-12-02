@@ -13,7 +13,6 @@ export function fetchNestedGroups(groupId, reload) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/nested`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -23,7 +22,7 @@ export function fetchNestedGroups(groupId, reload) {
 /*
  * Add the selected group to a group.
  */
-export function addNestedGroup(groupId, nestedGroupId, callback) {
+export function addNestedGroup(groupId, nestedGroupIds, callback) {
   return (dispatch) => {
     dispatch({
       type: constants.ADD_GROUP_NESTED,
@@ -31,8 +30,7 @@ export function addNestedGroup(groupId, nestedGroupId, callback) {
         promise: axios({
           method: 'patch',
           url: `/api/groups/${groupId}/nested`,
-          data: [ nestedGroupId ],
-          timeout: 5000,
+          data: nestedGroupIds,
           responseType: 'json'
         })
       },
@@ -76,10 +74,7 @@ export function removeNestedGroup(groupId, nestedGroupId) {
       promise: axios({
         method: 'delete',
         url: `/api/groups/${groupId}/nested`,
-        data: {
-          groupId: nestedGroupId
-        },
-        timeout: 5000,
+        data: [ nestedGroupId ],
         responseType: 'json'
       })
     },

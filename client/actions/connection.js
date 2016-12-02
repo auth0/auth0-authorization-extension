@@ -9,7 +9,6 @@ export function fetchConnections() {
     type: constants.FETCH_CONNECTIONS,
     payload: {
       promise: axios.get('/api/connections', {
-        timeout: 5000,
         responseType: 'json'
       })
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Error, Confirm, LoadingPanel } from '../Dashboard';
+import { Error, Confirm, LoadingPanel } from 'auth0-extension-ui';
 
 class GroupMemberRemoveDialog extends Component {
   constructor() {
@@ -25,10 +25,10 @@ class GroupMemberRemoveDialog extends Component {
     const title = `Remove user from ${groupName}`;
 
     return (
-      <Confirm title={ title } show={ requesting && isRemove } loading={ loading } onCancel={ this.clear } onConfirm={ this.confirm }>
-        <LoadingPanel show={ loading } spinnerStyle={{ height: '40px', width: '40px' }} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <Error message={ error } />
-          <p>Do you really want to remove <strong>{ userDisplayName }</strong> from <strong>{ groupName }</strong>?</p>
+      <Confirm title={title} show={requesting && isRemove} loading={loading} onCancel={this.clear} onConfirm={this.confirm} confirmMessage="Remove">
+        <LoadingPanel show={loading} spinnerStyle={{ height: '40px', width: '40px' }} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+          <Error message={error} />
+          <p style={{ textAlign: 'center' }}>Do you really want to remove <strong>{ userDisplayName }</strong> from <strong>{ groupName }</strong>?</p>
         </LoadingPanel>
       </Confirm>
     );

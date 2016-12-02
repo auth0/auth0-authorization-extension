@@ -2,19 +2,12 @@ import uuid from 'node-uuid';
 import Promise from 'bluebird';
 import { expect } from 'chai';
 
-import { isApplicationAccessAllowed, getUserGroups, getDynamicUserGroups } from '../../../server/lib/queries';
+import { getUserGroups, getDynamicUserGroups } from '../../../server/lib/queries';
 
 const mockGroups = (groups) => ({
   hash: uuid.v4(),
   getGroups: () => new Promise((resolve) => {
     resolve(groups);
-  })
-});
-
-const mockApplications = (applications) => ({
-  hash: uuid.v4(),
-  getApplications: () => new Promise((resolve) => {
-    resolve(applications);
   })
 });
 
@@ -28,80 +21,6 @@ const mockConnections = (connections) => ({
 });
 
 describe('Queries', () => {
-  describe('#isApplicationAccessAllowed', () => {
-    it('should return true if no groups have been configured', (done) => {
-      const db = mockApplications([
-        { _id: '123' }
-      ]);
-
-      const userGroups = [
-        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
-        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
-      ];
-
-      isApplicationAccessAllowed(db, '777', userGroups)
-        .then((isAllowed) => {
-          expect(isAllowed).to.equal(true);
-          done();
-        })
-        .catch(err => done(err));
-    });
-
-    it('should return true if application groups is empty', (done) => {
-      const db = mockApplications([
-        { _id: '777', groups: [ ] }
-      ]);
-
-      const userGroups = [
-        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
-        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
-      ];
-
-      isApplicationAccessAllowed(db, '777', userGroups)
-        .then((isAllowed) => {
-          expect(isAllowed).to.equal(true);
-          done();
-        })
-        .catch(err => done(err));
-    });
-
-    it('should return false if current groups dont match the application groups', (done) => {
-      const db = mockApplications([
-        { _id: '777', groups: [ '789', '455' ] }
-      ]);
-
-      const userGroups = [
-        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
-        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
-      ];
-
-      isApplicationAccessAllowed(db, '777', userGroups)
-        .then((isAllowed) => {
-          expect(isAllowed).to.equal(false);
-          done();
-        })
-        .catch(err => done(err));
-    });
-
-    it('should return true if current groups match the application groups', (done) => {
-      const db = mockApplications([
-        { _id: '777', groups: [ '789', '123' ] }
-      ]);
-
-      const userGroups = [
-        { _id: '123', name: 'Group 1', members: [ '111', '222', '333' ] },
-        { _id: '456', name: 'Group 2', members: [ '444', '555', '666' ] }
-      ];
-
-      isApplicationAccessAllowed(db, '777', userGroups)
-        .then((isAllowed) => {
-          expect(isAllowed).to.equal(true);
-          done();
-        })
-        .catch(err => done(err));
-    });
-  });
-
   describe('#getUserGroups', () => {
     it('should return an empty array if user does not belong to any groups', (done) => {
       const db = mockGroups([
@@ -330,20 +249,20 @@ describe('Queries', () => {
 
     it('should mappings that match the current transaction', (done) => {
       const db = mockGroups([
-        { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
+        {
+          _id: '123', name: 'Group 1', mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
         },
-        { _id: '456', name: 'Group 2', mappings:
-          [
-            { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
-            { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
-          ]
+        {
+          _id: '456', name: 'Group 2', mappings: [
+          { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
+          { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
+        ]
         },
-        { _id: '789', name: 'Group 3', mappings:
-          [
-            { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
-            { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
-          ]
+        {
+          _id: '789', name: 'Group 3', mappings: [
+          { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
+          { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
+        ]
         }
       ]);
 

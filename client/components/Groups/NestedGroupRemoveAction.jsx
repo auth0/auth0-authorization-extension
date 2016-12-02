@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import { TableAction } from '../Dashboard';
+import { TableAction } from 'auth0-extension-ui';
 
 class NestedGroupRemoveAction extends Component {
   constructor() {
@@ -14,7 +14,8 @@ class NestedGroupRemoveAction extends Component {
   render() {
     const { index, loading } = this.props;
     return (
-      <TableAction id={`remove-group-${index}`} type="success" title="Remove" icon="296"
+      <TableAction
+        id={`remove-group-${index}`} title="Remove nested group" icon="471"
         onClick={this.onRemove} disabled={loading || false}
       />
     );

@@ -15,20 +15,22 @@ nconf
   .env()
   .file(path.join(__dirname, './server/config.json'))
   .defaults({
+    AUTH0_RTA: 'auth0.auth0.com',
     DATA_CACHE_MAX_AGE: 1000 * 10,
     NODE_ENV: 'development',
     HOSTING_ENV: 'default',
-    PORT: 3000,
-    USE_OAUTH2: false
+    PORT: 3001,
+    USE_OAUTH2: false,
+    LOG_COLOR: true
   });
 
 // Start the server.
-const app = require('./server')();
-const port = nconf.get('PORT');
-app.listen(port, (error) => {
-  if (error) {
-    logger.error(error);
-  } else {
-    logger.info(`Listening on http://localhost:${port}.`);
+return require('./server/init')((key) => nconf.get(key), null, (err, hapi) => {
+  if (err) {
+    return logger.error(err);
   }
+
+  return hapi.start(() => {
+    logger.info('Server running at:', hapi.info.uri);
+  });
 });

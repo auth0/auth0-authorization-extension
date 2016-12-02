@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { Component } from 'react';
 
 import GroupRow from './GroupRow';
-import { Table, TableBody, TableHeader, TableColumn } from '../Dashboard';
+import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
 
 class GroupsTable extends Component {
   shouldComponentUpdate(nextProps) {
@@ -15,7 +15,6 @@ class GroupsTable extends Component {
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="3%" />
           <TableColumn width="15%">Name</TableColumn>
           <TableColumn width="28%">Description</TableColumn>
           <TableColumn>Members</TableColumn>

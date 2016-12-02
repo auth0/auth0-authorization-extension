@@ -1,18 +1,23 @@
 {
   "title": "Auth0 Authorization",
   "name": "auth0-authz",
-  "version": "1.4.5",
+  "version": "2.0.8",
   "author": "auth0",
   "description": "This extension gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
   "logoUrl": "https://cdn.auth0.com/extensions/auth0-authz/assets/logo.svg",
-  "initialUrlPath": "/admins/login",
-  "repository": "https://github.com/auth0/auth0-authz",
+  "initialUrlPath": "/login",
+  "updateConfirmMessage": "Warning! Read the documentation about breaking changes (https://auth0.com/docs/extensions/authorization-extension) before updating the extension",
+  "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
+  "repository": "https://github.com/auth0/auth0-authorization-extension",
   "keywords": [
     "auth0",
     "extension"
   ],
   "auth0": {
-    "scopes": "read:clients read:connections read:rules create:rules update:rules read:users update:users read:device_credentials read:logs"
+    "createClient": true,
+    "onUninstallPath": "/.extensions/on-uninstall",
+    "onUpdatePath": "/.extensions/on-update",
+    "scopes": "read:resource_servers update:resource_servers delete:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
   }
 }

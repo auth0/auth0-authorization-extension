@@ -4,17 +4,16 @@ import * as constants from '../constants';
 /*
  * Search for users.
  */
-export function searchUserPicker(search = '', page = 0) {
+export function searchUserPicker(q = '', page = 0) {
   return {
     type: constants.SEARCH_USER_PICKER,
     payload: {
       promise: axios.get('/api/users', {
         params: {
-          search,
+          q,
           page,
           per_page: 10
         },
-        timeout: 5000,
         responseType: 'json'
       })
     },

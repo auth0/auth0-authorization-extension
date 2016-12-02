@@ -5,9 +5,11 @@ import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-  loading : false,
+  loading: false,
   error: null,
-  records: []
+  records: [],
+  total: 0,
+  fetchQuery: null
 };
 
 export const groups = createReducer(fromJS(initialState), {
@@ -24,7 +26,9 @@ export const groups = createReducer(fromJS(initialState), {
   [constants.FETCH_GROUPS_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(_.sortBy(action.payload.data, app => app.id))
+      records: fromJS(_.sortBy(action.payload.data.groups, app => app.id)),
+      total: action.payload.data.total,
+      fetchQuery: action.payload.config && action.payload.config.params ? action.payload.config.params.q : null
     }),
 
   [constants.SAVE_GROUP_FULFILLED]: (state, action) => {
@@ -33,8 +37,7 @@ export const groups = createReducer(fromJS(initialState), {
     const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
     if (index >= 0) {
       records = records.splice(index, 1, record);
-    }
-    else {
+    } else {
       records = records.unshift(record);
     }
 

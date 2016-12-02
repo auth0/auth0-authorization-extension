@@ -1,22 +1,52 @@
 import React from 'react';
 import { findDOMNode } from 'react-dom';
-import { Button, ButtonToolbar } from 'react-bootstrap';
+import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
+import { Pagination, SectionHeader, BlankState, SearchBar, Error, TableTotals, LoadingPanel } from 'auth0-extension-ui';
 
+import UserGeneral from './UserGeneral';
+import UserFederated from './UserFederated';
 import UsersTable from './UsersTable';
-import { Error, LoadingPanel, TableTotals } from '../Dashboard';
+import UserIcon from '../Icons/UsersIcon';
 
 class UserOverview extends React.Component {
   constructor() {
     super();
 
-    this.onReset = this.onReset.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
+    this.searchBarOptions = [
+      {
+        value: 'user',
+        title: 'User',
+        filterBy: ''
+      },
+      {
+        value: 'email',
+        title: 'Email',
+        filterBy: 'email'
+      },
+      {
+        value: 'connection',
+        title: 'Connection',
+        filterBy: 'identities.connection'
+      }
+    ];
+
+    this.state = {
+      selectedFilter: this.searchBarOptions[0]
+    };
+
     this.renderActions = this.renderActions.bind(this);
+    this.handleUsersPageChange = this.handleUsersPageChange.bind(this);
+
+    // Searchbar.
+    this.onKeyPress = this.onKeyPress.bind(this);
+    this.onReset = this.onReset.bind(this);
+    this.onHandleOptionChange = this.onHandleOptionChange.bind(this);
   }
 
   onKeyPress(e) {
     if (e.key === 'Enter') {
-      this.props.onSearch(findDOMNode(this.refs.search).value);
+      e.preventDefault();
+      this.props.onSearch(`${e.target.value}*`, this.state.selectedFilter.filterBy);
     }
   }
 
@@ -24,57 +54,80 @@ class UserOverview extends React.Component {
     this.props.onReset();
   }
 
+  onHandleOptionChange(option) {
+    this.setState({
+      selectedFilter: option
+    });
+  }
+
+  handleUsersPageChange(page) {
+    this.props.getUsersOnPage(page);
+  }
+
   renderActions(user, index) {
     return this.props.renderActions(user, index);
   }
 
+  renderEmptyState() {
+    return (
+      <BlankState
+        title="Users"
+        iconImage={
+          <div className="no-content-image">
+            <UserIcon />
+          </div>
+        }
+        description="Lorem ipsum dolor sit amet."
+      >
+        <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
+          Read more
+        </a>
+      </BlankState>
+    );
+  }
+
   render() {
-    const { loading, error, users, total, renderActions } = this.props;
+    const { loading, error, users, total, fetchQuery, renderActions } = this.props;
+
+    if (!error && !users.length && !loading && ((!fetchQuery || !fetchQuery.length) && !total)) { return this.renderEmptyState(); }
 
     return (
       <div>
-        <LoadingPanel show={ loading }>
-          <div className="row">
-            <div className="col-xs-12 wrapper">
-              <Error message={ error } />
-            </div>
+        <Error message={error} />
+        <SectionHeader title="Users" description="Open a user to add them to a group or assign them to a role." />
+
+        <UserGeneral />
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-12">
+            <SearchBar
+              placeholder="Search for users"
+              searchOptions={this.searchBarOptions}
+              handleKeyPress={this.onKeyPress}
+              handleReset={this.onReset}
+              handleOptionChange={this.onHandleOptionChange}
+            />
           </div>
-          <div className="row">
-            <div className="col-xs-10">
-              <div className="advanced-search-control">
-                <span className="search-area">
-                  <i className="icon-budicon-489"></i>
-                  <input className="user-input" type="text" ref="search" placeholder="Search for users"
-                    spellCheck="false" style={{ marginLeft: '10px' }} onKeyPress={this.onKeyPress}
-                  />
-                </span>
-              </div>
-            </div>
-            <div className="col-xs-2">
-              <ButtonToolbar className="pull-right">
-                <Button bsSize="xsmall" onClick={ this.onReset } disabled={ loading }>
-                  <i className="icon icon-budicon-257"></i> Reset
-                </Button>
-              </ButtonToolbar>
-            </div>
-            <div className="col-xs-12">
-              <div className="help-block">
-                To perform your search, press <span className="keyboard-button">enter</span>.
-                You can also search for specific fields, eg: <strong>email:"john@doe.com"</strong>.
-              </div>
-            </div>
-          </div>
+        </div>
+
+        <LoadingPanel show={loading}>
           <div className="row">
             <div className="col-xs-12">
-                <UsersTable loading={ loading } users={ users } renderActions={ renderActions } />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-xs-12">
-              <TableTotals currentCount={ users.length } totalCount={ total } />
+              <UsersTable loading={loading} users={users} renderActions={renderActions} />
             </div>
           </div>
         </LoadingPanel>
+        <div className="row">
+          <div className="col-xs-12">
+            { process.env.PER_PAGE < total ?
+              <Pagination
+                totalItems={total}
+                handlePageChange={this.handleUsersPageChange}
+                perPage={process.env.PER_PAGE}
+              /> :
+                <TableTotals currentCount={users.length} totalCount={total} />
+            }
+          </div>
+        </div>
       </div>
     );
   }
@@ -87,7 +140,8 @@ UserOverview.propTypes = {
   users: React.PropTypes.array.isRequired,
   total: React.PropTypes.number.isRequired,
   loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired
+  renderActions: React.PropTypes.func.isRequired,
+  getUsersOnPage: React.PropTypes.func.isRequired
 };
 
 export default UserOverview;

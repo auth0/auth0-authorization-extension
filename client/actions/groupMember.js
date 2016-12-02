@@ -1,10 +1,11 @@
+import _ from 'lodash';
 import axios from 'axios';
 import * as constants from '../constants';
 
 /*
  * Load the members of a single group.
  */
-export function fetchGroupMembers(groupId, reload) {
+export function fetchGroupMembers(groupId, reload, per_page, page) {
   return {
     type: constants.FETCH_GROUP_MEMBERS,
     meta: {
@@ -13,7 +14,10 @@ export function fetchGroupMembers(groupId, reload) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members`, {
-        timeout: 5000,
+        params: {
+          per_page,
+          page
+        },
         responseType: 'json'
       })
     }
@@ -23,7 +27,7 @@ export function fetchGroupMembers(groupId, reload) {
 /*
  * Load the nested users of a single group.
  */
-export function fetchGroupMembersNested(groupId, reload) {
+export function fetchGroupMembersNested(groupId, reload, per_page, page) {
   return {
     type: constants.FETCH_GROUP_MEMBERS_NESTED,
     meta: {
@@ -32,7 +36,10 @@ export function fetchGroupMembersNested(groupId, reload) {
     },
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members/nested`, {
-        timeout: 5000,
+        params: {
+          per_page,
+          page
+        },
         responseType: 'json'
       })
     }
@@ -43,6 +50,8 @@ export function fetchGroupMembersNested(groupId, reload) {
  * Add the selected users members to a group.
  */
 export function addGroupMembers(groupId, members, callback) {
+  const membersIds = _.map(members, 'userId');
+
   return (dispatch) => {
     dispatch({
       type: constants.ADD_GROUP_MEMBERS,
@@ -50,13 +59,35 @@ export function addGroupMembers(groupId, members, callback) {
         promise: axios({
           method: 'patch',
           url: `/api/groups/${groupId}/members`,
-          data: members,
-          timeout: 5000,
+          data: membersIds,
           responseType: 'json'
         })
       },
       meta: {
         groupId,
+        onSuccess: callback
+      }
+    });
+  };
+}
+
+/*
+ * Add the selected users members to a group.
+ */
+export function addUserToGroups(userId, groups, callback) {
+  return (dispatch) => {
+    dispatch({
+      type: constants.ADD_GROUP_MEMBERS,
+      payload: {
+        promise: axios({
+          method: 'patch',
+          url: `/api/users/${userId}/groups`,
+          data: groups,
+          responseType: 'json'
+        })
+      },
+      meta: {
+        userId,
         onSuccess: callback
       }
     });
@@ -95,10 +126,7 @@ export function removeGroupMember(groupId, userId) {
       promise: axios({
         method: 'delete',
         url: `/api/groups/${groupId}/members`,
-        data: {
-          userId
-        },
-        timeout: 5000,
+        data: [ userId ],
         responseType: 'json'
       })
     },

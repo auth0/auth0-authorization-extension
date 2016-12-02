@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import * as constants from '../constants';
-import { fetchApplicationGroups } from './applicationGroup';
 
 /*
  * Load all applications in an Auth0 account.
@@ -11,7 +10,6 @@ export function fetchApplications() {
     type: constants.FETCH_APPLICATIONS,
     payload: {
       promise: axios.get('/api/applications', {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -29,7 +27,6 @@ export function fetchApplicationDetails(applicationId) {
     },
     payload: {
       promise: axios.get(`/api/applications/${applicationId}`, {
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -42,6 +39,5 @@ export function fetchApplicationDetails(applicationId) {
 export function fetchApplication(applicationId) {
   return (dispatch) => {
     dispatch(fetchApplicationDetails(applicationId));
-    dispatch(fetchApplicationGroups(applicationId));
   };
 }

@@ -31,7 +31,7 @@ export const groupPicker = createReducer(fromJS(initialState), {
   [constants.LOAD_GROUP_PICKER_FULFILLED]: (state, action) =>
     state.merge({
       loading: false,
-      records: fromJS(action.payload.data)
+      records: fromJS(action.payload.data.groups)
     }),
   [constants.CANCEL_GROUP_PICKER]: (state) =>
     state.merge({

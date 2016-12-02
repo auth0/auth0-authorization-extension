@@ -6,16 +6,38 @@ import createReducer from '../utils/createReducer';
 const initialState = {
   loading: false,
   error: null,
-  record: Map(),
+  record: { },
   roleId: null,
   isNew: false,
   isEdit: false,
   isDelete: false,
   requesting: false,
-  validationErrors: Map()
+  validationErrors: { }
 };
 
 export const role = createReducer(fromJS(initialState), {
+  [constants.FETCH_ROLE_PENDING]: (state, action) =>
+    state.merge({
+      loading: true,
+      roleId: action.meta.roleId
+    }),
+  [constants.FETCH_ROLE_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while loading the roles: ${action.errorMessage}`
+    }),
+  [constants.FETCH_ROLE_FULFILLED]: (state, action) => {
+    const { data } = action.payload;
+    if (data._id !== state.get('roleId')) {
+      return state;
+    }
+
+    return state.merge({
+      loading: false,
+      record: fromJS(data)
+    });
+  },
+
   [constants.CLEAR_ROLE]: (state) =>
     state.merge({
       ...initialState
@@ -23,14 +45,19 @@ export const role = createReducer(fromJS(initialState), {
   [constants.CREATE_ROLE]: (state) =>
     state.merge({
       ...initialState,
-      isNew: true
+      isNew: true,
+      page: 'chooseApplication'
     }),
+  [constants.ROLE_APPLICATION_SELECTED]: (state, action) =>
+    state.setIn([ 'record', 'applicationId' ], action.payload.applicationId)
+      .setIn([ 'page' ], action.payload.applicationId && action.payload.applicationId.length ? 'editRole' : 'chooseApplication'),
   [constants.EDIT_ROLE]: (state, action) =>
     state.merge({
       ...initialState,
       isEdit: true,
       record: action.payload.role,
-      roleId: action.payload.role.name
+      roleId: action.payload.role._id,
+      page: 'editRole'
     }),
   [constants.SAVE_ROLE_PENDING]: (state) =>
     state.merge({
@@ -38,12 +65,12 @@ export const role = createReducer(fromJS(initialState), {
       validationErrors: Map()
     }),
   [constants.SAVE_ROLE_REJECTED]: (state, action) => {
-    const validationErrors = action.payload.data && action.payload.data.errors && Map(action.payload.data.errors) || Map();
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
 
     return state.merge({
       loading: false,
-      validationErrors: validationErrors,
+      validationErrors,
       error: `An error occured while saving the role: ${errorMessage}`
     });
   },
@@ -54,7 +81,8 @@ export const role = createReducer(fromJS(initialState), {
   [constants.REQUEST_DELETE_ROLE]: (state, action) =>
     state.merge({
       isDelete: true,
-      roleId: action.payload.role.name,
+      record: action.payload.role,
+      roleId: action.payload.role._id,
       requesting: true
     }),
   [constants.CANCEL_DELETE_ROLE]: (state) =>

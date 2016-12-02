@@ -1,25 +1,58 @@
 import React, { Component } from 'react';
+import { Field } from 'redux-form';
+import { Error, Confirm, Multiselect } from 'auth0-extension-ui';
 
-import './UserPickerDialog.css';
-import { Error, Confirm } from '../Dashboard';
-import UserOverview from './UserOverview';
+import createForm from '../../utils/createForm';
 import UserPickerSelectAction from './UserPickerSelectAction';
 import UserPickerUnselectAction from './UserPickerUnselectAction';
 
-class UserPickerDialog extends Component {
+export default createForm('userPicker', class UserPickerDialog extends Component {
   constructor() {
     super();
 
-    this.onConfirm = this.onConfirm.bind(this);
     this.renderActions = this.renderActions.bind(this);
+    this.getOptions = this.getOptions.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+  }
+
+  static propTypes = {
+    userPicker: React.PropTypes.object.isRequired,
+    onConfirm: React.PropTypes.func.isRequired,
+    onCancel: React.PropTypes.func.isRequired,
+    onReset: React.PropTypes.func.isRequired,
+    onSearch: React.PropTypes.func.isRequired,
+    onSelectUser: React.PropTypes.func.isRequired,
+    onUnselectUser: React.PropTypes.func.isRequired,
+    fetchUsers: React.PropTypes.func.isRequired,
+    resetFetchUsers: React.PropTypes.func.isRequired,
+    totalUsers: React.PropTypes.number,
+    users: React.PropTypes.array,
+    reset: React.PropTypes.func.isRequired
+  };
+
+  getOptions(input, callback) {
+    const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
+    this.props.fetchUsers(query, null, true, null, null, () => {
+      callback(null, {
+        options: this.props.users,
+        complete: false
+      });
+    });
   }
 
   shouldComponentUpdate(nextProps) {
     return nextProps.userPicker !== this.props.userPicker;
   }
 
-  onConfirm() {
-    this.props.onConfirm(this.props.userPicker.get('selection').toJS());
+  onCancel() {
+    this.props.reset();
+    this.props.onCancel();
+    this.props.resetFetchUsers();
+  }
+
+  handleSubmit = () => {
+    this.props.handleSubmit();
+    this.props.resetFetchUsers();
   }
 
   renderActions(user, index) {
@@ -35,30 +68,23 @@ class UserPickerDialog extends Component {
   }
 
   render() {
-    const { onCancel, onReset, onSearch } = this.props;
+    const { onReset, onSearch } = this.props;
     const { title, error, records, selection, total, open, loading } = this.props.userPicker.toJS();
 
     const confirmMessage = selection.length ? `Add ${selection.length} Users` : 'Confirm';
 
     return (
-      <Confirm confirmMessage={confirmMessage} dialogClassName="user-picker-dialog" size="large" title={title} show={open} loading={loading} onCancel={onCancel} onConfirm={this.onConfirm}>
+      <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={this.onCancel} onConfirm={this.handleSubmit}>
         <Error message={error} />
-        <UserOverview onReset={onReset} onSearch={onSearch}
-          error={error} users={records} total={total} loading={loading} renderActions={this.renderActions}
+        <p className="modal-description">
+          Select one or more users you wish to add.
+        </p>
+        <Field
+          name="members"
+          component={Multiselect}
+          loadOptions={_.debounce((input, callback) => this.getOptions(input, callback), process.env.MULTISELECT_DEBOUNCE_MS)}
         />
       </Confirm>
     );
   }
-}
-
-UserPickerDialog.propTypes = {
-  userPicker: React.PropTypes.object.isRequired,
-  onConfirm: React.PropTypes.func.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
-  onReset: React.PropTypes.func.isRequired,
-  onSearch: React.PropTypes.func.isRequired,
-  onSelectUser: React.PropTypes.func.isRequired,
-  onUnselectUser: React.PropTypes.func.isRequired
-};
-
-export default UserPickerDialog;
+});

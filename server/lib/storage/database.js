@@ -1,7 +1,22 @@
-import { ArgumentError } from '../errors';
+import _ from 'lodash';
+import Promise from 'bluebird';
+import { ArgumentError, ValidationError } from 'auth0-extension-tools';
+import config from '../config';
+
+const checkUnique = (items = [], errorMessage = 'Record with that identifier is already exists.', id) => {
+  if (items.length === 0) {
+    return null;
+  }
+
+  if (id && items.length === 1 && items[0]._id === id) { // eslint-disable-line no-underscore-dangle
+    return null;
+  }
+
+  return Promise.reject(new ValidationError(errorMessage));
+};
 
 export default class Database {
-  constructor(options = { }) {
+  constructor(options = {}) {
     if (!options.provider) {
       throw new ArgumentError('The \'provider\' has to be set when initializing the database.');
     }
@@ -9,113 +24,175 @@ export default class Database {
     this.provider = options.provider;
   }
 
+  getStatus() {
+    if (!config('DB_TYPE') || config('DB_TYPE') === 'default') {
+      return this.provider.storageContext.read()
+        .then(data => ({
+          size: Buffer.byteLength(JSON.stringify(data), 'utf8'),
+          type: 'default'
+        }));
+    }
+
+    return { size: null, type: config('DB_TYPE') };
+  }
+
+  canChange(type, checkFor, id) {
+    return this.provider.getAll(type)
+      .then(items => _.filter(items, item => item[checkFor] && _.includes(item[checkFor], id)))
+      .then(items => {
+        if (items.length) {
+          const names = items.map(item => item.name).join(', ');
+          const message = `Unable to touch ${checkFor} while used in ${type}: ${names}`;
+          return Promise.reject(new ValidationError(message));
+        }
+        return Promise.resolve();
+      });
+  }
+
+  getConfiguration() {
+    return this.provider
+      .getAll('configuration')
+      .then(records => (records.length ? records[0] : null));
+  }
+
+  updateConfiguration(data) {
+    return this.provider
+      .update('configuration', 'v1', data, true);
+  }
+
   getRules() {
     return this.provider
-      .getRecords('rules');
+      .getAll('rules');
   }
 
   createRule(rule) {
     return this.provider
-      .createRecord('rules', rule);
-  }
-
-  getToken(sub) {
-    return this.provider
-      .getRecord('tokens', sub);
-  }
-
-  setToken(sub, token) {
-    return this.provider
-      .updateRecord('tokens', sub, token, true);
+      .create('rules', rule);
   }
 
   getPermissions() {
     return this.provider
-      .getRecords('permissions');
+      .getAll('permissions');
   }
 
   getPermission(id) {
     return this.provider
-      .getRecord('permissions', id);
+      .get('permissions', id);
   }
 
   createPermission(permission) {
-    return this.provider
-      .createRecord('permissions', permission);
+    return this.getPermissions()
+      .then(permissions =>
+        checkUnique(
+          permissions.filter(item => item.name.toLowerCase() === permission.name.toLowerCase() && item.applicationId === permission.applicationId),
+          `Permission with name "${permission.name}" already exists for this application`
+        ))
+      .then(() => this.provider.create('permissions', permission));
   }
 
   updatePermission(id, permission) {
-    return this.provider
-      .updateRecord('permissions', id, permission);
+    return this.getPermissions()
+      .then(permissions =>
+        checkUnique(
+          permissions.filter(item => item.name.toLowerCase() === permission.name.toLowerCase() && item.applicationId === permission.applicationId),
+          `Permission with name "${permission.name}" already exists for this application`,
+          id
+        ))
+      .then(() => this.canChange('roles', 'permissions', id))
+      .then(() => this.canChange('groups', 'permissions', id))
+      .then(() => this.provider.update('permissions', id, permission));
   }
 
   deletePermission(id) {
-    return this.provider
-      .deleteRecord('permissions', id);
+    return this.canChange('roles', 'permissions', id)
+      .then(() => this.provider.delete('permissions', id));
   }
 
   getRoles() {
     return this.provider
-      .getRecords('roles');
+      .getAll('roles');
   }
 
-  getRole(name) {
+  getRole(id) {
     return this.provider
-      .getRecord('roles', { name });
+      .get('roles', id);
   }
 
   createRole(role) {
-    return this.provider
-      .createRecord('roles', { name: role.name }, role);
+    return this.getRoles()
+      .then(roles =>
+        checkUnique(
+          roles.filter(item => item.name.toLowerCase() === role.name.toLowerCase() && item.applicationId === role.applicationId),
+          `Role with name "${role.name}" already exists for this application`
+        ))
+      .then(() => this.provider.create('roles', role));
   }
 
   updateRole(id, role) {
-    return this.provider
-      .updateRecord('roles', id, role);
+    return this.getRoles()
+      .then(roles =>
+        checkUnique(
+          roles.filter(item => item.name.toLowerCase() === role.name.toLowerCase() && item.applicationId === role.applicationId),
+          `Role with name "${role.name}" already exists for this application`,
+          id
+        ))
+      .then(() => this.provider.update('roles', id, role));
   }
 
   deleteRole(id) {
-    return this.provider
-      .deleteRecord('roles', id);
+    return this.canChange('groups', 'roles', id)
+      .then(() => this.provider.delete('roles', id));
   }
 
   getGroups() {
     return this.provider
-      .getRecords('groups');
+      .getAll('groups');
   }
 
   getGroup(id) {
     return this.provider
-      .getRecord('groups', id);
+      .get('groups', id);
   }
 
   createGroup(group) {
-    return this.provider
-      .createRecord('groups', group);
+    return this.getGroups()
+      .then(groups =>
+        checkUnique(
+          groups.filter(item => (item.name.toLowerCase() === group.name.toLowerCase())),
+          `Group with name "${group.name}" already exists`
+        ))
+      .then(() => this.provider.create('groups', group));
   }
 
   updateGroup(id, group) {
-    return this.provider
-      .updateRecord('groups', id, group);
+    return this.getGroups()
+      .then(groups =>
+        checkUnique(
+          groups.filter(item => (item.name.toLowerCase() === group.name.toLowerCase())),
+          `Group with name "${group.name}" already exists`,
+          id
+        ))
+      .then(() => this.provider.update('groups', id, group));
   }
 
+
   deleteGroup(id) {
-    return this.provider
-      .deleteRecord('groups', id);
+    return this.canChange('groups', 'nested', id)
+      .then(() => this.provider.delete('groups', id));
   }
 
   getApplications() {
     return this.provider
-      .getRecords('applications');
+      .getAll('applications');
   }
 
   getApplication(clientId) {
     return this.provider
-      .getRecord('applications', clientId);
+      .get('applications', clientId);
   }
 
   updateApplication(clientId, application) {
     return this.provider
-      .updateRecord('applications', clientId, application, true);
+      .update('applications', clientId, application, true);
   }
 }

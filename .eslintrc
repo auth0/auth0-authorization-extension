@@ -1,5 +1,5 @@
 {
-  "extends": "airbnb",
+  "extends": "auth0",
   "ecmaFeatures": {
     "jsx": true,
     "modules": true
@@ -21,6 +21,7 @@
       "SwitchCase": 1
     }],
     "jsx-quotes": [2, "prefer-double"],
+    "new-cap": 0,
     "no-multiple-empty-lines": 2,
     "no-unused-vars": 2,
     "no-var": 2,

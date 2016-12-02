@@ -1,52 +1,58 @@
-import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
-import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
+import React, { PropTypes, Component } from 'react';
+import { Button, Modal } from 'react-bootstrap';
+import { Field } from 'redux-form';
 
-import { InputText, InputCombo, LoadingPanel } from '../Dashboard';
+import createForm from '../../utils/createForm';
+import { InputText, InputCombo, LoadingPanel } from 'auth0-extension-ui';
 
-class PermissionForm extends Component {
+export default createForm('permission', class extends Component {
+  static propTypes = {
+    validationErrors: PropTypes.object,
+    loading: PropTypes.bool.isRequired,
+    submitting: PropTypes.bool,
+    handleSubmit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    applications: PropTypes.object.isRequired,
+    isNew: PropTypes.bool,
+    children: PropTypes.node
+  };
+
   render() {
-    const { fields: { name, description, client_id }, handleSubmit, loading, submitting, validationErrors } = this.props;
+    const { handleSubmit, loading, submitting, validationErrors, isNew } = this.props;
+    const applications = this.props.applications.map(app => ({
+      value: app.client_id,
+      text: `${app.name}`
+    }));
 
-    const applications = this.props.applications.map(app => {
-      return {
-        value: app.client_id,
-        text: app.name
-      };
-    });
+    return (
+      <div>
+        <Modal.Body>
+          {this.props.children}
+          <LoadingPanel show={loading}>
+            <p className="modal-description">Select the application for which this permission applies to and give it a name.</p>
 
-    return <div>
-      <Modal.Body>
-        {this.props.children}
-        <LoadingPanel show={ loading } spinnerStyle={{ height: '16px', width: '16px' }}
-            animationStyle={{ paddingTop: '0px', paddingBottom: '0px', marginTop: '0px', marginBottom: '10px' }}>
-          <InputText field={name} fieldName="name" label="Name" validationErrors={validationErrors} />
-          <InputText field={description} fieldName="description" label="Description" validationErrors={validationErrors} />
-          <InputCombo options={applications} field={client_id} fieldName="client_id" label="Application (client_id)" validationErrors={validationErrors} />
-        </LoadingPanel>
-      </Modal.Body>
-      <Modal.Footer>
-        <ButtonToolbar>
-          <Button bsSize="small" disabled={ loading || submitting } onClick={this.props.onClose}>
-            Cancel
-          </Button>
-          <Button bsStyle="primary" bsSize="small" disabled={ loading || submitting } onClick={handleSubmit}>
-            Save
-          </Button>
-        </ButtonToolbar>
-      </Modal.Footer>
-    </div>;
+            <Field
+              name="name" component={InputText}
+              label="Name" placeholder="e.g. read:invoce, delete:user, edit:book"
+              validationErrors={validationErrors}
+            />
+            <Field
+              name="description" component={InputText}
+              label="Description" validationErrors={validationErrors}
+            />
+            <Field
+              name="applicationId" component={InputCombo}
+              options={applications} label="Application"
+              validationErrors={validationErrors}
+            />
+
+          </LoadingPanel>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
+          <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}> { isNew ? 'Create' : 'Save' } </Button>
+        </Modal.Footer>
+      </div>
+    );
   }
-}
-
-PermissionForm.propTypes = {
-  applications: React.PropTypes.array,
-  validationErrors: React.PropTypes.object,
-  loading: React.PropTypes.bool.isRequired,
-  submitting: React.PropTypes.bool,
-  handleSubmit: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired
-};
-
-PermissionForm = reduxForm({ form: 'permission', fields: [ 'name', 'description', 'client_id' ] })(PermissionForm);
-export default PermissionForm;
+});

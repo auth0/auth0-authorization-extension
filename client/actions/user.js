@@ -1,34 +1,40 @@
-import * as constants from '../constants';
 import axios from 'axios';
+import * as constants from '../constants';
 
-import { fetchUserLogs } from './userLog';
-import { fetchUserGroups } from './userGroup';
-import { fetchUserDevices } from './userDevice';
+import { fetchUserGroups, fetchUserNestedGroups } from './userGroup';
 
 /*
  * Search for users.
  */
-export function fetchUsers(search = '', reset = false, page = 0) {
+export function fetchUsers(q = '', field = '', reset = false, per_page, page, onSuccess) { // eslint-disable-line camelcase
   return (dispatch, getState) => {
     const users = getState().users.get('records');
-    if (reset || search !== '' || !users.size) {
+    if (reset || q !== '' || !users.size) {
       dispatch({
         type: constants.FETCH_USERS,
         payload: {
           promise: axios.get('/api/users', {
             params: {
-              search,
+              q,
+              field,
+              per_page,
               page
             },
-            timeout: 5000,
             responseType: 'json'
           })
         },
         meta: {
-          page
+          page,
+          onSuccess
         }
       });
     }
+  };
+}
+
+export function resetFetchUsers() {
+  return {
+    type: constants.RESET_FETCH_USERS
   };
 }
 
@@ -44,31 +50,6 @@ export function fetchUserDetail(userId, onSuccess) {
     },
     payload: {
       promise: axios.get(`/api/users/${userId}`, {
-        timeout: 5000,
-        responseType: 'json'
-      })
-    }
-  };
-}
-
-/*
- * Fetch user authorization.
- */
-export function fetchUserAuthorization(user) {
-  return {
-    type: constants.FETCH_USER_AUTHORIZATION,
-    meta: {
-      userId: user.user_id
-    },
-    payload: {
-      promise: axios({
-        method: 'post',
-        url: `/api/authorize/${user.user_id}`,
-        data: {
-          connectionName: user.identities[0].connection,
-          groups: user.groups
-        },
-        timeout: 5000,
         responseType: 'json'
       })
     }
@@ -80,131 +61,91 @@ export function fetchUserAuthorization(user) {
  */
 export function fetchUser(userId) {
   return (dispatch) => {
-    dispatch(fetchUserDetail(userId, (payload) => {
-      dispatch(fetchUserAuthorization(payload.data.user));
-    }));
-    dispatch(fetchUserLogs(userId));
+    dispatch(fetchUserDetail(userId));
     dispatch(fetchUserGroups(userId));
-    dispatch(fetchUserDevices(userId));
+    dispatch(fetchUserNestedGroups(userId));
   };
 }
 
-/*
- * Get confirmation to remove MFA from a user.
- */
-export function requestRemoveMultiFactor(user) {
+export function openAddRoles() {
   return {
-    type: constants.REQUEST_REMOVE_MULTIFACTOR,
-    user
+    type: constants.ADD_ROLES_OPEN
   };
 }
 
-/*
- * Cancel the removal process.
- */
-export function cancelRemoveMultiFactor() {
+export function closeAddRoles() {
   return {
-    type: constants.CANCEL_REMOVE_MULTIFACTOR
+    type: constants.ADD_ROLES_CLOSE
   };
 }
 
-/*
- * Remove multi factor from a user.
- */
-export function removeMultiFactor(userId, provider) {
-  return (dispatch, getState) => {
-    const userId = getState().mfa.get('userId');
-    dispatch({
-      type: constants.REMOVE_MULTIFACTOR,
-      payload: {
-        promise: axios.delete(`/api/users/${userId}/multifactor/${provider}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        userId
-      }
-    });
-  };
-}
-
-/*
- * Get confirmation to block a user.
- */
-export function requestBlockUser(user) {
+export function saveUserRoles(user, data, onSuccess) {
   return {
-    type: constants.REQUEST_BLOCK_USER,
-    user
+    type: constants.SAVE_USER_ROLES,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: `/api/users/${user.user_id}/roles`,
+        data,
+        responseType: 'json'
+      })
+    },
+    meta: {
+      onSuccess
+    }
   };
 }
 
-/*
- * Cancel blocking a user.
- */
-export function cancelBlockUser() {
+export function fetchRolesForUser(userId) {
   return {
-    type: constants.CANCEL_BLOCK_USER
+    type: constants.FETCH_USER_ROLES,
+    payload: {
+      promise: axios.get(`/api/users/${userId}/roles`, {
+        responseType: 'json'
+      })
+    }
   };
 }
 
-/*
- * Block a user.
- */
-export function blockUser() {
-  return (dispatch, getState) => {
-    const userId = getState().block.get('userId');
-    dispatch({
-      type: constants.BLOCK_USER,
-      payload: {
-        promise: axios.post(`/api/users/${userId}/block`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        userId
-      }
-    });
-  };
-}
-
-/*
- * Get confirmation to unblock a user.
- */
-export function requestUnblockUser(user) {
+export function fetchAllRolesForUser(userId) {
   return {
-    type: constants.REQUEST_UNBLOCK_USER,
-    user
+    type: constants.FETCH_USER_ALL_ROLES,
+    payload: {
+      promise: axios.get(`/api/users/${userId}/roles/calculate`, {
+        responseType: 'json'
+      })
+    }
   };
 }
 
-/*
- * Cancel unblocking a user.
- */
-export function cancelUnblockUser() {
+export function requestDeleteUserRole(role) {
   return {
-    type: constants.CANCEL_UNBLOCK_USER
+    type: constants.REQUEST_DELETE_USER_ROLE,
+    meta: {
+      role
+    }
   };
 }
 
-/*
- * Unblock a user.
- */
-export function unblockUser() {
-  return (dispatch, getState) => {
-    const userId = getState().unblock.get('userId');
-    dispatch({
-      type: constants.UNBLOCK_USER,
-      payload: {
-        promise: axios.post(`/api/users/${userId}/unblock`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        userId
-      }
-    });
+export function cancelDeleteUserRole() {
+  return {
+    type: constants.CANCEL_DELETE_USER_ROLE
+  };
+}
+
+export function deleteUserRole(user, role, onSuccess) {
+  return {
+    type: constants.DELETE_USER_ROLE,
+    payload: {
+      promise: axios({
+        method: 'delete',
+        url: `/api/users/${user.user_id}/roles`,
+        data: [ role._id ], // eslint-disable-line no-underscore-dangle
+        responseType: 'json'
+      })
+    },
+    meta: {
+      onSuccess
+    }
   };
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Error, Json, LoadingPanel } from '../Dashboard';
+import { Error, Json, LoadingPanel } from 'auth0-extension-ui';
 
 class UserProfile extends Component {
   shouldComponentUpdate(nextProps) {
@@ -8,11 +8,13 @@ class UserProfile extends Component {
 
   render() {
     const { user, error, loading } = this.props;
-    return <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+    return (
+      <LoadingPanel show={loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
         <Error message={error}>
           <Json jsonObject={user.toJS()} />
         </Error>
-      </LoadingPanel>;
+      </LoadingPanel>
+    );
   }
 }
 

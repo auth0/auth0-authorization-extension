@@ -1,24 +1,54 @@
-import * as constants from '../constants';
 import axios from 'axios';
+import _ from 'lodash';
 
-export function fetchRoles(reload = false) {
-  return (dispatch, getState) => {
-    if (reload || !getState().roles.get('records').size) {
-      dispatch({
-        type: constants.FETCH_ROLES,
-        payload: {
-          promise: axios.get('/api/roles', {
-            timeout: 5000,
-            responseType: 'json'
-          })
-        }
-      });
+import * as constants from '../constants';
+
+/*
+ * Load all available roles.
+ */
+export function fetchRoles(q = '', field = '') {
+  return {
+    type: constants.FETCH_ROLES,
+    payload: {
+      promise: axios.get('/api/roles', {
+        params: {
+          q,
+          field
+        },
+        responseType: 'json'
+      })
     }
   };
 }
 
 /*
- * Create a role.
+ * Load the details of a single role.
+ */
+export function fetchRoleDetails(roleId) {
+  return {
+    type: constants.FETCH_ROLE,
+    meta: {
+      roleId
+    },
+    payload: {
+      promise: axios.get(`/api/roles/${roleId}`, {
+        responseType: 'json'
+      })
+    }
+  };
+}
+
+/*
+ * Load a single role.
+ */
+export function fetchRole(roleId) {
+  return (dispatch) => {
+    dispatch(fetchRoleDetails(roleId));
+  };
+}
+
+/*
+ * Create a new role.
  */
 export function createRole() {
   return {
@@ -26,8 +56,17 @@ export function createRole() {
   };
 }
 
+export function roleApplicationSelected(applicationId) {
+  return {
+    type: constants.ROLE_APPLICATION_SELECTED,
+    payload: {
+      applicationId
+    }
+  };
+}
+
 /*
- * Edit a role.
+ * Edit a specific role.
  */
 export function editRole(role) {
   return {
@@ -38,7 +77,12 @@ export function editRole(role) {
   };
 }
 
+/*
+ * Save the details of a role (name, descripton)
+ */
 export function saveRole(role) {
+  const roleData = _.pick(role, [ 'applicationId', 'applicationType', 'description', 'name', 'permissions' ]);
+
   return (dispatch, getState) => {
     const state = getState().role.toJS();
     dispatch({
@@ -47,22 +91,24 @@ export function saveRole(role) {
         promise: axios({
           method: state.isNew ? 'post' : 'put',
           url: state.isNew ? '/api/roles' : `/api/roles/${state.roleId}`,
-          data: role,
-          timeout: 5000,
+          data: {
+            applicationType: 'client',
+            ...roleData
+          },
           responseType: 'json'
         })
       },
       meta: {
         isNew: state.isNew,
-        role: role,
-        roleId: state.roleId || role.name
+        roleData,
+        roleId: state.roleId || roleData.name
       }
     });
   };
 }
 
 /*
- * Get confirmation to delete a role.
+ * Request if we can delete the current role?
  */
 export function requestDeleteRole(role) {
   return {
@@ -74,7 +120,7 @@ export function requestDeleteRole(role) {
 }
 
 /*
- * Cancel deleting a role.
+ * Cancel the delete process.
  */
 export function cancelDeleteRole() {
   return {
@@ -83,30 +129,25 @@ export function cancelDeleteRole() {
 }
 
 /*
- * Delete a role.
+ * Delete the role.
  */
-export function deleteRole() {
-  return (dispatch, getState) => {
-    const role = getState().role.get('role');
-    const roleId = getState().role.get('roleId');
-    dispatch({
-      type: constants.DELETE_ROLE,
-      payload: {
-        promise: axios.delete(`/api/roles/${roleId}`, {
-          timeout: 5000,
-          responseType: 'json'
-        })
-      },
-      meta: {
-        role,
-        roleId
-      }
-    });
+export function deleteRole(role) {
+  return {
+    type: constants.DELETE_ROLE,
+    payload: {
+      promise: axios.delete(`/api/roles/${role._id}`, {
+        responseType: 'json'
+      })
+    },
+    meta: {
+      role,
+      roleId: role._id
+    }
   };
 }
 
 /*
- * Clear the current role.
+ * Clear the selected role.
  */
 export function clearRole() {
   return {

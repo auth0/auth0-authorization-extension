@@ -2,18 +2,25 @@ import React, { Component, PropTypes } from 'react';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import UserGroupRemoveAction from './UserGroupRemoveAction';
-import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '../Dashboard';
+import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
 
 class UserGroups extends Component {
   constructor() {
     super();
 
+    this.state = {
+      showUserGroups: true
+    };
+
     this.addToGroup = this.addToGroup.bind(this);
     this.removeFromGroup = this.removeFromGroup.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.user !== this.props.user || nextProps.groups !== this.props.groups || nextProps.allGroups !== this.props.allGroups;
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.user !== this.props.user ||
+    nextProps.groups !== this.props.groups ||
+    nextProps.allGroups !== this.props.allGroups ||
+    nextState.showUserGroups !== this.state.showUserGroups;
   }
 
   getHelpText(groups) {
@@ -21,7 +28,13 @@ class UserGroups extends Component {
       return <span>This user does not belong to any groups.</span>;
     }
 
-    return <span>These are the explicit group memberships of the user where a user has directly been added to a group.</span>;
+    return <span>This is the list of groups to which a user has directly been added to.</span>;
+  }
+
+  setShowUserGroups = (showUserGroups) => {
+    this.setState({
+      showUserGroups
+    });
   }
 
   addToGroup() {
@@ -32,29 +45,29 @@ class UserGroups extends Component {
     this.props.removeFromGroup(this.props.user.toJS(), group);
   }
 
-  renderGroups(error, loading, groups, actionRenderer) {
+  renderGroups(error, loading, groups, showIcon, actionRenderer) {
     if (!error && groups.length === 0) {
-      return <div></div>;
+      return null;
     }
 
     return (
       <Table>
         <TableHeader>
-          <TableColumn width="3%" />
+          { showIcon ? <TableColumn width="3%" /> : null }
           <TableColumn width="30%">Name</TableColumn>
           <TableColumn width="60%">Description</TableColumn>
-          <TableColumn width="10%" />
+          { showIcon ? <TableColumn width="7%" /> : <TableColumn width="10%" /> }
         </TableHeader>
         <TableBody>
-        {groups.map((group, index) =>
-          <TableRow key={index}>
-            <TableIconCell color="green" icon="322" />
-            <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
-            <TableTextCell>{group.description}</TableTextCell>
-            <TableCell>
-              {actionRenderer(group, index)}
-            </TableCell>
-          </TableRow>
+          {groups.map((group, index) =>
+            <TableRow key={index}>
+              { showIcon ? <TableIconCell color="green" icon="322" /> : null }
+              <TableRouteCell route={`/groups/${group._id}`}>{ group.name || 'N/A' }</TableRouteCell>
+              <TableTextCell>{group.description}</TableTextCell>
+              <TableCell style={{ paddingRight: 0, textAlign: 'right' }}>
+                { actionRenderer ? actionRenderer(group, index) : null }
+              </TableCell>
+            </TableRow>
         )}
         </TableBody>
       </Table>
@@ -70,27 +83,30 @@ class UserGroups extends Component {
       <div>
         <div className="row">
           <div className="col-xs-12">
-            <h4>All Group Memberships</h4>
-            <span className="pull-left">The following table lists <strong>all</strong> group memberships for the user. This includes both explicit memberships and dynamic group memberships as the result of a mapping. <strong>Heads up:</strong> This list is cached for performance reasons and it could take a few seconds before changes are visible here.</span>
+            <span className="pull-left">The following table lists <strong>all</strong> group memberships for the user. This includes both direct memberships and indirect memberships as the result of a mapping or nested groups. <strong>Heads up:</strong> This list is cached for performance reasons and it could take a few seconds before changes are visible here.</span>
           </div>
         </div>
-        <LoadingPanel show={allGroups.loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <Error message={allGroups.error} />
-          <Table>
-            <TableHeader>
-              <TableColumn width="3%" />
-              <TableColumn width="97%">Name</TableColumn>
-            </TableHeader>
-            <TableBody>
-            {allGroups.records.map((group, index) =>
-              <TableRow key={index}>
-                <TableIconCell color="green" icon="322" />
-                <TableTextCell>{group}</TableTextCell>
-              </TableRow>
-            )}
-            </TableBody>
-          </Table>
-        </LoadingPanel>
+        { this.renderGroups(allGroups.error, allGroups.loading, allGroups.records, true) }
+      </div>
+    );
+  }
+
+  renderUserGroups(groups) {
+    return (
+      <div>
+        <div className="row" style={{ marginBottom: '20px' }}>
+          <div className="col-xs-8">
+            <p>{this.getHelpText(groups.records)}</p>
+          </div>
+          <div className="col-xs-4">
+            <Button className="pull-right" bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
+              <i className="icon icon-budicon-473" /> Add user to groups
+            </Button>
+          </div>
+        </div>
+        { this.renderGroups(groups.error, groups.loading, groups.records, false, (group, index) => (
+          <UserGroupRemoveAction index={index} group={group} loading={groups.loading} onRemove={this.removeFromGroup} />
+        )) }
       </div>
     );
   }
@@ -101,29 +117,30 @@ class UserGroups extends Component {
 
     return (
       <div>
-        <div className="row">
-          <div className="col-xs-12">
-            <h4>Explicit Group Memberships</h4>
-            <span className="pull-left">{this.getHelpText(groups.records)}</span>
-            <ButtonToolbar className="pull-right">
-              <Button bsStyle="primary" bsSize="xsmall" onClick={this.addToGroup} disabled={groups.loading}>
-                <i className="icon icon-budicon-337"></i> Add
-              </Button>
-            </ButtonToolbar>
+        <LoadingPanel show={groups.loading || allGroups.loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
+
+          <div className="row">
+            <div className="col-xs-12">
+              <Error message={groups.error || allGroups.error} />
+            </div>
           </div>
-        </div>
-        <LoadingPanel show={groups.loading} animationStyle={{ paddingTop: '5px', paddingBottom: '5px' }}>
-          <Error message={groups.error} />
-          {this.renderGroups(groups.error, groups.loading, groups.records, (group, index) => {
-            return (
-              <ButtonToolbar style={{ marginBottom: '0px' }}>
-                <UserGroupRemoveAction index={index} group={group} loading={groups.loading} onRemove={this.removeFromGroup} />
-              </ButtonToolbar>
-            );
-          })}
+          <div className="row" style={{ marginBottom: '20px' }}>
+            <div className="col-xs-12">
+              <ul className="nav nav-pills">
+                <li className={this.state.showUserGroups ? 'active' : null} >
+                  <a onClick={() => this.setShowUserGroups(true)}>Groups</a>
+                </li>
+                <li className={!this.state.showUserGroups ? 'active' : null}>
+                  <a onClick={() => this.setShowUserGroups(false)}>Nested Groups</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          { this.state.showUserGroups ?
+            this.renderUserGroups(groups) :
+            this.renderAllGroups(allGroups) }
         </LoadingPanel>
-        {this.renderAllGroups(allGroups)}
-    </div>
+      </div>
     );
   }
 }

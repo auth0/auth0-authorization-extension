@@ -1,29 +1,59 @@
-import './Header.css';
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
+import './Header.styl';
 
-class Header extends Component {
+export default class Header extends Component {
+  static propTypes = {
+    user: PropTypes.object,
+    issuer: PropTypes.string,
+    onLogout: PropTypes.func.isRequired,
+    openAPI: PropTypes.func.isRequired,
+    openConfiguration: PropTypes.func.isRequired
+  }
+
+  getPicture(iss) {
+    return `https://cdn.auth0.com/avatars/${iss.slice(0, 2).toLowerCase()}.png`;
+  }
+
   render() {
-    const { user, onLogout } = this.props;
-    return <header className="dashboard-header" style={{ backgroundColor: '#fbfbfb' }}>
+    const { user, issuer, onLogout, openAPI, openConfiguration } = this.props;
+    return (<header className="extension-header">
       <nav role="navigation" className="navbar navbar-default">
         <div className="container">
-          <div className="navbar-header">
-            <img src="http://cdn.auth0.com/extensions/auth0-authz/assets/app_logo.svg" style={{float: 'left', minWidth: '55px', minHeight: '55px', display: 'block', marginRight: '15px'}}></img>
-            <a className="navbar-brand" href="#" style={{width: '50%'}}>Authorization Dashboard</a>
+          <div className="extension-header-logo">
+            <div className="auth0-logo" />
+            <h1 className="extension-name">Authorization Extension</h1>
           </div>
           <div id="navbar-collapse" className="collapse navbar-collapse">
             <ul className="nav navbar-nav navbar-right">
+              <li>
+                <a href="https://auth0.com/docs/extensions/authorization-extension">Help</a>
+              </li>
+              <li>
+                <a href="https://manage.auth0.com/">Dashboard</a>
+              </li>
               <li className="dropdown">
-                <span role="button" data-toggle="dropdown" data-target="#" className="btn-dro btn-username">
-                  <img src={user.get('picture')} className="picture avatar" />
-                  <span className="username-text truncate">
-                    {user.get('nickname') || user.get('email')}
+                <span role="button" data-toggle="dropdown" data-target="#" className="btn-username">
+                  <img src={this.getPicture(window.config.AUTH0_DOMAIN)} className="avatar" />
+                  <span className="username-text">
+                    { window.config.AUTH0_DOMAIN }
                   </span>
-                  <i className="icon-budicon-460"></i>
+                  <i className="icon-budicon-460 toggle-icon" />
                 </span>
                 <ul role="menu" className="dropdown-menu">
                   <li role="presentation">
-                    <a href="#" role="menuitem" tabIndex="-1" onClick={onLogout}>
+                    <a role="menuitem" tabIndex="-1" onClick={openConfiguration}>
+                      Configuration
+                    </a>
+                  </li>
+                  <li role="presentation" className="divider" />
+                  <li role="presentation">
+                    <a role="menuitem" tabIndex="-1" onClick={openAPI}>
+                      API
+                    </a>
+                  </li>
+                  <li role="presentation" className="divider" />
+                  <li role="presentation">
+                    <a role="menuitem" tabIndex="-1" onClick={onLogout}>
                       Logout
                     </a>
                   </li>
@@ -33,13 +63,6 @@ class Header extends Component {
           </div>
         </div>
       </nav>
-    </header>;
+    </header>);
   }
 }
-
-Header.propTypes = {
-  user: React.PropTypes.object,
-  onLogout: React.PropTypes.func.isRequired
-};
-
-export default Header;

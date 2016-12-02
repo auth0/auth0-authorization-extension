@@ -5,10 +5,11 @@ import * as constants from '../constants';
 import createReducer from '../utils/createReducer';
 
 const initialState = {
-  loading : false,
+  loading: false,
   error: null,
   records: [],
-  total: 0
+  total: 0,
+  fetchQuery: null
 };
 
 export const users = createReducer(fromJS(initialState), {
@@ -28,12 +29,17 @@ export const users = createReducer(fromJS(initialState), {
       loading: false,
       total: data.total,
       nextPage: action.meta.page + 1,
-      records: state.get('records').concat(fromJS(data.users.map(user => {
+      records: fromJS(data.users.map(user => {
         user.last_login_relative = moment(user.last_login).fromNow();
         return user;
-      })))
+      })),
+      fetchQuery: action.payload.config && action.payload.config.params ? action.payload.config.params.q : null
     });
   },
+  [constants.RESET_FETCH_USERS]: (state, action) =>
+    state.merge({
+      records: []
+    }),
   [constants.BLOCK_USER_FULFILLED]: (state, action) =>
     state.updateIn(
       [ 'records', state.get('records').findIndex(p => p.get('user_id') === action.meta.userId), 'blocked' ], () => true

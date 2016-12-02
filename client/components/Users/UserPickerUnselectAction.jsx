@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-import { TableAction } from '../Dashboard';
+import { TableAction } from 'auth0-extension-ui';
 
 class UserPickerUnselectAction extends Component {
   constructor() {
@@ -15,7 +15,8 @@ class UserPickerUnselectAction extends Component {
   render() {
     const { index, loading } = this.props;
     return (
-      <TableAction id={`unselect-user-${index}`} type="success" title="Unselect" icon="296"
+      <TableAction
+        id={`unselect-user-${index}`} type="success" title="Unselect" icon="296"
         onClick={this.onUnselect} disabled={loading || false}
       />
     );

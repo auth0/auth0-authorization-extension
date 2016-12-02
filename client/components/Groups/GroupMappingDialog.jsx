@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Modal } from 'react-bootstrap';
 
-import { Error } from '../Dashboard';
+import { Error } from 'auth0-extension-ui';
 import GroupMappingForm from './GroupMappingForm';
 
 class GroupMappingDialog extends Component {
@@ -16,12 +16,8 @@ class GroupMappingDialog extends Component {
 
   onSave(groupMapping) {
     const groupReducer = this.props.group.toJS();
-    const mappingReducer = this.props.groupMapping.toJS();
 
-    this.props.onSave(groupReducer.record, {
-      _id: mappingReducer.groupMappingId,
-      ...groupMapping
-    });
+    this.props.onSave(groupReducer.record, groupMapping);
   }
 
   render() {
@@ -33,12 +29,18 @@ class GroupMappingDialog extends Component {
 
     return (
       <Modal show={isVisible} onHide={this.props.onClose}>
-        <Modal.Header closeButton={!mapping.loading}>
+        <Modal.Header closeButton={!mapping.loading} className="has-border">
           <Modal.Title>{title}</Modal.Title>
         </Modal.Header>
-        <GroupMappingForm loading={mapping.loading} connections={connections.records} initialValues={mapping.record} validationErrors={mapping.validationErrors}
-          onClose={this.props.onClose} onSubmit={this.onSave}>
-            <Error message={mapping.error} />
+        <GroupMappingForm
+          loading={mapping.loading}
+          connections={connections.records}
+          initialValues={mapping.record}
+          validationErrors={mapping.validationErrors}
+          onClose={this.props.onClose}
+          onSubmit={this.onSave}
+        >
+          <Error message={mapping.error} />
         </GroupMappingForm>
       </Modal>
     );
