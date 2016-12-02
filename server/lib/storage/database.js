@@ -98,8 +98,6 @@ export default class Database {
           `Permission with name "${permission.name}" already exists for this application`,
           id
         ))
-      .then(() => this.canChange('roles', 'permissions', id))
-      .then(() => this.canChange('groups', 'permissions', id))
       .then(() => this.provider.update('permissions', id, permission));
   }
 

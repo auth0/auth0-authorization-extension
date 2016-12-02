@@ -4,6 +4,7 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/policy/routes/post_user')(server));
   server.route(require('../api/applications/routes/get_application')(server));
   server.route(require('../api/applications/routes/get_applications')(server));
+  server.route(require('../api/applications/routes/put_application_replace')(server));
   server.route(require('../api/configuration/routes/get_configuration_status')(server));
   server.route(require('../api/configuration/routes/get_configuration')(server));
   server.route(require('../api/configuration/routes/get_export')(server));
