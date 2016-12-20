@@ -25,7 +25,8 @@ export default class RoleDialog extends Component {
     const title = role.isNew ? 'Create Role' : `Edit Role: ${role.record.name}`;
     const isVisible = role.isEdit || role.isNew;
 
-    const applicationId = applications && applications.records && applications.records[0] && applications.records[0].client_id;
+    const applicationId = role.record.applicationId || (applications && applications.records && applications.records[0] && applications.records[0].client_id);
+
     return (
       <Modal show={isVisible} onHide={this.props.onClose}>
         <Modal.Header closeButton={!role.loading} className="has-border">
@@ -33,7 +34,7 @@ export default class RoleDialog extends Component {
         </Modal.Header>
         <RoleForm
           isNew={role.isNew} applications={applications.records} permissions={permissions.records} loading={role.loading}
-          initialValues={{ ...role.record, applicationId: role.record.applicationId || applicationId }}
+          initialValues={{ ...role.record, applicationId }}
           validationErrors={role.validationErrors}
           onClose={this.props.onClose} onSubmit={this.props.onSave}
           page={role.page}
