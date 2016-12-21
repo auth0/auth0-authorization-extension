@@ -1,3 +1,7 @@
+## [2.0.10] - 2016-12-21
+
+- The rule template will now fallback to user.identities.connectionName when the delegation endpoint is being used
+
 ## [2.0.9] - 2016-12-21
 
 - Group / Members tab has error if you delete a user in the Dashboard that's been assigned to the group [#126](https://github.com/auth0/auth0-authorization-extension/issues/123)
