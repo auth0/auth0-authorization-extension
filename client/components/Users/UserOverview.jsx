@@ -77,7 +77,7 @@ class UserOverview extends React.Component {
             <UserIcon />
           </div>
         }
-        description="Lorem ipsum dolor sit amet."
+        description="It looks like you don't have any users yet! You'll need users to sign up through Auth0 first before you can assign them to groups."
       >
         <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
           Read more
