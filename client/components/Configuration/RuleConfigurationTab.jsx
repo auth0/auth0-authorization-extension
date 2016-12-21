@@ -38,7 +38,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
         },
         {
           title: 'Permissions',
-          description: (<span>Persist <strong>description</strong> in the user's application metadata.</span>),
+          description: (<span>Persist <strong>permissions</strong> in the user's application metadata.</span>),
           name: 'persistPermissions'
         }
       ],
