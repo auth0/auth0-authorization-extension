@@ -16,8 +16,23 @@ export function getUsersById(client, ids, page, limit) {
           cb();
         })
         .catch((err) => {
-          if (err && err.errorCode === 'inexistent_user') {
-            return cb();
+          if (err && err.name === 'APIError') {
+            try {
+              const apiError = JSON.parse(err.message);
+              if (apiError.errorCode === 'inexistent_user') {
+                users.push({
+                  user_id: userId,
+                  name: '<User Not Found>',
+                  email: userId,
+                  identities: [
+                    { connection: 'N/A' }
+                  ]
+                });
+                return cb();
+              }
+            } catch (e) {
+              return cb(err);
+            }
           }
 
           return cb(err);
