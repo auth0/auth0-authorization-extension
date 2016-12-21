@@ -25,7 +25,7 @@ export default class RoleDialog extends Component {
     const title = role.isNew ? 'Create Role' : `Edit Role: ${role.record.name}`;
     const isVisible = role.isEdit || role.isNew;
 
-    const applicationId = applications && applications.records && applications.records[0] && applications.records[0].client_id;
+    const applicationId = role.record.applicationId || (applications && applications.records && applications.records[0] && applications.records[0].client_id);
 
     return (
       <Modal show={isVisible} onHide={this.props.onClose}>
