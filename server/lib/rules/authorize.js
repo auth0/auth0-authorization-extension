@@ -43,7 +43,7 @@ function (user, context, callback) {
         "x-api-key": "<%= apiKey %>"
       },
       json: {
-        connectionName: context.connection,
+        connectionName: context.connection || user.identities[0].connection,
         groups: user.groups
       },
       timeout: 5000
