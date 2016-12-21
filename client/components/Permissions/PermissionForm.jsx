@@ -30,22 +30,22 @@ export default createForm('permission', class extends Component {
           {this.props.children}
           <LoadingPanel show={loading}>
             <p className="modal-description">Select the application for which this permission applies to and give it a name.</p>
-
-            <Field
-              name="name" component={InputText}
-              label="Name" placeholder="e.g. read:invoce, delete:user, edit:book"
-              validationErrors={validationErrors}
-            />
-            <Field
-              name="description" component={InputText}
-              label="Description" validationErrors={validationErrors}
-            />
-            <Field
-              name="applicationId" component={InputCombo}
-              options={applications} label="Application"
-              validationErrors={validationErrors}
-            />
-
+            <form className="form-horizontal">
+              <Field
+                name="name" component={InputText}
+                label="Name" placeholder="e.g. read:invoce, delete:user, edit:book"
+                validationErrors={validationErrors}
+              />
+              <Field
+                name="description" component={InputText}
+                label="Description" validationErrors={validationErrors}
+              />
+              <Field
+                name="applicationId" component={InputCombo}
+                options={applications} label="Application"
+                validationErrors={validationErrors}
+              />
+            </form>
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
