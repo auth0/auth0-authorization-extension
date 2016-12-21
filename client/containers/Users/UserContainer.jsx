@@ -19,10 +19,10 @@ export class UserContainer extends Component {
   constructor() {
     super();
 
-    this.requestAddToGroup   = this.requestAddToGroup.bind(this);
-    this.addToGroup          = this.addToGroup.bind(this);
-    this.cancelRemoveMember  = this.cancelRemoveMember.bind(this);
-    this.removeMember        = this.removeMember.bind(this);
+    this.requestAddToGroup = this.requestAddToGroup.bind(this);
+    this.addToGroup = this.addToGroup.bind(this);
+    this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
+    this.removeMember = this.removeMember.bind(this);
     this.requestRemoveMember = this.requestRemoveMember.bind(this);
   }
 

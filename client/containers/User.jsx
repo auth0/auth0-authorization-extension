@@ -15,6 +15,9 @@ export class UserContainer extends Component {
   constructor() {
     super();
 
+    this.state = {
+      selectedTab: 2
+    };
     this.requestAddToGroup = this.requestAddToGroup.bind(this);
     this.addToGroup = this.addToGroup.bind(this);
     this.cancelRemoveMember = this.cancelRemoveMember.bind(this);
@@ -40,6 +43,7 @@ export class UserContainer extends Component {
     if (groupIds.length) {
       this.props.addUserToGroups(this.props.user.record.get('user_id'), groupIds, () => {
         this.props.fetchUserGroups(this.props.user.record.get('user_id'));
+        this.props.fetchAllRolesForUser(this.props.user.record.get('user_id'));
       });
     }
   }
@@ -49,12 +53,20 @@ export class UserContainer extends Component {
   }
 
   removeMember(groupId, userId) {
-    this.props.removeGroupMember(groupId, userId);
+    this.props.removeGroupMember(groupId, userId, () => {
+      this.props.fetchAllRolesForUser(userId);
+    });
   }
 
   requestRemoveMember(user, group) {
     this.props.requestRemoveGroupMember(group, user);
   }
+
+  onTabChanged = (key) => {
+    this.setState({
+      selectedTab: key
+    });
+  };
 
   renderLoading() {
     return (
@@ -77,7 +89,7 @@ export class UserContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={2} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
+            <Tabs onSelect={this.onTabChanged} defaultActiveKey={this.state.selectedTab} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
               <Tab eventKey={1} title="Profile">
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
@@ -99,6 +111,7 @@ export class UserContainer extends Component {
                   loading={user.loading}
                   applications={this.props.applications}
                   fetchRolesForUser={this.props.fetchRolesForUser}
+                  fetchAllRolesForUser={this.props.fetchAllRolesForUser}
                   userId={this.props.params.id}
                 />
               </Tab>
