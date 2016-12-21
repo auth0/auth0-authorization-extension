@@ -6,7 +6,6 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 const project = require('../../package.json');
 const logger = require('../../server/lib/logger');
-logger.info('Running production configuration...');
 
 const config = require('./config.base.js');
 config.profile = false;
