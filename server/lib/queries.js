@@ -154,7 +154,11 @@ export const getRolesForUser = (database, userId) =>
     .then(roles => _.uniq(_.flattenDeep(roles)))
     .then(roleIds =>
       database.getRoles()
-        .then(roles => _.filter(roles, role => _.includes(roleIds, role._id)))
+        .then(roles => {
+          const groupRoles = _.filter(roles, role => _.includes(roleIds, role._id));
+          const userRoles = _.filter(roles, role => role.users && _.includes(role.users, userId));
+          return _.uniq([ ...groupRoles, ...userRoles ], '_id');
+        })
     );
 
 

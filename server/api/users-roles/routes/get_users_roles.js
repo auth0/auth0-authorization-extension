@@ -26,6 +26,6 @@ module.exports = () => ({
         applicationId: role.applicationId,
         description: role.description
       })))
-      .then(groups => reply(groups))
+      .then(roles => reply(roles))
       .catch(err => reply.error(err))
 });

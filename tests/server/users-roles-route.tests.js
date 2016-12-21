@@ -10,10 +10,18 @@ describe('users-groups-route', () => {
     roles: [ 'C56a418065aa426ca9455fd21deC0538' ],
     members: [ 'userId' ]
   };
+  const emptyGroup = {
+    _id: 'C56a418065aa426ca9455fd21deC0538',
+    name: 'test-group-2'
+  };
   const role = {
     _id: 'B56a418065aa426ca9455fd21deC0538',
     name: 'test-role',
     users: [ 'userId' ]
+  };
+  const emptyRole = {
+    _id: 'D56a418065aa426ca9455fd21deC0538',
+    name: 'test-role-2'
   };
   const groupRole = {
     _id: 'C56a418065aa426ca9455fd21deC0538',
@@ -21,8 +29,8 @@ describe('users-groups-route', () => {
   };
 
   before((done) => {
-    db.getGroups = () => Promise.resolve([ group ]);
-    db.getRoles = () => Promise.resolve([ role, groupRole ]);
+    db.getGroups = () => Promise.resolve([ emptyGroup, group ]);
+    db.getRoles = () => Promise.resolve([ role, emptyRole, groupRole ]);
     db.getRole = () => Promise.resolve(groupRole);
     db.updateRole = (id, data) => {
       groupRole.id = id;
@@ -109,6 +117,8 @@ describe('users-groups-route', () => {
         expect(response.result).to.be.a('array');
         expect(response.result[0]._id).to.be.equal(groupRole._id);
         expect(response.result[0].name).to.be.equal(groupRole.name);
+        expect(response.result[1]._id).to.be.equal(role._id);
+        expect(response.result[1].name).to.be.equal(role.name);
         cb();
       });
     });
