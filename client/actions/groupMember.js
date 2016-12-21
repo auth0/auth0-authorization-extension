@@ -119,7 +119,7 @@ export function cancelRemoveGroupMember() {
 /*
  * Remove a member from the group.
  */
-export function removeGroupMember(groupId, userId) {
+export function removeGroupMember(groupId, userId, callback) {
   return {
     type: constants.REMOVE_GROUP_MEMBER,
     payload: {
@@ -132,7 +132,8 @@ export function removeGroupMember(groupId, userId) {
     },
     meta: {
       userId,
-      groupId
+      groupId,
+      onSuccess: callback
     }
   };
 }

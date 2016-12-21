@@ -70,7 +70,7 @@ export default class ItemRolesDialog extends React.Component {
             </TableHeader>
             <TableBody>
               {_.sortBy(options, 'name').map((option, index) =>
-                <TableRow>
+                <TableRow key={`role-item-${option._id}`}>
                   <TableCell>
                     <input
                       value={option._id}

@@ -29,6 +29,11 @@ class UserRoles extends Component {
     }
   };
 
+  fetchRoles = () => {
+    this.props.fetchRolesForUser(this.props.userId);
+    this.props.fetchAllRolesForUser(this.props.userId);
+  };
+
   renderUserRoles(error, loading, userRoles) {
     return (
       <div>
@@ -61,7 +66,7 @@ class UserRoles extends Component {
             cancelDeleteRole={this.props.cancelDeleteRole}
             deleteRole={this.props.deleteRole}
             item={this.props.user}
-            fetchRolesForItem={this.props.fetchRolesForUser}
+            fetchRolesForItem={this.fetchRoles}
             itemId={this.props.userId}
           />
         </div>
