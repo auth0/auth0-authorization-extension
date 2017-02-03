@@ -134,11 +134,13 @@ class GroupsOverview extends React.Component {
   getUserPickerDialogUsers(records) {
     let users = [ ];
     if (records && records.length) {
-      users = _.map(records, (user) => ({
-        value: user.email,
-        label: user.name,
-        userId: user.user_id
-      }));
+      users = _.map(records, (user) => {
+        const value = `${user.email || user.name} - ${user.identities[0].connection}`;
+        const userId = user.user_id;
+        const label = user.name === user.email ? null : user.name;
+
+        return { value, label, userId };
+      });
     }
     return users;
   }
