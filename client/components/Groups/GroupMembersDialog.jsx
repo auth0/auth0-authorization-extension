@@ -28,7 +28,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
   }
 
   getOptions(input, callback) {
-    const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}* OR user_id:${input}`;
+    const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
     this.props.fetchUsers(query, null, true, null, null, () => {
       callback(null, {
         options: this.props.users,
