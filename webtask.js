@@ -25,5 +25,8 @@ const createServer = tools.createServer((wtConfig, wtStorage) => {
 
 module.exports = (context, req, res) => {
   config.setValue('PUBLIC_WT_URL', webtask.getUrl(req));
+  if (req.headers['x-forwarded-proto'] ) {
+    req.headers['x-forwarded-proto'] = req.headers['x-forwarded-proto'].split(',').shift();
+  }
   createServer(context, req, res);
 };
