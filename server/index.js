@@ -55,26 +55,7 @@ export default (cb) => {
     }
   });
 
-  const myPlugin = {
-    register: function (server, options, next) {
-      server.ext('onRequest', function (request, reply) {
-        // do something
-        if (request.headers['x-forwarded-proto'] ) {
-          request.headers['x-forwarded-proto'] = request.headers['x-forwarded-proto'].split(',').shift();
-        }
-        return reply.continue();
-      });
-      next();
-    }
-  };
-
-  myPlugin.register.attributes = {
-    name: 'myPlugin',
-    version: '1.0.0'
-  };
-
-
-  server.register([ myPlugin, goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
+  server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
     }
