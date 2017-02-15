@@ -54,6 +54,7 @@ export default (cb) => {
       }
     }
   });
+
   server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
     if (err) {
       return cb(err, null);
