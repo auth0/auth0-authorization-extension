@@ -1,3 +1,7 @@
+## [2.1.1] - 2017-02-17
+
+- Fixes to the build process
+
 ## [2.1.0] - 2017-02-17
 
 - Update `auth0-extension-hapi-tools` which fixes issues with the appliance, URL helpers and the logout url
