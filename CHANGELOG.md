@@ -1,3 +1,9 @@
+## [2.1.0] - 2017-02-17
+
+- Update `auth0-extension-hapi-tools` which fixes issues with the appliance, URL helpers and the logout url
+- Display the connection name in the user picker [#136](https://github.com/auth0/auth0-authorization-extension/pull/136)
+- Add `?expand=true` support to `/api/groups/<groupId>` ([commit](https://github.com/auth0/auth0-authorization-extension/commit/87463b12ad7529cdca7a65538b0951eb1c5b52e8))
+
 ## [2.0.10] - 2016-12-21
 
 - The rule template will now fallback to user.identities.connectionName when the delegation endpoint is being used
