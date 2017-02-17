@@ -33,8 +33,8 @@ class NestedGroups extends Component {
           <div className="row">
             <div className="col-xs-8">
               <p>
-                Add nested groups (sub groups) to this group.
-                All members of these nested groups will automatically become members of this group also.
+                Add nested groups (children) to this group.
+                All members of these nested groups will automatically become members of this group (and receive any roles or permissions that apply to this group).
               </p>
             </div>
             <div className="col-xs-4">

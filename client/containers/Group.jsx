@@ -36,6 +36,15 @@ export class GroupContainer extends Component {
     this.props.fetchApplications();
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps && nextProps.params && nextProps.params.id) {
+      if (this.props.params.id !== nextProps.params.id) {
+        this.props.fetchRolesForGroup(nextProps.params.id);
+        this.props.fetchGroup(nextProps.params.id);
+      }
+    }
+  }
+
   getUserPickerDialogUsers(records) {
     let users;
     if (records && records.length) {
