@@ -26,14 +26,16 @@ export default createForm('group', class GroupForm extends Component {
             </p>
           }
           {this.props.children}
-          <Field
-            name="name" component={InputText} label="Name"
-            validationErrors={validationErrors}
-          />
-          <Field
-            name="description" component={InputText}
-            label="Description" validationErrors={validationErrors}
-          />
+          <form className="form-horizontal">
+            <Field
+              name="name" component={InputText} label="Name"
+              validationErrors={validationErrors}
+            />
+            <Field
+              name="description" component={InputText}
+              label="Description" validationErrors={validationErrors}
+            />
+          </form>
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>

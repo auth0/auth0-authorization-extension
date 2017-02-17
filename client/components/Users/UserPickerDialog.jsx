@@ -77,13 +77,19 @@ export default createForm('userPicker', class UserPickerDialog extends Component
       <Confirm className="modal-overflow-visible" confirmMessage={confirmMessage} title={title} show={open} loading={loading} onCancel={this.onCancel} onConfirm={this.handleSubmit}>
         <Error message={error} />
         <p className="modal-description">
-          Select one or more users you wish to add.
+          Select one or more users you wish to add to this group.
         </p>
-        <Field
-          name="members"
-          component={Multiselect}
-          loadOptions={_.debounce((input, callback) => this.getOptions(input, callback), process.env.MULTISELECT_DEBOUNCE_MS)}
-        />
+        <form className="form-horizontal">
+          <div className="row">
+            <div className="col-xs-12">
+              <Field
+                name="members"
+                component={Multiselect}
+                loadOptions={_.debounce((input, callback) => this.getOptions(input, callback), process.env.MULTISELECT_DEBOUNCE_MS)}
+              />
+            </div>
+          </div>
+        </form>
       </Confirm>
     );
   }

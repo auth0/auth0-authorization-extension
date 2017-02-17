@@ -87,8 +87,14 @@ const roleForm = createForm('role', class extends Component {
 
     return (
       <div>
-        <strong>Permissions</strong>
-        <p>No permissions were created for this application yet.</p>
+        <div className="row">
+          <label className="control-label col-xs-3">
+            Permissions
+          </label>
+          <div className="col-xs-9" style={{ paddingTop: '7px' }}>
+            No permissions were created for this application yet.
+          </div>
+        </div>
       </div>);
   }
 
@@ -99,11 +105,13 @@ const roleForm = createForm('role', class extends Component {
           <p className="modal-description">
             Select the application for which you want to define a role for.
           </p>
-          <Field
-            name="applicationId" component={InputCombo}
-            options={this.state.applications} label="Application"
-            validationErrors={validationErrors} onChange={this.onApplicationChanged}
-          />
+          <form className="form-horizontal">
+            <Field
+              name="applicationId" component={InputCombo}
+              options={this.state.applications} label="Application"
+              validationErrors={validationErrors} onChange={this.onApplicationChanged}
+            />
+          </form>
         </div>
       );
     }
@@ -114,20 +122,22 @@ const roleForm = createForm('role', class extends Component {
         <p className="modal-description">
           Give the role a name, a description and add permissions to it.
         </p>
-        <Field
-          name="applicationId" component={InputCombo}
-          options={this.state.applications} label="Application"
-          validationErrors={validationErrors} disabled
-        />
-        <Field
-          name="name" component={InputText}
-          label="Name" validationErrors={validationErrors}
-        />
-        <Field
-          name="description" component={InputText}
-          label="Description" validationErrors={validationErrors}
-        />
-        { this.getPermissionsField() }
+        <form className="form-horizontal">
+          <Field
+            name="applicationId" component={InputCombo}
+            options={this.state.applications} label="Application"
+            validationErrors={validationErrors} disabled
+          />
+          <Field
+            name="name" component={InputText}
+            label="Name" validationErrors={validationErrors}
+          />
+          <Field
+            name="description" component={InputText}
+            label="Description" validationErrors={validationErrors}
+          />
+          { this.getPermissionsField() }
+        </form>
       </div>
     );
   }
