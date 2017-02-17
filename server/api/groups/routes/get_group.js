@@ -10,7 +10,7 @@ module.exports = () => ({
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]
     },
-    description: 'Get a single group based on its unique identifier.',
+    description: 'Get a single group based on its unique identifier. Add "?expand" to also load all roles and permissions for this group.',
     tags: [ 'api' ],
     validate: {
       query: {

@@ -62,10 +62,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
           <p className="modal-description">Select one or more users you wish to add to this group.</p>
           <form className="form-horizontal">
             <div className="row">
-              <label htmlFor="members" className="control-label col-xs-3">
-                Add members
-              </label>
-              <div className="col-xs-9">
+              <div className="col-xs-12">
                 <Field
                   name="members"
                   id="members"
