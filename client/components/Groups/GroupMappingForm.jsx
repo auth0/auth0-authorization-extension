@@ -34,17 +34,18 @@ export default createForm('groupMapping', class GroupMappingForm extends Compone
               When users log in with the selected connection and belong to the selected group then they will also become an implicit member of this groupi.
             </p>
 
-            <Field
-              name="connectionName" component={InputCombo}
-              options={connections} label="Connection"
-              validationErrors={validationErrors}
-            />
+            <form className="form-horizontal">
+              <Field
+                name="connectionName" component={InputCombo}
+                options={connections} label="Connection"
+                validationErrors={validationErrors}
+              />
 
-            <Field
-              name="groupName" component={InputText} label="Incoming Group Name"
-              validationErrors={validationErrors}
-            />
-
+              <Field
+                name="groupName" component={InputText} label="Incoming Group Name"
+                validationErrors={validationErrors}
+              />
+            </form>
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>

@@ -79,11 +79,20 @@ export default createForm('userPicker', class UserPickerDialog extends Component
         <p className="modal-description">
           Select one or more users you wish to add.
         </p>
-        <Field
-          name="members"
-          component={Multiselect}
-          loadOptions={_.debounce((input, callback) => this.getOptions(input, callback), process.env.MULTISELECT_DEBOUNCE_MS)}
-        />
+        <form className="form-horizontal">
+          <div className="row">
+            <label htmlFor="members" className="control-label col-xs-3">
+              Add members
+            </label>
+            <div className="col-xs-9">
+              <Field
+                name="members"
+                component={Multiselect}
+                loadOptions={_.debounce((input, callback) => this.getOptions(input, callback), process.env.MULTISELECT_DEBOUNCE_MS)}
+              />
+            </div>
+          </div>
+        </form>
       </Confirm>
     );
   }
