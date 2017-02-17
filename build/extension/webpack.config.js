@@ -61,8 +61,14 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.1.0';
 
   // Transform to commonjs.
-  Object.keys(externals.compatible).forEach(k => { externals.compatible[k] = `commonjs ${k}`; });
-
+  Object.keys(externals.compatible).forEach(k => {
+    if (typeof externals.compatible[k] === 'string') {
+      externals.compatible[k] = `commonjs ${externals.compatible[k]}`;
+    } else {
+      externals.compatible[k] = `commonjs ${k}`;
+    }
+  });
+  console.log(externals.compatible);
   return {
     entry: path.join(__dirname, '../../webtask'),
     target: 'node',
