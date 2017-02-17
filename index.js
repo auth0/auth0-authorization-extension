@@ -1,5 +1,8 @@
 const path = require('path');
 const nconf = require('nconf');
+const url = require('url');
+const tools = require('auth0-extension-hapi-tools');
+
 const logger = require('./server/lib/logger');
 
 // Initialize babel.
@@ -23,6 +26,18 @@ nconf
     USE_OAUTH2: false,
     LOG_COLOR: true
   });
+
+
+if (process.env.NODE_ENV !== 'production') {
+  tools.urlHelpers.getBaseUrl = (req) => {
+    const originalUrl = url.parse(req.originalUrl || '').pathname || '';
+    return url.format({
+      protocol: 'http',
+      host: req.headers.host,
+      pathname: originalUrl.replace(req.path, '').replace(/\/$/g, '')
+    });
+  };
+}
 
 // Start the server.
 return require('./server/init')((key) => nconf.get(key), null, (err, hapi) => {

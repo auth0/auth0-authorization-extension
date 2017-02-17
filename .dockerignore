@@ -1,6 +1,0 @@
-.DS_Store
-assets/app/*
-node_modules
-npm-debug.log
-server/config.json
-server/db.json

@@ -10,3 +10,4 @@ server/config.json
 dist
 build/extension/bundle-size.json
 server/config.json
+coverage

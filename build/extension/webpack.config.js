@@ -58,7 +58,7 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['auth0-oauth2-express'] = true;
   externals.compatible['good-console'] = 'good-console@6.1.2';
   externals.compatible['hapi-swagger'] = 'hapi-swagger@7.4.0';
-  externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.0.0';
+  externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.1.0';
 
   // Transform to commonjs.
   Object.keys(externals.compatible).forEach(k => { externals.compatible[k] = `commonjs ${k}`; });
