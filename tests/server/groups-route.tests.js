@@ -11,12 +11,27 @@ describe('groups-route', () => {
   const group = {
     _id: guid,
     name: groupName,
-    description: 'description'
+    description: 'description',
+    roles: [ 'r1', 'r2' ]
   };
+
+  const roles = [
+    { _id: 'r1', name: 'Role 1', applicationId: 'app1', applicationType: 'client', permissions: [ 'p11', 'p12' ] },
+    { _id: 'r2', name: 'Role 2', applicationId: 'app2', applicationType: 'client', permissions: [ 'p21', 'p22' ] }
+  ];
+  const permissions = [
+    { _id: 'p11', name: 'Permission 11', applicationId: 'app1', applicationType: 'client' },
+    { _id: 'p12', name: 'Permission 12', applicationId: 'app1', applicationType: 'client' },
+    { _id: 'p21', name: 'Permission 21', applicationId: 'app2', applicationType: 'client' },
+    { _id: 'p22', name: 'Permission 22', applicationId: 'app2', applicationType: 'client' }
+  ];
+
 
   before((done) => {
     db.getGroup = () => Promise.resolve(group);
     db.getGroups = () => Promise.resolve([ group ]);
+    db.getRoles = () => Promise.resolve(roles);
+    db.getPermissions = () => Promise.resolve(permissions);
     db.updateGroup = null;
     done();
   });
@@ -99,6 +114,28 @@ describe('groups-route', () => {
         expect(response.result).to.be.a('object');
         expect(response.result._id).to.be.equal(guid);
         expect(response.result.name).to.be.equal(groupName);
+        cb();
+      });
+    });
+
+    it('should return expanded group data', (cb) => {
+      const token = getToken('read:groups');
+      const options = {
+        method: 'GET',
+        url: `/api/groups/${guid}?expand=true`,
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result).to.be.a('object');
+        expect(response.result._id).to.be.equal(guid);
+        expect(response.result.name).to.be.equal(groupName);
+        expect(response.result.roles).to.be.a('array');
+        expect(response.result.roles[0]).to.be.a('object');
+        expect(response.result.roles[0].permissions).to.be.a('array');
+        expect(response.result.roles[0].permissions[0]).to.be.a('object');
         cb();
       });
     });

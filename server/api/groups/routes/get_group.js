@@ -1,5 +1,7 @@
 import Joi from 'joi';
 
+import { getGroupExpanded } from '../../../lib/queries';
+
 module.exports = () => ({
   method: 'GET',
   path: '/api/groups/{id}',
@@ -11,13 +13,23 @@ module.exports = () => ({
     description: 'Get a single group based on its unique identifier.',
     tags: [ 'api' ],
     validate: {
+      query: {
+        expand: Joi.boolean()
+      },
       params: {
         id: Joi.string().guid().required()
       }
     }
   },
-  handler: (req, reply) =>
-    req.storage.getGroup(req.params.id)
+  handler: (req, reply) => {
+    if (req.query.expand) {
+      return getGroupExpanded(req.storage, req.params.id)
+        .then(group => reply(group))
+        .catch(err => reply.error(err));
+    }
+
+    return req.storage.getGroup(req.params.id)
       .then(group => reply({ _id: group._id, name: group.name, description: group.description }))
-      .catch(err => reply.error(err))
+      .catch(err => reply.error(err));
+  }
 });

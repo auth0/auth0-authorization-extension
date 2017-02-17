@@ -21,6 +21,38 @@ export const getConnectionsCached = memoizer({
 });
 
 /*
+ * Cache permissions.
+ */
+export const getPermissionsCached = memoizer({
+  load: (db, callback) => {
+    db.getPermissions()
+      .then(permissions => {
+        callback(null, permissions);
+      })
+      .catch(err => callback(err));
+  },
+  hash: (db) => db.hash || 'permissions',
+  max: 100,
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+});
+
+/*
+ * Cache roles.
+ */
+export const getRolesCached = memoizer({
+  load: (db, callback) => {
+    db.getRoles()
+      .then(roles => {
+        callback(null, roles);
+      })
+      .catch(err => callback(err));
+  },
+  hash: (db) => db.hash || 'roles',
+  max: 100,
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+});
+
+/*
  * Cache groups.
  */
 export const getGroupsCached = memoizer({
@@ -32,6 +64,22 @@ export const getGroupsCached = memoizer({
       .catch(err => callback(err));
   },
   hash: (db) => db.hash || 'groups',
+  max: 100,
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+});
+
+/*
+ * Cache group.
+ */
+export const getGroupCached = memoizer({
+  load: (db, id, callback) => {
+    db.getGroup(id)
+      .then(group => {
+        callback(null, group);
+      })
+      .catch(err => callback(err));
+  },
+  hash: (db) => db.hash || 'group',
   max: 100,
   maxAge: nconf.get('DATA_CACHE_MAX_AGE')
 });
@@ -161,7 +209,6 @@ export const getRolesForUser = (database, userId) =>
         })
     );
 
-
 /*
  * Get all permissions for list of roles.
  */
@@ -171,6 +218,31 @@ export const getPermissionsForRoles = (database, userRoles) =>
       const permIds = _.flattenDeep(_.map(userRoles, role => role.permissions));
       return permissions.filter(permission => _.includes(permIds, permission._id));
     });
+
+/*
+ * Get all permissions for list of roles, grouped by role.
+ */
+export const getPermissionsByRoles = (database, roles) =>
+  new Promise((resolve, reject) => {
+    getPermissionsCached(database, (err, permissions) => {
+      if (err) {
+        return reject(err);
+      }
+
+      const rolesList = [];
+      _.forEach(roles, (role) => {
+        const currentRole = { ...role };
+        const rolePermissions = permissions.filter(permission => _.includes(role.permissions, permission._id));
+        currentRole.permissions = _.map(rolePermissions, permission =>
+          ({ _id: permission._id, name: permission.name, description: permission.description })
+        );
+
+        rolesList.push(currentRole);
+      });
+
+      return resolve(rolesList);
+    });
+  });
 
 /*
  * Resolve all users for a list of groups.
@@ -265,6 +337,32 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
           return resolve(nestedGroups);
         })
         .catch(reject);
+    });
+  });
+}
+
+/*
+ * Get expanded group data
+ */
+export function getGroupExpanded(db, groupId) {
+  return new Promise((resolve, reject) => {
+    getGroupCached(db, groupId, (error, foundGroup) => {
+      if (error) {
+        return reject(error);
+      }
+
+      const roleIds = foundGroup.roles || [];
+
+      return getRolesCached(db, (err, allRoles) => {
+        if (err) {
+          return reject(err);
+        }
+
+        const roles = allRoles.filter(role => roleIds.indexOf(role._id) > -1);
+
+        return getPermissionsByRoles(db, roles)
+          .then((rolesList) => resolve({ ...foundGroup, roles: rolesList }));
+      });
     });
   });
 }
