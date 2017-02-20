@@ -370,3 +370,39 @@ export function getGroupExpanded(db, groupId) {
     });
   });
 }
+
+/*
+ * Get expanded group data
+ */
+export function getGroupsExpanded(db, groups) {
+  return new Promise((resolve, reject) => {
+    getGroupsCached(db, (error, allGroups) => {
+      if (error) {
+        return reject(error);
+      }
+
+      return getRolesCached(db, (err, allRoles) => {
+        if (err) {
+          return reject(err);
+        }
+
+        const groupsWithParents = getParentGroups(allGroups, groups);
+        const roles = getRolesForGroups(groupsWithParents, allRoles).map(r => r.role);
+        const formatRole = (r) => ({
+          _id: r._id,
+          name: r.name,
+          description: r.description,
+          applicationId: r.applicationId,
+          applicationType: r.applicationType,
+          permissions: r.permissions && r.permissions.map(compact)
+        });
+
+        return getPermissionsByRoles(db, roles)
+          .then((rolesList) => resolve({
+            groups: groupsWithParents.map(compact),
+            roles: rolesList.map(formatRole)
+          }));
+      });
+    });
+  });
+}

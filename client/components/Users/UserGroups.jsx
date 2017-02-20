@@ -131,7 +131,7 @@ class UserGroups extends Component {
                   <a onClick={() => this.setShowUserGroups(true)}>Groups</a>
                 </li>
                 <li className={!this.state.showUserGroups ? 'active' : null}>
-                  <a onClick={() => this.setShowUserGroups(false)}>Nested Groups</a>
+                  <a onClick={() => this.setShowUserGroups(false)}>All Groups</a>
                 </li>
               </ul>
             </div>
