@@ -145,4 +145,6 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
       </div>
     );
   }
+}, {
+  enableReinitialize: true
 });

@@ -12,7 +12,7 @@ export default class ImportExportTab extends Component {
     closePreview: PropTypes.func.isRequired,
     importExport: PropTypes.object.isRequired,
     error: PropTypes.string,
-    loading: PropTypes.object,
+    loading: PropTypes.bool,
     record: PropTypes.object,
     requesting: PropTypes.bool,
     preview: PropTypes.object

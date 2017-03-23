@@ -34,7 +34,7 @@ export default class RuleSettings extends Component {
             <Error message={error} />
             <LoadingPanel show={loading}>
               <div>
-                <Tabs defaultActiveKey={activeTab} animation={false}>
+                <Tabs id="tabs" defaultActiveKey={activeTab} animation={false}>
                   <Tab eventKey={1} title="Rule Configuration">
                     <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
                   </Tab>
