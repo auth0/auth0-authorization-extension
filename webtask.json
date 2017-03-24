@@ -48,7 +48,7 @@
     },
     "S3_PATH": {
       "description": "Path to the JSON file",
-      "required": false,
+      "required": true,
       "example": "/auth0-authz.json",
       "default": "/auth0-authz.json",
       "visibleIf": {
