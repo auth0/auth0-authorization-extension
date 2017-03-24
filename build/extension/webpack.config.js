@@ -35,6 +35,7 @@ module.exports = externalModules.then((externals) => {
   externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.1.0';
   externals.compatible['auth0-oauth2-express'] = true;
   externals.compatible['auth0@2.0.0'] = true;
+  externals.compatible['aws-sdk'] = 'aws-sdk@2.5.3';
   externals.compatible['body-parser'] = true;
   externals.compatible['express-jwt'] = true;
   externals.compatible['good-console'] = 'good-console@6.1.2';
