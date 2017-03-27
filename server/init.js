@@ -1,6 +1,3 @@
-import { FileStorageContext, WebtaskStorageContext, BlobRecordProvider } from 'auth0-extension-tools';
-import path from 'path';
-
 import config from './lib/config';
 import Database from './lib/storage/database';
 import { init as initDb } from './lib/storage/getdb';
@@ -11,7 +8,7 @@ import logger from './lib/logger';
 
 module.exports = (cfg, storageContext, cb) => {
   if (cb == null) {
-    cb = (err) => {
+    cb = err => {
       if (err) {
         logger.error('Hapi initialization failed.');
         logger.error(err);
@@ -22,12 +19,14 @@ module.exports = (cfg, storageContext, cb) => {
   }
 
   // Set configuration provider.
-  config.setProvider((key) => cfg(key) || process.env[key]);
+  config.setProvider(key => cfg(key) || process.env[key]);
 
   // Initialize the storage layer.
-  initDb(new Database({
-    provider: createProvider(storageContext)
-  }));
+  initDb(
+    new Database({
+      provider: createProvider(storageContext)
+    })
+  );
 
   // Start the server.
   return createServer(cb);

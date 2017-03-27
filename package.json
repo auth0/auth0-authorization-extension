@@ -30,7 +30,7 @@
     "auth0": "^2.4.0",
     "auth0-extension-hapi-tools": "1.2.0",
     "auth0-extension-s3-tools": "1.1.1",
-    "auth0-extension-tools": "1.2.0",
+    "auth0-extension-tools": "1.2.1",
     "auth0-extension-ui": "1.0.1",
     "auth0-extension-ui-redux": "git+https://github.com/auth0-extensions/auth0-extension-ui-redux",
     "aws-sdk": "2.5.3",

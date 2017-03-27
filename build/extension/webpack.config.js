@@ -4,7 +4,7 @@ const Webpack = require('webpack');
 const project = require('../../package.json');
 const externalModules = require('./externals');
 
-module.exports = externalModules.then((externals) => {
+module.exports = externalModules.then(externals => {
   externals.compatible.async = true;
   externals.compatible.auth0 = true;
   externals.compatible.blipp = true;
@@ -32,7 +32,9 @@ module.exports = externalModules.then((externals) => {
   externals.compatible.superagent = true;
   externals.compatible.winston = true;
   externals.compatible.xml2js = true;
-  externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.1.0';
+  externals.compatible['auth0-extension-hapi-tools'] = 'auth0-extension-hapi-tools@1.2.0';
+  externals.compatible['auth0-extension-s3-tools'] = 'auth0-extension-s3-tools@1.1.1';
+  externals.compatible['auth0-extension-tools'] = 'auth0-extension-tools@1.2.1';
   externals.compatible['auth0-oauth2-express'] = true;
   externals.compatible['auth0@2.0.0'] = true;
   externals.compatible['aws-sdk'] = 'aws-sdk@2.5.3';
@@ -80,7 +82,7 @@ module.exports = externalModules.then((externals) => {
           loader: 'babel',
           exclude: path.join(__dirname, '../../node_modules/')
         },
-				{ test: /\.json$/, loader: 'json' }
+        { test: /\.json$/, loader: 'json' }
       ]
     },
     plugins: [
