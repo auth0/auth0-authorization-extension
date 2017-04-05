@@ -15,6 +15,7 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/configuration/routes/delete_apiaccess')(server));
   server.route(require('../api/connections/routes/get_connections')(server));
   server.route(require('../api/extension-hooks/routes/delete_uninstall')(server));
+  server.route(require('../api/extension-hooks/routes/post_install')(server));
   server.route(require('../api/extension-hooks/routes/put_update')(server));
   server.route(require('../api/permissions/routes/delete_permission')(server));
   server.route(require('../api/permissions/routes/get_permission')(server));

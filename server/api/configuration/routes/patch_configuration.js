@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import schema from '../schemas/configuration';
-import compileRule from '../../../lib/compileRule';
+import { compileAuthorizeRule } from '../../../lib/compileRule';
 
 module.exports = (server) => ({
   method: 'PATCH',
@@ -29,7 +29,7 @@ module.exports = (server) => ({
         const userName = req.auth.credentials.email || 'unknown';
         const payload = {
           name: 'auth0-authorization-extension',
-          script: compileRule(config, userName),
+          script: compileAuthorizeRule(config, userName),
           enabled: true
         };
 

@@ -5,14 +5,6 @@ module.exports = `/*
 function (user, context, callback) {
   var _ = require('lodash');
   var EXTENSION_URL = "<%= extensionUrl %>";
-  var audience = "";
-
-  audience = audience || (context.request.query && context.request.query.audience);
-  audience = audience || (context.request.body && context.request.body.audience);
-
-  if (audience === "urn:auth0-authz-api") {
-    return callback(new UnauthorizedError("no_end_users"));
-  }
 
   getPolicy(user, context, function(err, res, data) {
     if (err) {
