@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { compileAuthorizeRule, compileRestrictAccessRule } from '../../../lib/compileRule';
+import { compileRestrictAccessRule } from '../../../lib/compileRule';
 
 module.exports = (server) => ({
   method: 'POST',
