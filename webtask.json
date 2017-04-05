@@ -18,6 +18,7 @@
     "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
     "onUpdatePath": "/.extensions/on-update",
+    "onInstallPath": "/.extensions/on-install",
     "scopes": "read:resource_servers update:resource_servers delete:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
   },
   "secrets": {
