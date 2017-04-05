@@ -21,7 +21,7 @@ module.exports = (server) => ({
         const rule = _.find(rules, { name: 'auth0-authorization-extension' });
         availableRules = rules;
         if (rule) {
-          return req.pre.auth0.rules.delete({ id: rule.id }).then(() => rules);
+          return req.pre.auth0.rules.delete({ id: rule.id });
         }
 
         return Promise.resolve();
@@ -32,7 +32,7 @@ module.exports = (server) => ({
           return req.pre.auth0.rules.delete({ id: rule.id });
         }
 
-        return Promise.resolve(rules);
+        return Promise.resolve();
       })
       .then(() => deleteApi(req, true))
       .then(() => req.pre.auth0.clients.delete({ client_id: config('AUTH0_CLIENT_ID') }))
