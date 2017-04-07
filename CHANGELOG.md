@@ -1,7 +1,11 @@
-## [2.3.0] - 2017-04-
+## [2.4.0] - 2017-04-
 
 - Add Amazon S3 as a supported storage provider.
 - Add `?expand=true` support to `/api/users/<userId>/groups` ([commit](https://github.com/auth0/auth0-authorization-extension/commit/8d4771dcb42317b9d314592b1f573e6951a84274))
+
+## [2.3.0] - 2017-04-07
+
+- Changing rule for restricting access_token issuance to client credentials to handle audience as query param and request body simultaneously.
 
 ## [2.2.2] - 2017-04-06
 
