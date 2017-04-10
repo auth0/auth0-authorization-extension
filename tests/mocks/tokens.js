@@ -27,7 +27,27 @@ module.exports.getToken = (scope) =>
    module.exports.sign(certs.bar.private, 'key2', {
      iss: `https://${config('AUTH0_DOMAIN')}/`,
      aud: 'urn:auth0-authz-api',
-     sub: 'foo',
+     sub: '123456@clients',
      scope
    })
+;
+
+module.exports.getUserToken = (scope) =>
+   module.exports.sign(certs.bar.private, 'key2', {
+     iss: `https://${config('AUTH0_DOMAIN')}/`,
+     aud: 'urn:auth0-authz-api',
+     sub: 'auth0|aaaaaaaaa',
+     azp: '123',
+     scope
+   })
+;
+
+module.exports.getAdminTokenWithoutAccessToken = (scope) =>
+  jwt.sign({
+    iss: 'http://foo',
+    aud: 'urn:api-authz',
+    sub: 'auth0|aaaaaaaaa',
+    azp: '123',
+    scope
+  }, 'abc')
 ;
