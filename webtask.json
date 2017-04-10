@@ -1,7 +1,7 @@
 {
   "title": "Auth0 Authorization",
   "name": "auth0-authz",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "author": "auth0",
   "description": "This extension gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
