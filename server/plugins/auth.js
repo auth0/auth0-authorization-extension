@@ -77,6 +77,14 @@ module.exports.register = (server, options, next) => {
                 return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
               }
 
+              if (decoded.payload.azp) {
+                return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
+              }
+
+              if (!decoded.payload.sub.endsWith('@clients')) {
+                return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
+              }
+
               if (decoded.payload.scope && typeof decoded.payload.scope === 'string') {
                 decoded.payload.scope = decoded.payload.scope.split(' '); // eslint-disable-line no-param-reassign
               }
@@ -87,6 +95,10 @@ module.exports.register = (server, options, next) => {
         } else if (decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL')) {
           return jwt.verify(token, jwtOptions.dashboardAdmin.key, jwtOptions.dashboardAdmin.verifyOptions, (err) => {
             if (err) {
+              return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
+            }
+
+            if (!decoded.payload.access_token || !decoded.payload.access_token.length) {
               return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
             }
 
