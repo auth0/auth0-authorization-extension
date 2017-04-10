@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz-extension",
-  "version": "2.1.3",
+  "version": "2.3.1",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "4.6.2"
