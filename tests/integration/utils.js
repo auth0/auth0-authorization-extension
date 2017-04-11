@@ -24,5 +24,5 @@ module.exports.getAccessToken = () => {
           });
 };
 
-module.exports.authzApi = (endpoint) => (process.env.INT_authzApi_URL + endpoint);
+module.exports.authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
 module.exports.token = () => ({ Authorization: `Bearer ${accessToken}` });

@@ -9,7 +9,6 @@ const authzApi = utils.authzApi;
 const token = utils.token;
 
 let accessToken;
-
 let remoteRole;
 
 describe('roles', () => {
