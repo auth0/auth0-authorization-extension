@@ -98,17 +98,17 @@ describe('permissions', () => {
         json: true
       })
       .then((data) => {
-        remoteGroup = data;
+        remotePermission = data;
 
         // Check the permission was updated in the server
         request.get({
-            url: authzApi(`/permissions/${remoteGroup._id}`),
+            url: authzApi(`/permissions/${remotePermission._id}`),
             headers: token(),
             json: true
           })
           .then((data) => {
-            expect(remoteGroup.name).toEqual(data.name);
-            expect(remoteGroup.description).toEqual(data.description);
+            expect(remotePermission.name).toEqual(data.name);
+            expect(remotePermission.description).toEqual(data.description);
             done();
           }).catch(done);
       })
