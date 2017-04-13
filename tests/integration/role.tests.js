@@ -1,12 +1,8 @@
 const Promise = require('bluebird');
-const request = require('request-promise');
-const expect = require('expect');
-const faker = require('faker');
-const utils = require('./utils');
-
-const getAccessToken = utils.getAccessToken;
-const authzApi = utils.authzApi;
-const token = utils.token;
+import request from 'request-promise';
+import expect from 'expect';
+import faker from 'faker';
+import { getAccessToken, authzApi, token } from './utils';
 
 let accessToken;
 let remoteRole;
