@@ -121,9 +121,9 @@ describe('groups', () => {
                             done(new Error("The just added mapping could not be found in remote."))
                         }
                     })
-                    .catch(done);
+                    .catch((err) => done(err.message));
             })
-            .catch(done);
+            .catch((err) => done(err.message));
     });
 
     it.skip('should get the mappings of a group', (done) => {
@@ -236,7 +236,7 @@ describe('groups', () => {
                     .then((data) => {
                         expect(remoteGroup.name).toNotEqual(data.name);
                         expect(remoteGroup.description).toNotEqual(data.description);
-                        done(new Error("The group still exists, it should't.")); 
+                        done(new Error("The group still exisyarnts, it should't."));
                     }).catch((err) => {
                         if (err.statusCode === 400) {
                             done()
