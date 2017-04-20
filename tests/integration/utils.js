@@ -1,7 +1,5 @@
 import config from '../../server/lib/config';
 
-console.log('config', config('INT_AUTH0_CLIENT_SECRET'));
-
 const request = require('request-promise');
 
 let accessToken;
