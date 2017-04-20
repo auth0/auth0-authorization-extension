@@ -5,7 +5,7 @@ import logger from '../lib/logger';
 const tools = require('auth0-extension-tools');
 const Boom = require('boom');
 
-const validateHookToken = function (domain, webtaskUrl, extensionSecret) {
+const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   if (domain === null || domain === undefined) {
     throw new tools.ArgumentError('Must provide the domain');
   }
@@ -30,7 +30,7 @@ const validateHookToken = function (domain, webtaskUrl, extensionSecret) {
     throw new tools.ArgumentError(`The provided extensionSecret is invalid: ${extensionSecret}`);
   }
 
-  return function (hookPath) {
+  return hookPath => {
     if (hookPath === null || hookPath === undefined) {
       throw new tools.ArgumentError('Must provide the hookPath');
     }

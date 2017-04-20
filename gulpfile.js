@@ -1,3 +1,5 @@
+require('babel-register')();
+
 const gulp = require('gulp');
 const util = require('gulp-util');
 const open = require('open');

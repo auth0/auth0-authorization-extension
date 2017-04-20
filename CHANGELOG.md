@@ -1,3 +1,7 @@
+## [2.2.0] - 2017-03-24
+
+- Add Amazon S3 as a supported storage provider.
+
 ## [2.1.2] - 2017-02-17
 
 - Add `?expand=true` support to `/api/users/<userId>/groups` ([commit](https://github.com/auth0/auth0-authorization-extension/commit/8d4771dcb42317b9d314592b1f573e6951a84274))
