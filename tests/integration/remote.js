@@ -1,6 +1,7 @@
 const fs = require('fs');
 const Sandbox = require('sandboxjs');
 const npm = require('npm');
+const async = require('async');
 
 const EXTENSION_VERSION = process.env.npm_package_version;
 
@@ -57,7 +58,7 @@ npm.load((err) => {
 
     const code = fs.readFileSync(`./dist/auth0-authz.extension.${EXTENSION_VERSION}.js`).toString();
 
-    containers.forEach((container) => {
+    async.eachSeries(containers, (container, callback) => {
       const profile = Sandbox.init({
         url: 'https://sandbox.it.auth0.com',
         token: WEBTASK_TOKEN,
@@ -72,22 +73,25 @@ npm.load((err) => {
       })
       .then((webtask) => {
         process.env.INT_AUTHZ_API_URL = `${webtask.url}/api`;
-        
+
         console.log(`Running tests for ${container.name}`);
-        npm.commands.run(['int-test'], (err) => {
-          if (err) throw err;
+        npm.commands.run([ 'int-test' ], (err) => {
+          if (err) callback(err);
 
           console.log(`Tests for ${container.name} have finished. Deleting webtask...`);
 
-          profile.removeWebtask({ name: container.name }, (err) => {
-            if (err) throw err;
-            
-            console.log(`Webtask container for ${container.name} removed.`);
-          });
-          
+          profile.removeWebtask({ name: container.name })
+            .then(() => {
+              console.log(`Webtask container for ${container.name} removed.`);
+              
+              callback();
+            })
+            .catch(callback);
         });
       })
-      .catch(err => { throw err; });
+      .catch(err => { callback(err); });
+    }, (err) => {
+      console.log(err);
     });
   });
 });
