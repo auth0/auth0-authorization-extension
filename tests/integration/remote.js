@@ -11,7 +11,11 @@ const {
   AUTH0_CLIENT_ID,
   AUTH0_CLIENT_SECRET,
   AUTHORIZE_API_KEY,
-  EXTENSION_SECRET
+  EXTENSION_SECRET,
+  S3_BUCKET,
+  S3_PATH,
+  S3_KEY,
+  S3_SECRET
 } = process.env;
 
 
@@ -36,10 +40,10 @@ const containers = [
       AUTHORIZE_API_KEY,
       EXTENSION_SECRET,
       STORAGE_TYPE: 's3',
-      S3_BUCKET: '',
-      S3_PATH: '',
-      S3_KEY: '',
-      S3_SECRET: '',
+      S3_BUCKET,
+      S3_PATH,
+      S3_KEY,
+      S3_SECRET,
       WT_URL: `https://${WEBTASK_CONTAINER}.us.webtask.io/authz-with-s3-storage`
     }
   }
@@ -60,17 +64,20 @@ npm.load((err) => {
         container: WEBTASK_CONTAINER
       });
 
+      console.log(`Uploading code for ${container.name}`);
+
       profile.create(code, {
         secrets: container.env,
         name: container.name
       })
       .then((webtask) => {
         process.env.INT_AUTHZ_API_URL = `${webtask.url}/api`;
-
+        
+        console.log(`Running tests for ${container.name}`);
         npm.commands.run(['int-test'], (err) => {
           if (err) throw err;
 
-          console.log('tests finished');
+          console.log(`Tests for ${container.name} have finished.`);
         });
       })
       .catch(err => { throw err; });
