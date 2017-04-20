@@ -24,5 +24,5 @@ module.exports.post = (route) =>
 module.exports.auth0Client = () =>
   nock('https://foo.auth0.local')
     .post('/oauth/token')
-    .times(2)
+    .times(5)
     .reply(200, { access_token: 'access_token', id_token: 'id_token', ok: true });

@@ -25,7 +25,7 @@ export default class Database {
   }
 
   getStatus() {
-    if (!config('DB_TYPE') || config('DB_TYPE') === 'default') {
+    if (!config('STORAGE_TYPE') || config('STORAGE_TYPE') === 'webtask') {
       return this.provider.storageContext.read()
         .then(data => ({
           size: Buffer.byteLength(JSON.stringify(data), 'utf8'),
@@ -33,7 +33,7 @@ export default class Database {
         }));
     }
 
-    return { size: null, type: config('DB_TYPE') };
+    return Promise.resolve({ size: null, type: config('STORAGE_TYPE') });
   }
 
   canChange(type, checkFor, id) {

@@ -6,14 +6,14 @@ const config = require('./config.dev.js');
 const logger = require('../../server/lib/logger');
 
 // Overwrite logger.
-logger.debug = (...args) => {
-  gutil.log([ gutil.colors.magenta('[debug]'), args ].join(' '));
+logger.debug = function debug() {
+  gutil.log([ gutil.colors.magenta('[debug]'), Array.prototype.join.call(arguments, ' ') ].join(' '));
 };
-logger.info = (...args) => {
-  gutil.log([ gutil.colors.green('[info]'), args ].join(' '));
+logger.info = function info() {
+  gutil.log([ gutil.colors.green('[info]'), Array.prototype.join.call(arguments, ' ') ].join(' '));
 };
-logger.error = (...args) => {
-  gutil.log([ gutil.colors.red('[error]'), args ].join(' '));
+logger.error = function error() {
+  gutil.log([ gutil.colors.red('[error]'), Array.prototype.join.call(arguments, ' ') ].join(' '));
 };
 
 const options = {
