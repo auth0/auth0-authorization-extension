@@ -160,32 +160,6 @@ describe('groups', () => {
       .catch(done);
   });
 
-  it('should get the groups, permissions and roles of an user', (done) => {
-    request.get({ url: authzApi('/users'), headers: token(), json: true })
-      .then((response) => {
-        const users = response.users;
-        const user = users[0];
-        const clientId = credentials.client_id;
-        const connectionName = user.identities[0].connection;
-
-        request.post({
-          url: authzApi(`/users/${user.id}/policy/${clientId}`),
-          headers: token(),
-          json: true,
-          body: {
-            connectionName,
-            groups: []
-          }
-        })
-          .then((policy) => {
-            done();
-          })
-          .catch(done);
-
-      })
-      .catch(done);
-  });
-
   it('should remove members from a group', (done) => {
     request.delete({ url: authzApi(`/groups/${remoteGroup._id}/members`), body: [groupMemberName], headers: token(), json: true })
       .then(() => {
