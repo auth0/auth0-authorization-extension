@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import Database from '../../server/lib/storage/database';
+import Database from '../../../server/lib/storage/database';
 
 describe('Database', () => {
   describe('#constructor', () => {

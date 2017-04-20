@@ -1,5 +1,5 @@
-import createServer from '../server';
-import { init as initDb } from '../server/lib/storage/getdb';
+import createServer from '../../server';
+import { init as initDb } from '../../server/lib/storage/getdb';
 
 
 let server = null;
