@@ -77,7 +77,14 @@ npm.load((err) => {
         npm.commands.run(['int-test'], (err) => {
           if (err) throw err;
 
-          console.log(`Tests for ${container.name} have finished.`);
+          console.log(`Tests for ${container.name} have finished. Deleting webtask...`);
+
+          profile.removeWebtask({ name: container.name }, (err) => {
+            if (err) throw err;
+            
+            console.log(`Webtask container for ${container.name} removed.`);
+          });
+          
         });
       })
       .catch(err => { throw err; });
