@@ -16,10 +16,11 @@ module.exports.credentials = {
  */
 module.exports.getAccessToken = () => {
   return request.post({ uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`, form: module.exports.credentials, json: true })
-          .then(res => res.access_token).then((token) => {
-            accessToken = token;
-            return token;
-          });
+    .then(res => res.access_token).then((token) => {
+      accessToken = token;
+      console.log(token);
+      return token;
+    });
 };
 
 module.exports.authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
