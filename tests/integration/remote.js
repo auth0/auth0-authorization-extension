@@ -1,3 +1,5 @@
+/* eslint-disable no-console, no-shadow */
+
 const fs = require('fs');
 const Sandbox = require('sandboxjs');
 const npm = require('npm');
@@ -83,7 +85,7 @@ npm.load((err) => {
           profile.removeWebtask({ name: container.name })
             .then(() => {
               console.log(`Webtask container for ${container.name} removed.`);
-              
+
               callback();
             })
             .catch(callback);
