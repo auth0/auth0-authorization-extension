@@ -1,0 +1,58 @@
+{
+    "roles": [
+        {
+            "_id": "c095ad6b-9a09-4027-90bb-d72a37266230",
+            "applicationType": "client",
+            "applicationId": "4UfTcIbcCzdvUokuwI8Yp9cRGl70mo37",
+            "description": "A speaker can propose talks to the rest of the Team",
+            "name": "Speaker",
+            "permissions": [
+                "a442ed93-65d2-45b4-93bd-31365613e13d"
+            ]
+        }
+    ],
+    "groups": [
+        {
+            "_id": "0e2703a9-8f16-41bf-a03e-8ae36291032c",
+            "name": "Auth0 Employees",
+            "description": "Auth0's Employees",
+            "nested": [
+                "7614fa35-46e0-4e47-b5e0-5983914e65db"
+            ]
+        },
+        {
+            "_id": "7614fa35-46e0-4e47-b5e0-5983914e65db",
+            "name": "Engineering",
+            "description": "Engineers",
+            "nested": [
+                "daa42563-f520-4e43-9d5c-0da120d06db5"
+            ]
+        },
+        {
+            "name": "Development",
+            "description": "Developers",
+            "_id": "daa42563-f520-4e43-9d5c-0da120d06db5"
+        },
+        {
+            "_id": "51f3e385-0d36-4d99-b5ca-12acd2f3f772",
+            "name": "Internal Talks",
+            "description": "Internal talks speakers",
+            "mappings": [
+                {
+                    "_id": "af928f65-badb-4fcf-8812-42cc3b617a09",
+                    "groupName": "Auth0 Employees",
+                    "connectionName": "Username-Password-Authentication"
+                }
+            ]
+        }
+    ],
+    "permissions": [
+        {
+            "applicationType": "client",
+            "applicationId": "4UfTcIbcCzdvUokuwI8Yp9cRGl70mo37",
+            "description": "Create talks",
+            "name": "create:talk",
+            "_id": "a442ed93-65d2-45b4-93bd-31365613e13d"
+        }
+    ]
+}
