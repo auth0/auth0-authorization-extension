@@ -11,7 +11,7 @@
     "client:build": "cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
-    "int-test": "mocha tests/integration/mocha.js ./tests/integration/**/*.tests.js -R nyan --timeout 8000",
+    "int-test": "mocha tests/integration/mocha.js ./tests/integration/**/*.tests.js -R list --timeout 12000",
     "int-test-remote": "node ./tests/integration/remote.js",
     "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js -R nyan",
     "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js --watch",

@@ -116,7 +116,7 @@ describe('groups', () => {
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
           .then((res) => {
             if (res.contains(mappings[0])) {
-              done()
+              done();
             } else {
               done(new Error("The just added mapping could not be found in remote."))
             }
@@ -236,10 +236,10 @@ describe('groups', () => {
           .then((data) => {
             expect(remoteGroup.name).toNotEqual(data.name);
             expect(remoteGroup.description).toNotEqual(data.description);
-            done(new Error("The group still exisyarnts, it should't."));
+            done(new Error("The group still exists, it should't."));
           }).catch((err) => {
             if (err.statusCode === 400) {
-              done()
+              done();
             } else {
               done(err);
             }
