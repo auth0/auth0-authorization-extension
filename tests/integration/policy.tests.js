@@ -50,8 +50,9 @@ describe('policy', () => {
           usersData = [ ...new Array(10) ].map(() => ({
             connection: connectionName,
             email: faker.internet.email(),
-            username: faker.internet.userName(),
-            password: faker.internet.password()
+            password: faker.internet.password(),
+            firstName: faker.name.firstName(),
+            lastName: faker.name.lastName()
           }));
 
           const userCreationRequests = usersData.map((user) => request.post({
