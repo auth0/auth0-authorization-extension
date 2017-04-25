@@ -35,7 +35,7 @@ describe('policy', () => {
     })
       .then(res => res.access_token).then((mgmtToken) => {
         const mgmtHeader = { Authorization: `Bearer ${mgmtToken}` };
-        
+
         // Import data to the extension
         request.post({
           url: authzApi('/configuration/import'),
@@ -50,9 +50,7 @@ describe('policy', () => {
           usersData = [ ...new Array(10) ].map(() => ({
             connection: connectionName,
             email: faker.internet.email(),
-            password: faker.internet.password(),
-            firstName: faker.name.firstName(),
-            lastName: faker.name.lastName()
+            password: faker.internet.password()
           }));
 
           const userCreationRequests = usersData.map((user) => request.post({
