@@ -23,6 +23,15 @@ describe('policy', () => {
     // Request a Auth0 Management API token
     let usersData = [];
 
+    const chunks = (array, size) => {
+      const items = [ ...array ];
+      const results = [];
+      while (items.length) {
+        results.push(items.splice(0, size));
+      }
+      return results;
+    };
+
     request.post({
       uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`,
       form: {
@@ -35,42 +44,52 @@ describe('policy', () => {
     })
       .then(res => res.access_token).then((mgmtToken) => {
         const mgmtHeader = { Authorization: `Bearer ${mgmtToken}` };
+        const connectionName = 'Username-Password-Authentication';
 
-        // Import data to the extension
-        request.post({
-          url: authzApi('/configuration/import'),
-          body: importData,
-          headers: token(),
-          json: true,
-          resolveWithFullResponse: true
-        })
-        .then(() => {
-          const connectionName = 'Username-Password-Authentication';
+        usersData = [ ...new Array(10) ].map(() => ({
+          connection: connectionName,
+          email: faker.internet.email(),
+          password: faker.internet.password()
+        }));
 
-          usersData = [ ...new Array(10) ].map(() => ({
-            connection: connectionName,
-            email: faker.internet.email(),
-            password: faker.internet.password()
-          }));
+        const userCreationRequests = usersData.map((user) => request.post({
+          url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users`,
+          body: user,
+          headers: mgmtHeader,
+          json: true
+        }));
 
-          const userCreationRequests = usersData.map((user) => request.post({
-            url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users`,
-            body: user,
-            headers: mgmtHeader,
-            json: true
-          }));
+        Promise.all(userCreationRequests)
+          .then((values) => {
+            usersData = values;
+            const userIds = chunks(
+              usersData.map(
+                (user) => (`${user.identities[0].provider}|${user.identities[0].user_id}`)
+              ), 2
+            );
 
-          Promise.all(userCreationRequests)
-            .then((values) => {
-              usersData = values;
+            importData.groups = importData.groups.map((originGroup, i) => {
+              const group = { ...originGroup };
+              group.members = userIds[i];
+              return group;
+            });
 
-
+            // Import data to the extension
+            request.post({
+              url: authzApi('/configuration/import'),
+              body: importData,
+              headers: token(),
+              json: true,
+              resolveWithFullResponse: true
             })
-            .catch((errors) => console.log(errors));
-        }).catch(console.log);
-      }).catch(done);
+            .then(() => {
+              // At this point, we are able to actually test.
 
-    // request.get({ url: authzApi('/users'), headers: token(), json: true })
+            }, done);
+          }, done);
+      }, done);
+
+    // request.get({ url: authzApi('/policy'), headers: token(), json: true })
     //   .then((response) => {
     //     const users = response.users;
     //     const user = users[0];
