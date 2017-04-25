@@ -23,6 +23,7 @@ describe('policy', () => {
     // Request a Auth0 Management API token
     let usersData = [];
 
+    // Splits an array into chunked sub-arrays.
     const chunks = (array, size) => {
       const items = [ ...array ];
       const results = [];
@@ -32,6 +33,7 @@ describe('policy', () => {
       return results;
     };
 
+    // Get a Management API token.
     request.post({
       uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`,
       form: {
@@ -44,14 +46,18 @@ describe('policy', () => {
     })
       .then(res => res.access_token).then((mgmtToken) => {
         const mgmtHeader = { Authorization: `Bearer ${mgmtToken}` };
+
+        // Use Username-Password-Authentication by default.
         const connectionName = 'Username-Password-Authentication';
 
+        // Create 10 dummy users locally.
         usersData = [ ...new Array(10) ].map(() => ({
           connection: connectionName,
           email: faker.internet.email(),
           password: faker.internet.password()
         }));
 
+        // Actually create the users in the server.
         const userCreationRequests = usersData.map((user) => request.post({
           url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users`,
           body: user,
@@ -62,6 +68,8 @@ describe('policy', () => {
         Promise.all(userCreationRequests)
           .then((values) => {
             usersData = values;
+    
+            // Build the 'provider|id' user identifier for the extension members arrays.
             const userIds = chunks(
               usersData.map(
                 (user) => (`${user.identities[0].provider}|${user.identities[0].user_id}`)
