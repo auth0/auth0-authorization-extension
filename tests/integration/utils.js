@@ -24,3 +24,4 @@ module.exports.getAccessToken = () => {
 
 module.exports.authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
 module.exports.token = () => ({ Authorization: `Bearer ${accessToken}` });
+module.exports.extensionApiKey = config('EXTENSION_SECRET');

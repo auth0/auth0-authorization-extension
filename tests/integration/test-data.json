@@ -4,7 +4,7 @@
             "_id": "c095ad6b-9a09-4027-90bb-d72a37266230",
             "applicationType": "client",
             "applicationId": "4UfTcIbcCzdvUokuwI8Yp9cRGl70mo37",
-            "description": "A speaker can propose talks to the rest of the Team",
+            "description": "A speaker can propose talks to the rest of the team",
             "name": "Speaker",
             "permissions": [
                 "a442ed93-65d2-45b4-93bd-31365613e13d"
