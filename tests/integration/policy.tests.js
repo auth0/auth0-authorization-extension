@@ -1,7 +1,7 @@
 import request from 'request-promise';
 import expect from 'expect';
 import faker from 'faker';
-import { getAccessToken, authzApi, token, credentials, extensionApiKey } from './utils';
+import { getAccessToken, authzApi, token, credentials, extensionApiKey, chunks } from './utils';
 import importData from './test-data.json';
 import config from '../../server/lib/config';
 import Promise from 'bluebird';
@@ -21,16 +21,6 @@ describe('policy', () => {
         request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true })
           .then(() => {
             // Request a Auth0 Management API token
-
-            // Splits an array into chunked sub-arrays.
-            const chunks = (array, size) => {
-              const items = [ ...array ];
-              const results = [];
-              while (items.length) {
-                results.push(items.splice(0, size));
-              }
-              return results;
-            };
 
             // Get a Management API token.
             request.post({

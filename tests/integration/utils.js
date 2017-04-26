@@ -4,7 +4,7 @@ const request = require('request-promise');
 
 let accessToken;
 
-module.exports.credentials = {
+export const credentials = {
   audience: 'urn:auth0-authz-api',
   client_id: config('INT_AUTH0_CLIENT_ID'),
   client_secret: config('INT_AUTH0_CLIENT_SECRET'),
@@ -14,9 +14,9 @@ module.exports.credentials = {
 /*
  * Get an access token for the Authorization Extension API.
  */
-module.exports.getAccessToken = () => request.post({
+export const getAccessToken = () => request.post({
   uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`,
-  form: module.exports.credentials,
+  form: credentials,
   json: true
 })
   .then(res => res.access_token).then((token) => {
@@ -25,6 +25,16 @@ module.exports.getAccessToken = () => request.post({
   });
 
 
-module.exports.authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
-module.exports.token = () => ({ Authorization: `Bearer ${accessToken}` });
-module.exports.extensionApiKey = config('EXTENSION_SECRET');
+export const authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
+export const token = () => ({ Authorization: `Bearer ${accessToken}` });
+export const extensionApiKey = config('EXTENSION_SECRET');
+
+// Splits an array into chunked sub-arrays.
+export const chunks = (array, size) => {
+  const items = [ ...array ];
+  const results = [];
+  while (items.length) {
+    results.push(items.splice(0, size));
+  }
+  return results;
+};
