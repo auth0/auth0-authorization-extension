@@ -19,7 +19,7 @@ describe('policy', () => {
       .catch(err => done(err));
   });
 
-  it('should get the groups, permissions and roles of an user',  (done) => {
+  it('should get the groups, permissions and roles of an user', (done) => {
     // Request a Auth0 Management API token
     let usersData = [];
 
@@ -68,13 +68,9 @@ describe('policy', () => {
         Promise.all(userCreationRequests)
           .then((values) => {
             usersData = values;
-    
+
             // Build the 'provider|id' user identifier for the extension members arrays.
-            const userIds = chunks(
-              usersData.map(
-                (user) => (`${user.identities[0].provider}|${user.identities[0].user_id}`)
-              ), 2
-            );
+            const userIds = chunks(usersData.map(user => user.user_id), 2);
 
             importData.groups = importData.groups.map((originGroup, i) => {
               const group = { ...originGroup };
@@ -92,10 +88,25 @@ describe('policy', () => {
             })
             .then(() => {
               // At this point, we are able to actually test.
+              // TODO: Remove created users after test.
+              usersData.forEach(user => console.log(user));
+              const userDeletions = usersData.map((user) => request.delete({
+                url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users/${user.user_id}`,
+                headers: mgmtHeader,
+                resolveWithFullResponse: true
+              }));
 
+              Promise.all(userDeletions)
+                .then((values) => {
+                  done();
+                }, done);
             }, done);
           }, done);
       }, done);
+
+
+
+
 
     // request.get({ url: authzApi('/policy'), headers: token(), json: true })
     //   .then((response) => {
