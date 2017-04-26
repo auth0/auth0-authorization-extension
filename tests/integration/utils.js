@@ -14,13 +14,16 @@ module.exports.credentials = {
 /*
  * Get an access token for the Authorization Extension API.
  */
-module.exports.getAccessToken = () => {
-  return request.post({ uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`, form: module.exports.credentials, json: true })
-    .then(res => res.access_token).then((token) => {
-      accessToken = token;
-      return token;
-    });
-};
+module.exports.getAccessToken = () => request.post({
+  uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`,
+  form: module.exports.credentials,
+  json: true
+})
+  .then(res => res.access_token).then((token) => {
+    accessToken = token;
+    return token;
+  });
+
 
 module.exports.authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
 module.exports.token = () => ({ Authorization: `Bearer ${accessToken}` });

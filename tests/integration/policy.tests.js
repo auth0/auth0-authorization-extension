@@ -109,7 +109,7 @@ describe('policy', () => {
       }, done);
   });
 
-  it('should get the mappings parents of an user with a connection', (done) => {
+  it('should get the right mapping group', (done) => {
     /**
      * Given this group:
      * {
