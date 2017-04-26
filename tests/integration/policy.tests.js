@@ -88,8 +88,7 @@ describe('policy', () => {
             })
             .then(() => {
               // At this point, we are able to actually test.
-              // TODO: Remove created users after test.
-              usersData.forEach(user => console.log(user));
+
               const userDeletions = usersData.map((user) => request.delete({
                 url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users/${user.user_id}`,
                 headers: mgmtHeader,
