@@ -9,6 +9,7 @@ import Promise from 'bluebird';
 let accessToken;
 let usersData = [];
 let mgmtHeader = {};
+const clientId = '4UfTcIbcCzdvUokuwI8Yp9cRGl70mo37';
 
 // Use Username-Password-Authentication by default.
 const connectionName = 'Username-Password-Authentication';
@@ -99,8 +100,7 @@ describe('policy', () => {
       }, done);
   });
 
-  it('should get the right mapping group', (done) => {
-    /**
+  /**
      * Given this group:
      * {
      *   name: "Internal Talks",
@@ -109,9 +109,9 @@ describe('policy', () => {
      * If I request the groups for "Auth0 Employees"
      * and connection "Some-Connection", I should get "Internal Talks".
      */
-
+  it('should get the right mapping group/s with the connection name and the groups', (done) => {
+    
     const user = usersData[0];
-    const clientId = '4UfTcIbcCzdvUokuwI8Yp9cRGl70mo37';
 
     request.post({
       url: authzApi(`/users/${user.id}/policy/${clientId}`),
@@ -124,6 +124,25 @@ describe('policy', () => {
     })
     .then((policy) => {
       expect(policy.groups).toContain('Internal Talks');
+      done();
+    });
+  });
+
+  it('shouldn\'t get the right mapping group/s with the wrong connection name and the groups', (done) => {
+    // User #4 is a member of the group 'Development'
+    const user = usersData[4];
+
+    request.post({
+      url: authzApi(`/users/${user.id}/policy/${clientId}`),
+      headers: { ...token(), 'x-api-key': extensionApiKey },
+      json: true,
+      body: {
+        connectionName,
+        groups: [ 'Development' ]
+      }
+    })
+    .then((policy) => {
+      expect(policy.groups).toNotContain('Internal Talks');
       done();
     });
   });
