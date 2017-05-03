@@ -12,6 +12,11 @@ let remoteGroup;
 let groupMemberName = 'auth0|test-user-12345';
 let remoteRole;
 
+let parallelGroups = [ ...new Array(20) ].map(() => ({
+  name: faker.lorem.slug(),
+  description: faker.lorem.sentence()
+}));
+
 describe('groups', () => {
   before((done) => {
     getAccessToken()
@@ -72,12 +77,7 @@ describe('groups', () => {
 
   // Skipped waiting to this function to be implemented in the API.
   it.skip('should create many groups in parallel', (done) => {
-    const groups = [ ...new Array(20) ].map(() => ({
-      name: faker.lorem.slug(),
-      description: faker.lorem.sentence()
-    }));
-
-    const creationRequests = groups.map((groupData) => request.post({
+    const creationRequests = parallelGroups.map((groupData) => request.post({
       url: authzApi('/groups'),
       form: groupData,
       headers: token(),
@@ -86,20 +86,28 @@ describe('groups', () => {
 
     Promise.all(creationRequests)
       .then((creationResponses) => {
-
+        parallelGroups = creationResponses;
         creationResponses.forEach((group) => {
-          expect(groups.find(g => g._id === group._id)).toExist();
+          expect(parallelGroups.find(g => g._id === group._id)).toExist();
         });
+        done();
+      }, done);
+  });
 
-        const deletionRequests = creationResponses.map((group) => request.delete({
-          url: authzApi(`/groups/${group._id}`),
-          headers: token(),
-          resolveWithFullResponse: true
-        }));
-        Promise.all(deletionRequests)
-          .then((deletionResponses) => {
-            creationResponses.forEach((group) => {
-              expect(groups.find(g => g._id === group._id)).toNotExist();
+  // Skipped waiting to this function to be implemented in the API.
+  it.skip('should delete groups in parallel', (done) => {
+    const deletionRequests = parallelGroups.map((group) => request.delete({
+      url: authzApi(`/groups/${group._id}`),
+      headers: token(),
+      resolveWithFullResponse: true
+    }));
+    Promise.all(deletionRequests)
+      .then((deletionResponses) => {
+        // Let's fetch all the groups and find.
+        request.get({ url: authzApi(`/groups`), headers: token(), json: true })
+          .then((data) => {
+            data.forEach((group) => {
+              expect(parallelGroups.find(g => g._id === group._id)).toNotExist();
             });
             done();
           }, done);
