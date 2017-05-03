@@ -17,7 +17,7 @@ export function createProvider(storageContext) {
         keySecret: config('S3_SECRET'),
         defaultData: {}
       });
-      return new BlobRecordProvider(context, { concurrentWrites: true });
+      return new BlobRecordProvider(context, { concurrentWrites: false });
     }
     case 'webtask':
     default: {
@@ -26,7 +26,7 @@ export function createProvider(storageContext) {
       const context = storageContext
           ? new WebtaskStorageContext(storageContext, { force: 0 })
           : new FileStorageContext(path.join(__dirname, '../../data.json'), { mergeWrites: true });
-      return new BlobRecordProvider(context, { concurrentWrites: true });
+      return new BlobRecordProvider(context, { concurrentWrites: false });
     }
   }
 }
