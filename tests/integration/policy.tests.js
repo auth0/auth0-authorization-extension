@@ -101,16 +101,16 @@ describe('policy', () => {
   });
 
   /**
-     * Given this group:
-     * {
-     *   name: "Internal Talks",
-     *   mappings: [ { name: "Auth0 Employees", connection: "Some-Connection" } ]
-     * }
-     * If I request the groups for "Auth0 Employees"
-     * and connection "Some-Connection", I should get "Internal Talks".
-     */
+   * Given this group:
+   * {
+   *   name: "Internal Talks",
+   *   mappings: [ { name: "Auth0 Employees", connection: "Some-Connection" } ]
+   * }
+   * If I request the groups for "Auth0 Employees"
+   * and connection "Some-Connection", I should get "Internal Talks".
+   */
   it('should get the right mapping group/s with the connection name and the groups', (done) => {
-    
+
     const user = usersData[0];
 
     request.post({

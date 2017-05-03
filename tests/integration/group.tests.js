@@ -1,4 +1,6 @@
-const Promise = require('bluebird');
+/* eslint-disable no-underscore-dangle */
+
+import Promise from 'bluebird';
 import request from 'request-promise';
 import expect from 'expect';
 import faker from 'faker';
@@ -66,6 +68,42 @@ describe('groups', () => {
             done();
           }).catch(done);
       }).catch(done);
+  });
+
+  // Skipped waiting to this function to be implemented in the API.
+  it.skip('should create many groups in parallel', (done) => {
+    const groups = [ ...new Array(20) ].map(() => ({
+      name: faker.lorem.slug(),
+      description: faker.lorem.sentence()
+    }));
+
+    const creationRequests = groups.map((groupData) => request.post({
+      url: authzApi('/groups'),
+      form: groupData,
+      headers: token(),
+      json: true
+    }));
+
+    Promise.all(creationRequests)
+      .then((creationResponses) => {
+
+        creationResponses.forEach((group) => {
+          expect(groups.find(g => g._id === group._id)).toExist();
+        });
+
+        const deletionRequests = creationResponses.map((group) => request.delete({
+          url: authzApi(`/groups/${group._id}`),
+          headers: token(),
+          resolveWithFullResponse: true
+        }));
+        Promise.all(deletionRequests)
+          .then((deletionResponses) => {
+            creationResponses.forEach((group) => {
+              expect(groups.find(g => g._id === group._id)).toNotExist();
+            });
+            done();
+          }, done);
+      }, done);
   });
 
   it('should get all groups in the system', (done) => {
