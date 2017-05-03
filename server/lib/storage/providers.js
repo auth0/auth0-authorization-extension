@@ -17,7 +17,7 @@ export function createProvider(storageContext) {
         keySecret: config('S3_SECRET'),
         defaultData: {}
       });
-      return new BlobRecordProvider(context);
+      return new BlobRecordProvider(context, { concurrentWrites: true });
     }
     case 'webtask':
     default: {
