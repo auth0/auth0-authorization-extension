@@ -13,11 +13,21 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) => {
+    var availableRules;
     req.pre.auth0
       .rules
       .getAll()
       .then(rules => {
         const rule = _.find(rules, { name: 'auth0-authorization-extension' });
+        availableRules = rules;
+        if (rule) {
+          return req.pre.auth0.rules.delete({ id: rule.id });
+        }
+
+        return Promise.resolve();
+      })
+      .then(() => {
+        const rule = _.find(availableRules, { name: 'auth0-authorization-restrict-access' });
         if (rule) {
           return req.pre.auth0.rules.delete({ id: rule.id });
         }

@@ -10,6 +10,7 @@
   "updateConfirmMessage": "Warning! Read the documentation about breaking changes (https://auth0.com/docs/extensions/authorization-extension) before updating the extension",
   "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
   "repository": "https://github.com/auth0/auth0-authorization-extension",
+  "docsUrl": "https://auth0.com/docs/extensions/authorization-extension",
   "keywords": [
     "auth0",
     "extension"
@@ -18,6 +19,7 @@
     "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
     "onUpdatePath": "/.extensions/on-update",
+    "onInstallPath": "/.extensions/on-install",
     "scopes": "read:resource_servers update:resource_servers delete:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
   },
   "secrets": {
