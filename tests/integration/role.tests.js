@@ -1,4 +1,5 @@
-const Promise = require('bluebird');
+/* eslint-disable no-underscore-dangle, no-shadow */
+
 import request from 'request-promise';
 import expect from 'expect';
 import faker from 'faker';
@@ -56,17 +57,18 @@ describe('roles', () => {
         expect(remoteRole.description).toEqual(data.description);
         done();
       }).catch(done);
-      }).catch(done);
+    }).catch(done);
   });
 
   it('should get all roles in the system', (done) => {
     request.get({
-      url: authzApi(`/roles`),
+      url: authzApi('/roles'),
       headers: token(),
       json: true
     })
     .then((data) => {
-      data.roles.length > 0 ? done() : done(new Error('Unexpected number of roles.'));
+      expect(data.roles.length).toBeGreaterThan(0);
+      done();
     })
     .catch(done);
   });
@@ -77,9 +79,7 @@ describe('roles', () => {
       headers: token(),
       json: true
     })
-    .then((data) => {
-      done();
-    }).catch(done);
+    .then(() => done()).catch(done);
   });
 
   it('should update a role', (done) => {
@@ -88,7 +88,7 @@ describe('roles', () => {
       description: faker.lorem.sentence()
     });
 
-    delete newData['_id'];
+    delete newData._id;
 
     request.put({
       url: authzApi(`/roles/${remoteRole._id}`),
@@ -120,7 +120,7 @@ describe('roles', () => {
       headers: token(),
       resolveWithFullResponse: true
     })
-    .then((data) => {
+    .then(() => {
       // Check the role was deleted in the server
       request.get({
         url: authzApi(`/roles/${remoteRole._id}`),

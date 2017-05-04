@@ -4,6 +4,7 @@ import config from '../../server/lib/config';
 nconf
     .argv()
     .env()
+    .file({ file: `${__dirname}/../../server/config.json` })
     .defaults({
       AUTH0_CLIENT_ID: '111',
       AUTH0_CLIENT_SECRET: '222',

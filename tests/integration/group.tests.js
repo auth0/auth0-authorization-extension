@@ -1,10 +1,10 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, no-shadow */
 
 import Promise from 'bluebird';
 import request from 'request-promise';
 import expect from 'expect';
 import faker from 'faker';
-import { getAccessToken, authzApi, token, credentials } from './utils';
+import { getAccessToken, authzApi, token } from './utils';
 
 const dataToImportExport = {};
 let accessToken;
@@ -12,7 +12,7 @@ let remoteGroup;
 const groupMemberName = 'auth0|test-user-12345';
 let remoteRole;
 
-let parallelGroups = [ ...new Array(20) ].map(() => ({
+const parallelGroups = [ ...new Array(20) ].map(() => ({
   name: faker.lorem.slug(),
   description: faker.lorem.sentence()
 }));
@@ -25,7 +25,7 @@ describe('groups', () => {
         request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true })
           .then(() => done());
       })
-      .catch(err => done(err));
+      .catch(err => done(err.message.message));
   });
 
   it('should have an accessToken', () => {
@@ -85,12 +85,17 @@ describe('groups', () => {
     }));
 
     Promise.all(creationRequests)
-      .then((creationResponses) => {
-        parallelGroups = creationResponses;
-        creationResponses.forEach((group) => {
-          expect(parallelGroups.find(g => g._id === group._id)).toExist();
-        });
-        done();
+      .then(() => {
+        // Get all the groups and check
+        request.get({ url: authzApi('/groups'), headers: token(), json: true })
+          .then((data) => {
+            console.log('data.groups.length', data.groups.length);
+            console.log('parallelGroups.length', parallelGroups.length);
+            parallelGroups.forEach((group) => {
+              expect(data.groups.find(g => g.name === group.name)).toExist();
+            });
+            done();
+          }, done);
       }, done);
   });
 
@@ -102,7 +107,7 @@ describe('groups', () => {
       resolveWithFullResponse: true
     }));
     Promise.all(deletionRequests)
-      .then((deletionResponses) => {
+      .then(() => {
         // Let's fetch all the groups and find.
         request.get({ url: authzApi('/groups'), headers: token(), json: true })
           .then((data) => {
@@ -175,7 +180,7 @@ describe('groups', () => {
 
   it.skip('should get the mappings of a group', (done) => {
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
-      .then((res) => done())
+      .then(() => done())
       .catch(done);
   });
 
@@ -203,7 +208,7 @@ describe('groups', () => {
 
   it('should get the members of a group', (done) => {
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/members`), headers: token(), json: true })
-      .then((res) => done())
+      .then(() => done())
       .catch(done);
   });
 
@@ -221,7 +226,7 @@ describe('groups', () => {
 
   it('should get the nested members of a group', (done) => {
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/members/nested`), headers: token(), json: true })
-      .then((res) => done())
+      .then(() => done())
       .catch(done);
   });
 
@@ -238,7 +243,7 @@ describe('groups', () => {
       .then((data) => {
         remoteRole = data;
         request.patch({ url: authzApi(`/groups/${remoteGroup._id}/roles`), body: [ remoteRole._id ], headers: token(), json: true })
-          .then((res) => {
+          .then(() => {
             request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles`), headers: token(), json: true })
               .then((res) => {
                 expect(res.find(role => role._id === remoteRole._id)).toExist();
@@ -260,7 +265,7 @@ describe('groups', () => {
 
   it('should delete roles from a group', (done) => {
     request.delete({ url: authzApi(`/groups/${remoteGroup._id}/roles`), body: [ remoteRole._id ], headers: token(), json: true })
-      .then((res) => {
+      .then(() => {
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles`), headers: token(), json: true })
           .then((res) => {
             expect(res.find(role => role._id === remoteRole._id)).toNotExist();
@@ -271,13 +276,13 @@ describe('groups', () => {
 
   it('should get the nested roles of a group', (done) => {
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles/nested`), headers: token(), json: true })
-      .then((res) => done())
+      .then(() => done())
       .catch(done);
   });
 
   it('should delete a group', (done) => {
     request.delete({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), resolveWithFullResponse: true })
-      .then((res) => {
+      .then(() => {
         // Check the group was deleted in the server
         request.get({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), json: true })
           .then((data) => {
