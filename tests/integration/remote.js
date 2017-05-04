@@ -96,8 +96,10 @@ npm.load((err) => {
       })
       .catch(err => { callback(err); });
     }, (err) => {
-      logger.error(err);
-      process.exit(1);
+      if (err) {
+        logger.error(err);
+        process.exit(1);
+      }
     });
   });
 });
