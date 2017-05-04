@@ -288,7 +288,7 @@ describe('groups', () => {
           .then((data) => {
             expect(remoteGroup.name).toNotEqual(data.name);
             expect(remoteGroup.description).toNotEqual(data.description);
-            done(new Error("The group still exists, it should't."));
+            done();
           }).catch((err) => {
             if (err.statusCode === 400) {
               done();

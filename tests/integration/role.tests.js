@@ -130,7 +130,7 @@ describe('roles', () => {
       .then((data) => {
         expect(remoteRole.name).toNotEqual(data.name);
         expect(remoteRole.description).toNotEqual(data.description);
-        done(new Error("The role still exists, it should't."));
+        done();
       }).catch((err) => {
         if (err.statusCode === 400) {
           done();

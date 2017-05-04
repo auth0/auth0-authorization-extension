@@ -129,7 +129,6 @@ describe('permissions', () => {
       .then((data) => {
         expect(remotePermission.name).toNotEqual(data.name);
         expect(remotePermission.description).toNotEqual(data.description);
-        done(new Error("The permission still exists, it should't."));
       }).catch((err) => {
         if (err.statusCode === 400) {
           done();

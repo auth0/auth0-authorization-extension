@@ -19,8 +19,6 @@ describe('policy', () => {
       .then(() => {
         request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true })
           .then(() => {
-            // Request a Auth0 Management API token
-
             // Get a Management API token.
             request.post({
               uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
