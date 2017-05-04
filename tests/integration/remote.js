@@ -1,6 +1,7 @@
 /* eslint-disable no-console, no-shadow */
 
 const fs = require('fs');
+const path = require('path');
 const npm = require('npm');
 const async = require('async');
 const Sandbox = require('sandboxjs');
@@ -25,17 +26,6 @@ const {
 
 const containers = [
   {
-    name: 'authz-with-wt-storage',
-    env: {
-      AUTH0_DOMAIN,
-      AUTH0_CLIENT_ID,
-      AUTH0_CLIENT_SECRET,
-      AUTHORIZE_API_KEY,
-      EXTENSION_SECRET,
-      WT_URL: `https://${WEBTASK_CONTAINER}.us.webtask.io/authz-with-wt-storage`
-    }
-  },
-  {
     name: 'authz-with-s3-storage',
     env: {
       AUTH0_DOMAIN,
@@ -50,12 +40,24 @@ const containers = [
       S3_SECRET,
       WT_URL: `https://${WEBTASK_CONTAINER}.us.webtask.io/authz-with-s3-storage`
     }
+  },
+  {
+    name: 'authz-with-wt-storage',
+    env: {
+      AUTH0_DOMAIN,
+      AUTH0_CLIENT_ID,
+      AUTH0_CLIENT_SECRET,
+      AUTHORIZE_API_KEY,
+      EXTENSION_SECRET,
+      WT_URL: `https://${WEBTASK_CONTAINER}.us.webtask.io/authz-with-wt-storage`
+    }
   }
 ];
 
 npm.load((err) => {
   if (err) throw err;
 
+  npm.localPrefix = path.join(__dirname, '../..');
   npm.commands.run([ 'extension:build' ], (err) => {
     if (err) throw err;
 
