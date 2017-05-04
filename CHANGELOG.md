@@ -1,6 +1,23 @@
+## [2.4.1] - 2017-05-04
+
+- Solve UI issue caused by redux logger
+
+## [2.4.0] - 2017-05-04
+
+- Add Amazon S3 as a supported storage provider.
+- Fixes for parallel writes when using Webtask Storage
+
+## [2.3.0] - 2017-04-10
+
+- Additional logic to make sure only clients (and not end-users) can interact with the API.
+
+> Note: this change was retroactively applied to all other minor versions.
+
 ## [2.2.0] - 2017-03-24
 
 - Add Amazon S3 as a supported storage provider.
+
+> Note: this release has been removed due to issues in the Extensions Gallery
 
 ## [2.1.2] - 2017-02-17
 
