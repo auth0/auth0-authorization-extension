@@ -1,5 +1,5 @@
 import nconf from 'nconf';
-import config from '../server/lib/config';
+import config from '../../server/lib/config';
 
 import certs from './mocks/certs.json';
 import { wellKnownEndpoint } from './mocks/tokens';
@@ -9,6 +9,7 @@ import { initServer } from './server';
 nconf
   .argv()
   .env()
+  .file({ file: `${__dirname}/../server/config.json` })
   .defaults({
     AUTH0_CLIENT_ID: '111',
     AUTH0_CLIENT_SECRET: '222',
@@ -21,6 +22,7 @@ nconf
     DUMMY_KEY: 'DUMMY_VALUE',
     PUBLIC_WT_URL: 'http://foo'
   });
+  
 
 config.setProvider((key) => nconf.get(key));
 
