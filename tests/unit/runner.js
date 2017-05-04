@@ -1,5 +1,5 @@
 import nconf from 'nconf';
-import config from '../server/lib/config';
+import config from '../../server/lib/config';
 
 import certs from './mocks/certs.json';
 import { wellKnownEndpoint } from './mocks/tokens';

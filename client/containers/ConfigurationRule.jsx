@@ -22,8 +22,10 @@ export default connectContainer(class extends Component {
   }
 
   componentWillMount() {
-    this.props.fetchConfiguration();
-    this.props.exportConfig();
+    setTimeout(() => {
+      this.props.fetchConfiguration();
+      this.props.exportConfig();
+    }, 500);
   }
 
   render() {

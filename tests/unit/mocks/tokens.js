@@ -1,7 +1,7 @@
 import nock from 'nock';
 import jwt from 'jsonwebtoken';
 import certs from './certs.json';
-import config from '../../server/lib/config';
+import config from '../../../server/lib/config';
 
 module.exports.wellKnownEndpoint = (domain, cert, kid) =>
    nock(`https://${domain}`)
