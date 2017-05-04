@@ -1,9 +1,10 @@
 /* eslint-disable no-console, no-shadow */
 
 const fs = require('fs');
-const Sandbox = require('sandboxjs');
 const npm = require('npm');
 const async = require('async');
+const Sandbox = require('sandboxjs');
+const logger = require('../../server/lib/logger');
 
 const EXTENSION_VERSION = process.env.npm_package_version;
 
@@ -55,7 +56,7 @@ const containers = [
 npm.load((err) => {
   if (err) throw err;
 
-  npm.commands.run(['extension:build'], (err) => {
+  npm.commands.run([ 'extension:build' ], (err) => {
     if (err) throw err;
 
     const code = fs.readFileSync(`./dist/auth0-authz.extension.${EXTENSION_VERSION}.js`).toString();
@@ -67,24 +68,24 @@ npm.load((err) => {
         container: WEBTASK_CONTAINER
       });
 
-      console.log(`Uploading code for ${container.name}`);
+      logger.debug(`Uploading code for ${container.name}`);
 
       profile.create(code, {
         secrets: container.env,
         name: container.name
       })
       .then((webtask) => {
-        process.env.INT_AUTHZ_API_URL = `${webtask.url}/api`;
+        process.env.AUTHZ_API_URL = `${webtask.url}/api`;
 
-        console.log(`Running tests for ${container.name}`);
-        npm.commands.run([ 'int-test' ], (err) => {
+        logger.debug(`Running tests for ${container.name}`);
+        npm.commands.run([ 'test:integration' ], (err) => {
           if (err) callback(err);
 
-          console.log(`Tests for ${container.name} have finished. Deleting webtask...`);
+          logger.info(`Tests for ${container.name} have finished. Deleting webtask...`);
 
           profile.removeWebtask({ name: container.name })
             .then(() => {
-              console.log(`Webtask container for ${container.name} removed.`);
+              logger.debug(`Webtask container for ${container.name} removed.`);
 
               callback();
             })
@@ -93,7 +94,8 @@ npm.load((err) => {
       })
       .catch(err => { callback(err); });
     }, (err) => {
-      console.log(err);
+      logger.error(err);
+      process.exit(1);
     });
   });
 });

@@ -9,7 +9,7 @@ import Promise from 'bluebird';
 let accessToken;
 let usersData = [];
 let mgmtHeader = {};
-const clientId = '4UfTcIbcCzdvUokuwI8Yp9cRGl70mo37';
+const clientId = config('AUTH0_CLIENT_ID');
 
 // Use Username-Password-Authentication by default.
 const connectionName = 'Username-Password-Authentication';
@@ -25,11 +25,11 @@ describe('policy', () => {
 
             // Get a Management API token.
             request.post({
-              uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`,
+              uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
               form: {
-                audience: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/`,
-                client_id: config('INT_AUTH0_CLIENT_ID'),
-                client_secret: config('INT_AUTH0_CLIENT_SECRET'),
+                audience: `https://${config('AUTH0_DOMAIN')}/api/v2/`,
+                client_id: config('AUTH0_CLIENT_ID'),
+                client_secret: config('AUTH0_CLIENT_SECRET'),
                 grant_type: 'client_credentials'
               },
               json: true
@@ -46,7 +46,7 @@ describe('policy', () => {
 
                 // Actually create the users in the server.
                 const userCreationRequests = usersData.map((user) => request.post({
-                  url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users`,
+                  url: `https://${config('AUTH0_DOMAIN')}/api/v2/users`,
                   body: user,
                   headers: mgmtHeader,
                   json: true
@@ -79,7 +79,7 @@ describe('policy', () => {
                     }, done);
                   }, done);
               }, done);
-          });
+          }, done);
       })
       .catch(done);
   });
@@ -89,7 +89,7 @@ describe('policy', () => {
    */
   after((done) => {
     const userDeletions = usersData.map((user) => request.delete({
-      url: `https://${config('INT_AUTH0_DOMAIN')}/api/v2/users/${user.user_id}`,
+      url: `https://${config('AUTH0_DOMAIN')}/api/v2/users/${user.user_id}`,
       headers: mgmtHeader,
       resolveWithFullResponse: true
     }));
@@ -110,7 +110,6 @@ describe('policy', () => {
    * and connection "Some-Connection", I should get "Internal Talks".
    */
   it('should get the right mapping group/s with the connection name and the groups', (done) => {
-
     const user = usersData[0];
 
     request.post({

@@ -6,8 +6,8 @@ let accessToken;
 
 export const credentials = {
   audience: 'urn:auth0-authz-api',
-  client_id: config('INT_AUTH0_CLIENT_ID'),
-  client_secret: config('INT_AUTH0_CLIENT_SECRET'),
+  client_id: config('AUTH0_CLIENT_ID'),
+  client_secret: config('AUTH0_CLIENT_SECRET'),
   grant_type: 'client_credentials'
 };
 
@@ -15,7 +15,7 @@ export const credentials = {
  * Get an access token for the Authorization Extension API.
  */
 export const getAccessToken = () => request.post({
-  uri: `https://${config('INT_AUTH0_DOMAIN')}/oauth/token`,
+  uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
   form: credentials,
   json: true
 })
@@ -25,7 +25,7 @@ export const getAccessToken = () => request.post({
   });
 
 
-export const authzApi = (endpoint) => (config('INT_AUTHZ_API_URL') + endpoint);
+export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);
 export const token = () => ({ Authorization: `Bearer ${accessToken}` });
 export const extensionApiKey = config('EXTENSION_SECRET');
 

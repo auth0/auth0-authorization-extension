@@ -21,8 +21,12 @@ module.exports = () => ({
       return reply.error(new Error('Unable to use "import" without proper storage'));
     }
 
-    return req.storage.provider.storageContext.write(req.payload)
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    return req.storage.provider.storageContext.storage.set(req.payload, { force: true }, (err) => {
+      if (err) {
+        return reply.error(err);
+      }
+
+      return reply().code(204);
+    });
   }
 });
