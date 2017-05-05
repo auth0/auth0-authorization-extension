@@ -161,40 +161,49 @@ describe('groups', () => {
       .catch(done);
   });
 
-  it.skip('should add mappings to a group', (done) => {
+  it('should add mappings to a group', () => {
     const mappings = [
       { groupName: 'My groupName', connectionName: 'google-oauth2' }
     ];
-    request.patch({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), body: mappings, headers: token(), json: true })
+    return request.patch({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), body: mappings, headers: token(), json: true })
       .then(() => {
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
           .then((groupMappings) => {
             expect(groupMappings.length).toEqual(1);
             expect(groupMappings[0].groupName).toEqual('My groupName');
             expect(groupMappings[0].connectionName).toEqual('google-oauth2 (google-oauth2)');
-            done();
-          })
-          .catch((err) => {
-            done(err);
           });
+      });
+  });
+
+  it('should get the mappings of a group', () => (
+    request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token() })
+      .then((response) => {
+        expect(response.length).toBeGreaterThan(0);
       })
-      .catch((err) => done(err));
-  });
+  ));
 
-  it.skip('should get the mappings of a group', (done) => {
-    request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
-      .then(() => done())
-      .catch(done);
-  });
-
-  it.skip('should remove mappings of a group', (done) => {
-    request.delete({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), resolveWithFullResponse: true })
+  it('should remove mappings of a group', () => {
+    let mappingCount;
+    return request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
+      .then((mappings) => {
+        mappingCount = mappings.length;
+        return mappings[0];
+      })
+      .then((mapping) => request.delete({
+        url: authzApi(`/groups/${remoteGroup._id}/mappings`),
+        headers: token(),
+        body: [ mapping._id ],
+        json: true,
+        resolveWithFullResponse: true
+      })
       .then((res) => {
-        // TODO: Get the mappings and check
         expect(res.statusCode).toEqual(204);
-        done();
-      })
-      .catch(done);
+        return request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
+          .then((response) => {
+            expect(response.length).toEqual(mappingCount - 1);
+          });
+      }));
   });
 
   it('should add members to a group', (done) => {
