@@ -107,7 +107,9 @@
     "semver": "^5.1.0",
     "superagent": "^2.3.0",
     "webtask-tools": "^3.0.0",
-    "winston": "^2.2.0"
+    "winston": "^2.2.0",
+    "sandboxjs": "^3.4.2",
+    "npm": "^4.4.4"
   },
   "devDependencies": {
     "auth0-extensions-cli": "^1.0.5",
@@ -152,7 +154,6 @@
     "ngrok": "2.2.8",
     "nock": "9.0.13",
     "nodemon": "^1.11.0",
-    "npm": "^4.4.4",
     "npm-run": "^4.1.2",
     "nyc": "10.3.0",
     "open": "0.0.5",
@@ -184,7 +185,6 @@
     "redux-thunk": "2.2.0",
     "request-promise": "^2.0.1",
     "rimraf": "2.6.1",
-    "sandboxjs": "^3.4.2",
     "style-loader": "0.17.0",
     "stylus": "^0.54.5",
     "stylus-loader": "2.5.0",
