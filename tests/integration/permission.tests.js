@@ -9,26 +9,18 @@ let accessToken;
 let remotePermission;
 
 describe('permissions', () => {
-  before((done) => {
-    getAccessToken()
-      .then(response => {
-        accessToken = response;
-        request.post({
-          url: authzApi('/configuration/import'),
-          form: {},
-          headers: token(),
-          resolveWithFullResponse: true
-        })
-        .then(() => done());
-      })
-      .catch(err => done(err));
-  });
+  before(() => getAccessToken()
+    .then(response => {
+      accessToken = response;
+      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true });
+    })
+  );
 
   it('should have an accessToken', () => {
     expect(accessToken).toExist();
   });
 
-  it('should create a new permission', (done) => {
+  it('should create a new permission', () => {
     const permission = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence(),
@@ -36,7 +28,7 @@ describe('permissions', () => {
       applicationId: faker.lorem.slug()
     };
 
-    request.post({
+    return request.post({
       url: authzApi('/permissions'),
       form: permission,
       headers: token(),
@@ -44,7 +36,7 @@ describe('permissions', () => {
     })
     .then((data) => {
       remotePermission = data;
-      request.get({
+      return request.get({
         url: authzApi(`/permissions/${remotePermission._id}`),
         headers: token(),
         json: true
@@ -52,12 +44,11 @@ describe('permissions', () => {
         .then((data) => {
           expect(remotePermission.name).toEqual(data.name);
           expect(remotePermission.description).toEqual(data.description);
-          done();
-        }).catch(done);
-    }).catch(done);
+        });
+    });
   });
 
-  it('should get all permissions in the system', (done) => {
+  it('should get all permissions in the system', () =>
     request.get({
       url: authzApi('/permissions'),
       headers: token(),
@@ -65,23 +56,18 @@ describe('permissions', () => {
     })
     .then((data) => {
       expect(data.permissions.length).toBeGreaterThan(0);
-      done();
     })
-    .catch(done);
-  });
+  );
 
-  it('should get a single permission based on its unique identifier', (done) => {
+  it('should get a single permission based on its unique identifier', () =>
     request.get({
       url: authzApi(`/permissions/${remotePermission._id}`),
       headers: token(),
       json: true
     })
-    .then(() => {
-      done();
-    }).catch(done);
-  });
+  );
 
-  it('should update a permission', (done) => {
+  it('should update a permission', () => {
     const newData = Object.assign({}, remotePermission, {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence()
@@ -89,7 +75,7 @@ describe('permissions', () => {
 
     delete newData._id;
 
-    request.put({
+    return request.put({
       url: authzApi(`/permissions/${remotePermission._id}`),
       form: newData,
       headers: token(),
@@ -99,7 +85,7 @@ describe('permissions', () => {
       remotePermission = data;
 
       // Check the permission was updated in the server
-      request.get({
+      return request.get({
         url: authzApi(`/permissions/${remotePermission._id}`),
         headers: token(),
         json: true
@@ -107,10 +93,8 @@ describe('permissions', () => {
       .then((data) => {
         expect(remotePermission.name).toEqual(data.name);
         expect(remotePermission.description).toEqual(data.description);
-        done();
-      }).catch(done);
-    })
-    .catch(done);
+      });
+    });
   });
 
   it('should delete a permission', (done) => {
