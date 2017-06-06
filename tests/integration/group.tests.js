@@ -1,10 +1,10 @@
-/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-underscore-dangle, no-shadow */
 
 import Promise from 'bluebird';
 import request from 'request-promise';
 import expect from 'expect';
 import faker from 'faker';
-import { getAccessToken, authzApi, token, credentials } from './utils';
+import { getAccessToken, authzApi, token } from './utils';
 
 const dataToImportExport = {};
 let accessToken;
@@ -12,71 +12,59 @@ let remoteGroup;
 const groupMemberName = 'auth0|test-user-12345';
 let remoteRole;
 
-let parallelGroups = [ ...new Array(20) ].map(() => ({
+const parallelGroups = [ ...new Array(20) ].map(() => ({
   name: faker.lorem.slug(),
   description: faker.lorem.sentence()
 }));
 
 describe('groups', () => {
-  before((done) => {
-    getAccessToken()
-      .then(response => {
-        accessToken = response;
-        request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true })
-          .then(() => done());
-      })
-      .catch(err => done(err));
-  });
+  before(() => getAccessToken()
+    .then(response => {
+      accessToken = response;
+      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true });
+    })
+  );
 
   it('should have an accessToken', () => {
     expect(accessToken).toExist();
   });
 
-  it('should import data', (done) => {
+  it('should import data', () =>
     request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true })
       .then((response) => {
         expect(response.statusCode).toEqual(204);
-        done();
       })
-      .catch((err) => {
-        done(err);
-      });
-  });
+  );
 
-  it('should export data', (done) => {
+  it('should export data', () =>
     request.get({ url: authzApi('/configuration/export'), headers: token(), json: true })
       .then((data) => {
         expect(data).toEqual(dataToImportExport);
-        done();
       })
-      .catch((err) => {
-        done(err);
-      });
-  });
+  );
 
-  it('should create a new group', (done) => {
+  it('should create a new group', () => {
     const group = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence()
     };
 
     // Create the group
-    request.post({ url: authzApi('/groups'), form: group, headers: token(), json: true })
+    return request.post({ url: authzApi('/groups'), form: group, headers: token(), json: true })
       .then((data) => {
         remoteGroup = data;
 
         // Check the group is stored in the server
-        request.get({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), json: true })
+        return request.get({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), json: true })
           .then((data) => {
             expect(remoteGroup.name).toEqual(data.name);
             expect(remoteGroup.description).toEqual(data.description);
-            done();
-          }).catch(done);
-      }).catch(done);
+          });
+      });
   });
 
   // Skipped waiting to this function to be implemented in the API.
-  it('should create many groups in parallel', (done) => {
+  it('should create many groups in parallel', () => {
     const creationRequests = parallelGroups.map((groupData) => request.post({
       url: authzApi('/groups'),
       form: groupData,
@@ -84,61 +72,62 @@ describe('groups', () => {
       json: true
     }));
 
-    Promise.all(creationRequests)
-      .then((creationResponses) => {
-        parallelGroups = creationResponses;
-        creationResponses.forEach((group) => {
-          expect(parallelGroups.find(g => g._id === group._id)).toExist();
-        });
-        done();
-      }, done);
+    return Promise.all(creationRequests)
+      .then(() => request.get({ url: authzApi('/groups'), headers: token(), json: true })
+        .then((data) => {
+          parallelGroups.forEach((group) => {
+            expect(data.groups.find(g => g.name === group.name)).toExist();
+          });
+        })
+      );
   });
 
-  // Skipped waiting to this function to be implemented in the API.
-  it('should delete groups in parallel', (done) => {
-    const deletionRequests = parallelGroups.map((group) => request.delete({
-      url: authzApi(`/groups/${group._id}`),
-      headers: token(),
-      resolveWithFullResponse: true
-    }));
-    Promise.all(deletionRequests)
-      .then((deletionResponses) => {
-        // Let's fetch all the groups and find.
-        request.get({ url: authzApi('/groups'), headers: token(), json: true })
-          .then((data) => {
-            data.groups.forEach((group) => {
-              expect(parallelGroups.find(g => g._id === group._id)).toNotExist();
-            });
-            done();
-          }, done);
-      }, done);
-  });
-
-  it('should get all groups in the system', (done) => {
+  // Get all the groups and delete them all expect one
+  it('should delete groups in parallel', () =>
     request.get({ url: authzApi('/groups'), headers: token(), json: true })
       .then((data) => {
-        expect(data.groups.length).toEqual(1);
-        done();
-      })
-      .catch(done);
-  });
+        const groups = data.groups.splice(1);
+        const deletionRequests = groups.map((group) => request.delete({
+          url: authzApi(`/groups/${group._id}`),
+          headers: token(),
+          resolveWithFullResponse: true
+        }));
 
-  it('should get a single group based on its unique identifier', (done) => {
+        // Let's fetch all the groups and find.
+        return Promise.all(deletionRequests)
+          .then(() => 
+            request.get({ url: authzApi('/groups'), headers: token(), json: true })
+              .then((data) => {
+                data.groups.forEach((group) => {
+                  expect(parallelGroups.find(g => g._id === group._id)).toNotExist();
+                });
+              })
+          );
+      })
+  );
+
+  it('should get all groups in the system', () =>
+    request.get({ url: authzApi('/groups'), headers: token(), json: true })
+      .then((data) => {
+        expect(data.groups.length).toBeGreaterThan(0);
+      })
+  );
+
+  it('should get a single group based on its unique identifier', () =>
     request.get({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), json: true })
       .then((data) => {
         expect(remoteGroup.name).toEqual(data.name);
         expect(remoteGroup.description).toEqual(data.description);
-        done();
-      }).catch(done);
-  });
+      })
+  );
 
-  it('should update a group', (done) => {
+  it('should update a group', () => {
     const newData = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence()
     };
 
-    request.put({ url: authzApi(`/groups/${remoteGroup._id}`), form: newData, headers: token(), json: true })
+    return request.put({ url: authzApi(`/groups/${remoteGroup._id}`), form: newData, headers: token(), json: true })
       .then((data) => {
         remoteGroup = data;
 
@@ -147,85 +136,84 @@ describe('groups', () => {
           .then((data) => {
             expect(remoteGroup.name).toEqual(data.name);
             expect(remoteGroup.description).toEqual(data.description);
-            done();
-          }).catch(done);
-      })
-      .catch(done);
+          });
+      });
   });
 
-  it('should add mappings to a group', (done) => {
+  it('should add mappings to a group', () => {
     const mappings = [
       { groupName: 'My groupName', connectionName: 'google-oauth2' }
     ];
-    request.patch({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), body: mappings, headers: token(), json: true })
+    return request.patch({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), body: mappings, headers: token(), json: true })
       .then(() => {
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
           .then((groupMappings) => {
             expect(groupMappings.length).toEqual(1);
             expect(groupMappings[0].groupName).toEqual('My groupName');
             expect(groupMappings[0].connectionName).toEqual('google-oauth2 (google-oauth2)');
-            done();
-          })
-          .catch((err) => {
-            done(err);
           });
+      });
+  });
+
+  it('should get the mappings of a group', () => (
+    request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token() })
+      .then((response) => {
+        expect(response.length).toBeGreaterThan(0);
       })
-      .catch((err) => done(err));
-  });
+  ));
 
-  it.skip('should get the mappings of a group', (done) => {
-    request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
-      .then((res) => done())
-      .catch(done);
-  });
-
-  it.skip('should remove mappings of a group', (done) => {
-    request.delete({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), resolveWithFullResponse: true })
+  it('should remove mappings of a group', () => {
+    let mappingCount;
+    return request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
+      .then((mappings) => {
+        mappingCount = mappings.length;
+        return mappings[0];
+      })
+      .then((mapping) => request.delete({
+        url: authzApi(`/groups/${remoteGroup._id}/mappings`),
+        headers: token(),
+        body: [ mapping._id ],
+        json: true,
+        resolveWithFullResponse: true
+      })
       .then((res) => {
-        // TODO: Get the mappings and check
         expect(res.statusCode).toEqual(204);
-        done();
-      })
-      .catch(done);
+        return request.get({ url: authzApi(`/groups/${remoteGroup._id}/mappings`), headers: token(), json: true })
+          .then((response) => {
+            expect(response.length).toEqual(mappingCount - 1);
+          });
+      }));
   });
 
-  it('should add members to a group', (done) => {
+  it('should add members to a group', () =>
     request.patch({ url: authzApi(`/groups/${remoteGroup._id}/members`), body: [ groupMemberName ], headers: token(), json: true })
-      .then(() => {
+      .then(() =>
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/members`), headers: token(), json: true })
           .then((data) => {
             expect(data.users.find((member) => member.user_id === groupMemberName)).toExist();
-            done();
           })
-          .catch(done);
-      }).catch(done);
-  });
+      )
+  );
 
-  it('should get the members of a group', (done) => {
+  it('should get the members of a group', () =>
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/members`), headers: token(), json: true })
-      .then((res) => done())
-      .catch(done);
-  });
+  );
 
-  it('should remove members from a group', (done) => {
+  it('should remove members from a group', () =>
     request.delete({ url: authzApi(`/groups/${remoteGroup._id}/members`), body: [ groupMemberName ], headers: token(), json: true })
-      .then(() => {
+      .then(() =>
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/members`), headers: token(), json: true })
           .then((data) => {
             expect(data.users.find((member) => member.user_id === groupMemberName)).toNotExist();
-            done();
           })
-          .catch(done);
-      }).catch(done);
-  });
+      )
+  );
 
-  it('should get the nested members of a group', (done) => {
+  it('should get the nested members of a group', () =>
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/members/nested`), headers: token(), json: true })
-      .then((res) => done())
-      .catch(done);
-  });
+  );
 
-  it('should add roles to a group', (done) => {
+  it('should add roles to a group', () => {
     const role = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence(),
@@ -234,56 +222,49 @@ describe('groups', () => {
       permissions: []
     };
 
-    request.post({ url: authzApi('/roles'), form: role, headers: token(), json: true })
+    return request.post({ url: authzApi('/roles'), form: role, headers: token(), json: true })
       .then((data) => {
         remoteRole = data;
-        request.patch({ url: authzApi(`/groups/${remoteGroup._id}/roles`), body: [ remoteRole._id ], headers: token(), json: true })
-          .then((res) => {
+        return request.patch({ url: authzApi(`/groups/${remoteGroup._id}/roles`), body: [ remoteRole._id ], headers: token(), json: true })
+          .then(() =>
             request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles`), headers: token(), json: true })
               .then((res) => {
                 expect(res.find(role => role._id === remoteRole._id)).toExist();
-                done();
-              }).catch(done);
-          }).catch(done);
-      })
-      .catch(done);
+              })
+          );
+      });
   });
 
-  it('should get the roles of a group', (done) => {
+  it('should get the roles of a group', () =>
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles`), headers: token(), json: true })
       .then((res) => {
         expect(res.length).toBeGreaterThan(0);
-        done();
       })
-      .catch(done);
-  });
+  );
 
-  it('should delete roles from a group', (done) => {
+  it('should delete roles from a group', () =>
     request.delete({ url: authzApi(`/groups/${remoteGroup._id}/roles`), body: [ remoteRole._id ], headers: token(), json: true })
-      .then((res) => {
+      .then(() =>
         request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles`), headers: token(), json: true })
           .then((res) => {
             expect(res.find(role => role._id === remoteRole._id)).toNotExist();
-            done();
-          }).catch(done);
-      }).catch(done);
-  });
+          })
+      )
+  );
 
-  it('should get the nested roles of a group', (done) => {
+  it('should get the nested roles of a group', () =>
     request.get({ url: authzApi(`/groups/${remoteGroup._id}/roles/nested`), headers: token(), json: true })
-      .then((res) => done())
-      .catch(done);
-  });
+  );
 
   it('should delete a group', (done) => {
     request.delete({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), resolveWithFullResponse: true })
-      .then((res) => {
+      .then(() => {
         // Check the group was deleted in the server
         request.get({ url: authzApi(`/groups/${remoteGroup._id}`), headers: token(), json: true })
           .then((data) => {
             expect(remoteGroup.name).toNotEqual(data.name);
             expect(remoteGroup.description).toNotEqual(data.description);
-            done(new Error("The group still exists, it should't."));
+            done();
           }).catch((err) => {
             if (err.statusCode === 400) {
               done();

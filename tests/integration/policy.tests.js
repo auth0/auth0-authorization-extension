@@ -1,12 +1,11 @@
 import request from 'request-promise';
 import expect from 'expect';
 import faker from 'faker';
-import { getAccessToken, authzApi, token, credentials, extensionApiKey, chunks } from './utils';
+import Promise from 'bluebird';
+import { getAccessToken, authzApi, token, extensionApiKey, chunks } from './utils';
 import importData from './test-data.json';
 import config from '../../server/lib/config';
-import Promise from 'bluebird';
 
-let accessToken;
 let usersData = [];
 let mgmtHeader = {};
 const clientId = config('AUTH0_CLIENT_ID');
@@ -17,12 +16,9 @@ const connectionName = 'Username-Password-Authentication';
 describe('policy', () => {
   before((done) => {
     getAccessToken()
-      .then(response => {
-        accessToken = response;
+      .then(() => {
         request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true })
           .then(() => {
-            // Request a Auth0 Management API token
-
             // Get a Management API token.
             request.post({
               uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
