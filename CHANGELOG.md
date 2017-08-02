@@ -1,3 +1,7 @@
+## [2.4.2] - 2017-07-31
+
+- Prevent UI from crashing when user no longer exists in Auth0
+
 ## [2.4.1] - 2017-05-04
 
 - Solve UI issue caused by redux logger

@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz-extension",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "4.6.2"
@@ -69,7 +69,7 @@
   },
   "dependencies": {
     "async": "2.1.2",
-    "auth0": "^2.4.0",
+    "auth0": "2.4.0",
     "auth0-extension-hapi-tools": "1.2.0",
     "auth0-extension-s3-tools": "1.1.1",
     "auth0-extension-tools": "1.2.1",
