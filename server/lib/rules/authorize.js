@@ -64,7 +64,8 @@ function (user, context, callback) {
   // Store authorization data in the user profile so we can query it later.
   function saveToMetadata(user, groups, roles, permissions, cb) {
     user.app_metadata = user.app_metadata || {};
-    user.app_metadata.authorization = {<% if (config.persistGroups && !config.groupsPassthrough) { %>
+    user.app_metadata.authorization = user.app_metadata.authorization || {};
+    user.app_metadata.authorization[context.clientName] = {<% if (config.persistGroups && !config.groupsPassthrough) { %>
       groups: groups,<% } %><% if (config.persistGroups && config.groupsPassthrough) { %>
       groups: mergeRecords(user.groups, groups),<% } %><% if (config.persistRoles && !config.rolesPassthrough) { %>
       roles: roles,<% } %><% if (config.persistRoles && config.rolesPassthrough) { %>

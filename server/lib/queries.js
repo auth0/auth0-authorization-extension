@@ -33,7 +33,8 @@ export const getConnectionsCached = memoizer({
   },
   hash: (auth0) => auth0.hash || 'connections',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: nconf.get('DISABLE_CACHE')
 });
 
 /*
@@ -49,7 +50,8 @@ export const getPermissionsCached = memoizer({
   },
   hash: (db) => db.hash || 'permissions',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: nconf.get('DISABLE_CACHE')
 });
 
 /*
@@ -65,7 +67,8 @@ export const getRolesCached = memoizer({
   },
   hash: (db) => db.hash || 'roles',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: nconf.get('DISABLE_CACHE')
 });
 
 /*
@@ -81,7 +84,8 @@ export const getGroupsCached = memoizer({
   },
   hash: (db) => db.hash || 'groups',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: nconf.get('DISABLE_CACHE')
 });
 
 /*
@@ -317,7 +321,7 @@ export function getDynamicUserGroups(db, connectionName, groupMemberships, allGr
 /*
  * Get the groups a user belongs to.
  */
-export function getUserGroups(db, userId, connectionName, groupMemberships) {
+export function getUserGroups(db, userId, connectionName, groupMemberships, caching) {
   if (!Array.isArray(groupMemberships) || groupMemberships === undefined || groupMemberships === null) {
     groupMemberships = [ ];
   }

@@ -64,7 +64,8 @@
       "WARN_DB_SIZE": 409600,
       "MAX_MULTISELECT_USERS": 5,
       "MULTISELECT_DEBOUNCE_MS": 250,
-      "PER_PAGE": 10
+      "PER_PAGE": 10,
+      "DISABLE_CACHE": false
     }
   },
   "dependencies": {
