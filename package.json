@@ -65,6 +65,7 @@
       "MAX_MULTISELECT_USERS": 5,
       "MULTISELECT_DEBOUNCE_MS": 250,
       "PER_PAGE": 10,
+      "DATA_CACHE_MAX_AGE": 5000,
       "DISABLE_CACHE": false
     }
   },

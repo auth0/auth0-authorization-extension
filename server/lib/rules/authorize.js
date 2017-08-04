@@ -64,16 +64,23 @@ function (user, context, callback) {
   // Store authorization data in the user profile so we can query it later.
   function saveToMetadata(user, groups, roles, permissions, cb) {
     user.app_metadata = user.app_metadata || {};
+    <% if (config.persistOnClientLevel) { %>
     user.app_metadata.authorization = user.app_metadata.authorization || {};
-    user.app_metadata.authorization[context.clientName] = {<% if (config.persistGroups && !config.groupsPassthrough) { %>
-      groups: groups,<% } %><% if (config.persistGroups && config.groupsPassthrough) { %>
-      groups: mergeRecords(user.groups, groups),<% } %><% if (config.persistRoles && !config.rolesPassthrough) { %>
+    user.app_metadata.authorization.client = user.app_metadata.authorization.client || {};
+    user.app_metadata.authorization.client[context.clientId] = {<% if (config.persistRoles && !config.rolesPassthrough) { %>
       roles: roles,<% } %><% if (config.persistRoles && config.rolesPassthrough) { %>
       roles: mergeRecords(user.roles, roles),<% } %><% if (config.persistPermissions && !config.permissionsPassthrough) { %>
       permissions: permissions<% } %><% if (config.persistPermissions && config.permissionsPassthrough) { %>
       permissions: mergeRecords(user.permissions, permissions)<% } %>
-    };
-
+    };<% } else { %>
+    user.app_metadata.authorization = {<% if (config.persistRoles && !config.rolesPassthrough) { %>
+      roles: roles,<% } %><% if (config.persistRoles && config.rolesPassthrough) { %>
+      roles: mergeRecords(user.roles, roles),<% } %><% if (config.persistPermissions && !config.permissionsPassthrough) { %>
+      permissions: permissions<% } %><% if (config.persistPermissions && config.permissionsPassthrough) { %>
+      permissions: mergeRecords(user.permissions, permissions)<% } %>
+    };<% } %><% if (config.persistGroups) { %>
+    user.app_metadata.authorization.groups = <% if (config.groupsPassthrough) { %> mergeRecords(user.groups, groups);<% } else { %>groups;<% } %>
+    <% } %>
     auth0.users.updateAppMetadata(user.user_id, user.app_metadata)
     .then(function() {
       cb();
