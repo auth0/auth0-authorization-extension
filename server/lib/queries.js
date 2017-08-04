@@ -321,9 +321,22 @@ export function getDynamicUserGroups(db, connectionName, groupMemberships, allGr
 /*
  * Get the groups a user belongs to.
  */
-export function getUserGroups(db, userId, connectionName, groupMemberships, caching) {
+export function getUserGroups(db, userId, connectionName, groupMemberships, disableCaching) {
   if (!Array.isArray(groupMemberships) || groupMemberships === undefined || groupMemberships === null) {
     groupMemberships = [ ];
+  }
+
+  const prepareData = (groups) => {
+    const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+
+    // Calculate the dynamic user groups based on external and internal group memberships.
+    return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
+      .then(dynamicGroups => getParentGroups(groups, _.union(userGroups, dynamicGroups)));
+  };
+
+  if (disableCaching) {
+    return db.getGroups()
+      .then(prepareData);
   }
 
   return new Promise((resolve, reject) => {
@@ -332,15 +345,8 @@ export function getUserGroups(db, userId, connectionName, groupMemberships, cach
         return reject(err);
       }
 
-      // Get the direct groups memberships of a user.
-      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
-
-      // Calculate the dynamic user groups based on external and internal group memberships.
-      return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
-        .then(dynamicGroups => {
-          const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
-          return resolve(nestedGroups);
-        })
+      return prepareData(groups)
+        .then(data => resolve(data))
         .catch(reject);
     });
   });
