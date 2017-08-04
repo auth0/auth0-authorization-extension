@@ -312,21 +312,15 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
     groupMemberships = [ ];
   }
 
-  return new Promise((resolve, reject) => {
-    db.getGroups()
-      .then((groups) => {
-        // Get the direct groups memberships of a user.
-        const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+  return db.getGroups()
+    .then((groups) => {
+      // Get the direct groups memberships of a user.
+      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
 
-        // Calculate the dynamic user groups based on external and internal group memberships.
-        return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
-          .then(dynamicGroups => {
-            const nestedGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
-            return resolve(nestedGroups);
-          });
-      })
-      .catch(reject);
-  });
+      // Calculate the dynamic user groups based on external and internal group memberships.
+      return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
+        .then(dynamicGroups => getParentGroups(groups, _.union(userGroups, dynamicGroups)));
+    });
 }
 
 /*
