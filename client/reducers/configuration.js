@@ -43,6 +43,7 @@ export const configuration = createReducer(fromJS(initialState), {
   },
   [constants.SAVE_CONFIGURATION_FULFILLED]: (state, action) =>
     state.merge({
+      error: null,
       loading: false,
       record: fromJS(action.payload.data)
     }),

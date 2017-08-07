@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { ValidationError } from 'auth0-extension-tools';
 
 import schema from '../schemas/configuration';
 import compileRule from '../../../lib/compileRule';
@@ -24,7 +25,30 @@ module.exports = (server) => ({
   handler: (req, reply) => {
     const config = req.payload;
 
-    req.pre.auth0.rules.getAll()
+    if (config.groupsInIdToken || config.rolesInIdToken || config.permissionsInIdToken) {
+      if (config.idTokenNamespace.indexOf('auth0.com') >= 0) {
+        return reply.error(new ValidationError('ID Token Namespace cannot contain "auth0.com"'));
+      }
+
+      if (config.idTokenNamespace.indexOf('http') !== 0) {
+        return reply.error(new ValidationError('ID Token Namespace should be a valid url'));
+      }
+    }
+
+    if (config.groupsInAccessToken || config.rolesInAccessToken || config.permissionsInAccessToken) {
+      if (config.accessTokenNamespace.indexOf('auth0.com') >= 0) {
+        return reply.error(new ValidationError('Access Token Namespace cannot contain "auth0.com"'));
+      }
+
+      if (config.accessTokenNamespace.indexOf('http') !== 0) {
+        return reply.error(new ValidationError('Access Token Namespace should be a valid url'));
+      }
+    }
+
+    config.idTokenNamespace = config.idTokenNamespace.replace(/\/$/, '');
+    config.accessTokenNamespace = config.accessTokenNamespace.replace(/\/$/, '');
+
+    return req.pre.auth0.rules.getAll()
       .then(rules => {
         const userName = req.auth.credentials.email || 'unknown';
         const payload = {

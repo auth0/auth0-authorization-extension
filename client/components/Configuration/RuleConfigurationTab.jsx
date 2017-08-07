@@ -134,7 +134,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
         <div data-columns="3" className="switchboard switchboard-responsive">
           { this.tabSwitchItems.idTokenContents.map(item => this.renderSwitchItem(item)) }
           <div className="namespace-input">
-            { this.renderTextInput({ name: 'idTokenNamespace', placeholder: 'Namespace for ID Token', label: 'ID Token Namespace' }) }
+            { this.renderTextInput({ name: 'idTokenNamespace', placeholder: 'http://example.com', label: 'ID Token Namespace' }) }
           </div>
         </div>
 
@@ -152,7 +152,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
         <div data-columns="3" className="switchboard switchboard-responsive">
           { this.tabSwitchItems.accessTokenContents.map(item => this.renderSwitchItem(item)) }
           <div className="namespace-input">
-            { this.renderTextInput({ name: 'accessTokenNamespace', placeholder: 'Namespace for Access Token', label: 'Access Token Namespace' }) }
+            { this.renderTextInput({ name: 'accessTokenNamespace', placeholder: 'http://example.com', label: 'Access Token Namespace' }) }
           </div>
         </div>
 
