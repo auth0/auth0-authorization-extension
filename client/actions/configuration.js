@@ -87,9 +87,11 @@ export function fetchRuleStatus() {
  */
 export function saveConfiguration(config) {
   const configData = _.pick(config, [
-    'groupsInToken', 'rolesInToken', 'permissionsInToken',
+    'groupsInIdToken', 'rolesInIdToken', 'permissionsInIdToken', 'idTokenNamespace',
+    'groupsInAccessToken', 'rolesInAccessToken', 'permissionsInAccessToken', 'accessTokenNamespace',
     'persistGroups', 'persistRoles', 'persistPermissions',
-    'groupsPassthrough', 'rolesPassthrough', 'permissionsPassthrough'
+    'groupsPassthrough', 'rolesPassthrough', 'permissionsPassthrough',
+    'persistOnClientLevel', 'disableCaching'
   ]);
   return {
     type: constants.SAVE_CONFIGURATION,

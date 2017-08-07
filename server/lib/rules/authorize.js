@@ -5,6 +5,8 @@ module.exports = `/*
 function (user, context, callback) {
   var _ = require('lodash');
   var EXTENSION_URL = "<%= extensionUrl %>";
+  var idTokenNamespace = "<%= config.idTokenNamespace %>";
+  var accessTokenNamespace = "<%= config.accessTokenNamespace %>";
 
   var audience = '';
   audience = audience || (context.request && context.request.query && context.request.query.audience);
@@ -30,13 +32,28 @@ function (user, context, callback) {
       );
     }
 
-    // Update the user object.<% if (config.groupsInToken && !config.groupsPassthrough) { %>
-    user.groups = data.groups;<% } %><% if (config.groupsInToken && config.groupsPassthrough) { %>
-    user.groups = mergeRecords(user.groups, data.groups);<% } %><% if (config.rolesInToken && !config.rolesPassthrough) { %>
-    user.roles = data.roles;<% } %><% if (config.rolesInToken && config.rolesPassthrough) { %>
-    user.roles = mergeRecords(user.roles, data.roles);<% } %><% if (config.permissionsInToken && !config.permissionsPassthrough) { %>
-    user.permissions = data.permissions;<% } %><% if (config.permissionsInToken && config.permissionsPassthrough) { %>
+    // Update the user object.<% if (config.groupsInIdToken && !config.groupsPassthrough) { %>
+    user.groups = data.groups;<% } %><% if (config.groupsInIdToken && config.groupsPassthrough) { %>
+    user.groups = mergeRecords(user.groups, data.groups);<% } %><% if (config.rolesInIdToken && !config.rolesPassthrough) { %>
+    user.roles = data.roles;<% } %><% if (config.rolesInIdToken && config.rolesPassthrough) { %>
+    user.roles = mergeRecords(user.roles, data.roles);<% } %><% if (config.permissionsInIdToken && !config.permissionsPassthrough) { %>
+    user.permissions = data.permissions;<% } %><% if (config.permissionsInIdToken && config.permissionsPassthrough) { %>
     user.permissions = mergeRecords(user.permissions, data.permissions);<% } %>
+    // Update Tokens.<% if (config.groupsInIdToken && !config.groupsPassthrough) { %>
+    context.idToken[idTokenNamespace + '/groups' ] = data.groups;<% } %><% if (config.groupsInIdToken && config.groupsPassthrough) { %>
+    context.idToken[idTokenNamespace + '/groups' ] = mergeRecords(user.groups, data.groups);<% } %><% if (config.rolesInIdToken && !config.rolesPassthrough) { %>
+    context.idToken[idTokenNamespace + '/roles' ] = data.roles;<% } %><% if (config.rolesInIdToken && config.rolesPassthrough) { %>
+    context.idToken[idTokenNamespace + '/roles' ] = mergeRecords(user.roles, data.roles);<% } %><% if (config.permissionsInIdToken && !config.permissionsPassthrough) { %>
+    context.idToken[idTokenNamespace + '/permissions' ] = data.permissions;<% } %><% if (config.permissionsInIdToken && config.permissionsPassthrough) { %>
+    context.idToken[idTokenNamespace + '/permissions' ] = mergeRecords(user.permissions, data.permissions);<% } %>
+    <% if (config.groupsInAccessToken && !config.groupsPassthrough) { %>
+    context.accessToken[accessTokenNamespace + '/groups' ] = data.groups;<% } %><% if (config.groupsInAccessToken && config.groupsPassthrough) { %>
+    context.accessToken[accessTokenNamespace + '/groups' ] = mergeRecords(user.groups, data.groups);<% } %><% if (config.rolesInAccessToken && !config.rolesPassthrough) { %>
+    context.accessToken[accessTokenNamespace + '/roles' ] = data.roles;<% } %><% if (config.rolesInAccessToken && config.rolesPassthrough) { %>
+    context.accessToken[accessTokenNamespace + '/roles' ] = mergeRecords(user.roles, data.roles);<% } %><% if (config.permissionsInAccessToken && !config.permissionsPassthrough) { %>
+    context.accessToken[accessTokenNamespace + '/permissions' ] = data.permissions;<% } %><% if (config.permissionsInAccessToken && config.permissionsPassthrough) { %>
+    context.accessToken[accessTokenNamespace + '/permissions' ] = mergeRecords(user.permissions, data.permissions);<% } %>
+
 <% if (config.persistGroups || config.persistRoles || config.persistPermissions) { %>
     // Store this in the user profile (app_metadata).
     saveToMetadata(user, data.groups, data.roles, data.permissions, function(err) {
@@ -55,7 +72,8 @@ function (user, context, callback) {
       },
       json: {
         connectionName: context.connection || user.identities[0].connection,
-        groups: user.groups
+        groups: user.groups,
+        disableCaching: <%= config.disableCaching %>
       },
       timeout: 5000
     }, cb);

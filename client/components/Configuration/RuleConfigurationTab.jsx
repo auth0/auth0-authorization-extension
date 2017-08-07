@@ -1,28 +1,46 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { Field } from 'redux-form';
-import { InputSwitchItem } from 'auth0-extension-ui';
+import { InputSwitchItem, InputText } from 'auth0-extension-ui';
 import createForm from '../../utils/createForm';
+import './RuleConfigurationTab.styl';
 
 export default createForm('ruleConfigurationForm', class RuleConfigurationForm extends Component {
   constructor(props) {
     super(props);
     this.tabSwitchItems = {
-      tokenContents: [
+      idTokenContents: [
         {
           title: 'Groups',
           description: (<span>Add <strong>groups</strong> to the user's token.</span>),
-          name: 'groupsInToken'
+          name: 'groupsInIdToken'
         },
         {
           title: 'Roles',
           description: (<span>Add <strong>roles</strong> to the user's token.</span>),
-          name: 'rolesInToken'
+          name: 'rolesInIdToken'
         },
         {
           title: 'Permissions',
           description: (<span>Add <strong>permissions</strong> to the user's token.</span>),
-          name: 'permissionsInToken'
+          name: 'permissionsInIdToken'
+        }
+      ],
+      accessTokenContents: [
+        {
+          title: 'Groups',
+          description: (<span>Add <strong>groups</strong> to the access token.</span>),
+          name: 'groupsInAccessToken'
+        },
+        {
+          title: 'Roles',
+          description: (<span>Add <strong>roles</strong> to the access token.</span>),
+          name: 'rolesInAccessToken'
+        },
+        {
+          title: 'Permissions',
+          description: (<span>Add <strong>permissions</strong> to the access token.</span>),
+          name: 'permissionsInAccessToken'
         }
       ],
       persistence: [
@@ -58,6 +76,18 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           description: (<span>Merge the user's permissions with permissions originating from the IdP.</span>),
           name: 'permissionsPassthrough'
         }
+      ],
+      other: [
+        {
+          title: 'Persist on client Level',
+          description: (<span>persistOnClientLevel description placeholder</span>),
+          name: 'persistOnClientLevel'
+        },
+        {
+          title: 'Disable Caching',
+          description: (<span>disableCaching description placeholder</span>),
+          name: 'disableCaching'
+        }
       ]
     };
   }
@@ -70,6 +100,10 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
     return <Field key={field.name} name={field.name} component={InputSwitchItem} title={field.title} description={field.description} />;
   }
 
+  renderTextInput(field) {
+    return <Field name={field.name} component={InputText} label={field.label} placeholder={field.placeholder} />;
+  }
+
   render() {
     const { handleSubmit, submitting } = this.props;
 
@@ -77,7 +111,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
       <div>
         <div className="row">
           <div className="col-xs-10">
-            <h4>Token Contents</h4>
+            <h4>Authentication Response (id_token, SAML/WS-Federation response)</h4>
           </div>
           <div className="col-xs-2">
             <div className="pull-right">
@@ -98,7 +132,28 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           </div>
         </div>
         <div data-columns="3" className="switchboard switchboard-responsive">
-          { this.tabSwitchItems.tokenContents.map(item => this.renderSwitchItem(item)) }
+          { this.tabSwitchItems.idTokenContents.map(item => this.renderSwitchItem(item)) }
+          <div className="namespace-input">
+            { this.renderTextInput({ name: 'idTokenNamespace', placeholder: 'Namespace for ID Token', label: 'ID Token Namespace' }) }
+          </div>
+        </div>
+
+        <h4>Authorization Response (access_token)</h4>
+        <div className="cues-container">
+          <div className="use-case-box is-active">
+            <div className="explainer-text">
+              <span className="explainer-text-content">
+                accessTokenContents description placeholder
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div data-columns="3" className="switchboard switchboard-responsive">
+          { this.tabSwitchItems.accessTokenContents.map(item => this.renderSwitchItem(item)) }
+          <div className="namespace-input">
+            { this.renderTextInput({ name: 'accessTokenNamespace', placeholder: 'Namespace for Access Token', label: 'Access Token Namespace' }) }
+          </div>
         </div>
 
         <div className="alert alert-info">
@@ -141,6 +196,21 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
 
         <div className="alert alert-warning">
           <strong>Heads up!</strong> There is no synchronization taking place between the data in the Authorization Extension and the user's profile. Any changes made here will only be visible in the user's metadata next time they log in.
+        </div>
+
+        <h4>Other settings</h4>
+        <div className="cues-container">
+          <div className="use-case-box is-active">
+            <div className="explainer-text">
+              <span className="explainer-text-content">
+                Description placeholder
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div data-columns="2" className="switchboard switchboard-responsive">
+          { this.tabSwitchItems.other.map(item => this.renderSwitchItem(item)) }
         </div>
       </div>
     );
