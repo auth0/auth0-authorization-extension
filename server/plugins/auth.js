@@ -7,7 +7,7 @@ import * as tools from 'auth0-extension-hapi-tools';
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
 
-const hashApiKey = () => crypto.createHmac('sha256', config('PUBLIC_WT_URL'))
+const hashApiKey = () => crypto.createHmac('sha256', config('WT_URL'))
     .update(config('EXTENSION_SECRET'))
     .digest('hex');
 
@@ -35,7 +35,7 @@ module.exports.register = (server, options, next) => {
       key: config('EXTENSION_SECRET'),
       verifyOptions: {
         audience: 'urn:api-authz',
-        issuer: config('PUBLIC_WT_URL'),
+        issuer: config('WT_URL'),
         algorithms: [ 'HS256' ]
       }
     },
@@ -92,7 +92,7 @@ module.exports.register = (server, options, next) => {
               return callback(null, true, decoded.payload);
             });
           });
-        } else if (decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL')) {
+        } else if (decoded && decoded.payload && decoded.payload.iss === config('WT_URL')) {
           return jwt.verify(token, jwtOptions.dashboardAdmin.key, jwtOptions.dashboardAdmin.verifyOptions, (err) => {
             if (err) {
               return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
@@ -120,7 +120,7 @@ module.exports.register = (server, options, next) => {
       rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
       scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users',
-      baseUrl: config('PUBLIC_WT_URL'),
+      baseUrl: config('WT_URL'),
       audience: 'urn:api-authz',
       secret: config('EXTENSION_SECRET'),
       clientName: 'Authorization Extension',

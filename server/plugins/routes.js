@@ -60,7 +60,7 @@ module.exports.register = (server, options, next) => {
     method: 'GET',
     path: '/admins/login',
     config: { auth: false },
-    handler: (request, reply) => reply('Redirecting to login page...').redirect(`${config('PUBLIC_WT_URL')}/login`)
+    handler: (request, reply) => reply('Redirecting to login page...').redirect(`${config('WT_URL')}/login`)
   });
   next();
 };
