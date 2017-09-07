@@ -14,22 +14,21 @@ module.exports = () => ({
     validate: {
       query: {
         q: Joi.string().max(1000).allow('').default(''),
-        field: Joi.string().max(1000).allow('').default('')
+        field: Joi.string().max(1000).allow('').default(''),
+        select: Joi.string().max(1000).allow('').default('')
       }
     }
   },
   handler: (req, reply) =>
     req.storage.getRoles()
       .then(roles => ({
-        roles: _.filter(roles, (item) => {
-          // if exists, filter by search value
-          const searchQuery = req.query.q;
-          if (!searchQuery) return true;
-
-          const field = req.query.field;
-          return _.includes(item[field].toLowerCase(), searchQuery.toLowerCase());
-        }),
-        total: roles.length
+        const fields = _.chain(req.query.field).split(',').map(_.trim).value();
+        const queries = _.chain(req.query.q).split(',').map(_.trim).value();
+        const predicate = _.zipObject(fields, queries);
+        const filteredRoles = _.filter(roles, predicate);
+        const selectedRoles = _.chain(req.query.select).split(',').map(_.trim).value();
+        roles: req.query.select ? _.map(filteredRoles, role => _pick(role, selectedRoles)) : filteredRoles,
+        total: filteredRoles.length
       }))
       .then(roles => reply(roles))
       .catch(err => reply.error(err))
