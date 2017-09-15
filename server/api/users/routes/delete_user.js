@@ -22,6 +22,6 @@ module.exports = (server) => ({
   },
   handler: (req, reply) =>
     removeUserId(req.storage, req.params.id)
-      .then(user => reply(user))
+      .then(() => reply().code(204))
       .catch(err => reply.error(err))
 });

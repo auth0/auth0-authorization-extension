@@ -436,9 +436,14 @@ const updateUserInGroups = (db, id, newId) =>
   getAllUserGroups(db, id)
     .then(groups => Promise.map(groups, group => {
       const groupId = group._id;
-      const index = group.members.indexOf(id);
-      group.members[index] = newId; // eslint-disable-line no-param-reassign
-      group.members = _.uniq(group.members); // eslint-disable-line no-param-reassign
+
+      if (newId) {
+        const index = group.members.indexOf(id);
+        group.members[index] = newId; // eslint-disable-line no-param-reassign
+        group.members = _.uniq(group.members); // eslint-disable-line no-param-reassign
+      } else {
+        _.pull(group.members, id);
+      }
 
       return db.updateGroup(groupId, group);
     }));
@@ -447,25 +452,16 @@ const updateUserInRoles = (db, id, newId) =>
   getAllUserRoles(db, id)
     .then(roles => Promise.map(roles, role => {
       const roleId = role._id;
-      const index = role.users.indexOf(id);
-      role.users[index] = newId; // eslint-disable-line no-param-reassign
-      role.users = _.uniq(role.users); // eslint-disable-line no-param-reassign
+
+      if (newId) {
+        const index = role.users.indexOf(id);
+        role.users[index] = newId; // eslint-disable-line no-param-reassign
+        role.users = _.uniq(role.users); // eslint-disable-line no-param-reassign
+      } else {
+        _.pull(role.users, id);
+      }
 
       return db.updateRole(roleId, role);
-    }));
-
-const removeUserFromGroups = (db, id) =>
-  getAllUserGroups(db, id)
-    .then(groups => Promise.map(groups, group => {
-      _.pull(group.members, id);
-      return db.updateGroup(group._id, group);
-    }));
-
-const removeUserFromRoles = (db, id) =>
-  getAllUserRoles(db, id)
-    .then(roles => Promise.map(roles, role => {
-      _.pull(role.users, id);
-      return db.updateRole(role._id, role);
     }));
 
 /*
@@ -480,7 +476,7 @@ export function updateUserId(db, id, newId) {
  * Removes userId from all groups and roles
  */
 export function removeUserId(db, id) {
-  return removeUserFromGroups(db, id)
-    .then(() => removeUserFromRoles(db, id));
+  return updateUserInGroups(db, id)
+    .then(() => updateUserInRoles(db, id));
 }
 
