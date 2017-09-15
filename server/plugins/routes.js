@@ -48,6 +48,8 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/metadata/routes/get_metadata')(server));
   server.route(require('../api/users/routes/get_user')(server));
   server.route(require('../api/users/routes/get_users')(server));
+  server.route(require('../api/users/routes/patch_user')(server));
+  server.route(require('../api/users/routes/delete_user')(server));
   server.route(require('../api/users-groups/routes/get_users_groups')(server));
   server.route(require('../api/users-groups/routes/get_users_groups_calculate')(server));
   server.route(require('../api/users-groups/routes/patch_user_add_to_group')(server));

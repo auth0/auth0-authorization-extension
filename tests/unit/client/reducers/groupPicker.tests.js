@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { groupPicker } from '../../../client/reducers/groupPicker';
-import * as constants from '../../../client/constants';
+import { groupPicker } from '../../../../client/reducers/groupPicker';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   error: null,

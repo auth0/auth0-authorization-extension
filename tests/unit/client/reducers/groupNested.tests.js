@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { groupNested } from '../../../client/reducers/groupNested';
-import * as constants from '../../../client/constants';
+import { groupNested } from '../../../../client/reducers/groupNested';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   error: null,

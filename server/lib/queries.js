@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+
 import _ from 'lodash';
 import nconf from 'nconf';
 import Promise from 'bluebird';
@@ -309,7 +311,7 @@ export function getDynamicUserGroups(db, connectionName, groupMemberships, allGr
  */
 export function getUserGroups(db, userId, connectionName, groupMemberships) {
   if (!Array.isArray(groupMemberships) || groupMemberships === undefined || groupMemberships === null) {
-    groupMemberships = [ ];
+    groupMemberships = [ ]; // eslint-disable-line no-param-reassign
   }
 
   return new Promise((resolve, reject) => {
@@ -406,3 +408,79 @@ export function getGroupsExpanded(db, groups) {
     });
   });
 }
+
+const getAllUserGroups = (db, userId) =>
+  new Promise((resolve, reject) => {
+    getGroupsCached(db, (err, groups) => {
+      if (err) {
+        return reject(err);
+      }
+
+      return resolve(_.filter(groups, (group) => group.members && group.members.indexOf(userId) >= 0));
+    });
+  });
+
+
+const getAllUserRoles = (db, userId) =>
+  new Promise((resolve, reject) => {
+    getRolesCached(db, (err, roles) => {
+      if (err) {
+        return reject(err);
+      }
+
+      return resolve(_.filter(roles, (role) => role.users && role.users.indexOf(userId) >= 0));
+    });
+  });
+
+const updateUserInGroups = (db, id, newId) =>
+  getAllUserGroups(db, id)
+    .then(groups => Promise.map(groups, group => {
+      const groupId = group._id;
+      const index = group.members.indexOf(id);
+      group.members[index] = newId; // eslint-disable-line no-param-reassign
+      group.members = _.uniq(group.members); // eslint-disable-line no-param-reassign
+
+      return db.updateGroup(groupId, group);
+    }));
+
+const updateUserInRoles = (db, id, newId) =>
+  getAllUserRoles(db, id)
+    .then(roles => Promise.map(roles, role => {
+      const roleId = role._id;
+      const index = role.users.indexOf(id);
+      role.users[index] = newId; // eslint-disable-line no-param-reassign
+      role.users = _.uniq(role.users); // eslint-disable-line no-param-reassign
+
+      return db.updateRole(roleId, role);
+    }));
+
+const removeUserFromGroups = (db, id) =>
+  getAllUserGroups(db, id)
+    .then(groups => Promise.map(groups, group => {
+      _.pull(group.members, id);
+      return db.updateGroup(group._id, group);
+    }));
+
+const removeUserFromRoles = (db, id) =>
+  getAllUserRoles(db, id)
+    .then(roles => Promise.map(roles, role => {
+      _.pull(role.users, id);
+      return db.updateRole(role._id, role);
+    }));
+
+/*
+ * Replace userId in all groups and roles
+ */
+export function updateUserId(db, id, newId) {
+  return updateUserInGroups(db, id, newId)
+    .then(() => updateUserInRoles(db, id, newId));
+}
+
+/*
+ * Removes userId from all groups and roles
+ */
+export function removeUserId(db, id) {
+  return removeUserFromGroups(db, id)
+    .then(() => removeUserFromRoles(db, id));
+}
+
