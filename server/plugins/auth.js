@@ -77,7 +77,7 @@ module.exports.register = (server, options, next) => {
                 return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
               }
 
-              if (decoded.payload.gty !== 'client-credentials') {
+              if (decoded.payload.gty && decoded.payload.gty !== 'client-credentials') {
                 return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
               }
 
