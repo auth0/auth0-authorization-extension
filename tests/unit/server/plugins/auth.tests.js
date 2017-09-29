@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import * as auth0 from '../../unit/mocks/auth0';
-import { getServerData } from '../../../server';
-import { getToken, getUserToken, getAdminTokenWithoutAccessToken } from '../../unit/mocks/tokens';
+import * as auth0 from '../../mocks/auth0';
+import { getServerData } from '../../server';
+import { getToken, getUserToken, getApiToken, getAdminTokenWithoutAccessToken } from '../../mocks/tokens';
 
 describe('auth', () => {
   const { server } = getServerData();
@@ -63,6 +63,70 @@ describe('auth', () => {
 
       server.inject(options, (response) => {
         expect(response.result.statusCode).to.be.equal(401);
+        cb();
+      });
+    });
+
+    it('should return 401 if the api token does contain wrong gty', (cb) => {
+      const token = getApiToken('wrong-gty');
+      const options = {
+        method: 'GET',
+        url: '/api/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(401);
+        cb();
+      });
+    });
+
+    it('should return 401 if the api token does contain wrong sub', (cb) => {
+      const token = getApiToken('client-credentials');
+      const options = {
+        method: 'GET',
+        url: '/api/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(401);
+        cb();
+      });
+    });
+
+    it('should work with correct api token (with gty)', (cb) => {
+      const token = getApiToken('client-credentials', 'clients', [ 'read:groups' ]);
+      const options = {
+        method: 'GET',
+        url: '/api/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.be.equal(200);
+        cb();
+      });
+    });
+
+    it('should work with correct api token (without gty)', (cb) => {
+      const token = getApiToken(null, 'clients', [ 'read:groups' ]);
+      const options = {
+        method: 'GET',
+        url: '/api/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.be.equal(200);
         cb();
       });
     });
