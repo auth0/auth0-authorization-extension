@@ -6,7 +6,7 @@ import { getUserGroups, getDynamicUserGroups, getGroupExpanded } from '../../../
 
 const mockDatabase = (groups, roles, permissions) => ({
   hash: uuid.v4(),
-  getGroup: (id) => new Promise((resolve) => {
+  getGroup: () => new Promise((resolve) => {
     resolve(groups[0]);
   }),
   getGroups: () => new Promise((resolve) => {
@@ -214,17 +214,21 @@ describe('Queries', () => {
     });
 
     it('should return empty if the current transaction does not match any groups', (done) => {
-      const auth0 = mockConnections([
+      const auth0 = mockConnections([ // eslint-disable-line no-unused-vars
           { id: 'abc', name: 'my-ad' },
           { id: 'def', name: 'other-ad' }
       ]);
 
       const db = mockDatabase([
-        { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
+        {
+          _id: '123',
+          name: 'Group 1',
+          mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
         },
-        { _id: '456', name: 'Group 2', mappings:
-          [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
+        {
+          _id: '456',
+          name: 'Group 2',
+          mappings: [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
         }
       ]);
 
@@ -239,11 +243,15 @@ describe('Queries', () => {
 
     it('should return empty if the current transaction does not match any groups', (done) => {
       const db = mockDatabase([
-        { _id: '123', name: 'Group 1', mappings:
-          [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
+        {
+          _id: '123',
+          name: 'Group 1',
+          mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
         },
-        { _id: '456', name: 'Group 2', mappings:
-          [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
+        {
+          _id: '456',
+          name: 'Group 2',
+          mappings: [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
         }
       ]);
 
@@ -262,16 +270,20 @@ describe('Queries', () => {
           _id: '123', name: 'Group 1', mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
         },
         {
-          _id: '456', name: 'Group 2', mappings: [
-          { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
-          { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
-        ]
+          _id: '456',
+          name: 'Group 2',
+          mappings: [
+            { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
+            { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
+          ]
         },
         {
-          _id: '789', name: 'Group 3', mappings: [
-          { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
-          { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
-        ]
+          _id: '789',
+          name: 'Group 3',
+          mappings: [
+            { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
+            { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
+          ]
         }
       ]);
 
@@ -292,16 +304,17 @@ describe('Queries', () => {
       const db = mockDatabase([
         { _id: '123', name: 'Group 1', roles: [ 'r1', 'r2' ] }
       ],
-      [
-        { _id: 'r1', name: 'Role 1', applicationId: 'app1', applicationType: 'client', permissions: [ 'p11', 'p12' ] },
-        { _id: 'r2', name: 'Role 2', applicationId: 'app2', applicationType: 'client', permissions: [ 'p21', 'p22' ] }
-      ],
-      [
-        { _id: 'p11', name: 'Permission 11', applicationId: 'app1', applicationType: 'client' },
-        { _id: 'p12', name: 'Permission 12', applicationId: 'app1', applicationType: 'client' },
-        { _id: 'p21', name: 'Permission 21', applicationId: 'app2', applicationType: 'client' },
-        { _id: 'p22', name: 'Permission 22', applicationId: 'app2', applicationType: 'client' }
-      ]);
+        [
+          { _id: 'r1', name: 'Role 1', applicationId: 'app1', applicationType: 'client', permissions: [ 'p11', 'p12' ] },
+          { _id: 'r2', name: 'Role 2', applicationId: 'app2', applicationType: 'client', permissions: [ 'p21', 'p22' ] }
+        ],
+        [
+          { _id: 'p11', name: 'Permission 11', applicationId: 'app1', applicationType: 'client' },
+          { _id: 'p12', name: 'Permission 12', applicationId: 'app1', applicationType: 'client' },
+          { _id: 'p21', name: 'Permission 21', applicationId: 'app2', applicationType: 'client' },
+          { _id: 'p22', name: 'Permission 22', applicationId: 'app2', applicationType: 'client' }
+        ]
+      );
 
       getGroupExpanded(db, '123')
         .then((group) => {

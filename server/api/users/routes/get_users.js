@@ -13,7 +13,7 @@ module.exports = (server) => ({
       query: {
         q: Joi.string().max(1000).allow('').default(''),
         field: Joi.string().max(1000).allow('').default(''),
-        per_page: Joi.number().integer().min(1).max(200).default(100),
+        per_page: Joi.number().integer().min(1).max(200).default(100), // eslint-disable-line newline-per-chained-call
         page: Joi.number().integer().min(0).default(0)
       }
     },

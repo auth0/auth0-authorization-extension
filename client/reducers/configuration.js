@@ -67,14 +67,14 @@ export const configuration = createReducer(fromJS(initialState), {
       loading: true
     }),
   [constants.SAVE_CONFIGURATION_RESOURCESERVER_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const errorMessage = (action.payload.data && action.payload.data.errors && 'Validation Error') || action.errorMessage;
 
     return state.merge({
       loading: false,
       error: `An error occured while saving the resource server configuration: ${errorMessage}`
     });
   },
-  [constants.SAVE_CONFIGURATION_RESOURCESERVER_FULFILLED]: (state, action) =>
+  [constants.SAVE_CONFIGURATION_RESOURCESERVER_FULFILLED]: (state) =>
     state.merge({
       loading: false
     }),
@@ -83,14 +83,14 @@ export const configuration = createReducer(fromJS(initialState), {
       loading: true
     }),
   [constants.REMOVE_CONFIGURATION_RESOURCESERVER_REJECTED]: (state, action) => {
-    const errorMessage = action.payload.data && action.payload.data.errors && 'Validation Error' || action.errorMessage;
+    const errorMessage = (action.payload.data && action.payload.data.errors && 'Validation Error') || action.errorMessage;
 
     return state.merge({
       loading: false,
       error: `An error occured while removing the resource server configuration: ${errorMessage}`
     });
   },
-  [constants.REMOVE_CONFIGURATION_RESOURCESERVER_FULFILLED]: (state, action) =>
+  [constants.REMOVE_CONFIGURATION_RESOURCESERVER_FULFILLED]: (state) =>
     state.merge({
       loading: false,
       resourceserver: { }
@@ -114,5 +114,5 @@ export const configuration = createReducer(fromJS(initialState), {
     state.merge({
       loading: false,
       explorer: fromJS(action.payload.data)
-    }),
+    })
 });

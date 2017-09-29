@@ -1,6 +1,6 @@
-import React from 'react';
+import React from 'react'; // eslint-disable-line no-unused-vars
 import { render } from 'react-dom';
-import DevTools from './containers/DevTools';
+import DevTools from './containers/DevTools.jsx'; // eslint-disable-line no-unused-vars
 
 module.exports = (store) => {
   const popup = window.open(null, 'Redux DevTools', 'menubar=no,location=no,resizable=yes,scrollbars=no,status=no');

@@ -18,6 +18,24 @@ const initialState = {
   ids: []
 };
 
+const userAllRoles = createReducer(fromJS(initialState.allRoles), {
+  [constants.FETCH_USER_ALL_ROLES_PENDING]: (state) =>
+    state.merge({
+      ...initialState.allRoles,
+      loading: true
+    }),
+  [constants.FETCH_USER_ALL_ROLES_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.allRoles,
+      error: `An error occured while loading all roles: ${action.errorMessage}`
+    }),
+  [constants.FETCH_USER_ALL_ROLES_FULFILLED]: (state, action) =>
+    state.merge({
+      loading: false,
+      records: fromJS(action.payload.data || [])
+    })
+});
+
 export const userRoles = createReducer(fromJS(initialState), {
   [constants.FETCH_USER_ROLES_PENDING]: (state) =>
     state.merge({
@@ -80,23 +98,5 @@ export const userRoles = createReducer(fromJS(initialState), {
       loading: false,
       deleting: false,
       record: null
-    })
-});
-
-const userAllRoles = createReducer(fromJS(initialState.allRoles), {
-  [constants.FETCH_USER_ALL_ROLES_PENDING]: (state) =>
-    state.merge({
-      ...initialState.allRoles,
-      loading: true
-    }),
-  [constants.FETCH_USER_ALL_ROLES_REJECTED]: (state, action) =>
-    state.merge({
-      ...initialState.allRoles,
-      error: `An error occured while loading all roles: ${action.errorMessage}`
-    }),
-  [constants.FETCH_USER_ALL_ROLES_FULFILLED]: (state, action) =>
-    state.merge({
-      loading: false,
-      records: fromJS(action.payload.data || [])
     })
 });

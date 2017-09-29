@@ -21,6 +21,64 @@ const initialState = {
   }
 };
 
+const userGroups = createReducer(fromJS(initialState.groups), {
+  [constants.FETCH_USER_GROUPS_PENDING]: (state) =>
+    state.merge({
+      ...initialState.groups,
+      loading: true
+    }),
+  [constants.FETCH_USER_GROUPS_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.groups,
+      error: `An error occured while loading the groups: ${action.errorMessage}`
+    }),
+  [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) =>
+    state.merge({
+      loading: false,
+      records: fromJS(action.payload.data)
+    }),
+  [constants.ADD_GROUP_MEMBERS_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      error: null
+    }),
+  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while adding the user: ${action.errorMessage}`
+    }),
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state) =>
+    state.merge({
+      loading: false
+    }),
+  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) => {
+    const records = state.get('records');
+    const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
+    return state.merge({
+      loading: false,
+      records: records.delete(index)
+    });
+  }
+});
+
+const userAllGroups = createReducer(fromJS(initialState.allGroups), {
+  [constants.FETCH_USER_NESTED_GROUPS_PENDING]: (state) =>
+    state.merge({
+      ...initialState.allGroups,
+      loading: true
+    }),
+  [constants.FETCH_USER_NESTED_GROUPS_REJECTED]: (state, action) =>
+    state.merge({
+      ...initialState.allGroups,
+      error: `An error occured while loading all groups (authorization): ${action.errorMessage}`
+    }),
+  [constants.FETCH_USER_NESTED_GROUPS_FULFILLED]: (state, action) =>
+    state.merge({
+      loading: false,
+      records: fromJS(action.payload.data || [])
+    })
+});
+
 export const user = createReducer(fromJS(initialState), {
   [constants.FETCH_USER_PENDING]: (state, action) =>
     state.merge({
@@ -84,15 +142,15 @@ export const user = createReducer(fromJS(initialState), {
       allGroups: userAllGroups(state.get('allGroups'), action)
     }),
 
-  [constants.ADD_ROLES_OPEN]: (state, action) =>
+  [constants.ADD_ROLES_OPEN]: (state) =>
     state.merge({
       addRoles: true
     }),
-  [constants.ADD_ROLES_CLOSE]: (state, action) =>
+  [constants.ADD_ROLES_CLOSE]: (state) =>
     state.merge({
       addRoles: false
     }),
-  [constants.SAVE_USER_ROLES_PENDING]: (state, action) =>
+  [constants.SAVE_USER_ROLES_PENDING]: (state) =>
     state.merge({
       addRoles: true,
       loading: true
@@ -103,67 +161,9 @@ export const user = createReducer(fromJS(initialState), {
       loading: false,
       error: `Error during saving roles: ${action.errorMessage}`
     }),
-  [constants.SAVE_USER_ROLES_FULFILLED]: (state, action) =>
+  [constants.SAVE_USER_ROLES_FULFILLED]: (state) =>
     state.merge({
       addRoles: false,
       loading: false
-    })
-});
-
-const userGroups = createReducer(fromJS(initialState.groups), {
-  [constants.FETCH_USER_GROUPS_PENDING]: (state) =>
-    state.merge({
-      ...initialState.groups,
-      loading: true
-    }),
-  [constants.FETCH_USER_GROUPS_REJECTED]: (state, action) =>
-    state.merge({
-      ...initialState.groups,
-      error: `An error occured while loading the groups: ${action.errorMessage}`
-    }),
-  [constants.FETCH_USER_GROUPS_FULFILLED]: (state, action) =>
-    state.merge({
-      loading: false,
-      records: fromJS(action.payload.data)
-    }),
-  [constants.ADD_GROUP_MEMBERS_PENDING]: (state) =>
-    state.merge({
-      loading: true,
-      error: null
-    }),
-  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
-    state.merge({
-      loading: false,
-      error: `An error occured while adding the user: ${action.errorMessage}`
-    }),
-  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state) =>
-    state.merge({
-      loading: false
-    }),
-  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) => {
-    const records = state.get('records');
-    const index = records.findIndex((group) => group.get('_id') === action.meta.groupId);
-    return state.merge({
-      loading: false,
-      records: records.delete(index)
-    });
-  }
-});
-
-const userAllGroups = createReducer(fromJS(initialState.allGroups), {
-  [constants.FETCH_USER_NESTED_GROUPS_PENDING]: (state) =>
-    state.merge({
-      ...initialState.allGroups,
-      loading: true
-    }),
-  [constants.FETCH_USER_NESTED_GROUPS_REJECTED]: (state, action) =>
-    state.merge({
-      ...initialState.allGroups,
-      error: `An error occured while loading all groups (authorization): ${action.errorMessage}`
-    }),
-  [constants.FETCH_USER_NESTED_GROUPS_FULFILLED]: (state, action) =>
-    state.merge({
-      loading: false,
-      records: fromJS(action.payload.data || [])
     })
 });

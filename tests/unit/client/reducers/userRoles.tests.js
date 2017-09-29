@@ -92,7 +92,7 @@ describe('user roles reducer', () => {
           records: []
         },
         record: null,
-        ids: [1, 2],
+        ids: [ 1, 2 ],
         records: [
           { _id: 1, name: 'test1' },
           { _id: 2, name: 'test2' }
@@ -131,7 +131,7 @@ describe('user roles reducer', () => {
   it('should handle CANCEL_DELETE_USER_ROLE', () => {
     expect(
       userRoles(initialState, {
-        type: constants.CANCEL_DELETE_USER_ROLE,
+        type: constants.CANCEL_DELETE_USER_ROLE
       }).toJSON()
     ).toEqual(
       {

@@ -146,7 +146,7 @@ describe('user reducer', () => {
         total: 0,
         fetchQuery: null
       }, {
-        type: constants.RESET_FETCH_USERS,
+        type: constants.RESET_FETCH_USERS
       }).toJSON()
     ).toEqual(
       {

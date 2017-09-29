@@ -1,5 +1,5 @@
-import React from 'react';
-import { Router, Route, IndexRedirect } from 'react-router';
+import React from 'react';  // eslint-disable-line no-unused-vars
+import { Router, Route, IndexRedirect } from 'react-router';  // eslint-disable-line no-unused-vars
 
 import * as containers from './containers';
 

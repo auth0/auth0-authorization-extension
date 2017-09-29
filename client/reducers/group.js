@@ -37,237 +37,6 @@ const initialState = {
   }
 };
 
-export const group = createReducer(fromJS(initialState), {
-  [constants.FETCH_GROUP_PENDING]: (state, action) =>
-    state.merge({
-      loading: true,
-      groupId: action.meta.groupId
-    }),
-  [constants.FETCH_GROUP_REJECTED]: (state, action) =>
-    state.merge({
-      loading: false,
-      error: `An error occured while loading the user: ${action.errorMessage}`
-    }),
-  [constants.FETCH_GROUP_FULFILLED]: (state, action) => {
-    const { data } = action.payload;
-    if (data._id !== state.get('groupId')) {
-      return state;
-    }
-
-    return state.merge({
-      loading: false,
-      record: fromJS(data)
-    });
-  },
-
-  [constants.CLEAR_GROUP]: (state) =>
-    state.merge({
-      ...initialState
-    }),
-  [constants.CREATE_GROUP]: (state) =>
-    state.merge({
-      ...initialState,
-      isNew: true
-    }),
-  [constants.EDIT_GROUP]: (state, action) =>
-    state.merge({
-      ...initialState,
-      isEdit: true,
-      record: action.payload.group,
-      groupId: action.payload.group._id
-    }),
-  [constants.EDIT_GROUP_USERS]: (state, action) =>
-    state.merge({
-      ...initialState,
-      isEditUsers: true,
-      record: action.payload.group,
-      groupId: action.payload.group._id
-    }),
-  [constants.SAVE_GROUP_PENDING]: (state) =>
-    state.merge({
-      loading: true,
-      validationErrors: Map()
-    }),
-  [constants.SAVE_GROUP_REJECTED]: (state, action) => {
-    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
-    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
-
-    return state.merge({
-      loading: false,
-      validationErrors,
-      error: `An error occured while saving the group: ${errorMessage}`
-    });
-  },
-  [constants.SAVE_GROUP_FULFILLED]: (state) =>
-    state.merge({
-      ...initialState
-    }),
-
-  [constants.UPDATE_GROUP_PENDING]: (state) =>
-    state.merge({
-      loading: true,
-      validationErrors: Map()
-    }),
-  [constants.UPDATE_GROUP_REJECTED]: (state, action) => {
-    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
-    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
-
-    return state.merge({
-      loading: false,
-      validationErrors,
-      error: `An error occured while saving the group: ${errorMessage}`
-    });
-  },
-  [constants.UPDATE_GROUP_FULFILLED]: (state, action) =>
-    state.merge({
-      ...initialState
-    }),
-
-  [constants.REQUEST_DELETE_GROUP]: (state, action) =>
-    state.merge({
-      isDelete: true,
-      record: action.payload.group,
-      groupId: action.payload.group._id,
-      requesting: true
-    }),
-  [constants.CANCEL_DELETE_GROUP]: (state) =>
-    state.merge({
-      ...initialState
-    }),
-  [constants.DELETE_GROUP_PENDING]: (state) =>
-    state.merge({
-      loading: true
-    }),
-  [constants.DELETE_GROUP_REJECTED]: (state, action) =>
-    state.merge({
-      loading: false,
-      error: `An error occured while deleting the group: ${action.errorMessage}`
-    }),
-  [constants.DELETE_GROUP_FULFILLED]: (state) =>
-    state.merge({
-      ...initialState
-    }),
-  [constants.FETCH_GROUP_MEMBERS_PENDING]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.FETCH_GROUP_MEMBERS_REJECTED]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.ADD_GROUP_MEMBERS_PENDING]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
-    state.merge({
-      members: groupMembers(state.get('members'), action)
-    }),
-  [constants.FETCH_GROUP_NESTED_PENDING]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.FETCH_GROUP_NESTED_REJECTED]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.FETCH_GROUP_NESTED_FULFILLED]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.ADD_GROUP_NESTED_PENDING]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.ADD_GROUP_NESTED_REJECTED]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.ADD_GROUP_NESTED_FULFILLED]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.REMOVE_GROUP_NESTED_FULFILLED]: (state, action) =>
-    state.merge({
-      nested: nestedGroups(state.get('nested'), action)
-    }),
-  [constants.FETCH_GROUP_MAPPINGS_PENDING]: (state, action) =>
-    state.merge({
-      mappings: groupMappings(state.get('mappings'), action)
-    }),
-  [constants.FETCH_GROUP_MAPPINGS_REJECTED]: (state, action) =>
-    state.merge({
-      mappings: groupMappings(state.get('mappings'), action)
-    }),
-  [constants.FETCH_GROUP_MAPPINGS_FULFILLED]: (state, action) =>
-    state.merge({
-      mappings: groupMappings(state.get('mappings'), action)
-    }),
-  [constants.DELETE_GROUP_MAPPING_FULFILLED]: (state, action) =>
-    state.merge({
-      mappings: groupMappings(state.get('mappings'), action)
-    }),
-  [constants.FETCH_GROUP_MEMBERS_NESTED_PENDING]: (state, action) =>
-    state.merge({
-      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
-    }),
-  [constants.FETCH_GROUP_MEMBERS_NESTED_REJECTED]: (state, action) =>
-    state.merge({
-      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
-    }),
-  [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) =>
-    state.merge({
-      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
-    }),
-  [constants.CLOSE_UPDATE_GROUP]: (state) =>
-    state.merge({
-      isNew: false,
-      isEdit: false,
-      isDelete: false,
-      requesting: false
-    }),
-  [constants.CLOSE_DELETE_GROUP]: (state) =>
-    state.merge({
-      isNew: false,
-      isEdit: false,
-      isDelete: false,
-      requesting: false
-    }),
-  [constants.GROUP_ADD_ROLES_OPEN]: (state, action) =>
-    state.merge({
-      addRoles: true
-    }),
-  [constants.GROUP_ADD_ROLES_CLOSE]: (state, action) =>
-    state.merge({
-      addRoles: false
-    }),
-  [constants.SAVE_GROUP_ROLES_PENDING]: (state, action) =>
-    state.merge({
-      addRoles: true
-    }),
-  [constants.SAVE_GROUP_ROLES_REJECTED]: (state, action) =>
-    state.merge({
-      addRoles: false,
-      error: `Error during saving roles: ${action.errorMessage}`
-    }),
-  [constants.SAVE_GROUP_ROLES_FULFILLED]: (state, action) =>
-    state.merge({
-      addRoles: false
-    })
-});
-
 const groupMappings = createReducer(fromJS(initialState.mappings), {
   [constants.FETCH_GROUP_MAPPINGS_PENDING]: (state, action) => {
     if (action.meta && action.meta.reload) {
@@ -422,5 +191,236 @@ const nestedMembers = createReducer(fromJS(initialState.nestedMembers), {
       loading: false,
       total: fromJS(action.payload.data.total),
       records: fromJS(action.payload.data.nested)
+    })
+});
+
+export const group = createReducer(fromJS(initialState), {
+  [constants.FETCH_GROUP_PENDING]: (state, action) =>
+    state.merge({
+      loading: true,
+      groupId: action.meta.groupId
+    }),
+  [constants.FETCH_GROUP_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while loading the user: ${action.errorMessage}`
+    }),
+  [constants.FETCH_GROUP_FULFILLED]: (state, action) => {
+    const { data } = action.payload;
+    if (data._id !== state.get('groupId')) {
+      return state;
+    }
+
+    return state.merge({
+      loading: false,
+      record: fromJS(data)
+    });
+  },
+
+  [constants.CLEAR_GROUP]: (state) =>
+    state.merge({
+      ...initialState
+    }),
+  [constants.CREATE_GROUP]: (state) =>
+    state.merge({
+      ...initialState,
+      isNew: true
+    }),
+  [constants.EDIT_GROUP]: (state, action) =>
+    state.merge({
+      ...initialState,
+      isEdit: true,
+      record: action.payload.group,
+      groupId: action.payload.group._id
+    }),
+  [constants.EDIT_GROUP_USERS]: (state, action) =>
+    state.merge({
+      ...initialState,
+      isEditUsers: true,
+      record: action.payload.group,
+      groupId: action.payload.group._id
+    }),
+  [constants.SAVE_GROUP_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      validationErrors: Map()
+    }),
+  [constants.SAVE_GROUP_REJECTED]: (state, action) => {
+    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
+
+    return state.merge({
+      loading: false,
+      validationErrors,
+      error: `An error occured while saving the group: ${errorMessage}`
+    });
+  },
+  [constants.SAVE_GROUP_FULFILLED]: (state) =>
+    state.merge({
+      ...initialState
+    }),
+
+  [constants.UPDATE_GROUP_PENDING]: (state) =>
+    state.merge({
+      loading: true,
+      validationErrors: Map()
+    }),
+  [constants.UPDATE_GROUP_REJECTED]: (state, action) => {
+    const validationErrors = (action.payload.data && action.payload.data.errors && Map(action.payload.data.errors)) || Map();
+    const errorMessage = (action.payload.data && action.payload.data.errors) ? 'Validation Error' : (action.errorMessage || 'Validation Error');
+
+    return state.merge({
+      loading: false,
+      validationErrors,
+      error: `An error occured while saving the group: ${errorMessage}`
+    });
+  },
+  [constants.UPDATE_GROUP_FULFILLED]: (state) =>
+    state.merge({
+      ...initialState
+    }),
+
+  [constants.REQUEST_DELETE_GROUP]: (state, action) =>
+    state.merge({
+      isDelete: true,
+      record: action.payload.group,
+      groupId: action.payload.group._id,
+      requesting: true
+    }),
+  [constants.CANCEL_DELETE_GROUP]: (state) =>
+    state.merge({
+      ...initialState
+    }),
+  [constants.DELETE_GROUP_PENDING]: (state) =>
+    state.merge({
+      loading: true
+    }),
+  [constants.DELETE_GROUP_REJECTED]: (state, action) =>
+    state.merge({
+      loading: false,
+      error: `An error occured while deleting the group: ${action.errorMessage}`
+    }),
+  [constants.DELETE_GROUP_FULFILLED]: (state) =>
+    state.merge({
+      ...initialState
+    }),
+  [constants.FETCH_GROUP_MEMBERS_PENDING]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_PENDING]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_REJECTED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.ADD_GROUP_MEMBERS_FULFILLED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.REMOVE_GROUP_MEMBER_FULFILLED]: (state, action) =>
+    state.merge({
+      members: groupMembers(state.get('members'), action)
+    }),
+  [constants.FETCH_GROUP_NESTED_PENDING]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.FETCH_GROUP_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.FETCH_GROUP_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.ADD_GROUP_NESTED_PENDING]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.ADD_GROUP_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.ADD_GROUP_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.REMOVE_GROUP_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nested: nestedGroups(state.get('nested'), action)
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_PENDING]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_REJECTED]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.FETCH_GROUP_MAPPINGS_FULFILLED]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.DELETE_GROUP_MAPPING_FULFILLED]: (state, action) =>
+    state.merge({
+      mappings: groupMappings(state.get('mappings'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_PENDING]: (state, action) =>
+    state.merge({
+      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_REJECTED]: (state, action) =>
+    state.merge({
+      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.FETCH_GROUP_MEMBERS_NESTED_FULFILLED]: (state, action) =>
+    state.merge({
+      nestedMembers: nestedMembers(state.get('nestedMembers'), action)
+    }),
+  [constants.CLOSE_UPDATE_GROUP]: (state) =>
+    state.merge({
+      isNew: false,
+      isEdit: false,
+      isDelete: false,
+      requesting: false
+    }),
+  [constants.CLOSE_DELETE_GROUP]: (state) =>
+    state.merge({
+      isNew: false,
+      isEdit: false,
+      isDelete: false,
+      requesting: false
+    }),
+  [constants.GROUP_ADD_ROLES_OPEN]: (state) =>
+    state.merge({
+      addRoles: true
+    }),
+  [constants.GROUP_ADD_ROLES_CLOSE]: (state) =>
+    state.merge({
+      addRoles: false
+    }),
+  [constants.SAVE_GROUP_ROLES_PENDING]: (state) =>
+    state.merge({
+      addRoles: true
+    }),
+  [constants.SAVE_GROUP_ROLES_REJECTED]: (state, action) =>
+    state.merge({
+      addRoles: false,
+      error: `Error during saving roles: ${action.errorMessage}`
+    }),
+  [constants.SAVE_GROUP_ROLES_FULFILLED]: (state) =>
+    state.merge({
+      addRoles: false
     })
 });

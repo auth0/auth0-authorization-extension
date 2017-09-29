@@ -72,7 +72,7 @@ describe('group roles reducer', () => {
         error: null,
         deleting: false,
         record: null,
-        ids: [1, 2],
+        ids: [ 1, 2 ],
         records: [
           { _id: 1, name: 'test1' },
           { _id: 2, name: 'test2' }
@@ -106,7 +106,7 @@ describe('group roles reducer', () => {
   it('should handle CANCEL_DELETE_GROUP_ROLE', () => {
     expect(
       groupRoles(initialState, {
-        type: constants.CANCEL_DELETE_GROUP_ROLE,
+        type: constants.CANCEL_DELETE_GROUP_ROLE
       }).toJSON()
     ).toEqual(
       {

@@ -2,10 +2,10 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import { compose, createStore, applyMiddleware } from 'redux';
+import { promiseSuccessMiddleware, normalizeErrorMiddleware } from 'auth0-extension-ui-redux';
 
 import rootReducer from '../reducers';
-import { promiseSuccessMiddleware, normalizeErrorMiddleware } from 'auth0-extension-ui-redux';
-import DevTools from '../containers/DevTools';
+import DevTools from '../containers/DevTools.jsx';
 
 
 export default function configureStore(middlewares, initialState = { }) {
@@ -33,6 +33,7 @@ export default function configureStore(middlewares, initialState = { }) {
   if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('../reducers', () => {
       const nextRootReducer = require('../reducers');
+
       store.replaceReducer(nextRootReducer);
     });
   }

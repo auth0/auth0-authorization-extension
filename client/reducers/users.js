@@ -36,7 +36,7 @@ export const users = createReducer(fromJS(initialState), {
       fetchQuery: action.payload.config && action.payload.config.params ? action.payload.config.params.q : null
     });
   },
-  [constants.RESET_FETCH_USERS]: (state, action) =>
+  [constants.RESET_FETCH_USERS]: (state) =>
     state.merge({
       records: []
     }),
@@ -50,8 +50,7 @@ export const users = createReducer(fromJS(initialState), {
     ),
   [constants.REMOVE_MULTIFACTOR_FULFILLED]: (state, action) =>
     state.updateIn(
-      [ 'records', state.get('records').findIndex(p => p.get('user_id') === action.meta.userId), 'multifactor' ], (multifactor) => {
-        return multifactor.splice(0, 1);
-      }
+      [ 'records', state.get('records').findIndex(p => p.get('user_id') === action.meta.userId), 'multifactor' ], (multifactor) =>
+        multifactor.splice(0, 1)
     )
 });

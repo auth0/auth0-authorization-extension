@@ -1,24 +1,25 @@
+/* global FileReader */
 import axios from 'axios';
 import * as constants from '../constants';
 
 export function importConfigPrepare(file) {
   return (dispatch) => {
     const name = file.name;
-    const regex = new RegExp('(.*?)\.(json)$');
+    const regex = new RegExp('(.*?)\.(json)$'); // eslint-disable-line no-useless-escape
     if (regex.test(name)) {
-      let reader = new FileReader();
+      const reader = new FileReader();
       reader.readAsText(file, 'UTF-8');
       reader.onload = (evt) => {
         const result = JSON.parse(evt.target.result);
         return dispatch(openPreview(result));
       };
-      reader.onerror = (evt) => {
+      reader.onerror = (evt) => { // eslint-disable-line no-unused-vars
         dispatch(addError('Something went wrong.'));
       };
     } else {
       dispatch(addError('Incorrect file type.'));
     }
-  }
+  };
 }
 
 export function openPreview(text) {
@@ -27,13 +28,13 @@ export function openPreview(text) {
     meta: {
       preview: text
     }
-  }
+  };
 }
 
 export function closePreview() {
   return {
     type: constants.CLOSE_CONFIGURATION_PREVIEW
-  }
+  };
 }
 
 export function importConfig(text) {
@@ -67,11 +68,11 @@ export function addError(error) {
     meta: {
       error
     }
-  }
+  };
 }
 
 export function closeError() {
   return {
     type: constants.FETCH_CONFIGURATION_CLOSE_ERROR
-  }
+  };
 }
