@@ -1,7 +1,7 @@
 import { expect } from 'chai';
-import * as auth0 from '../../mocks/auth0';
-import { getServerData } from '../../server';
-import { getToken, getUserToken, getAdminTokenWithoutAccessToken } from '../../mocks/tokens';
+import * as auth0 from '../../unit/mocks/auth0';
+import { getServerData } from '../../../server';
+import { getToken, getUserToken, getAdminTokenWithoutAccessToken } from '../../unit/mocks/tokens';
 
 describe('auth', () => {
   const { server } = getServerData();

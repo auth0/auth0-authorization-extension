@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { userPicker } from '../../../client/reducers/userPicker';
-import * as constants from '../../../client/constants';
+import { userPicker } from '../../../../client/reducers/userPicker';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   error: null,

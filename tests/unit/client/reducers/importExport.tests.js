@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { importExport } from '../../../client/reducers/importExport';
-import * as constants from '../../../client/constants';
+import { importExport } from '../../../../client/reducers/importExport';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   loading: false,

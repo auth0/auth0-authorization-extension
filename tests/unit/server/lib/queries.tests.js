@@ -2,7 +2,7 @@ import uuid from 'node-uuid';
 import Promise from 'bluebird';
 import { expect } from 'chai';
 
-import { getUserGroups, getDynamicUserGroups, getGroupExpanded } from '../../../server/lib/queries';
+import { getUserGroups, getDynamicUserGroups, getGroupExpanded } from '../../../../server/lib/queries';
 
 const mockDatabase = (groups, roles, permissions) => ({
   hash: uuid.v4(),

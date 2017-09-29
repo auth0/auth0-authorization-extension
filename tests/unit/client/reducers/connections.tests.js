@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { connections } from '../../../client/reducers/connections';
-import * as constants from '../../../client/constants';
+import { connections } from '../../../../client/reducers/connections';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   loading: false,
