@@ -21,15 +21,17 @@ module.exports = () => ({
   },
   handler: (req, reply) =>
     req.storage.getRoles()
-      .then(roles => ({
+      .then(roles => {
         const fields = _.chain(req.query.field).split(',').map(_.trim).value();
         const queries = _.chain(req.query.q).split(',').map(_.trim).value();
         const predicate = _.zipObject(fields, queries);
         const filteredRoles = _.filter(roles, predicate);
         const selectedRoles = _.chain(req.query.select).split(',').map(_.trim).value();
-        roles: req.query.select ? _.map(filteredRoles, role => _pick(role, selectedRoles)) : filteredRoles,
-        total: filteredRoles.length
-      }))
+        return {
+          roles: req.query.select ? _.map(filteredRoles, role => _pick(role, selectedRoles)) : filteredRoles,
+          total: filteredRoles.length
+        }
+      })
       .then(roles => reply(roles))
       .catch(err => reply.error(err))
 });
