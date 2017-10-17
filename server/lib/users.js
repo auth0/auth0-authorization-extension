@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import async from 'async';
 import Promise from 'bluebird';
 
@@ -35,7 +36,9 @@ export function getUsersById(client, ids, page, limit) {
         return reject(err);
       }
 
-      return resolve({ total, users });
+      const sorted = _.sortByOrder(users, 'user_id');
+
+      return resolve({ total, users: sorted });
     });
   });
 }
