@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { permissions } from '../../../client/reducers/permissions';
-import * as constants from '../../../client/constants';
+import { permissions } from '../../../../client/reducers/permissions';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   loading: false,
@@ -96,7 +96,7 @@ describe('permissions reducer', () => {
           }
         },
         meta: {
-          permissionId:1
+          permissionId: 1
         }
       }).toJSON()
     ).toEqual(
@@ -120,10 +120,10 @@ describe('permissions reducer', () => {
       permissions({
         loading: false,
         error: null,
-        records: [{
+        records: [ {
           _id: 1,
           name: 'test'
-        }],
+        } ],
         total: 0,
         fetchQuery: null
       }, {
@@ -135,7 +135,7 @@ describe('permissions reducer', () => {
           }
         },
         meta: {
-          permissionId:1
+          permissionId: 1
         }
       }).toJSON()
     ).toEqual(

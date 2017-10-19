@@ -95,7 +95,7 @@ describe('groups', () => {
 
         // Let's fetch all the groups and find.
         return Promise.all(deletionRequests)
-          .then(() => 
+          .then(() =>
             request.get({ url: authzApi('/groups'), headers: token(), json: true })
               .then((data) => {
                 data.groups.forEach((group) => {

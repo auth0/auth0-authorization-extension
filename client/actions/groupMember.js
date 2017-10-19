@@ -5,7 +5,7 @@ import * as constants from '../constants';
 /*
  * Load the members of a single group.
  */
-export function fetchGroupMembers(groupId, reload, per_page, page) {
+export function fetchGroupMembers(groupId, reload, perPage, page) {
   return {
     type: constants.FETCH_GROUP_MEMBERS,
     meta: {
@@ -15,7 +15,7 @@ export function fetchGroupMembers(groupId, reload, per_page, page) {
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members`, {
         params: {
-          per_page,
+          per_page: perPage,
           page
         },
         responseType: 'json'
@@ -27,7 +27,7 @@ export function fetchGroupMembers(groupId, reload, per_page, page) {
 /*
  * Load the nested users of a single group.
  */
-export function fetchGroupMembersNested(groupId, reload, per_page, page) {
+export function fetchGroupMembersNested(groupId, reload, perPage, page) {
   return {
     type: constants.FETCH_GROUP_MEMBERS_NESTED,
     meta: {
@@ -37,7 +37,7 @@ export function fetchGroupMembersNested(groupId, reload, per_page, page) {
     payload: {
       promise: axios.get(`/api/groups/${groupId}/members/nested`, {
         params: {
-          per_page,
+          per_page: perPage,
           page
         },
         responseType: 'json'

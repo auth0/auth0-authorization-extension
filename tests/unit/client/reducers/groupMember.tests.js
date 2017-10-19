@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { groupMember } from '../../../client/reducers/groupMember';
-import * as constants from '../../../client/constants';
+import { groupMember } from '../../../../client/reducers/groupMember';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   error: null,

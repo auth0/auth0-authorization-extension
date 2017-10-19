@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { users } from '../../../client/reducers/users';
-import * as constants from '../../../client/constants';
+import { users } from '../../../../client/reducers/users';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   loading: false,
@@ -146,7 +146,7 @@ describe('user reducer', () => {
         total: 0,
         fetchQuery: null
       }, {
-        type: constants.RESET_FETCH_USERS,
+        type: constants.RESET_FETCH_USERS
       }).toJSON()
     ).toEqual(
       {

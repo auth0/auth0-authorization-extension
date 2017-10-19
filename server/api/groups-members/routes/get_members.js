@@ -20,7 +20,7 @@ module.exports = (server) => ({
         id: Joi.string().guid().required()
       },
       query: {
-        per_page: Joi.number().integer().min(1).max(25).default(25),
+        per_page: Joi.number().integer().min(1).max(25).default(25), // eslint-disable-line newline-per-chained-call
         page: Joi.number().integer().min(0).default(0)
       }
     }

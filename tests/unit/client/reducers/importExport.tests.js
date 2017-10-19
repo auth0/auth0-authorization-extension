@@ -1,6 +1,6 @@
 import expect from 'expect';
-import { importExport } from '../../../client/reducers/importExport';
-import * as constants from '../../../client/constants';
+import { importExport } from '../../../../client/reducers/importExport';
+import * as constants from '../../../../client/constants';
 
 const initialState = {
   loading: false,
@@ -173,7 +173,7 @@ describe('importExport reducer', () => {
       importExport(initialState, {
         type: constants.OPEN_CONFIGURATION_PREVIEW,
         meta: {
-          preview: {name: 'test'}
+          preview: { name: 'test' }
         }
       }).toJSON()
     ).toEqual(
@@ -182,7 +182,7 @@ describe('importExport reducer', () => {
         error: null,
         record: {},
         requesting: true,
-        preview: {name: 'test'}
+        preview: { name: 'test' }
       }
     );
   });

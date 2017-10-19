@@ -51,3 +51,14 @@ module.exports.getAdminTokenWithoutAccessToken = (scope) =>
     scope
   }, 'abc')
 ;
+
+module.exports.getApiToken = (gty, sub, scope) =>
+  module.exports.sign(certs.bar.private, 'key2', {
+    iss: `https://${config('AUTH0_DOMAIN')}/`,
+    aud: 'urn:auth0-authz-api',
+    sub: `auth0@${sub}`,
+    azp: '123',
+    gty,
+    scope
+  })
+;

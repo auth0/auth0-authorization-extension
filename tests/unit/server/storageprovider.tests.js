@@ -5,7 +5,7 @@ describe('Database', () => {
   describe('#constructor', () => {
     it('should require a provider', (done) => {
       const run = () => {
-        const database = new Database();
+        const database = new Database(); // eslint-disable-line no-unused-vars
       };
       expect(run)
         .to.throw('The \'provider\' has to be set when initializing the database.');
@@ -13,7 +13,7 @@ describe('Database', () => {
     });
 
     it('should initialize correctly', (done) => {
-      const database = new Database({
+      const database = new Database({ // eslint-disable-line no-unused-vars
         provider: { }
       });
       done();
