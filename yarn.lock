@@ -93,7 +93,7 @@ acorn@^2.1.0, acorn@~2.7.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-2.7.0.tgz#ab6e7d9d886aaca8b085bc3312b79a198433f0e7"
 
-acorn@^3.0.0, acorn@^3.0.4, acorn@^3.1.0, acorn@~3.3.0:
+acorn@^3.0.0, acorn@^3.0.4, acorn@^3.1.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-3.3.0.tgz#45e37fb39e8da3f25baee3ff5369e2bb5f22017a"
 
@@ -512,7 +512,16 @@ auth0-styleguide@auth0/styleguide#4.6.5:
     gulp-stylus "^2.3.1"
     serve "^1.4.0"
 
-auth0@^2.3.1, auth0@^2.4.0:
+auth0@2.4.0:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.4.0.tgz#c76b35526f75d2a48c0ab3702b5b0873879f4642"
+  dependencies:
+    bluebird "^2.10.2"
+    request "^2.75.0"
+    rest-facade "^1.2.7"
+    url-join "0.0.1"
+
+auth0@^2.3.1:
   version "2.5.0"
   resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.5.0.tgz#95939460013afdccc57d0f4db091bc7f9966efe4"
   dependencies:
@@ -2294,14 +2303,7 @@ constant-case@^1.1.0:
     snake-case "^1.1.0"
     upper-case "^1.1.1"
 
-constantinople@^3.0.1:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/constantinople/-/constantinople-3.1.0.tgz#7569caa8aa3f8d5935d62e1fa96f9f702cd81c79"
-  dependencies:
-    acorn "^3.1.0"
-    is-expression "^2.0.1"
-
-constantinople@~3.0.1:
+constantinople@^3.0.1, constantinople@~3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/constantinople/-/constantinople-3.0.2.tgz#4b945d9937907bcd98ee575122c3817516544141"
   dependencies:
@@ -2703,7 +2705,7 @@ debug-log@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/debug-log/-/debug-log-1.0.1.tgz#2307632d4c04382b8df8a32f70b895046d52745f"
 
-debug@*, debug@2, debug@2.6.0:
+debug@*, debug@2, debug@2.6.0, debug@^2.1.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.0.tgz#bc596bcabe7617f11d9fa15361eded5608b8499b"
   dependencies:
@@ -2725,7 +2727,7 @@ debug@2.2.0, debug@^2.1.1, debug@^2.2.0, debug@~2.2.0:
   dependencies:
     ms "0.7.1"
 
-debug@2.X, debug@^2.1.0, debug@^2.6.3:
+debug@2.X, debug@^2.6.3:
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/debug/-/debug-2.6.6.tgz#a9fa6fbe9ca43cf1e79f73b75c0189cbb7d6db5a"
   dependencies:
@@ -5322,13 +5324,6 @@ is-expression@^1.0.0:
   resolved "https://registry.yarnpkg.com/is-expression/-/is-expression-1.0.2.tgz#a345b96218e9df21e65510c39b4dc3602fdd3f96"
   dependencies:
     acorn "~2.7.0"
-    object-assign "^4.0.1"
-
-is-expression@^2.0.1:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/is-expression/-/is-expression-2.1.0.tgz#91be9d47debcfef077977e9722be6dcfb4465ef0"
-  dependencies:
-    acorn "~3.3.0"
     object-assign "^4.0.1"
 
 is-extendable@^0.1.0, is-extendable@^0.1.1:
@@ -9150,7 +9145,7 @@ request-stream@^1.2.2:
     debug "^2.2.0"
     xtend "^4.0.1"
 
-request@2, request@^2.55.0, request@^2.74.0, request@^2.81.0, request@~2.81.0:
+request@2, request@^2.55.0, request@^2.74.0, request@^2.75.0, request@^2.81.0, request@~2.81.0:
   version "2.81.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.81.0.tgz#c6928946a0e06c5f8d6f8a9333469ffda46298a0"
   dependencies:
@@ -9177,7 +9172,7 @@ request@2, request@^2.55.0, request@^2.74.0, request@^2.81.0, request@~2.81.0:
     tunnel-agent "^0.6.0"
     uuid "^3.0.0"
 
-request@^2.34, request@^2.72.0, request@^2.73.0, request@^2.75.0:
+request@^2.34, request@^2.72.0, request@^2.73.0:
   version "2.78.0"
   resolved "https://registry.yarnpkg.com/request/-/request-2.78.0.tgz#e1c8dec346e1c81923b24acdb337f11decabe9cc"
   dependencies:
