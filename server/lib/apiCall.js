@@ -3,7 +3,7 @@ import Promise from 'bluebird';
 const idle = (timeout) =>
   new Promise(resolve => setTimeout(() => resolve(), timeout * 1000));
 
-export default (context, promise, args, retry = 3) => {
+export default (context, promise, args, retry = 2) => {
   let retriesLeft = retry;
 
   const tryRequest = () => promise.apply(context, args)
@@ -11,8 +11,8 @@ export default (context, promise, args, retry = 3) => {
     .catch((err) => {
       const originalError = err.originalError || {};
       const ratelimitReset = (originalError.response && originalError.response.header && originalError.response.header['x-ratelimit-reset']) || 0;
-      const currentTime = Math.round(new Date().getTime() / 1000) - 1;
-      const maxTimeout = 5; // wait for 5 seconds max
+      const currentTime = Math.round(new Date().getTime() / 1000);
+      const maxTimeout = 10; // wait for 10 seconds max
       let timeout = parseInt(ratelimitReset, 10) - currentTime;
 
       if (originalError.status === 429 && retriesLeft > 0 && ratelimitReset && timeout <= maxTimeout) {
@@ -24,7 +24,7 @@ export default (context, promise, args, retry = 3) => {
         return idle(timeout).then(tryRequest);
       }
 
-      return Promise.reject(err.originalError || err);
+      return Promise.reject(err);
     });
 
   return tryRequest();
