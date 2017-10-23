@@ -1,3 +1,8 @@
+## [2.4.3] - 2017-10-23
+
+- Fixed bug with random order of the group members. Now they are sorted by ids
+- Fixed API authorization error
+
 ## [2.4.2] - 2017-07-31
 
 - Prevent UI from crashing when user no longer exists in Auth0
