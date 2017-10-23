@@ -14,7 +14,6 @@ module.exports = `<!DOCTYPE html>
 </head>
 <body>
   <div id="app"></div>
-  <script type="text/javascript" src="//cdn.auth0.com/js/lock-9.2.min.js"></script>
   <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1672/js/bundle.js"></script>
   <script type="text/javascript">window.config = <%- JSON.stringify(config) %>;</script>
   <% if (assets.vendors) { %><script type="text/javascript" src="<%= assets.vendors %>"></script><% } %>

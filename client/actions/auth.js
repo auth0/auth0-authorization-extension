@@ -5,10 +5,9 @@ import axios from 'axios';
 import * as constants from '../constants';
 
 import { isTokenExpired, decodeToken } from '../utils/auth';
-import { show } from '../utils/lock';
 
-export function login(returnUrl) {
-  show(returnUrl);
+export function login() {
+  window.location.href = window.config.BASE_URL + '/login';
 
   return {
     type: constants.SHOW_LOGIN
