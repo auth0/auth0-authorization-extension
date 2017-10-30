@@ -1,3 +1,8 @@
+## [2.4.4] - 2017-10-30
+
+- Adds support for Rate Limiting headers in API
+- Adds retry logic for Management API rate limiting errors
+
 ## [2.4.3] - 2017-10-23
 
 - Fixed bug with random order of the group members. Now they are sorted by ids
