@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import apiCall from '../../../lib/apiCall';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -13,7 +14,7 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    req.pre.auth0.connections.getAll({ fields: 'id,name,strategy' })
+    apiCall(req.pre.auth0, req.pre.auth0.connections.getAll, [ { fields: 'id,name,strategy' } ])
       .then(connections => _.chain(connections)
         .sortBy((conn) => conn.name.toLowerCase())
         .value())

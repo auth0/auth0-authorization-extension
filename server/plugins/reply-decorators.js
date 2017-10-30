@@ -7,7 +7,13 @@ function notFound(message) {
 
 function error(err) {
   logger.error(err);
-  return this.response(Boom.badRequest(err.message || err.code || err.name || err.text || err.description || err));
+  const errorMessage = (err.message && err.message.error) || err.message || err.code || err.name || err.text || err.description || err;
+
+  if (err.message && err.message.statusCode === 429) {
+    return this.response(Boom.tooManyRequests(errorMessage));
+  }
+
+  return this.response(Boom.badRequest(errorMessage));
 }
 
 function unauthorized(message) {

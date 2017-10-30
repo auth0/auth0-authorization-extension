@@ -2,6 +2,7 @@ import _ from 'lodash';
 import nconf from 'nconf';
 import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
+import apiCall from './apiCall';
 
 const compact = (entity) => ({
   _id: entity._id,
@@ -14,7 +15,7 @@ const compact = (entity) => ({
  */
 export const getConnectionsCached = memoizer({
   load: (auth0, callback) => {
-    auth0.connections.getAll({ fields: 'id,name,strategy' })
+    apiCall(auth0, auth0.connections.getAll, [ { fields: 'id,name,strategy' } ])
       .then(connections => _.chain(connections)
         .sortBy((conn) => conn.name.toLowerCase())
         .value())

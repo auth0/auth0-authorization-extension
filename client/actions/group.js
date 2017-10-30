@@ -2,7 +2,7 @@ import axios from 'axios';
 import _ from 'lodash';
 import { push } from 'react-router-redux';
 import * as constants from '../constants';
-import { fetchGroupMembers, fetchGroupMembersNested } from './groupMember';
+import { fetchGroupMembers } from './groupMember';
 import { fetchGroupMappings } from './groupMapping';
 import { fetchNestedGroups } from './groupNested';
 
@@ -50,7 +50,6 @@ export function fetchGroup(groupId) {
     dispatch(fetchGroupMembers(groupId, null, process.env.PER_PAGE));
     dispatch(fetchGroupMappings(groupId));
     dispatch(fetchNestedGroups(groupId));
-    dispatch(fetchGroupMembersNested(groupId, null, process.env.PER_PAGE));
   };
 }
 

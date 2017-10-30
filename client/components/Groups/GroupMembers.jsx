@@ -15,8 +15,14 @@ class GroupMembers extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextProps.members !== this.props.members ||
-    nextProps.nestedMembers !== this.props.nestedMembers ||
-    nextState.showGroupMembers !== this.state.showGroupMembers;
+      nextProps.nestedMembers !== this.props.nestedMembers ||
+      nextState.showGroupMembers !== this.state.showGroupMembers;
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    if (this.state.showGroupMembers && !nextState.showGroupMembers) {
+      this.props.getAllNestedMembersOnPage(this.props.groupId, 1);
+    }
   }
 
   setShowGroupMembers = (showGroupMembers) => {
@@ -35,7 +41,7 @@ class GroupMembers extends Component {
 
   renderActions = (user, index) => <GroupMemberRemoveAction index={index} user={user} loading={this.props.members.get('loading')} onRemove={this.props.removeMember} />
 
-  renderAllMembers(nestedMembers) {
+  renderAllMembersTable(nestedMembers) {
     if (nestedMembers.error) {
       return (
         <div><Error message={nestedMembers.error} /></div>
@@ -66,9 +72,19 @@ class GroupMembers extends Component {
                 <TableRouteCell route={`/users/${record.user.user_id}`}>{ record.user.name || record.user.email || record.user.user_id }</TableRouteCell>
                 <TableRouteCell route={`/groups/${record.group._id}`}>{ record.group.name || 'N/A' }</TableRouteCell>
               </TableRow>
-          )}
+            )}
           </TableBody>
         </Table>
+      </div>
+    );
+  }
+
+  renderAllMembers(nestedMembers) {
+    return (
+      <div>
+        <LoadingPanel show={nestedMembers.loading}>
+          {this.renderAllMembersTable(nestedMembers)}
+        </LoadingPanel>
 
         <Pagination
           totalItems={nestedMembers.total}

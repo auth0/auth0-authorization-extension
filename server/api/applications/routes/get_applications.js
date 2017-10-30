@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import apiCall from '../../../lib/apiCall';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -13,7 +14,7 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    req.pre.auth0.clients.getAll({ fields: 'client_id,name,callbacks,global,app_type' })
+    apiCall(req.pre.auth0, req.pre.auth0.clients.getAll, [ { fields: 'client_id,name,callbacks,global,app_type' } ])
       .then(clients => _.chain(clients)
         .filter(client =>
           !client.global &&
