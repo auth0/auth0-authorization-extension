@@ -7,7 +7,6 @@ export function getUsersById(client, ids, page, limit) {
     const total = ids.length;
 
     page = (page - 1 < 0) ? 0 : page - 1; // eslint-disable-line no-param-reassign
-    ids = ids.splice(page * limit, limit); // eslint-disable-line no-param-reassign
     if (!ids || ids.length === 0) {
       return resolve({ total, users: [] });
     }
@@ -15,10 +14,10 @@ export function getUsersById(client, ids, page, limit) {
     idStr = '"' + idStr + '"';
     const queryString = `user_id: (${idStr})`;
 
-    apiCall(client, client.users.getAll, [ { q: queryString } ])
-    .then(function(users) {
-      const sorted = _.sortByOrder(users, 'user_id');
-      return resolve({ total, users: sorted });
+    apiCall(client, client.users.getAll, [ { q: queryString, page: page, per_page: limit, include_totals: true } ])
+    .then(function(res) {
+      const sorted = _.sortByOrder(res.users, 'user_id');
+      return resolve({ total: res.total, users: sorted });
     })
     .catch(function(err) {
       reject(err);
