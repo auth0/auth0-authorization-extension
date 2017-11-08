@@ -1,5 +1,6 @@
 import path from 'path';
 import { S3StorageContext } from 'auth0-extension-s3-tools';
+import { MongoRecordProvider } from 'auth0-extension-mongo-tools';
 import { FileStorageContext, WebtaskStorageContext, BlobRecordProvider } from 'auth0-extension-tools';
 
 import config from '../config';
@@ -18,6 +19,11 @@ export function createProvider(storageContext) {
         defaultData: {}
       });
       return new BlobRecordProvider(context, { concurrentWrites: false });
+    }
+    case 'mongodb': {
+      logger.info('Initializing the MongoDB Storage Context.');
+
+      return new MongoRecordProvider(config('MONGO_CONNECTION'));
     }
     case 'webtask':
     default: {

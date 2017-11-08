@@ -1,4 +1,6 @@
 import schema from '../schemas/storage';
+import config from '../../../lib/config';
+import { mongoImport } from '../../../lib/mongoTools';
 
 module.exports = () => ({
   method: 'POST',
@@ -13,6 +15,12 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => {
+    if (config('STORAGE_TYPE') === 'mongodb') {
+      return mongoImport(req.storage, req.payload)
+        .then(result => reply(result))
+        .catch(err => reply.error(err));
+    }
+
     if (
       !req.storage.provider ||
       !req.storage.provider.storageContext ||
