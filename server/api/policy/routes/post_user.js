@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import Joi from 'joi';
 
 import schema from '../schemas/policy_request';
-import { getPermissionsForRoles, getRolesForGroups, getUserGroups, getUserData } from '../../../lib/queries';
+import { getUserData } from '../../../lib/queries';
 
 module.exports = (server) => ({
   method: 'POST',
@@ -31,7 +30,7 @@ module.exports = (server) => ({
     const { userId, clientId } = req.params;
     const { connectionName, groups } = req.payload;
 
-    if (req.storage.provider && req.storage.provider.storageContext && typeof req.storage.provider.storageContext.read) {
+    if (req.storage.provider && req.storage.provider.storageContext && req.storage.provider.storageContext.read) {
       return getUserData(req.storage, userId, clientId, connectionName, groups)
         .then(data => reply(data))
         .catch(err => reply.error(err));
