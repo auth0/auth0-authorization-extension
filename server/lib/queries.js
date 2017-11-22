@@ -407,3 +407,45 @@ export function getGroupsExpanded(db, groups) {
     });
   });
 }
+
+/*
+ * Get all user's groups, roles and permissions
+ */
+export function getUserData(db, userId, clientId, connectionName, groupMemberships) {
+  const result = {
+    groups: [],
+    roles: []
+  };
+
+  return db.provider.storageContext.read()
+    .then(data => {
+      const { groups, roles, permissions } = data;
+
+      const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
+
+      if (!Array.isArray(groupMemberships)) {
+        groupMemberships = [ ];
+      }
+
+      return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
+        .then((dynamicGroups) => {
+          result.groups = _.uniq(getParentGroups(groups, _.union(userGroups, dynamicGroups)).map(group => group.name));
+          return null;
+        })
+        .then(() => {
+          const clearRoles = getRolesForGroups(userGroups, roles).map(record => record.role);
+          const directRoles = roles.filter(role => role.users && role.users.indexOf(userId) > -1);
+          const userRoles = [ ...clearRoles, ...directRoles ];
+          const relevantRoles = userRoles.filter(role => role.applicationId === clientId);
+          result.roles = _.uniq(relevantRoles.map(role => role.name));
+
+          return relevantRoles;
+        }).then((relevantRoles) => {
+          const permIds = _.flattenDeep(_.map(relevantRoles, role => role.permissions));
+          const userPermissions = permissions.filter(permission => _.includes(permIds, permission._id));
+          result.permissions = _.uniq(userPermissions.map(permission => permission.name));
+
+          return result;
+        });
+    });
+}
