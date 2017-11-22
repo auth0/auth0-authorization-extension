@@ -419,7 +419,7 @@ export function getUserData(db, userId, clientId, connectionName, groupMembershi
 
   return db.provider.storageContext.read()
     .then(data => {
-      const { groups, roles, permissions } = data;
+      const { groups = [], roles = [], permissions = [] } = data;
 
       const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
 
