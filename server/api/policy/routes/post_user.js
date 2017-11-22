@@ -1,8 +1,7 @@
-import _ from 'lodash';
 import Joi from 'joi';
 
 import schema from '../schemas/policy_request';
-import { getPermissionsForRoles, getRolesForGroups, getUserGroups } from '../../../lib/queries';
+import { getUserData } from '../../../lib/queries';
 
 module.exports = (server) => ({
   method: 'POST',
@@ -30,31 +29,13 @@ module.exports = (server) => ({
   handler: (req, reply) => {
     const { userId, clientId } = req.params;
     const { connectionName, groups } = req.payload;
-    const result = {
-      groups: [],
-      roles: []
-    };
 
-    getUserGroups(req.storage, userId, connectionName, groups)
-      .then(userGroups => {
-        result.groups = userGroups.map(group => group.name);
-        return req.storage.getRoles()
-          .then(allRoles => {
-            const groupRoles = getRolesForGroups(userGroups, allRoles);
-            const clearRoles = groupRoles.map(record => record.role);
-            const directRoles = allRoles.filter(role => role.users && role.users.indexOf(userId) > -1);
+    if (req.storage.provider && req.storage.provider.storageContext && req.storage.provider.storageContext.read) {
+      return getUserData(req.storage, userId, clientId, connectionName, groups)
+        .then(data => reply(data))
+        .catch(err => reply.error(err));
+    }
 
-            return [ ...clearRoles, ...directRoles ];
-          });
-      })
-      .then(userRoles => {
-        const relevantRoles = userRoles.filter(role => role.applicationId === clientId);
-        result.roles = relevantRoles.map(role => role.name);
-
-        return getPermissionsForRoles(req.storage, relevantRoles);
-      })
-      .then(permissions => ({ ...result, permissions: permissions.map(permission => permission.name) }))
-      .then(data => reply({ groups: _.uniq(data.groups), permissions: _.uniq(data.permissions), roles: _.uniq(data.roles) }))
-      .catch(err => reply.error(err));
+    return reply.error(new Error('Storage error.'));
   }
 });
