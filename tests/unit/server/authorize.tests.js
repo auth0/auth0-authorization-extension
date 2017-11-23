@@ -95,6 +95,7 @@ describe('users-route', () => {
     db.getGroups = () => Promise.resolve(groups);
     db.getRoles = () => Promise.resolve(roles);
     db.getPermissions = () => Promise.resolve(permissions);
+    db.provider = { storageContext: { read: () => Promise.resolve({ groups, roles, permissions }) } };
 
     done();
   });
@@ -143,6 +144,117 @@ describe('users-route', () => {
         expect(response.result.permissions).to.include('comment');
         expect(response.result.roles).to.not.include('delete-role');
         expect(response.result.permissions).to.not.include('delete');
+
+        cb();
+      });
+    });
+
+    it('should return groups and roles if there are no permissions in the config', (cb) => {
+      db.provider = { storageContext: { read: () => Promise.resolve({ groups, roles }) } };
+      const options = {
+        method: 'POST',
+        url: `/api/users/1/policy/${clientId}`,
+        payload: {
+          groups: [ 'google-group' ],
+          connectionName: 'google-oauth2'
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result).to.be.a('object');
+        expect(response.result.roles).to.be.a('array');
+        expect(response.result.groups).to.be.a('array');
+        expect(response.result.permissions).to.be.a('array');
+        expect(response.result.roles).to.include('read-role');
+        expect(response.result.roles).to.include('update-role');
+        expect(response.result.roles).to.include('comment-role');
+        expect(response.result.roles).to.include('create-role');
+        expect(response.result.groups).to.include('main');
+        expect(response.result.groups).to.include('sub');
+        expect(response.result.groups).to.include('mapped');
+        expect(response.result.roles).to.not.include('delete-role');
+
+        cb();
+      });
+    });
+
+    it('should return groups if there are no roles in the config', (cb) => {
+      db.provider = { storageContext: { read: () => Promise.resolve({ groups, permissions }) } };
+      const options = {
+        method: 'POST',
+        url: `/api/users/1/policy/${clientId}`,
+        payload: {
+          groups: [ 'google-group' ],
+          connectionName: 'google-oauth2'
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result).to.be.a('object');
+        expect(response.result.roles).to.be.a('array');
+        expect(response.result.groups).to.be.a('array');
+        expect(response.result.permissions).to.be.a('array');
+        expect(response.result.groups).to.include('main');
+        expect(response.result.groups).to.include('sub');
+        expect(response.result.groups).to.include('mapped');
+
+        cb();
+      });
+    });
+
+    it('should return roles and permissions if there are no groups in the config', (cb) => {
+      db.provider = { storageContext: { read: () => Promise.resolve({ roles, permissions }) } };
+
+      const options = {
+        method: 'POST',
+        url: `/api/users/1/policy/${clientId}`,
+        payload: {
+          groups: [ 'google-group' ],
+          connectionName: 'google-oauth2'
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result).to.be.a('object');
+        expect(response.result.roles).to.be.a('array');
+        expect(response.result.groups).to.be.a('array');
+        expect(response.result.permissions).to.be.a('array');
+        expect(response.result.roles).to.include('create-role');
+        expect(response.result.permissions).to.include('create');
+        expect(response.result.roles).to.not.include('delete-role');
+        expect(response.result.permissions).to.not.include('delete');
+
+        cb();
+      });
+    });
+
+    it('should return error if unable to read from storage', (cb) => {
+      db.provider = null;
+
+      const options = {
+        method: 'POST',
+        url: `/api/users/1/policy/${clientId}`,
+        payload: {
+          groups: [ 'google-group' ],
+          connectionName: 'google-oauth2'
+        },
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.statusCode).to.be.equal(400);
+        expect(response.result.message).to.be.equal('Storage error.');
 
         cb();
       });

@@ -419,7 +419,7 @@ export function getUserData(db, userId, clientId, connectionName, groupMembershi
 
   return db.provider.storageContext.read()
     .then(data => {
-      const { groups, roles, permissions } = data;
+      const { groups = [], roles = [], permissions = [] } = data;
 
       const userGroups = _.filter(groups, (group) => _.includes(group.members, userId));
 
@@ -429,11 +429,12 @@ export function getUserData(db, userId, clientId, connectionName, groupMembershi
 
       return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
         .then((dynamicGroups) => {
-          result.groups = _.uniq(getParentGroups(groups, _.union(userGroups, dynamicGroups)).map(group => group.name));
-          return null;
+          const parentGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
+          result.groups = _.uniq(parentGroups.map(group => group.name));
+          return parentGroups;
         })
-        .then(() => {
-          const clearRoles = getRolesForGroups(userGroups, roles).map(record => record.role);
+        .then((allUserGroups) => {
+          const clearRoles = getRolesForGroups(allUserGroups, roles).map(record => record.role);
           const directRoles = roles.filter(role => role.users && role.users.indexOf(userId) > -1);
           const userRoles = [ ...clearRoles, ...directRoles ];
           const relevantRoles = userRoles.filter(role => role.applicationId === clientId);
