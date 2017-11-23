@@ -2,21 +2,39 @@ import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
+import * as auth0 from '../mocks/auth0';
 
 describe('groups-members-route', () => {
   const { db, server } = getServerData();
   const guid = 'C56a418065aa426ca9455fd21deC0538';
+  const pgid = 'C56a418065aa426ca9455fd21deC0530';
+  const ngid = 'C56a418065aa426ca9455fd21deC0539';
   const uid = 'auth0|some_user_id';
+  const nuid = 'auth0|some_nested_user_id';
   const groupName = 'test-group';
   const group = {
     _id: guid,
     name: groupName,
     description: 'description',
-    members: []
+    members: [uid]
+  };
+  const parentGroup = {
+    _id: pgid,
+    name: groupName,
+    description: 'description',
+    members: [uid],
+    nested: [ngid]
+  };
+  const nestedGroup = {
+    _id: ngid,
+    name: groupName,
+    description: 'description',
+    members: [nuid],
   };
 
   before((done) => {
     db.getGroup = () => Promise.resolve(group);
+    db.getGroups = () => Promise.resolve([ group, parentGroup, nestedGroup ]);
     db.updateGroup = null;
     done();
   });
@@ -63,17 +81,16 @@ describe('groups-members-route', () => {
       server.inject(options, (response) => {
         expect(response.statusCode).to.be.equal(200);
         expect(response.result.users).to.be.a('array');
-        expect(response.result.total).to.be.a('number');
+        expect(response.result.total).to.be.equal(1);
         cb();
       });
     });
 
     it('should return nested members', (cb) => {
       const token = getToken('read:groups');
-      db.getGroups = () => Promise.resolve([ group ]);
       const options = {
         method: 'GET',
-        url: `/api/groups/${guid}/members/nested`,
+        url: `/api/groups/${pgid}/members/nested`,
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -82,7 +99,7 @@ describe('groups-members-route', () => {
       server.inject(options, (response) => {
         expect(response.statusCode).to.be.equal(200);
         expect(response.result.nested).to.be.a('array');
-        expect(response.result.total).to.be.a('number');
+        expect(response.result.total).to.equal(2);
         cb();
       });
     });
