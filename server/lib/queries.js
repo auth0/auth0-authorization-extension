@@ -4,6 +4,15 @@ import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
 import apiCall from './apiCall';
 
+const avoidBlock = action => (...args) => new Promise((resolve, reject) => {
+  process.nextTick(() => {
+    try {
+      resolve(action(...args));
+    } catch(e) {
+      reject(e);
+  }});
+});
+
 const compact = (entity) => ({
   _id: entity._id,
   name: entity.name,
@@ -427,13 +436,13 @@ export function getUserData(db, userId, clientId, connectionName, groupMembershi
         groupMemberships = [ ];
       }
 
-      return getDynamicUserGroups(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
-        .then((dynamicGroups) => {
+      return avoidBlock(getDynamicUserGroups)(db, connectionName, [ ...groupMemberships, ...(userGroups.map(g => g.name)) ], groups)
+        .then(avoidBlock((dynamicGroups) => {
           const parentGroups = getParentGroups(groups, _.union(userGroups, dynamicGroups));
           result.groups = _.uniq(parentGroups.map(group => group.name));
           return parentGroups;
-        })
-        .then((allUserGroups) => {
+        }))
+        .then(avoidBlock((allUserGroups) => {
           const clearRoles = getRolesForGroups(allUserGroups, roles).map(record => record.role);
           const directRoles = roles.filter(role => role.users && role.users.indexOf(userId) > -1);
           const userRoles = [ ...clearRoles, ...directRoles ];
@@ -441,12 +450,13 @@ export function getUserData(db, userId, clientId, connectionName, groupMembershi
           result.roles = _.uniq(relevantRoles.map(role => role.name));
 
           return relevantRoles;
-        }).then((relevantRoles) => {
+        }))
+        .then(avoidBlock((relevantRoles) => {
           const permIds = _.flattenDeep(_.map(relevantRoles, role => role.permissions));
           const userPermissions = permissions.filter(permission => _.includes(permIds, permission._id));
           result.permissions = _.uniq(userPermissions.map(permission => permission.name));
 
           return result;
-        });
+        }));
     });
 }
