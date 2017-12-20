@@ -21,10 +21,7 @@ module.exports = (server) => ({
         clientId: Joi.string().required()
       },
       payload: schema
-    },
-    pre: [
-      server.handlers.managementClient
-    ]
+    }
   },
   handler: (req, reply) => {
     const { userId, clientId } = req.params;
