@@ -1,3 +1,6 @@
+import config from '../../../lib/config';
+import { mongoExport } from '../../../lib/mongoTools';
+
 module.exports = () => ({
   method: 'GET',
   path: '/api/configuration/export',
@@ -8,6 +11,12 @@ module.exports = () => ({
     }
   },
   handler: (req, reply) => {
+    if (config('STORAGE_TYPE') === 'mongodb') {
+      return mongoExport(req.storage)
+        .then(result => reply(result))
+        .catch(err => reply.error(err));
+    }
+
     if (
       !req.storage.provider ||
       !req.storage.provider.storageContext ||

@@ -35,6 +35,10 @@
         {
           "value": "s3",
           "text": "Amazon S3"
+        },
+        {
+          "value": "mongodb",
+          "text": "MongoDB"
         }
       ]
     },
@@ -69,6 +73,14 @@
       "example": "r3UOMBA......................",
       "visibleIf": {
         "STORAGE_TYPE": "s3"
+      }
+    },
+    "MONGO_CONNECTION": {
+      "description": "MongoDB connection string",
+      "required": true,
+      "example": "mongodb://foo.bar.tld:1000",
+      "visibleIf": {
+        "STORAGE_TYPE": "mongodb"
       }
     }
   }
