@@ -2,6 +2,7 @@ import config from '../lib/config';
 
 module.exports.register = (server, options, next) => {
   server.route(require('../api/policy/routes/post_user')(server));
+  server.route(require('../api/hierarchy/routes/post_hierarchy')(server));
   server.route(require('../api/applications/routes/get_application')(server));
   server.route(require('../api/applications/routes/get_applications')(server));
   server.route(require('../api/configuration/routes/get_configuration_status')(server));

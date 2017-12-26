@@ -460,3 +460,49 @@ export function getUserData(db, userId, clientId, connectionName, groupMembershi
         }));
     });
 }
+
+const remapRecords = (records, key) => {
+  const result = {};
+
+  _.each(records, (record) => {
+    if (record.roles || key === 'name') {
+      result[record[key]] = { roles: record.roles || [] };
+    } else if (record.permissions) {
+      result[record[key]] = { name: record.name, permissions: record.permissions };
+    } else {
+      result[record[key]] = { name: record.name };
+    }
+  });
+
+  return result;
+};
+
+const enrichRecords = (records, key, source) => {
+  const result = {};
+
+  _.each(records, (record, name) => {
+    result[name] = record;
+    result[name][key] = _.map(record[key], item => source[item]);
+  });
+
+  return result;
+};
+/*
+ * Get groups hierarchy
+ */
+export function getGroupsHierarchy(db, groupNames) {
+  return db.provider.storageContext.read()
+    .then(data => {
+      const { groups = [], roles = [], permissions = [] } = data;
+
+      const selectedGroups = _.filter(groups, (group) => _.includes(groupNames, group.name));
+      const usedGroups = getParentGroups(groups, selectedGroups);
+      const usedRoles = getRolesForGroups(usedGroups, roles).map(record => record.role);
+      const permIds = _.flattenDeep(_.map(usedRoles, role => role.permissions));
+      const usedPermissions = permissions.filter(permission => _.includes(permIds, permission._id));
+
+      const convertedRoles = enrichRecords(remapRecords(usedRoles, '_id'), 'permissions', remapRecords(usedPermissions, '_id'));
+
+      return enrichRecords(remapRecords(usedGroups, 'name'), 'roles', convertedRoles);
+    });
+}
