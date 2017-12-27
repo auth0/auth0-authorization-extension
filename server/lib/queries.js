@@ -472,6 +472,10 @@ const remapRecords = (records, key) => {
     } else {
       result[record[key]] = { name: record.name };
     }
+
+    if (record.mappings) {
+      result[record[key]].mappings = record.mappings;
+    }
   });
 
   return result;
@@ -482,7 +486,7 @@ const enrichRecords = (records, key, source) => {
 
   _.each(records, (record, name) => {
     result[name] = record;
-    result[name][key] = _.map(record[key], item => source[item]);
+    result[name][key] = _.map(record[key], item => source[item]).filter(item => item);
   });
 
   return result;
@@ -490,14 +494,15 @@ const enrichRecords = (records, key, source) => {
 /*
  * Get groups hierarchy
  */
-export function getGroupsHierarchy(db, groupNames) {
+export function getGroupsHierarchy(db, groupNames, clientId) {
   return db.provider.storageContext.read()
     .then(data => {
       const { groups = [], roles = [], permissions = [] } = data;
 
       const selectedGroups = _.filter(groups, (group) => _.includes(groupNames, group.name));
       const usedGroups = getParentGroups(groups, selectedGroups);
-      const usedRoles = getRolesForGroups(usedGroups, roles).map(record => record.role);
+      const groupRoles = getRolesForGroups(usedGroups, roles).map(record => record.role);
+      const usedRoles = clientId ? _.filter(groupRoles, { applicationId: clientId }) : groupRoles;
       const permIds = _.flattenDeep(_.map(usedRoles, role => role.permissions));
       const usedPermissions = permissions.filter(permission => _.includes(permIds, permission._id));
 
