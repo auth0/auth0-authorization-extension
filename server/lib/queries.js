@@ -8,9 +8,10 @@ const avoidBlock = action => (...args) => new Promise((resolve, reject) => {
   setImmediate(() => {
     try {
       resolve(action(...args));
-    } catch(e) {
+    } catch (e) {
       reject(e);
-  }});
+    }
+  });
 });
 
 const compact = (entity) => ({

@@ -18,7 +18,7 @@ var createServer = (context, req, res) => {
   // To avoid the  "Blocked event loop" error we delay loading the application module
   setImmediate(() => {
     config.setValue('PUBLIC_WT_URL', tools.urlHelpers.getWebtaskUrl(req));
-    // After the application has been initialized we remove the 
+    // After the application has been initialized we remove the
     // artificial delay in processing
     createServer = tools.createServer(factory);
     createServer(context, req, res);

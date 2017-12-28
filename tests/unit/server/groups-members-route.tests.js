@@ -2,7 +2,6 @@ import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
-import * as auth0 from '../mocks/auth0';
 
 describe('groups-members-route', () => {
   const { db, server } = getServerData();
@@ -16,20 +15,20 @@ describe('groups-members-route', () => {
     _id: guid,
     name: groupName,
     description: 'description',
-    members: [uid]
+    members: [ uid ]
   };
   const parentGroup = {
     _id: pgid,
     name: groupName,
     description: 'description',
-    members: [uid],
-    nested: [ngid]
+    members: [ uid ],
+    nested: [ ngid ]
   };
   const nestedGroup = {
     _id: ngid,
     name: groupName,
     description: 'description',
-    members: [nuid],
+    members: [ nuid ]
   };
 
   before((done) => {
