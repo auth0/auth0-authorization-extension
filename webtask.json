@@ -35,6 +35,10 @@
         {
           "value": "s3",
           "text": "Amazon S3"
+        },
+        {
+          "value": "mongodb",
+          "text": "MongoDB"
         }
       ]
     },
@@ -69,6 +73,14 @@
       "example": "r3UOMBA......................",
       "visibleIf": {
         "STORAGE_TYPE": "s3"
+      }
+    },
+    "MONGODB_URL": {
+      "description": "Your MongoDB url",
+      "required": true,
+      "example": "mongodb://some.mongodb.host:27017/database-name",
+      "visibleIf": {
+        "STORAGE_TYPE": "mongodb"
       }
     }
   }

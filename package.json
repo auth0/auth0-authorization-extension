@@ -71,6 +71,7 @@
     "async": "2.1.2",
     "auth0": "2.8.0",
     "auth0-extension-hapi-tools": "1.2.0",
+    "auth0-extension-mongo-tools": "^0.1.0",
     "auth0-extension-s3-tools": "1.1.1",
     "auth0-extension-tools": "1.2.1",
     "auth0-extension-ui": "1.0.1",
