@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import apiCall from '../../../lib/apiCall';
+import multipartRequest from '../../../lib/multipartRequest';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -14,12 +14,9 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    apiCall(req.pre.auth0, req.pre.auth0.clients.getAll, [ { fields: 'client_id,name,callbacks,global,app_type' } ])
+    multipartRequest(req.pre.auth0, 'clients', { global: false, fields: 'client_id,name,callbacks,app_type' })
       .then(clients => _.chain(clients)
-        .filter(client =>
-          !client.global &&
-          (client.app_type === 'spa' || client.app_type === 'native' || client.app_type === 'regular_web')
-        )
+        .filter(client => client.app_type === 'spa' || client.app_type === 'native' || client.app_type === 'regular_web')
         .sortBy((client) => client.name.toLowerCase())
         .value())
       .then(applications => reply(applications))
