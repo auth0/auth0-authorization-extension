@@ -22,7 +22,7 @@ export default createForm('group', class GroupForm extends Component {
         <LoadingPanel show={loading}>
           { isNew &&
             <p className="modal-description">
-              Give your group a name. After creating the group you'll be able to assing users and roles to it.
+              Give your group a name. After creating the group you'll be able to assign users and roles to it.
             </p>
           }
           {this.props.children}
