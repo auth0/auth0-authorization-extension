@@ -412,13 +412,14 @@ atob@~1.1.0:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/atob/-/atob-1.1.3.tgz#95f13629b12c3a51a5d215abdce2aa9f32f80773"
 
-auth0-extension-hapi-tools@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/auth0-extension-hapi-tools/-/auth0-extension-hapi-tools-1.2.0.tgz#67ccc8fe2e6f7518e2f486bc88aeebc449359625"
+auth0-extension-hapi-tools@1.2.2:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/auth0-extension-hapi-tools/-/auth0-extension-hapi-tools-1.2.2.tgz#188c138c1cb0039f4b87e665d82029f9ae21843a"
   dependencies:
-    auth0-extension-tools "1.2.0"
+    auth0-extension-tools "^1.3.0"
     boom "3.2.2"
     hapi-auth-jwt2 "7.0.1"
+    jsonwebtoken "7.1.9"
     webtask-tools "^3.1.1"
 
 auth0-extension-s3-tools@1.1.1:
@@ -428,23 +429,6 @@ auth0-extension-s3-tools@1.1.1:
     auth0-extension-tools "^0.9.0"
     aws-sdk "2.5.3"
     bluebird "3.4.1"
-
-auth0-extension-tools@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/auth0-extension-tools/-/auth0-extension-tools-1.2.0.tgz#cc673fb39902b00db777ec02fc880cb1ba805990"
-  dependencies:
-    async "2.1.2"
-    auth0 "^2.3.1"
-    bluebird "^3.4.1"
-    jsonwebtoken "^7.1.9"
-    jwks-rsa "^1.1.1"
-    lodash "^4.15.0"
-    lru-memoizer "^1.7.0"
-    ms "^0.7.1"
-    node-uuid "^1.4.7"
-    promise-retry "^1.1.1"
-    superagent "^2.2.0"
-    webtask-tools "^2.2.0"
 
 auth0-extension-tools@1.2.1:
   version "1.2.1"
@@ -474,6 +458,23 @@ auth0-extension-tools@^0.9.0:
     lru-memoizer "^1.6.0"
     ms "^0.7.1"
     node-uuid "^1.4.7"
+    superagent "^2.2.0"
+    webtask-tools "^2.2.0"
+
+auth0-extension-tools@^1.3.0:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/auth0-extension-tools/-/auth0-extension-tools-1.3.1.tgz#c4a8bbf40f290907721e10f43c7aedeadfa69313"
+  dependencies:
+    async "2.1.2"
+    auth0 "^2.9.1"
+    bluebird "^3.4.1"
+    jsonwebtoken "^7.1.9"
+    jwks-rsa "^1.1.1"
+    lodash "^4.15.0"
+    lru-memoizer "^1.7.0"
+    ms "^0.7.1"
+    node-uuid "^1.4.7"
+    promise-retry "^1.1.1"
     superagent "^2.2.0"
     webtask-tools "^2.2.0"
 
@@ -552,6 +553,17 @@ auth0@^2.3.1:
     request "^2.75.0"
     rest-facade "^1.2.7"
     url-join "0.0.1"
+
+auth0@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/auth0/-/auth0-2.9.1.tgz#85e088035f29925ed086da94d811288a65f5835c"
+  dependencies:
+    bluebird "^2.10.2"
+    lru-memoizer "^1.11.1"
+    object.assign "^4.0.4"
+    request "^2.83.0"
+    rest-facade "^1.10.0"
+    retry "^0.10.1"
 
 autoprefixer@6.7.7, autoprefixer@^6.0.0, autoprefixer@^6.3.1:
   version "6.7.7"
@@ -6001,21 +6013,21 @@ jsonpointer@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/jsonpointer/-/jsonpointer-4.0.0.tgz#6661e161d2fc445f19f98430231343722e1fcbd5"
 
-jsonwebtoken@^5.7.0:
-  version "5.7.0"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-5.7.0.tgz#1c90f9a86ce5b748f5f979c12b70402b4afcddb4"
-  dependencies:
-    jws "^3.0.0"
-    ms "^0.7.1"
-    xtend "^4.0.1"
-
-jsonwebtoken@^7.0.0, jsonwebtoken@^7.1.7, jsonwebtoken@^7.1.9:
+jsonwebtoken@7.1.9, jsonwebtoken@^7.0.0, jsonwebtoken@^7.1.7, jsonwebtoken@^7.1.9:
   version "7.1.9"
   resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-7.1.9.tgz#847804e5258bec5a9499a8dc4a5e7a3bae08d58a"
   dependencies:
     joi "^6.10.1"
     jws "^3.1.3"
     lodash.once "^4.0.0"
+    ms "^0.7.1"
+    xtend "^4.0.1"
+
+jsonwebtoken@^5.7.0:
+  version "5.7.0"
+  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-5.7.0.tgz#1c90f9a86ce5b748f5f979c12b70402b4afcddb4"
+  dependencies:
+    jws "^3.0.0"
     ms "^0.7.1"
     xtend "^4.0.1"
 
@@ -9508,15 +9520,7 @@ resolve@^1.1.6, resolve@^1.1.7, resolve@~1.1.6:
   version "1.1.7"
   resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.1.7.tgz#203114d82ad2c5ed9e8e0411b3932875e889e97b"
 
-rest-facade@^1.2.7:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.4.1.tgz#c9b87a4ddf04d95fc5a8acf0f1341561cacee4a2"
-  dependencies:
-    bluebird "^2.10.2"
-    change-case "^2.3.0"
-    superagent "^1.4.0"
-
-rest-facade@^1.5.0:
+rest-facade@^1.10.0, rest-facade@^1.5.0:
   version "1.10.1"
   resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.10.1.tgz#a9b030ff50df28c9ea1a2719f94e369c47167d20"
   dependencies:
@@ -9525,6 +9529,14 @@ rest-facade@^1.5.0:
     deepmerge "^1.5.1"
     superagent "^3.8.0"
     superagent-proxy "^1.0.2"
+
+rest-facade@^1.2.7:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/rest-facade/-/rest-facade-1.4.1.tgz#c9b87a4ddf04d95fc5a8acf0f1341561cacee4a2"
+  dependencies:
+    bluebird "^2.10.2"
+    change-case "^2.3.0"
+    superagent "^1.4.0"
 
 restore-cursor@^1.0.1:
   version "1.0.1"
@@ -9537,7 +9549,7 @@ ret@~0.1.10:
   version "0.1.14"
   resolved "https://registry.yarnpkg.com/ret/-/ret-0.1.14.tgz#58c636837b12e161f8a380cf081c6a230fd1664e"
 
-retry@^0.10.0, retry@~0.10.1:
+retry@^0.10.0, retry@^0.10.1, retry@~0.10.1:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/retry/-/retry-0.10.1.tgz#e76388d217992c252750241d3d3956fed98d8ff4"
 
@@ -10877,6 +10889,15 @@ typedarray@^0.0.6:
 ua-parser-js@^0.7.9:
   version "0.7.12"
   resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.12.tgz#04c81a99bdd5dc52263ea29d24c6bf8d4818a4bb"
+
+uglify-js@^2.4.19:
+  version "2.8.29"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.29.tgz#29c5733148057bb4e1f75df35b7a9cb72e6a59dd"
+  dependencies:
+    source-map "~0.5.1"
+    yargs "~3.10.0"
+  optionalDependencies:
+    uglify-to-browserify "~1.0.0"
 
 uglify-js@^2.6, uglify-js@~2.7.3:
   version "2.7.4"
