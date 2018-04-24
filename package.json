@@ -29,7 +29,7 @@
   "auth0-extension": {
     "externals": [
       "async@2.1.2",
-      "auth0-extension-hapi-tools@1.2.2",
+      "auth0-extension-hapi-tools@1.2.1",
       "auth0-extension-s3-tools@1.1.1",
       "auth0-extension-tools@1.2.1",
       "auth0@2.8.0",
