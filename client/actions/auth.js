@@ -1,4 +1,4 @@
-/* global sessionStorage */
+/* global localStorage sessionStorage */
 
 import axios from 'axios';
 
@@ -16,6 +16,7 @@ export function login() {
 
 export function logout() {
   return (dispatch) => {
+    localStorage.removeItem('authz:apiToken');
     sessionStorage.removeItem('authz:apiToken');
     window.location.href = window.config.BASE_URL + '/logout';
 
@@ -27,7 +28,7 @@ export function logout() {
 
 export function loadCredentials() {
   return (dispatch) => {
-    const apiToken = sessionStorage.getItem('authz:apiToken');
+    const apiToken = localStorage.getItem('authz:apiToken') || sessionStorage.getItem('authz:apiToken');
     if (apiToken) {
       const decodedToken = decodeToken(apiToken);
       if (isTokenExpired(decodedToken)) {
@@ -36,7 +37,7 @@ export function loadCredentials() {
 
       axios.defaults.headers.common.Authorization = `Bearer ${apiToken}`;
 
-      sessionStorage.setItem('authz:token', apiToken);
+      localStorage.setItem('authz:apiToken', apiToken);
 
       dispatch({
         type: constants.RECIEVED_TOKEN,
