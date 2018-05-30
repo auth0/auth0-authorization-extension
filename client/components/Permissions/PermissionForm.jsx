@@ -33,7 +33,7 @@ export default createForm('permission', class extends Component {
             <form className="form-horizontal">
               <Field
                 name="name" component={InputText}
-                label="Name" placeholder="e.g. read:invoce, delete:user, edit:book"
+                label="Name" placeholder="e.g. read:invoice, delete:user, edit:book"
                 validationErrors={validationErrors}
               />
               <Field

@@ -5,7 +5,7 @@ import memoizer from 'lru-memoizer';
 import apiCall from './apiCall';
 
 const avoidBlock = action => (...args) => new Promise((resolve, reject) => {
-  process.nextTick(() => {
+  setImmediate(() => {
     try {
       resolve(action(...args));
     } catch(e) {

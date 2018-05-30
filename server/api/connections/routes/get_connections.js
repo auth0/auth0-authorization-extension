@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import apiCall from '../../../lib/apiCall';
+import multipartRequest from '../../../lib/multipartRequest';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -14,7 +14,7 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    apiCall(req.pre.auth0, req.pre.auth0.connections.getAll, [ { fields: 'id,name,strategy' } ])
+    multipartRequest(req.pre.auth0, 'connections', { fields: 'id,name,strategy' })
       .then(connections => _.chain(connections)
         .sortBy((conn) => conn.name.toLowerCase())
         .value())

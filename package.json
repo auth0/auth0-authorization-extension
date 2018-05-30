@@ -1,9 +1,9 @@
 {
   "name": "auth0-authz-extension",
-  "version": "2.4.7",
+  "version": "2.4.11",
   "description": "Auth0 Authorization Extension",
   "engines": {
-    "node": "4.6.2"
+    "node": ">=6.10"
   },
   "main": "server.js",
   "scripts": {
@@ -29,7 +29,7 @@
   "auth0-extension": {
     "externals": [
       "async@2.1.2",
-      "auth0-extension-hapi-tools@1.2.0",
+      "auth0-extension-hapi-tools@1.2.1",
       "auth0-extension-s3-tools@1.1.1",
       "auth0-extension-tools@1.2.1",
       "auth0@2.8.0",
@@ -72,7 +72,7 @@
   "dependencies": {
     "async": "2.1.2",
     "auth0": "2.8.0",
-    "auth0-extension-hapi-tools": "1.2.0",
+    "auth0-extension-hapi-tools": "1.2.2",
     "auth0-extension-s3-tools": "1.1.1",
     "auth0-extension-tools": "1.2.1",
     "auth0-extension-ui": "1.0.1",
