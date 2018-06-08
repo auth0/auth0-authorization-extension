@@ -1,6 +1,6 @@
 {
-  "AUTHZ_URL": 'https://tenant.us8.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/api',
-  "AUTHZ_TOKEN": 'your authz-api token',
+  "AUTHZ_URL": "https://tenant.us8.webtask.io/adf6e2f2b84784b57522e3b19dfc9201/api",
+  "AUTHZ_TOKEN": "your authz-api token",
   "GROUPS_NUMBER": 10,
   "USERS_PER_GROUP": 10000
 }
