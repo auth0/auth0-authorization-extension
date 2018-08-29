@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import config from '../../../lib/config';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -23,6 +24,8 @@ module.exports = (server) => ({
   },
   handler: (req, reply) => {
     const page = (req.query.page - 1 < 0) ? 0 : req.query.page - 1;
+    const defaultSearchEngine = (config('AUTH0_RTA').replace('https://', '') !== 'auth0.auth0.com') ? 'v2' : 'v3';
+    const selectedSearchEngine = config('SEARCH_ENGINE') !== 'default' && config('SEARCH_ENGINE');
     const options = {
       sort: 'last_login:-1',
       q: req.query.field ? `${req.query.field}:${req.query.q}` : req.query.q,
@@ -30,7 +33,7 @@ module.exports = (server) => ({
       page: page || 0,
       include_totals: true,
       fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked',
-      search_engine: 'v2'
+      search_engine: selectedSearchEngine || defaultSearchEngine
     };
 
     req.pre.auth0.users.getAll(options)

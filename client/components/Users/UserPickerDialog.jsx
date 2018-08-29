@@ -31,7 +31,10 @@ export default createForm('userPicker', class UserPickerDialog extends Component
   };
 
   getOptions(input, callback) {
-    const query = `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
+    const useSEv3 = window.config.SEARCH_ENGINE === 'v3';
+    const query = useSEv3
+      ? `name:${input}* OR email:${input}*`
+      : `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
     this.props.fetchUsers(query, null, true, null, null, () => {
       callback(null, {
         options: this.props.users,
