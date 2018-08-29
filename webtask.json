@@ -1,7 +1,7 @@
 {
   "title": "Auth0 Authorization",
   "name": "auth0-authz",
-  "version": "2.5.0",
+  "version": "2.4.12",
   "author": "auth0",
   "description": "This extension gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
@@ -21,22 +21,6 @@
     "scopes": "read:connections read:resource_servers update:resource_servers delete:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
   },
   "secrets": {
-    "SEARCH_ENGINE": {
-      "description": "Engine for searching users",
-      "type": "select",
-      "allowMultiple": false,
-      "default": "default",
-      "options": [
-        {
-          "value": "default",
-          "text": "Default"
-        },
-        {
-          "value": "v3",
-          "text": "v3"
-        }
-      ]
-    },
     "STORAGE_TYPE": {
       "description": "Choose the storage type for the database",
       "type": "select",
