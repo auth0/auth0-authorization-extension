@@ -19,7 +19,8 @@ const assembleHtmlRoute = (link) => ({
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
       BASE_URL: urlHelpers.getBaseUrl(req),
       API_BASE: urlHelpers.getBaseUrl(req),
-      BASE_PATH: urlHelpers.getBasePath(req)
+      BASE_PATH: urlHelpers.getBasePath(req),
+      SEARCH_ENGINE: (config('AUTH0_RTA').replace('https://', '') !== 'auth0.auth0.com') ? 'v2' : 'v3'
     };
 
     // Development.

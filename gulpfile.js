@@ -27,6 +27,7 @@ gulp.task('run', () => {
         'build/webpack',
         'server/data.json',
         'client/',
+        'dist/',
         'tests/',
         'node_modules/'
       ]
