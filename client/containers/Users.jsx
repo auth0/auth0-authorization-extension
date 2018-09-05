@@ -29,8 +29,8 @@ class Users extends React.Component {
     this.props.fetchUsers('', '', true, process.env.PER_PAGE);
   }
 
-  getUsersOnPage(page) {
-    this.props.fetchUsers('', '', true, process.env.PER_PAGE, page);
+  getUsersOnPage(page, query = '', field = '') {
+    this.props.fetchUsers(query, field, true, process.env.PER_PAGE, page);
   }
 
   render() {

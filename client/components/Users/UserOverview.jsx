@@ -61,7 +61,9 @@ class UserOverview extends React.Component {
   }
 
   handleUsersPageChange(page) {
-    this.props.getUsersOnPage(page);
+    const query = this.props && this.props.fetchQuery;
+    const filter = this.state && this.state.selectedFilter && this.state.selectedFilter.filterBy;
+    this.props.getUsersOnPage(page, query, filter);
   }
 
   renderActions(user, index) {
