@@ -5,3 +5,4 @@ process.env.NODE_ENV = 'test';
 // before our tests run.
 require('babel-register')();
 require('./runner');
+require('./initClientTests');
