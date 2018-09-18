@@ -1,3 +1,30 @@
+## [2.5.0] - 2018-08-30
+
+- Search Engine Autodetect (V3 for cloud, V2 for PSaaS)
+
+## [2.4.10] - 2018-04-23
+
+- Multipart request for clients and connections paging
+
+## [2.4.9] - 2017-12-20
+
+- Optimizations to avoid Blocking event loop
+
+## [2.4.8] - 2017-12-14
+- Uses `setImmediate` to avoid blocks
+
+## [2.4.7] - 2017-11-28
+
+- Attempt to reduce blocked event loop errors
+
+## [2.4.6] - 2017-11-23
+
+- Get roles for all groups (including parent groups) [bugfix]
+
+## [2.4.5] - 2017-11-22
+
+- `/policy` endpoint refactor
+
 ## [2.4.4] - 2017-10-30
 
 - Adds support for Rate Limiting headers in API
