@@ -1,3 +1,7 @@
+## [2.5.1] - 2018-10-18
+
+- [#230](https://github.com/auth0/auth0-authorization-extension/pull/230) - Use dedicated nonce key as `authz-nonce` to avoid collisions
+
 ## [2.5.0] - 2018-08-30
 
 - Search Engine Autodetect (V3 for cloud, V2 for PSaaS)
