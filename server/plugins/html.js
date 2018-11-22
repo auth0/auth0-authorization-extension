@@ -24,17 +24,17 @@ const assembleHtmlRoute = (link) => ({
     };
 
     // Development.
-    // if (process.env.NODE_ENV === 'development') {
-    //   return reply(ejs.render(template, {
-    //     config: {
-    //       ...cfg,
-    //       API_BASE: 'http://localhost:3000/'
-    //     },
-    //     assets: {
-    //       app: 'http://localhost:3000/app/bundle.js'
-    //     }
-    //   }));
-    // }
+    if (process.env.NODE_ENV === 'development') {
+      return reply(ejs.render(template, {
+        config: {
+          ...cfg,
+          API_BASE: 'http://localhost:3000/'
+        },
+        assets: {
+          app: 'http://localhost:3000/app/bundle.js'
+        }
+      }));
+    }
 
     // Render from CDN.
     const clientVersion = config('CLIENT_VERSION');
@@ -63,6 +63,10 @@ const assembleHtmlRoute = (link) => ({
 
         if (locals.assets.vendors) {
           locals.assets.vendors = `/app/${locals.assets.vendors}`;
+        }
+
+        if (locals.assets.style) {
+          locals.assets.style = `/app/${locals.assets.style}`;
         }
       }
 
