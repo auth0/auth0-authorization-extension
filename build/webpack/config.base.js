@@ -13,7 +13,6 @@ module.exports = {
   entry: {
     app: path.resolve(__dirname, '../../client/app.jsx'),
     vendors: [
-      'babel-polyfill',
       'axios',
       'bluebird',
       'classnames',
