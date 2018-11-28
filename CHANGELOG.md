@@ -1,6 +1,6 @@
-## [Unreleased]
+## [2.5.2] - 2018-11-28-
 
-- `babel-polyfill` for IE11 support
+- `babel-polyfill` for IE11 support. #232
 
 ## [2.5.1] - 2018-10-18
 
