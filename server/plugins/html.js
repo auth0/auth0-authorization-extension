@@ -64,6 +64,10 @@ const assembleHtmlRoute = (link) => ({
         if (locals.assets.vendors) {
           locals.assets.vendors = `/app/${locals.assets.vendors}`;
         }
+
+        if (locals.assets.style) {
+          locals.assets.style = `/app/${locals.assets.style}`;
+        }
       }
 
       // Render the HTML page.
