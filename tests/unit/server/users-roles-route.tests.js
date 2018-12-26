@@ -142,6 +142,11 @@ describe('users-groups-route', () => {
   });
 
   describe('#patch', () => {
+    beforeEach((done) => {
+      groupRole.users = null;
+      done();
+    });
+
     it('should return 403 if scope is missing (update roles)', (cb) => {
       const token = getToken();
       const options = {
@@ -167,6 +172,25 @@ describe('users-groups-route', () => {
           Authorization: `Bearer ${token}`
         },
         payload: [ groupRole._id ]
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.equal(204);
+        expect(groupRole.id).to.be.equal(groupRole._id);
+        expect(groupRole.users[0]).to.be.equal('userId');
+        cb();
+      });
+    });
+
+    it('should add user to role by role name', (cb) => {
+      const token = getToken('update:roles');
+      const options = {
+        method: 'PATCH',
+        url: '/api/users/userId/roles',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        payload: [ groupRole.name ]
       };
 
       server.inject(options, (response) => {
