@@ -24,21 +24,23 @@ module.exports = (server) => ({
   handler: (req, reply) => {
     const config = req.payload;
 
-    req.pre.auth0.rules.getAll()
-      .then(rules => {
-        const userName = req.auth.credentials.email || 'unknown';
-        const payload = {
-          name: 'auth0-authorization-extension',
-          script: compileRule(config, userName),
-          enabled: true
-        };
+    compileRule(req.storage, req.pre.auth0, config, req.auth.credentials.email || 'unknown')
+      .then((script) => {
+        req.pre.auth0.rules.getAll()
+          .then(rules => {
+            const payload = {
+              name: 'auth0-authorization-extension',
+              enabled: true,
+              script
+            };
 
-        const rule = _.find(rules, { name: payload.name });
-        if (!rule) {
-          return req.pre.auth0.rules.create({ stage: 'login_success', ...payload });
-        }
+            const rule = _.find(rules, { name: payload.name });
+            if (!rule) {
+              return req.pre.auth0.rules.create({ stage: 'login_success', ...payload });
+            }
 
-        return req.pre.auth0.rules.update({ id: rule.id }, payload);
+            return req.pre.auth0.rules.update({ id: rule.id }, payload);
+          });
       })
       .then(() => req.storage.updateConfiguration(config))
       .then((updated) => reply(updated))

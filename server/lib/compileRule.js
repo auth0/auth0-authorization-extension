@@ -1,17 +1,22 @@
 import ejs from 'ejs';
-import crypto from 'crypto';
 import config from './config';
+import generateApiKey from './generateApiKey';
 import authorizeRule from './rules/authorize';
 
-const hashApiKey = () => crypto.createHmac('sha256', config('PUBLIC_WT_URL'))
-    .update(config('EXTENSION_SECRET'))
-    .digest('hex');
+export default (storage, auth0, configuration = { }, userName = '') =>
+  storage.getApiKey()
+    .then((key) => {
+      if (!key) {
+        return generateApiKey(storage, auth0);
+      }
 
-export default (configuration = { }, userName = '') =>
-  ejs.render(authorizeRule, {
-    extensionUrl: config('PUBLIC_WT_URL').replace(/\/$/g, ''),
-    apiKey: hashApiKey(),
-    updateTime: () => new Date().toISOString(),
-    config: configuration,
-    userName
-  });
+      return null;
+    })
+    .then(() =>
+      ejs.render(authorizeRule, {
+        extensionUrl: config('PUBLIC_WT_URL').replace(/\/$/g, ''),
+        updateTime: () => new Date().toISOString(),
+        config: configuration,
+        userName
+      })
+    );

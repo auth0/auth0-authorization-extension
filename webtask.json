@@ -19,7 +19,7 @@
     "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
     "onUpdatePath": "/.extensions/on-update",
-    "scopes": "read:connections read:resource_servers update:resource_servers delete:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules delete:rules"
+    "scopes": "read:connections read:resource_servers update:resource_servers delete:resource_servers read:clients delete:clients read:users read:rules create:rules update:rules_configs update:rules delete:rules"
   },
   "secrets": {
     "STORAGE_TYPE": {

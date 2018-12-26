@@ -49,6 +49,19 @@ export default class Database {
       });
   }
 
+  getApiKey() {
+    return this.provider
+      .getAll('configuration')
+      .then(records => (records.length ? records[0].apikey : null));
+  }
+
+  updateApiKey(apikey) {
+    return this.provider
+      .getAll('configuration')
+      .then(records => (records.length ? records[0] : {}))
+      .then(data => this.provider.update('configuration', 'v1', { ...data, apikey }, true));
+  }
+
   getConfiguration() {
     return this.provider
       .getAll('configuration')

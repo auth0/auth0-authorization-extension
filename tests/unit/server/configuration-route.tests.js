@@ -14,6 +14,7 @@ describe('configuration-route', () => {
     db.getStatus = () => Promise.resolve({ size: 10, type: 'default' });
     db.getConfiguration = () => Promise.resolve({ groupsInToken: false, rolesInToken: true });
     db.updateConfiguration = (data) => Promise.resolve(data);
+    db.updateApiKey = (data) => Promise.resolve(data);
     db.provider = {
       storageContext: {
         read: () => Promise.resolve({ key: 'value' }),
@@ -252,6 +253,24 @@ describe('configuration-route', () => {
 
       server.inject(options, (response) => {
         expect(response.statusCode).to.equal(204);
+        cb();
+      });
+    });
+
+    it('should rotate apikey and return hash', (cb) => {
+      const token = getToken('update:configuration');
+      auth0.put('/api/v2/rules-configs/AUTHZ_EXT_API_KEY');
+      const options = {
+        method: 'PATCH',
+        url: '/api/configuration/rotate-apikey',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.hash).to.be.a('string');
+        expect(response.result.hash.length).to.be.equal(64);
         cb();
       });
     });

@@ -95,6 +95,7 @@ describe('users-route', () => {
     db.getGroups = () => Promise.resolve(groups);
     db.getRoles = () => Promise.resolve(roles);
     db.getPermissions = () => Promise.resolve(permissions);
+    db.getApiKey = () => Promise.resolve('hash');
     db.provider = { storageContext: { read: () => Promise.resolve({ groups, roles, permissions }) } };
 
     done();

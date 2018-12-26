@@ -8,6 +8,7 @@ import ImportExportTab from './ImportExportTab';
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
+    rotateApiKey: PropTypes.func.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
     importConfigPrepare: PropTypes.func.isRequired,
     importConfig: PropTypes.func.isRequired,
@@ -20,7 +21,7 @@ export default class RuleSettings extends Component {
   }
 
   render() {
-    const { loading, error, record, activeTab } = this.props.configuration.toJS();
+    const { loading, error, record, hash, activeTab } = this.props.configuration.toJS();
     const importExport = this.props.importExport;
     return (
       <div>
@@ -36,7 +37,7 @@ export default class RuleSettings extends Component {
               <div>
                 <Tabs id="tabs" defaultActiveKey={activeTab} animation={false}>
                   <Tab eventKey={1} title="Rule Configuration">
-                    <RuleConfigurationTab initialValues={record} onSubmit={this.props.saveConfiguration} />
+                    <RuleConfigurationTab initialValues={record} hash={hash} onSubmit={this.props.saveConfiguration} rotateApiKey={this.props.rotateApiKey} />
                   </Tab>
                   <Tab eventKey={2} title="Import / Export">
                     <ImportExportTab

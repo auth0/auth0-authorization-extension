@@ -6,6 +6,11 @@ module.exports.get = (route, data, code = 200) =>
     .query(() => true)
     .reply(code, data);
 
+module.exports.put = (route) =>
+  nock('https://foo.auth0.local')
+    .intercept(route, 'PUT')
+    .reply(204);
+
 module.exports.patch = (route) =>
   nock('https://foo.auth0.local')
     .intercept(route, 'PATCH')

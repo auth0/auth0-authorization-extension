@@ -16,6 +16,7 @@ export default connectContainer(class extends Component {
 
   static propTypes = {
     configuration: PropTypes.object.isRequired,
+    rotateApiKey: PropTypes.func.isRequired,
     fetchConfiguration: PropTypes.func.isRequired,
     saveConfiguration: PropTypes.func.isRequired,
     exportConfig: PropTypes.func.isRequired
@@ -32,6 +33,7 @@ export default connectContainer(class extends Component {
     return (
       <RuleSettings
         configuration={this.props.configuration}
+        rotateApiKey={this.props.rotateApiKey}
         saveConfiguration={this.props.saveConfiguration}
         importExport={this.props.importExport}
         importConfigPrepare={this.props.importConfigPrepare}
