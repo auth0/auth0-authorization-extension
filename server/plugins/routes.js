@@ -9,6 +9,7 @@ module.exports.register = (server, options, next) => {
   server.route(require('../api/configuration/routes/get_export')(server));
   server.route(require('../api/configuration/routes/post_import')(server));
   server.route(require('../api/configuration/routes/patch_configuration')(server));
+  server.route(require('../api/configuration/routes/patch_apikey')(server));
   server.route(require('../api/configuration/routes/get_apiaccess')(server));
   server.route(require('../api/configuration/routes/patch_apiaccess')(server));
   server.route(require('../api/configuration/routes/post_apiaccess')(server));

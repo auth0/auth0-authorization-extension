@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import { Button } from 'react-bootstrap';
 import { Field } from 'redux-form';
-import { InputSwitchItem } from 'auth0-extension-ui';
+import { InputSwitchItem, InputText } from 'auth0-extension-ui';
 import createForm from '../../utils/createForm';
+import './RuleConfigurationTab.styl';
 
 export default createForm('ruleConfigurationForm', class RuleConfigurationForm extends Component {
   constructor(props) {
@@ -62,19 +63,43 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
     };
   }
   static propTypes = {
+    hash: PropTypes.string,
     submitting: PropTypes.bool,
-    handleSubmit: PropTypes.func.isRequired
+    handleSubmit: PropTypes.func.isRequired,
+    rotateApiKey: PropTypes.func.isRequired
   }
 
   renderSwitchItem(field) {
     return <Field key={field.name} name={field.name} component={InputSwitchItem} title={field.title} description={field.description} />;
   }
 
+  renderApiKeySection(submitting, hash) {
+    return (
+      <div className="row">
+        <div className="col-xs-2">
+          <h5>ApiKey:</h5>
+        </div>
+        <div className="col-xs-8">
+          <div className="api-key-hash">{hash}</div>
+        </div>
+        <div className="col-xs-2">
+          <div className="pull-right">
+            <Button bsStyle="primary" disabled={submitting} onClick={this.props.rotateApiKey}>
+              <i className="icon-budicon-171"></i>
+              Rotate
+            </Button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   render() {
-    const { handleSubmit, submitting } = this.props;
+    const { handleSubmit, submitting, hash } = this.props;
 
     return (
       <div>
+        { this.renderApiKeySection(submitting, hash) }
         <div className="row">
           <div className="col-xs-10">
             <h4>Token Contents</h4>

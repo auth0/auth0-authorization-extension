@@ -21,14 +21,12 @@ module.exports = (server) => ({
           persistGroups: true
         };
 
-        const payload = {
-          name: 'auth0-authorization-extension',
-          script: compileRule(config, 'auth0-authz-extension')
-        };
+        const name = 'auth0-authorization-extension';
+        const rule = _.find(rules, { name });
 
-        const rule = _.find(rules, { name: 'auth0-authz' });
         if (rule) {
-          return req.pre.auth0.rules.update({ id: rule.id }, payload);
+          return compileRule(req.storage, req.pre.auth0, config, name)
+            .then(script => req.pre.auth0.rules.update({ id: rule.id }, { name, script }));
         }
 
         return Promise.resolve();

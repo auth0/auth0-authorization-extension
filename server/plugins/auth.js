@@ -7,24 +7,27 @@ import * as tools from 'auth0-extension-hapi-tools';
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
 
-const hashApiKey = () => crypto.createHmac('sha256', config('PUBLIC_WT_URL'))
-    .update(config('EXTENSION_SECRET'))
-    .digest('hex');
+const hashApiKey = (key) => crypto.createHmac('sha256', `${key} + ${config('AUTH0_CLIENT_SECRET')}`)
+  .update(config('EXTENSION_SECRET'))
+  .digest('hex');
 
 module.exports.register = (server, options, next) => {
-  const apiKeyHash = hashApiKey();
   server.auth.scheme('extension-secret', () =>
     ({
       authenticate: (request, reply) => {
         const apiKey = request.headers['x-api-key'];
-        if (apiKey && apiKey === apiKeyHash) {
-          return reply.continue({
-            credentials: {
-              user: 'rule'
+        return request.storage.getApiKey()
+          .then(key => {
+            if (apiKey && apiKey === hashApiKey(key)) {
+              return reply.continue({
+                credentials: {
+                  user: 'rule'
+                }
+              });
             }
+
+            return reply(Boom.unauthorized('Invalid API Key'));
           });
-        }
-        return reply(Boom.unauthorized('Invalid API Key'));
       }
     })
   );
@@ -120,7 +123,7 @@ module.exports.register = (server, options, next) => {
       sessionStorageKey: 'authz:apiToken',
       rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
-      scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules read:users',
+      scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users',
       baseUrl: config('PUBLIC_WT_URL'),
       audience: 'urn:api-authz',
       secret: config('EXTENSION_SECRET'),

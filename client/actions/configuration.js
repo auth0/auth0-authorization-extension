@@ -104,6 +104,23 @@ export function saveConfiguration(config) {
   };
 }
 
+
+/*
+ * Re-generate Api Key.
+ */
+export function rotateApiKey() {
+  return {
+    type: constants.ROTATE_APIKEY,
+    payload: {
+      promise: axios({
+        method: 'patch',
+        url: '/api/configuration/rotate-apikey',
+        responseType: 'json'
+      })
+    }
+  };
+}
+
 /*
  * Load configuration data.
  */

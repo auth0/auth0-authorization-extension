@@ -1,3 +1,8 @@
+## Unreleased
+
+- Added possibility to rotate ApiKey.
+- Now saving ApiKey to rules-configs instead of adding it into the rule.
+
 ## [2.5.2] - 2018-11-28
 
 - `babel-polyfill` for IE11 support. #232

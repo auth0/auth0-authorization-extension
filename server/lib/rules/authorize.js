@@ -51,7 +51,7 @@ function (user, context, callback) {
     request.post({
       url: EXTENSION_URL + "/api/users/" + user.user_id + "/policy/" + context.clientID,
       headers: {
-        "x-api-key": "<%= apiKey %>"
+        "x-api-key": configuration.AUTHZ_EXT_API_KEY
       },
       json: {
         connectionName: context.connection || user.identities[0].connection,
