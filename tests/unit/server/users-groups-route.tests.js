@@ -178,6 +178,11 @@ describe('users-groups-route', () => {
   });
 
   describe('#patch', () => {
+    beforeEach((done) => {
+      group.members = null;
+      done();
+    });
+
     it('should return 403 if scope is missing (update groups)', (cb) => {
       const token = getToken();
       const options = {
@@ -203,6 +208,25 @@ describe('users-groups-route', () => {
           Authorization: `Bearer ${token}`
         },
         payload: [ group._id ]
+      };
+
+      server.inject(options, (response) => {
+        expect(response.statusCode).to.equal(204);
+        expect(group.id).to.be.equal(group._id);
+        expect(group.members[0]).to.be.equal('userId');
+        cb();
+      });
+    });
+
+    it('should add user to groups by name', (cb) => {
+      const token = getToken('update:groups');
+      const options = {
+        method: 'PATCH',
+        url: '/api/users/userId/groups',
+        headers: {
+          Authorization: `Bearer ${token}`
+        },
+        payload: [ group.name ]
       };
 
       server.inject(options, (response) => {
