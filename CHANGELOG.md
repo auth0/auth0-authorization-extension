@@ -1,7 +1,8 @@
-## Unreleased
+## [2.6.0] - 2019-01-18
 
 - Added possibility to rotate ApiKey.
 - Now saving ApiKey to rules-configs instead of adding it into the rule.
+- API: add groups/roles to user by id or name
 
 ## [2.5.2] - 2018-11-28
 
