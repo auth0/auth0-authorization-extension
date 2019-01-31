@@ -45,6 +45,14 @@ function (user, context, callback) {
 <% } else { %>
     return callback(null, user, context);
 <% } %>  });
+  
+  // Convert groups to array
+  function parseGroups(data) {
+    if (typeof data === 'string') {
+      return data.replace(/,/g, ' ').replace(/\\s+/g, ' ').split(' ');
+    }
+    return data;
+  }
 
   // Get the policy for the user.
   function getPolicy(user, context, cb) {
@@ -55,7 +63,7 @@ function (user, context, callback) {
       },
       json: {
         connectionName: context.connection || user.identities[0].connection,
-        groups: user.groups
+        groups: parseGroups(user.groups)
       },
       timeout: 5000
     }, cb);
