@@ -1,3 +1,7 @@
+## Unreleased
+
+- Added function to convert user.groups from string to array.
+
 ## [2.6.0] - 2019-01-18
 
 - Added possibility to rotate ApiKey.
