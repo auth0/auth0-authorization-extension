@@ -49,6 +49,7 @@ function (user, context, callback) {
   // Convert groups to array
   function parseGroups(data) {
     if (typeof data === 'string') {
+      // split groups represented as string by spaces and/or comma
       return data.replace(/,/g, ' ').replace(/\\s+/g, ' ').split(' ');
     }
     return data;
