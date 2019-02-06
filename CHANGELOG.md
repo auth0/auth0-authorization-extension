@@ -1,4 +1,4 @@
-## [2.6.0] - 2019-02-06
+## [2.6.1] - 2019-02-06
 
 - Added function to convert user.groups from string to array.
 
