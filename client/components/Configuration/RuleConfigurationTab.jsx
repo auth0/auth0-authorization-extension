@@ -12,17 +12,17 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
       tokenContents: [
         {
           title: 'Groups',
-          description: (<span>Add <strong>groups</strong> to the user's token.</span>),
+          description: (<span>Add <strong>groups</strong> to the user object.</span>),
           name: 'groupsInToken'
         },
         {
           title: 'Roles',
-          description: (<span>Add <strong>roles</strong> to the user's token.</span>),
+          description: (<span>Add <strong>roles</strong> to the user object.</span>),
           name: 'rolesInToken'
         },
         {
           title: 'Permissions',
-          description: (<span>Add <strong>permissions</strong> to the user's token.</span>),
+          description: (<span>Add <strong>permissions</strong> to the user object.</span>),
           name: 'permissionsInToken'
         }
       ],
@@ -102,7 +102,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
         { this.renderApiKeySection(submitting, hash) }
         <div className="row">
           <div className="col-xs-10">
-            <h4>Token Contents</h4>
+            <h4>Authorization information in the <code>user</code> object in Rules</h4>
           </div>
           <div className="col-xs-2">
             <div className="pull-right">
@@ -116,20 +116,15 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           <div className="use-case-box is-active">
             <div className="explainer-text">
               <span className="explainer-text-content">
-                Authorization data like groups, roles and permissions can be stored in the outgoing token issued by Auth0.
-                Your application can then consume this information by inspecting the token and take appropriate actions based on the user's current authorization context.
+                Authorization data like groups, roles and permissions can be added to the user object in the rules execution context.
+                Rules can then consume this information and use it to add custom claims to tokens or make authorization decisions. 
+                See <a target="_blank" href="https://auth0.com/docs/extensions/authorization-extension/v2/rules">Using rules with the Authorization Extension</a> for more information.
               </span>
             </div>
           </div>
         </div>
         <div data-columns="3" className="switchboard switchboard-responsive">
           { this.tabSwitchItems.tokenContents.map(item => this.renderSwitchItem(item)) }
-        </div>
-
-        <div className="alert alert-info">
-          <strong>Heads up!</strong> Storing too much data in the token can cause performance issues or even prevent the token to be issued.
-          Make sure you only choose to store the data that you'll really need.
-          If this data can grow too large, consider using persistence instead of adding it to the token.
         </div>
 
         <div className="cues-container">
