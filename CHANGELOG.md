@@ -1,3 +1,7 @@
+## [2.6.2] - 2019-03-28
+
+- Clarify authorization information and claims
+
 ## [2.6.1] - 2019-02-06
 
 - Added function to convert user.groups from string to array.
