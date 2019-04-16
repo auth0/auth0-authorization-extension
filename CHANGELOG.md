@@ -1,3 +1,8 @@
+## [2.6.4] - Unreleased
+
+- `PUBLIC_WT_URL` generation fixed for specific clusters
+
+
 ## [2.6.2] - 2019-03-28
 
 - Clarify authorization information and claims
