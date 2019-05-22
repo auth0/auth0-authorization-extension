@@ -1,3 +1,7 @@
+## [2.6.5] - 2019-05-22
+
+- Group Members page will display "broken" members and allow to remove them.
+
 ## [2.6.4] - 2019-04-19
 
 - `PUBLIC_WT_URL` generation fixed for specific clusters

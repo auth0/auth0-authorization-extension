@@ -18,19 +18,16 @@ export function getUsersById(client, ids, page, limit) {
           cb();
         })
         .catch((err) => {
-          if (err && err.statusCode === 404) {
-            users.push({
-              user_id: userId,
-              name: '<User Not Found>',
-              email: userId,
-              identities: [
-                { connection: 'N/A' }
-              ]
-            });
-            return cb();
-          }
-
-          return cb(err);
+          const errDescription = err && (err.name || err.statusCode);
+          users.push({
+            user_id: userId,
+            name: `<Error: ${errDescription}>`,
+            email: userId,
+            identities: [
+              { connection: 'N/A' }
+            ]
+          });
+          return cb();
         });
     }, (err) => {
       if (err) {

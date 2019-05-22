@@ -16,20 +16,20 @@ describe('groups-members-route', () => {
     _id: guid,
     name: groupName,
     description: 'description',
-    members: [uid]
+    members: [ uid, 'undefined' ]
   };
   const parentGroup = {
     _id: pgid,
     name: groupName,
     description: 'description',
-    members: [uid],
-    nested: [ngid]
+    members: [ uid ],
+    nested: [ ngid ]
   };
   const nestedGroup = {
     _id: ngid,
     name: groupName,
     description: 'description',
-    members: [nuid],
+    members: [ nuid ]
   };
 
   before((done) => {
@@ -81,7 +81,10 @@ describe('groups-members-route', () => {
       server.inject(options, (response) => {
         expect(response.statusCode).to.be.equal(200);
         expect(response.result.users).to.be.a('array');
-        expect(response.result.total).to.be.equal(1);
+        expect(response.result.users[0].user_id).to.be.equal(uid);
+        expect(response.result.users[1].user_id).to.be.equal('undefined');
+        expect(response.result.users[1].name).to.be.equal('<Error: APIError>');
+        expect(response.result.total).to.be.equal(2);
         cb();
       });
     });
