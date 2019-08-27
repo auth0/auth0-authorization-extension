@@ -1,3 +1,7 @@
+## [2.6.6] - 2019-05-22
+
+- Fixed `on-update` extension hook.
+
 ## [2.6.5] - 2019-05-22
 
 - Group Members page will display "broken" members and allow to remove them.

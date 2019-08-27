@@ -15,17 +15,13 @@ module.exports = (server) => ({
     req.pre.auth0
       .rules
       .getAll()
-      .then(rules => {
-        const config = {
-          groupsInToken: true,
-          persistGroups: true
-        };
-
+      .then((rules) => {
         const name = 'auth0-authorization-extension';
         const rule = _.find(rules, { name });
 
         if (rule) {
-          return compileRule(req.storage, req.pre.auth0, config, name)
+          return req.storage.getConfiguration()
+            .then(config => compileRule(req.storage, req.pre.auth0, config, name))
             .then(script => req.pre.auth0.rules.update({ id: rule.id }, { name, script }));
         }
 
