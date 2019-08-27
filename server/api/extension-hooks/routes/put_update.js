@@ -7,7 +7,7 @@ module.exports = (server) => ({
   config: {
     auth: false,
     pre: [
-      // server.handlers.validateHookToken('/.extensions/on-update'),
+      server.handlers.validateHookToken('/.extensions/on-update'),
       server.handlers.managementClient
     ]
   },
