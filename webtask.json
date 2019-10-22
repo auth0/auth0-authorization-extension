@@ -1,6 +1,6 @@
 {
-  "title": "Auth0 Authorization",
-  "name": "auth0-authz",
+  "title": "Auth0 Authorization (custom)",
+  "name": "auth0-authz-2",
   "version": "2.6.5",
   "preVersion": "2.5.2",
   "author": "auth0",
