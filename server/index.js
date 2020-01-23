@@ -1,4 +1,4 @@
-import Hapi from 'hapi';
+import Hapi from '@auth0/hapi';
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
@@ -46,7 +46,7 @@ export default (cb) => {
   const server = new Hapi.Server();
   server.connection({
     host: 'localhost',
-    port: config('PORT'),
+    port: 3000,
     routes: {
       cors: true,
       validate: {
