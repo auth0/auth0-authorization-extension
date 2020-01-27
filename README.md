@@ -2,6 +2,10 @@
 
 This extension provides authorization features for Auth0 focused on RBAC and user group management.
 
+## Status Update
+
+The Authorization Extension is in maintenance mode. We do not plan on adding new features to the extension as we are working to bring features of the extension into the core Auth0 platform. Bug fixes and security patches will still be made.
+
 ## Documentation
 
 We provide documentation on how to install and use the Authorization Extension on the [Auth0 docs website](https://auth0.com/docs/extensions/authorization-extension/v2).
