@@ -27,10 +27,7 @@ Due to the SameSite cookie changes in browsers, we needed a version of Hapi that
 **Requires Node 8** - higher versions not yet supported. If you are using `nvm`, simply run `nvm use` inside the directory to switch to the correct version.
 
 1. Clone this repo.
-2. Run `npm install`.
-3. Build the client: `npm run build`.
-4. Ensure `ngrok` is installed globally (`npm i -g ngrok`).
-5. Run tests with `npm test`.
+2. Run `npm ci`.
 
 ### Create a local config
 
@@ -49,22 +46,26 @@ To run the extension, you'll need a file in `server/config.json` that specifies 
 }
 ```
 
-Copy this config into the file created at `server/config.json`, and modify the following values:
+Copy this config into the file created at `server/config.json` and modify the following values:
 
 1. Set your tenant name in the `AUTH0_DOMAIN` option.
 2. Create a client in that tenant. This client should be an SPA (Single Page App).
 3. Enter the client ID and client secret as both the `AUTH0_CLIENT_ID/_SECRET` as well as the `EXTENSION_CLIENT_ID/_SECRET`.
-4. Start a local ngrok server on port 3000 (`ngrok http 3000`).
-5. Enter the ngrok URL into the `WT_URL` and `PUBLIC_WT_URL` options.
 
-Start the server in production mode with:
+## Running in production mode
 
-```
-npm run serve:prod
-```
+1. Build the client: `npm run build`.
+2. Ensure `ngrok` is installed globally (`npm i -g ngrok`).
+3. Start a local ngrok server on port 3000 (`ngrok http 3000`).
+4. Open `server/config.json` and enter the HTTPS ngrok URL into the `WT_URL` and `PUBLIC_WT_URL` options.
+5. Start the server in production mode with `npm run serve:prod`.
 
 You can then open the ngrok URL to use the extension.
 
 ## Running in development mode
 
-TODO. We need to fix the gulpfile.
+Run `npm run serve:dev`. Please note that the development mode works only in Chrome.
+
+## Running tests
+
+Run tests with `npm test`.

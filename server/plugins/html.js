@@ -31,7 +31,7 @@ const assembleHtmlRoute = (link) => ({
           API_BASE: 'http://localhost:3000/'
         },
         assets: {
-          app: 'http://localhost:3000/app/bundle.js'
+          app: '/app/bundle.js'
         }
       }));
     }

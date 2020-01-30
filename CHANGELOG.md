@@ -1,3 +1,8 @@
+## [2.7.0] - 2020-01-30
+
+- Add support to work under SameSite cookie restrictions.
+- Fix local development environment.
+
 ## [2.6.5] - 2019-05-22
 
 - Group Members page will display "broken" members and allow to remove them.

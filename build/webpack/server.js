@@ -17,7 +17,7 @@ logger.error = function error() {
 };
 
 const options = {
-  publicPath: 'http://localhost:3000/app/',
+  publicPath: 'http://localhost:3001/app/',
   hot: true,
   inline: true,
   historyApiFallback: true,
@@ -25,7 +25,7 @@ const options = {
     {
       context: () => true,
       target: {
-        port: 3001
+        port: 3000
       }
     }
   ],
@@ -44,12 +44,12 @@ const options = {
 };
 
 new WebpackDevServer(webpack(config), options)
-  .listen(3000, 'localhost',
+  .listen(3001, 'localhost',
     (err) => {
       if (err) {
         logger.error(err);
       } else {
-        logger.info('Webpack proxy listening on: http://localhost:3000');
+        logger.info('Webpack proxy listening on: http://localhost:3001');
 
         // Start the actual webserver.
         require('../../index');
