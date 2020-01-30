@@ -6,37 +6,33 @@ const open = require('open');
 const ngrok = require('ngrok');
 const nodemon = require('gulp-nodemon');
 
-gulp.task('run', () => {
-  ngrok.connect(3000, (ngrokError, url) => {
-    if (ngrokError) {
-      throw ngrokError;
-    }
+gulp.task('run', async () => {
+  const url = await ngrok.connect(3001);
 
-    nodemon({
-      script: './build/webpack/server.js',
-      ext: 'js json',
-      env: {
-        EXTENSION_SECRET: 'a-random-secret',
-        AUTH0_RTA: 'https://auth0.auth0.com',
-        NODE_ENV: 'development',
-        WT_URL: url,
-        PUBLIC_WT_URL: url
-      },
-      ignore: [
-        'assets/app/',
-        'build/webpack',
-        'server/data.json',
-        'client/',
-        'dist/',
-        'tests/',
-        'node_modules/'
-      ]
-    });
-
-    setTimeout(() => {
-      const publicUrl = `${url.replace('https://', 'http://')}/login`;
-      open(publicUrl);
-      util.log('Public Url:', publicUrl);
-    }, 4000);
+  nodemon({
+    script: './build/webpack/server.js',
+    ext: 'js json',
+    env: {
+      EXTENSION_SECRET: 'a-random-secret',
+      AUTH0_RTA: 'https://auth0.auth0.com',
+      NODE_ENV: 'development',
+      WT_URL: url,
+      PUBLIC_WT_URL: url
+    },
+    ignore: [
+      'assets/app/',
+      'build/webpack',
+      'server/data.json',
+      'client/',
+      'dist/',
+      'tests/',
+      'node_modules/'
+    ]
   });
+
+  setTimeout(() => {
+    const publicUrl = `${url}/login`;
+    open(publicUrl);
+    util.log('Public Url:', publicUrl);
+  }, 4000);
 });
