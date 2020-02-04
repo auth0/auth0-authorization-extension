@@ -1,6 +1,3 @@
-import _ from 'lodash';
-import compileRule from '../../../lib/compileRule';
-
 module.exports = (server) => ({
   method: 'PUT',
   path: '/.extensions/on-update',
@@ -12,26 +9,6 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) => {
-    req.pre.auth0
-      .rules
-      .getAll()
-      .then(rules => {
-        const config = {
-          groupsInToken: true,
-          persistGroups: true
-        };
-
-        const name = 'auth0-authorization-extension';
-        const rule = _.find(rules, { name });
-
-        if (rule) {
-          return compileRule(req.storage, req.pre.auth0, config, name)
-            .then(script => req.pre.auth0.rules.update({ id: rule.id }, { name, script }));
-        }
-
-        return Promise.resolve();
-      })
-      .then(() => reply().code(204))
-      .catch((err) => reply.error(err));
+    reply().code(204);
   }
 });
