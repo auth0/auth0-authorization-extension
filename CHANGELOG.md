@@ -1,3 +1,8 @@
+## [2.8.1] - 2020-02-05
+
+- Fix the extension upgrade logic that caused rule configuration to be reset after the upgrade. This was causing missing permissions and similar depending on the configuration of the customer.
+- Declare version 2.6.0 as a breaking change.
+
 ## [2.7.0] - 2020-01-30
 
 - Add support to work under SameSite cookie restrictions.
@@ -21,6 +26,10 @@
 - Added function to convert user.groups from string to array.
 
 ## [2.6.0] - 2019-01-18
+
+**BREAKING CHANGE:** After upgrading to 2.6 or a higher version, you need to rotate your key and re-publish the rule on
+the extension's Configuration page. Failing to do this will cause an "InvalidApiKey" error on rule execution. This is
+needed due to the changed logic on storing and handling the Api Key.
 
 - Added possibility to rotate ApiKey.
 - Now saving ApiKey to rules-configs instead of adding it into the rule.
