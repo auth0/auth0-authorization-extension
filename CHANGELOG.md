@@ -27,9 +27,25 @@
 
 ## [2.6.0] - 2019-01-18
 
-**BREAKING CHANGE:** After upgrading to 2.6 or a higher version, you need to rotate your key and re-publish the rule on
-the extension's Configuration page. Failing to do this will cause an "InvalidApiKey" error on rule execution. This is
-needed due to the changed logic on storing and handling the Api Key.
+**BREAKING CHANGE:** After upgrading to 2.6 or a higher version, you need to do the following to continue operation:
+
+1. Rotate your key and re-publish the rule on the extension's Configuration page. This is needed due to the changed
+ logic on storing and handling the Api Key.
+2. The rule published by this extension is named `auth0-authorization-extension`. Check your tenant's rules. If you see
+ a rule named `auth0-authz` disable/remove it **by following the instructions below**.
+
+ #### Checklist to disable/remove `auth0-authz` rule:
+
+ 1. Go to your tenant's rules
+ 2. Modify `auth0-authorization-extension`'s order to be right next to `auth0-authz` extension.
+ 3. Check `auth0-authz` to be sure that it is not authored by you and no manual changes are done.
+ 4. Check `auth0-authz` to be sure that disabling/removing it will not change authorization flow in a way to grant
+  access or privileges to users that shouldn't have it.
+ 5. Disable the `auth0-authz` rule. After verifying that everything is in order, you can choose to keep
+  it disabled or remove it.
+
+Failing to do these will cause an "InvalidApiKey" or "You are not allowed to access this application." error on rule
+execution.
 
 - Added possibility to rotate ApiKey.
 - Now saving ApiKey to rules-configs instead of adding it into the rule.
