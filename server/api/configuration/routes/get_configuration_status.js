@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import multipartRequest from '../../../lib/multipartRequest';
 
 module.exports = (server) => ({
   method: 'GET',
@@ -13,7 +14,7 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) =>
-    req.pre.auth0.rules.getAll()
+      multipartRequest(req.pre.auth0, 'rules', { fields: 'name,enabled' })
       .then(rules => {
         const rule = _.find(rules, { name: 'auth0-authorization-extension' });
         return {
