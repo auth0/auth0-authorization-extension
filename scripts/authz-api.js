@@ -1,17 +1,22 @@
 const async = require('async');
 const request = require('superagent');
 
-const { AUTHZ_URL, AUTHZ_TOKEN, GROUPS_NUMBER, USERS_PER_GROUP } = require('./script-settings.json');
+const {
+  AUTHZ_URL,
+  AUTHZ_TOKEN,
+  GROUPS_NUMBER,
+  USERS_PER_GROUP
+} = require('./script-settings.example.json');
 
 const fakeUsers = [];
 const uid = 'fake|' + new Date().getTime();
 
-for (var i=0; i<USERS_PER_GROUP; i++) {
+for (let i = 0; i < USERS_PER_GROUP; i++) {
   fakeUsers.push(uid + i);
 }
 
 const addToGroup = (gid, cb) => {
-  console.log('Adding ' + fakeUsers.length + ' users to ' + gid + ' group');
+  console.log('Adding ' + fakeUsers.length + ' users to ' + gid + ' group'); // eslint-disable-line no-console
   request
     .patch(AUTHZ_URL + '/groups/' + gid + '/members')
     .set('Authorization', 'Bearer ' + AUTHZ_TOKEN)
@@ -45,14 +50,19 @@ const createGroup = (name, cb) => {
     });
 };
 
-async.timesLimit(GROUPS_NUMBER, 1, (i, next) => {
-  createGroup('Group' + i, (err, group) => {
-    if (err) {
-      return next(err);
-    }
+async.timesLimit(
+  GROUPS_NUMBER,
+  1,
+  (i, next) => {
+    createGroup('Group' + i, (err, group) => {
+      if (err) {
+        return next(err);
+      }
 
-    addToGroup(group._id, next);
-  })
-}, (err) => {
-  console.log(err);
-});
+      return addToGroup(group._id, next);
+    });
+  },
+  (err) => {
+    console.log(err); // eslint-disable-line no-console
+  }
+);

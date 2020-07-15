@@ -1,40 +1,40 @@
-import { expect } from 'chai';
-import { getServerData } from '../server';
-import * as auth0 from '../mocks/auth0';
-import { getToken } from '../mocks/tokens';
+import { expect } from "chai";
+import { getServerData } from "../server";
+import * as auth0 from "../mocks/auth0";
+import { getToken } from "../mocks/tokens";
 
-describe('applications-route', () => {
+describe.only("applications-route", () => {
   const { server } = getServerData();
   const applications = [
     {
-      name: 'GlobalApp',
+      name: "GlobalApp",
       global: true,
-      client_id: '0'
+      client_id: "0",
     },
     {
-      name: 'NonIA',
+      name: "NonIA",
       global: false,
-      app_type: 'non_interactive',
-      client_id: '1'
+      app_type: "non_interactive",
+      client_id: "1",
     },
     {
-      name: 'SPA',
+      name: "SPA",
       global: false,
-      app_type: 'spa',
-      client_id: '2'
+      app_type: "spa",
+      client_id: "2",
     },
     {
-      name: 'GlobalApp',
+      name: "GlobalApp",
       global: false,
-      client_id: '3'
-    }
+      client_id: "3",
+    },
   ];
 
-  describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+  describe("#get", () => {
+    it("should return 401 if no token provided", (cb) => {
       const options = {
-        method: 'GET',
-        url: '/api/applications'
+        method: "GET",
+        url: "/api/applications",
       };
 
       server.inject(options, (response) => {
@@ -43,14 +43,14 @@ describe('applications-route', () => {
       });
     });
 
-    it('should return 403 if scope is missing (list of apps)', (cb) => {
+    it.only("should return 403 if scope is missing (list of apps)", (cb) => {
       const token = getToken();
       const options = {
-        method: 'GET',
-        url: '/api/applications',
+        method: "GET",
+        url: "/api/applications",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       };
 
       server.inject(options, (response) => {
@@ -59,33 +59,33 @@ describe('applications-route', () => {
       });
     });
 
-    it('should return list of applications', (cb) => {
-      const token = getToken('read:applications');
-      auth0.get('/api/v2/clients', applications);
+    it("should return list of applications", (cb) => {
+      const token = getToken("read:applications");
+      auth0.get("/api/v2/clients", applications);
       const options = {
-        method: 'GET',
-        url: '/api/applications',
+        method: "GET",
+        url: "/api/applications",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       };
 
       server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
+        expect(response.result).to.be.a("array");
         expect(response.result.length).to.equal(1);
-        expect(response.result[0].app_type).to.equal('spa');
+        expect(response.result[0].app_type).to.equal("spa");
         cb();
       });
     });
 
-    it('should return 403 if scope is missing (single app)', (cb) => {
+    it("should return 403 if scope is missing (single app)", (cb) => {
       const token = getToken();
       const options = {
-        method: 'GET',
-        url: '/api/applications/1',
+        method: "GET",
+        url: "/api/applications/1",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       };
 
       server.inject(options, (response) => {
@@ -94,19 +94,19 @@ describe('applications-route', () => {
       });
     });
 
-    it('should return application data', (cb) => {
-      const token = getToken('read:applications');
-      auth0.get('/api/v2/clients/1', applications[1]);
+    it("should return application data", (cb) => {
+      const token = getToken("read:applications");
+      auth0.get("/api/v2/clients/1", applications[1]);
       const options = {
-        method: 'GET',
-        url: '/api/applications/1',
+        method: "GET",
+        url: "/api/applications/1",
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       };
 
       server.inject(options, (response) => {
-        expect(response.result.client_id).to.be.equal('1');
+        expect(response.result.client_id).to.be.equal("1");
         cb();
       });
     });

@@ -1,9 +1,5 @@
 {
-  "extends": [
-    "auth0-base",
-    "plugin:import/errors",
-    "plugin:import/warnings"
-  ],
+  "extends": ["auth0-base", "plugin:import/errors", "plugin:import/warnings"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
@@ -28,10 +24,14 @@
     "comma-dangle": [2, "never"],
     "eol-last": 2,
     "global-require": 0,
-    "indent": [2, 2, {
-      "SwitchCase": 1
-    }],
-    "import/no-extraneous-dependencies": [error, { devDependencies: true }],
+    "indent": [
+      2,
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "import/no-extraneous-dependencies": [error, { "devDependencies": true }],
     "import/namespace": 0,
     "import/named": 0,
     "import/prefer-default-export": 0,
@@ -51,9 +51,12 @@
     "semi": [2, "always"],
     "strict": 0,
     "space-before-blocks": [2, "always"],
-    "space-before-function-paren": [2, {
-      "anonymous": "never",
-      "named": "never"
-    }]
+    "space-before-function-paren": [
+      2,
+      {
+        "anonymous": "never",
+        "named": "never"
+      }
+    ]
   }
 }
