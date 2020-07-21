@@ -3,7 +3,7 @@ import { getServerData } from '../server';
 import * as auth0 from '../mocks/auth0';
 import { getToken } from '../mocks/tokens';
 
-describe.only('applications-route', () => {
+describe('applications-route', () => {
   const { server } = getServerData();
   const applications = [
     {
@@ -43,7 +43,7 @@ describe.only('applications-route', () => {
       });
     });
 
-    it.only('should return 403 if scope is missing (list of apps)', (cb) => {
+    it('should return 403 if scope is missing (list of apps)', (cb) => {
       const token = getToken();
       const options = {
         method: 'GET',
