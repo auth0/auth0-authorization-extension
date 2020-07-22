@@ -1,8 +1,6 @@
-import React from 'react';
 import { shallow } from 'enzyme';
 import { expect } from 'chai';
 import { describe, it } from 'mocha';
-import UserOverview from '../../../../../client/components/Users/UserOverview';
 
 describe('#Client-Components-UserOverview', () => {
   const renderComponent = (options) => {

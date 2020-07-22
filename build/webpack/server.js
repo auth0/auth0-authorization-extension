@@ -1,4 +1,5 @@
-const gutil = require('gulp-util');
+const log = require('fancy-log');
+const colors = require('ansi-colors');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 
@@ -6,14 +7,14 @@ const config = require('./config.dev.js');
 const logger = require('../../server/lib/logger');
 
 // Overwrite logger.
-logger.debug = function debug() {
-  gutil.log([ gutil.colors.magenta('[debug]'), Array.prototype.join.call(arguments, ' ') ].join(' '));
+logger.debug = function debug(...args) {
+  log([ colors.magenta('[debug]'), Array.prototype.join.call(args, ' ') ].join(' '));
 };
-logger.info = function info() {
-  gutil.log([ gutil.colors.green('[info]'), Array.prototype.join.call(arguments, ' ') ].join(' '));
+logger.info = function info(...args) {
+  log([ colors.green('[info]'), Array.prototype.join.call(args, ' ') ].join(' '));
 };
-logger.error = function error() {
-  gutil.log([ gutil.colors.red('[error]'), Array.prototype.join.call(arguments, ' ') ].join(' '));
+logger.error = function error(...args) {
+  log([ colors.red('[error]'), Array.prototype.join.call(args, ' ') ].join(' '));
 };
 
 const options = {

@@ -1,7 +1,7 @@
 require('babel-register')();
 
 const gulp = require('gulp');
-const util = require('gulp-util');
+const log = require('fancy-log');
 const open = require('open');
 const ngrok = require('ngrok');
 const nodemon = require('gulp-nodemon');
@@ -33,6 +33,6 @@ gulp.task('run', async () => {
   setTimeout(() => {
     const publicUrl = `${url}/login`;
     open(publicUrl);
-    util.log('Public Url:', publicUrl);
+    log('Public Url:', publicUrl);
   }, 4000);
 });

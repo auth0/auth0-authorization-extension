@@ -43,7 +43,7 @@ module.exports = function(client, entity, opts = {}, perPage = 100, concurrency 
         }
 
         const pages = [];
-        for (let i=1; i<=pageCount; i++) {
+        for (let i = 1; i <= pageCount; i++) {
           pages.push(i);
         }
 
