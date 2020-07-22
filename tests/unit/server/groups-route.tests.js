@@ -17,22 +17,63 @@ describe('groups-route', () => {
   };
 
   const groups = [
-    { _id: 'C56a418065aa426ca9455fd21deC1110', name: 'employees', roles: [ 'r1', 'r2' ], nested: [ 'C56a418065aa426ca9455fd21deC1111' ] },
-    { _id: 'C56a418065aa426ca9455fd21deC1111', name: 'it', roles: [ 'r3' ], nested: [ guid ] },
+    {
+      _id: 'C56a418065aa426ca9455fd21deC1110',
+      name: 'employees',
+      roles: [ 'r1', 'r2' ],
+      nested: [ 'C56a418065aa426ca9455fd21deC1111' ]
+    },
+    {
+      _id: 'C56a418065aa426ca9455fd21deC1111',
+      name: 'it',
+      roles: [ 'r3' ],
+      nested: [ guid ]
+    },
     { _id: guid, name: groupName, roles: [ 'r1' ], nested: [ '', '' ] }
   ];
 
   const roles = [
-    { _id: 'r1', name: 'Role 1', applicationId: 'app1', applicationType: 'client', permissions: [ 'p11' ] },
-    { _id: 'r2', name: 'Role 2', applicationId: 'app2', applicationType: 'client', permissions: [ 'p21', 'p22', 'p33' ] }
+    {
+      _id: 'r1',
+      name: 'Role 1',
+      applicationId: 'app1',
+      applicationType: 'client',
+      permissions: [ 'p11' ]
+    },
+    {
+      _id: 'r2',
+      name: 'Role 2',
+      applicationId: 'app2',
+      applicationType: 'client',
+      permissions: [ 'p21', 'p22', 'p33' ]
+    }
   ];
   const permissions = [
-    { _id: 'p11', name: 'Permission 11', applicationId: 'app1', applicationType: 'client' },
-    { _id: 'p12', name: 'Permission 12', applicationId: 'app1', applicationType: 'client' },
-    { _id: 'p21', name: 'Permission 21', applicationId: 'app2', applicationType: 'client' },
-    { _id: 'p22', name: 'Permission 22', applicationId: 'app2', applicationType: 'client' }
+    {
+      _id: 'p11',
+      name: 'Permission 11',
+      applicationId: 'app1',
+      applicationType: 'client'
+    },
+    {
+      _id: 'p12',
+      name: 'Permission 12',
+      applicationId: 'app1',
+      applicationType: 'client'
+    },
+    {
+      _id: 'p21',
+      name: 'Permission 21',
+      applicationId: 'app2',
+      applicationType: 'client'
+    },
+    {
+      _id: 'p22',
+      name: 'Permission 22',
+      applicationId: 'app2',
+      applicationType: 'client'
+    }
   ];
-
 
   before((done) => {
     db.getGroup = () => Promise.resolve(group);
@@ -183,7 +224,9 @@ describe('groups-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"id" must be a valid GUID');
+        expect(response.result.message).to.be.equal(
+          '"id" must be a valid GUID'
+        );
         cb();
       });
     });
@@ -309,7 +352,9 @@ describe('groups-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"name" is not allowed to be empty');
+        expect(response.result.message).to.be.equal(
+          '"name" is not allowed to be empty'
+        );
         cb();
       });
     });

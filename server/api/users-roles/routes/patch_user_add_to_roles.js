@@ -23,8 +23,11 @@ module.exports = () => ({
     const roleIds = req.payload;
     const pattern = /^(\{{0,1}([0-9a-fA-F]){8}-?([0-9a-fA-F]){4}-?([0-9a-fA-F]){4}-?([0-9a-fA-F]){4}-?([0-9a-fA-F]){12}\}{0,1})$/;
     const searchBy = pattern.test(roleIds[0]) ? '_id' : 'name';
-    req.storage.getRoles()
-      .then((roles) => _.filter(roles, (role) => _.includes(roleIds, role[searchBy])))
+    req.storage
+      .getRoles()
+      .then((roles) =>
+        _.filter(roles, (role) => _.includes(roleIds, role[searchBy]))
+      )
       .then((filtered) =>
         Promise.each(filtered, (role) => {
           if (!role.users) {
@@ -35,8 +38,9 @@ module.exports = () => ({
           }
 
           return req.storage.updateRole(role._id, role);
-        }))
+        })
+      )
       .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+      .catch((err) => reply.error(err));
   }
 });

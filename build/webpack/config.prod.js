@@ -1,13 +1,12 @@
-'use strict';
+"use strict";
 
-const webpack = require('webpack');
-const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const webpack = require("webpack");
+const StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-const project = require('../../package.json');
-const logger = require('../../server/lib/logger');
+const project = require("../../package.json");
+const config = require("./config.base.js");
 
-const config = require('./config.base.js');
 config.profile = false;
 
 const version = process.env.EXTENSION_VERSION || project.version;
@@ -19,11 +18,14 @@ config.output.filename = `auth0-authz.ui.${version}.js`;
 // Development modules.
 config.module.loaders.push({
   test: /\.css$/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!postcss-loader')
+  loader: ExtractTextPlugin.extract(
+    "style-loader",
+    "css-loader!postcss-loader"
+  ),
 });
 config.module.loaders.push({
   test: /\.styl/,
-  loader: ExtractTextPlugin.extract('style-loader', 'css-loader!stylus-loader')
+  loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader"),
 });
 
 // Webpack plugins.
@@ -33,17 +35,20 @@ config.plugins = config.plugins.concat([
 
   // Extract CSS to a different file, will require additional configuration.
   new ExtractTextPlugin(`auth0-authz.ui.${version}.css`, {
-    allChunks: true
+    allChunks: true,
   }),
 
   // Separate the vender in a different file.
-  new webpack.optimize.CommonsChunkPlugin('vendors', `auth0-authz.ui.vendors.${version}.js`),
+  new webpack.optimize.CommonsChunkPlugin(
+    "vendors",
+    `auth0-authz.ui.vendors.${version}.js`
+  ),
 
   // Compress and uglify the output.
   new webpack.optimize.UglifyJsPlugin({
     mangle: true,
     output: {
-      comments: false
+      comments: false,
     },
     compress: {
       sequences: true,
@@ -54,22 +59,22 @@ config.plugins = config.plugins.concat([
       if_return: true,
       join_vars: true,
       drop_console: true,
-      warnings: false
-    }
+      warnings: false,
+    },
   }),
 
   // Alternative to StatsWriterPlugin.
   new StatsWriterPlugin({
-    filename: 'manifest.json',
+    filename: "manifest.json",
     transform: function transformData(data) {
       const chunks = {
         app: data.assetsByChunkName.app[0],
         style: data.assetsByChunkName.app[1],
-        vendors: data.assetsByChunkName.vendors[0]
+        vendors: data.assetsByChunkName.vendors[0],
       };
       return JSON.stringify(chunks);
-    }
-  })
+    },
+  }),
 ]);
 
 module.exports = config;

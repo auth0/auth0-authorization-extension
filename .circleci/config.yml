@@ -1,0 +1,25 @@
+version: 2.1
+orbs:
+  node: circleci/node@3.0.1
+jobs:
+  build-lint-test:
+    parameters:
+      version:
+        type: string
+    docker:
+      - image: circleci/node:<< parameters.version >>
+    steps:
+      - checkout
+      - run: npm ci
+      - run: npm run lint:js
+      - run: npm test
+      - run: npm run build
+workflows:
+  matrix-tests:
+    jobs:
+      - build-lint-test:
+          version: "8"
+      - build-lint-test:
+          version: "10"
+      - build-lint-test:
+          version: "12"

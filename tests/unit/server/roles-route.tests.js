@@ -185,7 +185,9 @@ describe('roles-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an object');
+        expect(response.result.message).to.be.equal(
+          '"value" must be an object'
+        );
         cb();
       });
     });
@@ -247,7 +249,9 @@ describe('roles-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an object');
+        expect(response.result.message).to.be.equal(
+          '"value" must be an object'
+        );
         cb();
       });
     });

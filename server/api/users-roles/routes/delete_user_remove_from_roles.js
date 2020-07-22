@@ -21,8 +21,8 @@ module.exports = () => ({
   handler: (req, reply) => {
     const roleIds = req.payload;
 
-    return Promise.each(roleIds, id => req.storage.getRole(id)
-      .then(role => {
+    return Promise.each(roleIds, (id) =>
+      req.storage.getRole(id).then((role) => {
         if (!role.users) {
           role.users = []; // eslint-disable-line no-param-reassign
         }
@@ -32,8 +32,9 @@ module.exports = () => ({
         }
 
         return req.storage.updateRole(id, role);
-      }))
+      })
+    )
       .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+      .catch((err) => reply.error(err));
   }
 });

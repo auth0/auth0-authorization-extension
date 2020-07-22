@@ -2,7 +2,6 @@ import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
-import * as auth0 from '../mocks/auth0';
 
 describe('groups-members-route', () => {
   const { db, server } = getServerData();
