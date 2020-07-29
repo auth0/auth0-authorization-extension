@@ -6,13 +6,18 @@ import { getToken } from '../mocks/tokens';
 
 describe('configuration-route', () => {
   const { db, server } = getServerData();
-  const rules = [ { name: 'auth0-authorization-extension', enabled: true, id: 'ruleId' } ];
-  const resourceServers = [ { identifier: 'urn:auth0-authz-api', token_lifetime: 10, id: 'rsid' } ];
+  const rules = [
+    { name: 'auth0-authorization-extension', enabled: true, id: 'ruleId' }
+  ];
+  const resourceServers = [
+    { identifier: 'urn:auth0-authz-api', token_lifetime: 10, id: 'rsid' }
+  ];
   let storageData = null;
 
   before((done) => {
     db.getStatus = () => Promise.resolve({ size: 10, type: 'default' });
-    db.getConfiguration = () => Promise.resolve({ groupsInToken: false, rolesInToken: true });
+    db.getConfiguration = () =>
+      Promise.resolve({ groupsInToken: false, rolesInToken: true });
     db.updateConfiguration = (data) => Promise.resolve(data);
     db.updateApiKey = (data) => Promise.resolve(data);
     db.provider = {
@@ -192,7 +197,9 @@ describe('configuration-route', () => {
 
       server.inject(options, (response) => {
         expect(response.result.statusCode).to.equal(400);
-        expect(response.result.message).to.equal('"groupsInToken" must be a boolean');
+        expect(response.result.message).to.equal(
+          '"groupsInToken" must be a boolean'
+        );
         cb();
       });
     });
@@ -322,10 +329,12 @@ describe('configuration-route', () => {
           Authorization: `Bearer ${token}`
         },
         payload: {
-          configuration: [ {
-            _id: 'v1',
-            persistRoles: true
-          } ]
+          configuration: [
+            {
+              _id: 'v1',
+              persistRoles: true
+            }
+          ]
         }
       };
 

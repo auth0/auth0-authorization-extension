@@ -55,7 +55,9 @@ describe('groups-mapping-route', () => {
 
     it('should return mappings for group', (cb) => {
       const token = getToken('read:groups');
-      auth0.get('/api/v2/connections', [ { name: connectionName, id: 'cid', strategy: 'default' } ]);
+      auth0.get('/api/v2/connections', [
+        { name: connectionName, id: 'cid', strategy: 'default' }
+      ]);
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/mappings`,
@@ -193,7 +195,9 @@ describe('groups-mapping-route', () => {
         expect(updatedGroup.name).to.be.equal(groupName);
         expect(updatedGroup._id).to.be.equal(guid);
         expect(updatedGroup.mappings).to.be.a('array');
-        expect(updatedGroup.mappings[0].groupName).to.be.equal(newMapping.groupName);
+        expect(updatedGroup.mappings[0].groupName).to.be.equal(
+          newMapping.groupName
+        );
         cb();
       });
     });

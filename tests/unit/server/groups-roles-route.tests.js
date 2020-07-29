@@ -18,7 +18,7 @@ describe('groups-members-route', () => {
     _id: roleId,
     name: 'role',
     description: 'description',
-    permissions: [ ]
+    permissions: []
   };
   let updatedGroup = null;
 

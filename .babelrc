@@ -1,18 +1,12 @@
 {
-  "presets": [
-    "es2015",
-    "react",
-    "stage-0"
-  ],
+  "presets": ["env", "react", "stage-0"],
   "env": {
     "development": {
       "presets": ["react-hmre"]
+    },
+    "production": {
+      "presets": ["babili"]
     }
   },
-  "plugins": [
-    "transform-runtime"
-  ],
-  "ignore": [
-    "./node_modules/**/*.js"
-  ]
+  "plugins": []
 }

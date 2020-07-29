@@ -2,30 +2,39 @@ import uuid from 'node-uuid';
 import Promise from 'bluebird';
 import { expect } from 'chai';
 
-import { getUserGroups, getDynamicUserGroups, getGroupExpanded } from '../../../../server/lib/queries';
+import {
+  getUserGroups,
+  getDynamicUserGroups,
+  getGroupExpanded
+} from '../../../../server/lib/queries';
 
 const mockDatabase = (groups, roles, permissions) => ({
   hash: uuid.v4(),
-  getGroup: () => new Promise((resolve) => {
-    resolve(groups[0]);
-  }),
-  getGroups: () => new Promise((resolve) => {
-    resolve(groups);
-  }),
-  getRoles: () => new Promise((resolve) => {
-    resolve(roles);
-  }),
-  getPermissions: () => new Promise((resolve) => {
-    resolve(permissions);
-  })
+  getGroup: () =>
+    new Promise((resolve) => {
+      resolve(groups[0]);
+    }),
+  getGroups: () =>
+    new Promise((resolve) => {
+      resolve(groups);
+    }),
+  getRoles: () =>
+    new Promise((resolve) => {
+      resolve(roles);
+    }),
+  getPermissions: () =>
+    new Promise((resolve) => {
+      resolve(permissions);
+    })
 });
 
 const mockConnections = (connections) => ({
   hash: uuid.v4(),
   connections: {
-    getAll: () => new Promise((resolve) => {
-      resolve(connections);
-    })
+    getAll: () =>
+      new Promise((resolve) => {
+        resolve(connections);
+      })
   }
 });
 
@@ -43,7 +52,7 @@ describe('Queries', () => {
           expect(groups.length).to.equal(0);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should group memberships if user belongs to groups', (done) => {
@@ -60,7 +69,7 @@ describe('Queries', () => {
           expect(groups[0].name).to.equal('Group 2');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should handle empty group memberships', (done) => {
@@ -77,7 +86,7 @@ describe('Queries', () => {
           expect(groups[0].name).to.equal('Group 2');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should handle nested groups', (done) => {
@@ -95,7 +104,7 @@ describe('Queries', () => {
           expect(groups[1].name).to.equal('Group 2');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should handle nested groups that dont belong to the current user', (done) => {
@@ -112,7 +121,7 @@ describe('Queries', () => {
           expect(groups[0].name).to.equal('Group 2');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should handle nested groups (cyclic)', (done) => {
@@ -131,7 +140,7 @@ describe('Queries', () => {
           expect(groups[2].name).to.equal('Group 3');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should ignore existing group memberships if null', (done) => {
@@ -150,7 +159,7 @@ describe('Queries', () => {
           expect(groups[2].name).to.equal('Group 3');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should ignore existing group memberships if undefined', (done) => {
@@ -169,7 +178,7 @@ describe('Queries', () => {
           expect(groups[2].name).to.equal('Group 3');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should ignore existing group memberships if not an array', (done) => {
@@ -188,7 +197,7 @@ describe('Queries', () => {
           expect(groups[2].name).to.equal('Group 3');
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
   });
 
@@ -200,7 +209,7 @@ describe('Queries', () => {
           expect(groups.length).to.equal(0);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should not run if existing group memberships are empty', (done) => {
@@ -214,21 +223,25 @@ describe('Queries', () => {
     });
 
     it('should return empty if the current transaction does not match any groups', (done) => {
-      const auth0 = mockConnections([ // eslint-disable-line no-unused-vars
-          { id: 'abc', name: 'my-ad' },
-          { id: 'def', name: 'other-ad' }
-      ]);
+      mockConnections([
+        { id: 'abc', name: 'my-ad' },
+        { id: 'def', name: 'other-ad' }
+      ]); // eslint-disable-line no-unused-vars
 
       const db = mockDatabase([
         {
           _id: '123',
           name: 'Group 1',
-          mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
+          mappings: [
+            { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' }
+          ]
         },
         {
           _id: '456',
           name: 'Group 2',
-          mappings: [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
+          mappings: [
+            { _id: '67890', groupName: 'Domain Users', connectionName: 'def' }
+          ]
         }
       ]);
 
@@ -238,7 +251,7 @@ describe('Queries', () => {
           expect(groups.length).to.equal(0);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should return empty if the current transaction does not match any groups', (done) => {
@@ -246,12 +259,16 @@ describe('Queries', () => {
         {
           _id: '123',
           name: 'Group 1',
-          mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' } ]
+          mappings: [
+            { _id: '12345', groupName: 'Domain Users', connectionName: 'abc' }
+          ]
         },
         {
           _id: '456',
           name: 'Group 2',
-          mappings: [ { _id: '67890', groupName: 'Domain Users', connectionName: 'def' } ]
+          mappings: [
+            { _id: '67890', groupName: 'Domain Users', connectionName: 'def' }
+          ]
         }
       ]);
 
@@ -261,28 +278,48 @@ describe('Queries', () => {
           expect(groups.length).to.equal(0);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
 
     it('should mappings that match the current transaction', (done) => {
       const db = mockDatabase([
         {
-          _id: '123', name: 'Group 1', mappings: [ { _id: '12345', groupName: 'Domain Users', connectionName: 'my-ad' } ]
+          _id: '123',
+          name: 'Group 1',
+          mappings: [
+            {
+              _id: '12345',
+              groupName: 'Domain Users',
+              connectionName: 'my-ad'
+            }
+          ]
         },
         {
           _id: '456',
           name: 'Group 2',
           mappings: [
             { _id: '67890', groupName: 'Domain Users', connectionName: 'def' },
-            { _id: '44444', groupName: 'Domain Admins', connectionName: 'my-ad' }
+            {
+              _id: '44444',
+              groupName: 'Domain Admins',
+              connectionName: 'my-ad'
+            }
           ]
         },
         {
           _id: '789',
           name: 'Group 3',
           mappings: [
-            { _id: 'aaaaa', groupName: 'Domain Users', connectionName: 'my-ad' },
-            { _id: 'bbbbb', groupName: 'Domain Admins', connectionName: 'my-ad' }
+            {
+              _id: 'aaaaa',
+              groupName: 'Domain Users',
+              connectionName: 'my-ad'
+            },
+            {
+              _id: 'bbbbb',
+              groupName: 'Domain Admins',
+              connectionName: 'my-ad'
+            }
           ]
         }
       ]);
@@ -301,18 +338,49 @@ describe('Queries', () => {
 
   describe('#getGroupExpanded', () => {
     it('should return empty if the current transaction does not match any groups', (done) => {
-      const db = mockDatabase([
-        { _id: '123', name: 'Group 1', roles: [ 'r1', 'r2' ] }
-      ],
+      const db = mockDatabase(
+        [ { _id: '123', name: 'Group 1', roles: [ 'r1', 'r2' ] } ],
         [
-          { _id: 'r1', name: 'Role 1', applicationId: 'app1', applicationType: 'client', permissions: [ 'p11', 'p12' ] },
-          { _id: 'r2', name: 'Role 2', applicationId: 'app2', applicationType: 'client', permissions: [ 'p21', 'p22' ] }
+          {
+            _id: 'r1',
+            name: 'Role 1',
+            applicationId: 'app1',
+            applicationType: 'client',
+            permissions: [ 'p11', 'p12' ]
+          },
+          {
+            _id: 'r2',
+            name: 'Role 2',
+            applicationId: 'app2',
+            applicationType: 'client',
+            permissions: [ 'p21', 'p22' ]
+          }
         ],
         [
-          { _id: 'p11', name: 'Permission 11', applicationId: 'app1', applicationType: 'client' },
-          { _id: 'p12', name: 'Permission 12', applicationId: 'app1', applicationType: 'client' },
-          { _id: 'p21', name: 'Permission 21', applicationId: 'app2', applicationType: 'client' },
-          { _id: 'p22', name: 'Permission 22', applicationId: 'app2', applicationType: 'client' }
+          {
+            _id: 'p11',
+            name: 'Permission 11',
+            applicationId: 'app1',
+            applicationType: 'client'
+          },
+          {
+            _id: 'p12',
+            name: 'Permission 12',
+            applicationId: 'app1',
+            applicationType: 'client'
+          },
+          {
+            _id: 'p21',
+            name: 'Permission 21',
+            applicationId: 'app2',
+            applicationType: 'client'
+          },
+          {
+            _id: 'p22',
+            name: 'Permission 22',
+            applicationId: 'app2',
+            applicationType: 'client'
+          }
         ]
       );
 
@@ -324,7 +392,7 @@ describe('Queries', () => {
           expect(group.roles[0].permissions.length).to.equal(2);
           done();
         })
-        .catch(err => done(err));
+        .catch((err) => done(err));
     });
   });
 });

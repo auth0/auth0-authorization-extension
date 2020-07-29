@@ -15,7 +15,7 @@ function copyProps(src, target) {
     .filter(prop => typeof target[prop] === 'undefined')
     .reduce((result, prop) => ({
       ...result,
-      [prop]: Object.getOwnPropertyDescriptor(src, prop),
+      [prop]: Object.getOwnPropertyDescriptor(src, prop)
     }), {});
   Object.defineProperties(target, props);
 }
