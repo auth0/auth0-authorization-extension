@@ -21,11 +21,18 @@ jobs:
       - run: sleep 10
       - run: npm run test:integration
 workflows:
-  matrix-tests:
+  build_and_test:
     jobs:
-      - build-lint-test:
-          version: "8"
-      - build-lint-test:
-          version: "10"
-      - build-lint-test:
-          version: "12"
+    - build-lint-test:
+        name: "build_lint_test_8"
+        version: "8"
+    - build-lint-test:
+        name: "build_lint_test_10"
+        version: "10"
+        requires:
+          - build_lint_test_8
+    - build-lint-test:
+        name: "build_lint_test_12"
+        version: "12"
+        requires:
+          - build_lint_test_10
