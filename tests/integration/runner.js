@@ -15,7 +15,8 @@ nconf
     NODE_ENV: 'test',
     DATA_CACHE_MAX_AGE: 0,
     DUMMY_KEY: 'DUMMY_VALUE',
-    PUBLIC_WT_URL: 'http://foo'
+    PUBLIC_WT_URL: 'http://foo',
+    AUTHZ_API_URL: 'http://localhost:3000/api'
   });
 
 config.setProvider((key) => nconf.get(key));

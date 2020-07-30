@@ -47,8 +47,8 @@ describe('policy', () => {
               .then((mgmtToken) => {
                 mgmtHeader = { Authorization: `Bearer ${mgmtToken}` };
 
-                // Create 10 dummy users locally.
-                usersData = [ ...new Array(10) ].map(() => ({
+                // Create 5 dummy users locally.
+                usersData = [ ...new Array(5) ].map(() => ({
                   connection: connectionName,
                   email: faker.internet.email(),
                   password: faker.internet.password()

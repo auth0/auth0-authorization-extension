@@ -8,7 +8,6 @@ import { initServer } from './server';
 
 nconf
   .argv()
-  .env()
   .defaults({
     AUTH0_CLIENT_ID: '111',
     AUTH0_CLIENT_SECRET: '222',

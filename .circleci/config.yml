@@ -14,6 +14,12 @@ jobs:
       - run: npm run lint:js
       - run: npm test
       - run: npm run build
+      - run:
+          name: Start server
+          command: npm run serve:dev
+          background: true
+      - run: sleep 10
+      - run: npm run test:integration
 workflows:
   matrix-tests:
     jobs:
