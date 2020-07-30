@@ -18,7 +18,6 @@
     "test:pre": "npm run test:clean",
     "test:clean": "rimraf ./coverage && rimraf ./.nyc_output",
     "test:integration": "mocha tests/integration/mocha.js ./tests/integration/**/*.tests.js -R list --timeout 12000",
-    "test:integration:wt": "node ./tests/integration/remote.js",
     "lint:js": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack .",
     "lint:fix": "eslint --ignore-path .gitignore --ignore-pattern build --ignore-pattern webpack . --fix"
   },
