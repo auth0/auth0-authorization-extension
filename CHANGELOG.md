@@ -1,3 +1,8 @@
+## [2.9.0] - 2020-08-11
+
+- Multipart request for rules paging
+- Bump dependencies and resolve issues for local development.
+
 ## [2.8.1] - 2020-02-05
 
 - Fix the extension upgrade logic that caused rule configuration to be reset after the upgrade. This was causing missing permissions and similar depending on the configuration of the customer.
