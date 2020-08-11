@@ -3,6 +3,7 @@ import nconf from 'nconf';
 import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
 import apiCall from './apiCall';
+import multipartRequest from './multipartRequest';
 
 const avoidBlock = (action) => (...args) =>
   new Promise((resolve, reject) => {
@@ -26,7 +27,7 @@ const compact = (entity) => ({
  */
 export const getConnectionsCached = memoizer({
   load: (auth0, callback) => {
-    apiCall(auth0, auth0.connections.getAll, [ { fields: 'id,name,strategy' } ])
+    multipartRequest(auth0, 'connections', { fields: 'id,name,strategy' })
       .then((connections) =>
         _.chain(connections)
           .sortBy((conn) => conn.name.toLowerCase())

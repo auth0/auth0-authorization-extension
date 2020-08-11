@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import schema from '../schemas/configuration';
 import compileRule from '../../../lib/compileRule';
+import multipartRequest from '../../../lib/multipartRequest';
 
 module.exports = (server) => ({
   method: 'PATCH',
@@ -26,7 +27,7 @@ module.exports = (server) => ({
 
     compileRule(req.storage, req.pre.auth0, config, req.auth.credentials.email || 'unknown')
       .then((script) => {
-        req.pre.auth0.rules.getAll()
+        multipartRequest(req.pre.auth0, 'rules', { fields: 'name,id' })
           .then(rules => {
             const payload = {
               name: 'auth0-authorization-extension',

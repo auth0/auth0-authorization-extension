@@ -8,7 +8,7 @@ module.exports = function(
   entity,
   opts = {},
   perPage = 100,
-  concurrency = 5
+  concurrency = 3
 ) {
   if (client === null || client === undefined) {
     throw new ArgumentError('Must provide a auth0 client object.');

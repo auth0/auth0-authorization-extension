@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import config from '../../../lib/config';
 import { deleteApi } from '../../../lib/apiaccess';
+import multipartRequest from '../../../lib/multipartRequest';
 
 module.exports = (server) => ({
   method: 'DELETE',
@@ -13,9 +14,7 @@ module.exports = (server) => ({
     ]
   },
   handler: (req, reply) => {
-    req.pre.auth0
-      .rules
-      .getAll()
+    multipartRequest(req.pre.auth0, 'rules', { fields: 'name,id' })
       .then(rules => {
         const rule = _.find(rules, { name: 'auth0-authorization-extension' });
         if (rule) {
