@@ -31,7 +31,7 @@ module.exports = (server) => ({
       page: page || 0,
       include_totals: true,
       fields: 'user_id,name,email,identities,picture,last_login,logins_count,multifactor,blocked',
-      search_engine: (config('AUTH0_RTA').replace('https://', '') !== 'auth0.auth0.com') ? 'v2' : 'v3'
+      search_engine: config('USER_SEARCH_ENGINE') || 'v3'
     };
 
     req.pre.auth0.users.getAll(options)
