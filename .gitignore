@@ -7,9 +7,8 @@ npm-debug.log
 server/db.json
 server/data.json
 server/config.json
-dist
+
 build/extension/bundle-size.json
 server/config.json
 scripts/script-settings.json
 coverage
-build/bundle.js
