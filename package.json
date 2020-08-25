@@ -1,6 +1,6 @@
 {
-  "name": "auth0-authz-andy",
-  "version": "2.9.1",
+  "name": "auth0-authz-extension",
+  "version": "2.9.0",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": ">=12"
@@ -10,7 +10,7 @@
     "clean": "rimraf ./dist",
     "build": "npm run clean && npm run client:build && npm run extension:build",
     "client:build": "cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js --colors -p",
-    "extension:build": "a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-authz-andy.extension.$npm_package_version.js ./build/bundle.js",
+    "extension:build": "a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-authz.extension.$npm_package_version.js ./build/bundle.js",
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
     "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js",
@@ -116,7 +116,7 @@
   },
   "devDependencies": {
     "ansi-colors": "^4.1.1",
-    "auth0-extensions-cli": "1.1.2",
+    "auth0-extensions-cli": "^1.1.2",
     "auth0-js": "^9.7.3",
     "auth0-styleguide": "auth0/styleguide#4.8.33",
     "autoprefixer": "6.7.7",
