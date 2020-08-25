@@ -70,14 +70,6 @@
       "visibleIf": {
         "STORAGE_TYPE": "s3"
       }
-    },
-    "AWS_REGION": {
-      "description": "Your S3 AWS Region",
-      "required": true,
-      "example": "us-east-1",
-      "visibleIf": {
-        "STORAGE_TYPE": "s3"
-      }
     }
   }
 }

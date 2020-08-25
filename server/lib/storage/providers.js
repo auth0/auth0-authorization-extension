@@ -15,7 +15,6 @@ export function createProvider(storageContext) {
         bucket: config('S3_BUCKET'),
         keyId: config('S3_KEY'),
         keySecret: config('S3_SECRET'),
-        awsRegion: config('AWS_REGION'),
         defaultData: {}
       });
       return new BlobRecordProvider(context, { concurrentWrites: false });
