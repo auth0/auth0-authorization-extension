@@ -12,40 +12,41 @@ config.profile = false;
 const version = process.env.EXTENSION_VERSION || project.version;
 
 // Build output, which includes the hash.
-config.output.hash = true;
 config.output.filename = `auth0-authz.ui.${version}.js`;
 
 // Development modules.
-config.module.loaders.push({
+config.module.rules.push({
   test: /\.css$/,
-  loader: ExtractTextPlugin.extract(
-    "style-loader",
-    "css-loader!postcss-loader"
-  ),
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    use: [ 'css-loader', 'postcss-loader' ]
+  })
 });
-config.module.loaders.push({
+config.module.rules.push({
   test: /\.styl/,
-  loader: ExtractTextPlugin.extract("style-loader", "css-loader!stylus-loader"),
+  use: ExtractTextPlugin.extract({
+    fallback: 'style-loader',
+    use: [ 'css-loader', 'stylus-loader' ]
+  })
 });
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([
-  new webpack.optimize.OccurenceOrderPlugin(true),
-  new webpack.optimize.DedupePlugin(),
-
   // Extract CSS to a different file, will require additional configuration.
-  new ExtractTextPlugin(`auth0-authz.ui.${version}.css`, {
-    allChunks: true,
+  new ExtractTextPlugin({
+    filename: `auth0-authz.ui.${version}.css`,
+    allChunks: true
   }),
 
-  // Separate the vender in a different file.
-  new webpack.optimize.CommonsChunkPlugin(
-    "vendors",
-    `auth0-authz.ui.vendors.${version}.js`
-  ),
+  // Separate the vendor in a different file.
+  new webpack.optimize.CommonsChunkPlugin({
+    name: 'vendors',
+    filename: `auth0-authz.ui.vendors.${version}.js`
+  }),
 
   // Compress and uglify the output.
   new webpack.optimize.UglifyJsPlugin({
+    sourceMap: true,
     mangle: true,
     output: {
       comments: false,
@@ -58,9 +59,8 @@ config.plugins = config.plugins.concat([
       unused: true,
       if_return: true,
       join_vars: true,
-      drop_console: true,
-      warnings: false,
-    },
+      drop_console: true
+    }
   }),
 
   // Alternative to StatsWriterPlugin.

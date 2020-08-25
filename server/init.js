@@ -20,7 +20,6 @@ module.exports = (cfg, storageContext, cb) => {
 
   // Set configuration provider.
   config.setProvider(key => cfg(key) || process.env[key]);
-
   // Initialize the storage layer.
   initDb(
     new Database({

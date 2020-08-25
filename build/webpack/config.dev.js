@@ -9,7 +9,6 @@ const WEBPACK_PORT = 3000;
 // Override base configuration.
 const config = require('./config.base.js');
 config.devtool = 'eval-source-map';
-config.debug = true;
 config.entry = [
   'babel-polyfill',
   `webpack-dev-server/client?http://${WEBPACK_HOST}:${WEBPACK_PORT}`,
