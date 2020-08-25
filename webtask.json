@@ -9,7 +9,7 @@
   "initialUrlPath": "/admins/login",
   "updateConfirmMessage": "Warning! Read the documentation about breaking changes (https://auth0.com/docs/extensions/authorization-extension) before updating the extension. If you are upgrading from 2.5 or older, you have to rotate your Api Key and republish the rule upon upgrade.",
   "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
-  "repository": "https://github.com/6footgeek/auth0-authorization-extension",
+  "repository": "https://github.com/auth0/auth0-authorization-extension",
   "keywords": [
     "auth0",
     "extension"
