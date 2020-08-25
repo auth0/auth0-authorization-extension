@@ -3,7 +3,7 @@ import { ArgumentError } from 'auth0-extension-tools';
 
 import apiCall from './apiCall';
 
-module.exports = function(
+export default function(
   client,
   entity,
   opts = {},

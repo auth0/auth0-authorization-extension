@@ -61,6 +61,8 @@
       "webtask-tools",
       "winston@1.0.0"
     ],
+    "useBabel": false,
+    "bundleModules": false,
     "settings": {
       "WARN_DB_SIZE": 409600,
       "MAX_MULTISELECT_USERS": 5,
@@ -114,7 +116,7 @@
   },
   "devDependencies": {
     "ansi-colors": "^4.1.1",
-    "auth0-extensions-cli": "~1.0.9",
+    "auth0-extensions-cli": "^1.1.0",
     "auth0-js": "^9.7.3",
     "auth0-styleguide": "auth0/styleguide#4.8.33",
     "autoprefixer": "6.7.7",
