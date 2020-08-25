@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import config from '../../../lib/config';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'GET',
   path: '/api/users',
   config: {

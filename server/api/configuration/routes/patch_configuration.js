@@ -4,7 +4,7 @@ import schema from '../schemas/configuration';
 import compileRule from '../../../lib/compileRule';
 import multipartRequest from '../../../lib/multipartRequest';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'PATCH',
   path: '/api/configuration',
   config: {

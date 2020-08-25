@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'GET',
   path: '/api/applications/{clientId}',
   config: {

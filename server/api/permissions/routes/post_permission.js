@@ -1,6 +1,6 @@
 import schema from '../schemas/permission';
 
-module.exports = () => ({
+export default () => ({
   method: 'POST',
   path: '/api/permissions',
   config: {

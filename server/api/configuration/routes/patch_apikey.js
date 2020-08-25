@@ -1,6 +1,6 @@
 import generateApiKey from '../../../lib/generateApiKey';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'PATCH',
   path: '/api/configuration/rotate-apikey',
   config: {

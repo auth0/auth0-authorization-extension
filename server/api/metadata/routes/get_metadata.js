@@ -1,6 +1,6 @@
 import metadata from '../../../../webtask.json';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/meta',
   config: {

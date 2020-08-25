@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import Joi from 'joi';
 import _ from 'lodash';
 
-module.exports = () => ({
+export default () => ({
   method: 'PATCH',
   path: '/api/users/{id}/groups',
   config: {

@@ -4,11 +4,11 @@ const nconf = require('nconf');
 const logger = require('./server/lib/logger');
 
 // Initialize babel.
-require('babel-core/register')({
-  ignore: /node_modules/,
+require('@babel/register')({
+  ignore: [ /node_modules/ ],
   sourceMaps: !(process.env.NODE_ENV === 'production')
 });
-require('babel-polyfill');
+require('@babel/polyfill');
 
 // Initialize configuration.
 nconf
@@ -26,7 +26,7 @@ nconf
   });
 
 // Start the server.
-return require('./server/init')((key) => nconf.get(key), null, (err, hapi) => {
+return require('./server/init').default((key) => nconf.get(key), null, (err, hapi) => {
   if (err) {
     return logger.error(err);
   }

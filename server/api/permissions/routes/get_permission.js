@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/permissions/{id}',
   config: {

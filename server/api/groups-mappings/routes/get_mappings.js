@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { getMappingsWithNames } from '../../../lib/queries';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/mappings',
   config: {

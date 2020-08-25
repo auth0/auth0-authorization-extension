@@ -1,6 +1,6 @@
 import Joi from 'joi';
 
-module.exports = () => ({
+export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/roles',
   config: {

@@ -1,6 +1,6 @@
 import path from 'path';
 
-module.exports.register = (server, options, next) => {
+export const register = (server, options, next) => {
   server.route({
     method: 'GET',
     path: '/app/{param*}',
@@ -18,6 +18,6 @@ module.exports.register = (server, options, next) => {
   next();
 };
 
-module.exports.register.attributes = {
+register.attributes = {
   name: 'assets'
 };

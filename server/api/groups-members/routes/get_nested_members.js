@@ -4,7 +4,7 @@ import Joi from 'joi';
 import { getUsersById } from '../../../lib/users';
 import { getChildGroups, getMembers } from '../../../lib/queries';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/members/nested',
   config: {

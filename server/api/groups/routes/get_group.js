@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import { getGroupExpanded } from '../../../lib/queries';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/groups/{id}',
   config: {

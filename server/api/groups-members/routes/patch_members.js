@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import schema from '../schemas/user_ids';
 
-module.exports = () => ({
+export default () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/members',
   config: {

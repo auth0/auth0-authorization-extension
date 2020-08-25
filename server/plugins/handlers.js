@@ -1,9 +1,9 @@
 import { handlers } from 'auth0-extension-hapi-tools';
+import * as tools from 'auth0-extension-tools';
+import * as Boom from 'boom';
+
 import config from '../lib/config';
 import logger from '../lib/logger';
-
-const tools = require('auth0-extension-tools');
-const Boom = require('boom');
 
 const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   if (domain === null || domain === undefined) {
@@ -62,7 +62,7 @@ const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   };
 };
 
-module.exports.register = (server, options, next) => {
+export const register = (server, options, next) => {
   server.decorate('server', 'handlers', {
     managementClient: handlers.managementApiClient({
       domain: config('AUTH0_DOMAIN'),
@@ -80,6 +80,6 @@ module.exports.register = (server, options, next) => {
   next();
 };
 
-module.exports.register.attributes = {
+register.attributes = {
   name: 'handlers'
 };

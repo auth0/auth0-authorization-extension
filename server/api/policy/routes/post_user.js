@@ -3,7 +3,7 @@ import Joi from 'joi';
 import schema from '../schemas/policy_request';
 import { getUserData } from '../../../lib/queries';
 
-module.exports = () => ({
+export default () => ({
   method: 'POST',
   path: '/api/users/{userId}/policy/{clientId}',
   config: {

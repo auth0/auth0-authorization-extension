@@ -1,6 +1,6 @@
 import schema from '../schemas/group';
 
-module.exports = () => ({
+export default () => ({
   method: 'POST',
   path: '/api/groups',
   config: {

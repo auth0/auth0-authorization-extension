@@ -1,4 +1,4 @@
-require('babel-register')();
+require('@babel/register')();
 
 const gulp = require('gulp');
 const log = require('fancy-log');
@@ -12,6 +12,7 @@ gulp.task('run', async () => {
   nodemon({
     script: './build/webpack/server.js',
     ext: 'js json',
+    verbose: true,
     env: {
       EXTENSION_SECRET: 'a-random-secret',
       AUTH0_RTA: 'https://auth0.auth0.com',

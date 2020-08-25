@@ -1,7 +1,7 @@
 import uuid from 'node-uuid';
 import schema from '../schemas/mappings';
 
-module.exports = () => ({
+export default () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/mappings',
   config: {

@@ -11,7 +11,7 @@ const hashApiKey = (key) => crypto.createHmac('sha256', `${key} + ${config('AUTH
   .update(config('EXTENSION_SECRET'))
   .digest('hex');
 
-module.exports.register = (server, options, next) => {
+export const register = (server, options, next) => {
   server.auth.scheme('extension-secret', () =>
     ({
       authenticate: (request, reply) => {
@@ -147,6 +147,6 @@ module.exports.register = (server, options, next) => {
   });
 };
 
-module.exports.register.attributes = {
+register.attributes = {
   name: 'auth'
 };

@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import { getRolesForUser } from '../../../lib/queries';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/users/{id}/roles/calculate',
   config: {

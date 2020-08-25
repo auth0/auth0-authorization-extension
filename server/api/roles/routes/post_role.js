@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import schema from '../schemas/role';
 
-module.exports = () => ({
+export default () => ({
   method: 'POST',
   path: '/api/roles',
   config: {

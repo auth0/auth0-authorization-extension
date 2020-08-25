@@ -1,17 +1,16 @@
 'use strict';
 
 const webpack = require('webpack');
-const logger = require('../../server/lib/logger');
 
 const WEBPACK_HOST = 'localhost';
 const WEBPACK_PORT = 3000;
 
 // Override base configuration.
 const config = require('./config.base.js');
+
 config.devtool = 'eval-source-map';
-config.debug = true;
 config.entry = [
-  'babel-polyfill',
+  '@babel/polyfill',
   `webpack-dev-server/client?http://${WEBPACK_HOST}:${WEBPACK_PORT}`,
   'webpack/hot/only-dev-server',
   config.entry.app
@@ -23,8 +22,6 @@ config.stats = {
   colors: true,
   reasons: true
 };
-
-// Development modules.
 
 // Webpack plugins.
 config.plugins = config.plugins.concat([

@@ -2,7 +2,7 @@ import Joi from 'joi';
 
 import schema from '../schemas/group_ids';
 
-module.exports = () => ({
+export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/nested',
   config: {
