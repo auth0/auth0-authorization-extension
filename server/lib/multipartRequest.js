@@ -58,4 +58,4 @@ export default function(
     });
 
   return getAll().then(() => result);
-};
+}
