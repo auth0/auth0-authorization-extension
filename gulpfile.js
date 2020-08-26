@@ -1,3 +1,5 @@
+require('@babel/register')();
+
 const gulp = require('gulp');
 const log = require('fancy-log');
 const open = require('open');
