@@ -6,13 +6,13 @@ const postcssReporter = require('postcss-reporter');
 
 module.exports = {
   devtool: 'cheap-module-source-map',
-  stats: false,
+  stats: true,
 
   // The application and the vendor libraries.
   entry: {
     app: path.resolve(__dirname, '../../client/app.jsx'),
     vendors: [
-      'babel-polyfill',
+      '@babel/polyfill',
       'axios',
       'bluebird',
       'classnames',

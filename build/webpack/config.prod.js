@@ -49,7 +49,7 @@ config.plugins = config.plugins.concat([
     sourceMap: true,
     mangle: true,
     output: {
-      comments: false,
+      comments: false
     },
     compress: {
       sequences: true,
@@ -70,11 +70,11 @@ config.plugins = config.plugins.concat([
       const chunks = {
         app: data.assetsByChunkName.app[0],
         style: data.assetsByChunkName.app[1],
-        vendors: data.assetsByChunkName.vendors[0],
+        vendors: data.assetsByChunkName.vendors[0]
       };
       return JSON.stringify(chunks);
-    },
-  }),
+    }
+  })
 ]);
 
 module.exports = config;
