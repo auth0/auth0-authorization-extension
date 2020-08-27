@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 import schema from '../schemas/mapping_ids';
 
-module.exports = () => ({
+export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/mappings',
   config: {

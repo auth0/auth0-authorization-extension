@@ -1,6 +1,6 @@
 import { createApi } from '../../../lib/apiaccess';
 
-module.exports = () => ({
+export default () => ({
   method: 'POST',
   path: '/api/configuration/resource-server',
   config: {

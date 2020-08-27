@@ -93,12 +93,13 @@ const clientRoutes = [
   '/import-export'
 ];
 
-module.exports.register = (server, options, next) => {
+export const register = (server, options, next) => {
   clientRoutes.map(link => server.route(assembleHtmlRoute(link)));
 
   next();
 };
 
-module.exports.register.attributes = {
+register.attributes = {
   name: 'html'
 };
+

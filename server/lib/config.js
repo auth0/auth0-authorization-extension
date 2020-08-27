@@ -1,3 +1,4 @@
 import { config } from 'auth0-extension-tools';
 
-module.exports = config();
+export default config();
+

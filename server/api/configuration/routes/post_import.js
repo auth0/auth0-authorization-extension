@@ -1,6 +1,6 @@
 import schema from '../schemas/storage';
 
-module.exports = () => ({
+export default () => ({
   method: 'POST',
   path: '/api/configuration/import',
   config: {

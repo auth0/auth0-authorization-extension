@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import schema from '../schemas/group';
 
-module.exports = () => ({
+export default () => ({
   method: 'PUT',
   path: '/api/groups/{id}',
   config: {

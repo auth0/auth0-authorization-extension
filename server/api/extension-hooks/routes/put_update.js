@@ -1,4 +1,4 @@
-module.exports = (server) => ({
+export default (server) => ({
   method: 'PUT',
   path: '/.extensions/on-update',
   config: {

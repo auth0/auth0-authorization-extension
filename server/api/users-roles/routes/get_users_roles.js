@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import _ from 'lodash';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/users/{id}/roles',
   config: {

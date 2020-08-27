@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { getGroupsExpanded } from '../../../lib/queries';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/users/{id}/groups',
   config: {

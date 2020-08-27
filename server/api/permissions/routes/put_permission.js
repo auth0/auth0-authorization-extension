@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import schema from '../schemas/permission';
 
-module.exports = () => ({
+export default () => ({
   method: 'PUT',
   path: '/api/permissions/{id}',
   config: {

@@ -3,7 +3,7 @@ import Joi from 'joi';
 
 import { getParentGroups, getRolesForGroups } from '../../../lib/queries';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/roles/nested',
   config: {

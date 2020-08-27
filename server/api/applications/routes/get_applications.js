@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import multipartRequest from '../../../lib/multipartRequest';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'GET',
   path: '/api/applications',
   config: {

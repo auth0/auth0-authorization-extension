@@ -3,7 +3,7 @@ import config from '../../../lib/config';
 import { deleteApi } from '../../../lib/apiaccess';
 import multipartRequest from '../../../lib/multipartRequest';
 
-module.exports = (server) => ({
+export default (server) => ({
   method: 'DELETE',
   path: '/.extensions/on-uninstall',
   config: {

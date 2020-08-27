@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Promise from 'bluebird';
 import Joi from 'joi';
 
-module.exports = () => ({
+export default () => ({
   method: 'PATCH',
   path: '/api/users/{id}/roles',
   config: {

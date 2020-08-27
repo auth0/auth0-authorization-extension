@@ -11,7 +11,9 @@ const factory = (wtConfig, wtStorage) => {
   logger.info(' > PUBLIC_WT_URL:', wtConfig('PUBLIC_WT_URL'));
   // Require in place to load the dependency only when needed
   // and avoid Blocked event loop errors
-  return require('./server/init')(wtConfig, wtStorage);
+  const server = require('./server/init').default;
+
+  return server(wtConfig, wtStorage);
 };
 
 // Loading all modules at the beginning takes too much time

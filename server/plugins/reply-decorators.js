@@ -20,7 +20,7 @@ function unauthorized(message) {
   return this.response(Boom.unauthorized(message));
 }
 
-module.exports.register = (server, options, next) => {
+export const register = (server, options, next) => {
   server.decorate('reply', 'notFound', notFound);
   server.decorate('reply', 'error', error);
   server.decorate('reply', 'unauthorized', unauthorized);
@@ -28,6 +28,7 @@ module.exports.register = (server, options, next) => {
   next();
 };
 
-module.exports.register.attributes = {
+register.attributes = {
   name: 'reply-decorators'
 };
+

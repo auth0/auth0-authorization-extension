@@ -262,7 +262,8 @@ describe('groups', () => {
       request
         .get({
           url: authzApi(`/groups/${testGroup._id}/mappings`),
-          headers: token()
+          headers: token(),
+          json: true
         })
         .then((response) => {
           expect(response.length).toBeGreaterThan(0);

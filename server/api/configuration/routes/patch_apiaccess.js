@@ -1,7 +1,7 @@
 import Joi from 'joi';
 import { getApi, createApi, updateApi, deleteApi } from '../../../lib/apiaccess';
 
-module.exports = () => ({
+export default () => ({
   method: 'PATCH',
   path: '/api/configuration/resource-server',
   config: {

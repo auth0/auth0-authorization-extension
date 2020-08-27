@@ -6,7 +6,7 @@ import { createProvider } from './lib/storage/providers';
 import createServer from './';
 import logger from './lib/logger';
 
-module.exports = (cfg, storageContext, cb) => {
+export default (cfg, storageContext, cb) => {
   if (cb == null) {
     cb = err => {
       if (err) {
@@ -20,7 +20,6 @@ module.exports = (cfg, storageContext, cb) => {
 
   // Set configuration provider.
   config.setProvider(key => cfg(key) || process.env[key]);
-
   // Initialize the storage layer.
   initDb(
     new Database({

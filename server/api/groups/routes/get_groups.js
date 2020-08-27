@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import Joi from 'joi';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/groups',
   config: {

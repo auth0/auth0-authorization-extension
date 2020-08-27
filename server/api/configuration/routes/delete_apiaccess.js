@@ -1,6 +1,6 @@
 import { deleteApi } from '../../../lib/apiaccess';
 
-module.exports = () => ({
+export default () => ({
   method: 'DELETE',
   path: '/api/configuration/resource-server',
   config: {

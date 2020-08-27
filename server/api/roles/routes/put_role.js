@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Joi from 'joi';
 import schema from '../schemas/role';
 
-module.exports = () => ({
+export default () => ({
   method: 'PUT',
   path: '/api/roles/{id}',
   config: {

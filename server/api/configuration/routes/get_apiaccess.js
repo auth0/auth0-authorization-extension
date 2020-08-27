@@ -1,6 +1,6 @@
 import { getApi } from '../../../lib/apiaccess';
 
-module.exports = () => ({
+export default () => ({
   method: 'GET',
   path: '/api/configuration/resource-server',
   config: {
