@@ -109,7 +109,7 @@ describe('groups', () => {
       })
       .then((data) => {
         const exportedDataKeys = Object.keys(data);
-        expect(exportedDataKeys).toEqual([ 'groups', 'roles', 'permissions' ]);
+        expect(exportedDataKeys).toEqual([ 'groups', 'roles' ]);
       }));
 
   it('should create a new group', () =>
