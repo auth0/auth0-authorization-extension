@@ -70,22 +70,6 @@
       "visibleIf": {
         "STORAGE_TYPE": "s3"
       }
-    },
-    "USER_SEARCH_ENGINE": {
-      "description": "User search engine. Cloud only supports V3",
-      "type": "select",
-      "default": "v3",
-      "allowMultiple": false,
-      "options": [
-        {
-          "value": "v3",
-          "text": "v3"
-        },
-        {
-          "value": "v2",
-          "text": "v2"
-        }
-      ]
     }
   }
 }
