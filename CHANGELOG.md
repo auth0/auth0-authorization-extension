@@ -1,3 +1,8 @@
+## [2.10.0] - 2020-08-28
+
+- User search engine configuration added.
+- Bumped webpack to v3
+
 ## [2.9.0] - 2020-08-11
 
 - Multipart request for rules paging
