@@ -1,3 +1,8 @@
+## [2.11.0] - 2021-01-25
+
+- Fix local development
+- Replaced unpaginated query to resource server endpoint with get by id
+
 ## [2.10.0] - 2020-08-28
 
 - User search engine configuration added.
