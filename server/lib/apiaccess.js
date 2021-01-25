@@ -63,10 +63,7 @@ const makeRequest = (req, path, method, payload) =>
   );
 
 export const getApi = (req) =>
-  makeRequest(req, 'resource-servers', 'GET').then((apis) => {
-    const api = apis.filter((item) => item.identifier === apiIdentifier);
-    return api[0] || {};
-  });
+  makeRequest(req, `resource-servers/${apiIdentifier}`, 'GET').catch(e => { return {}; });
 
 export const createApi = (req, lifeTime) => {
   const payload = {
