@@ -16,7 +16,7 @@ We have RBAC available in Auth0 as a core feature of the platform, rather than r
 
 For a detailed summary of the differences between this extension and the core features of the platform, [check this document](https://auth0.com/docs/authorization/concepts/core-vs-extension).
 
-We advise using the core capabilities *rather than the extension* as they are built to meet the high scalability needs of the Auth0 platform.
+We advise using the core capabilities _rather than the extension_ as they are built to meet the high scalability needs of the Auth0 platform.
 
 #### Why do we rely on a fork of `hapi`?
 
@@ -24,10 +24,11 @@ Due to the SameSite cookie changes in browsers, we needed a version of Hapi that
 
 ## Development Setup
 
-**Requires Node 8 or Node 12** - higher versions not yet supported. If you are using `nvm`, simply run `nvm use` inside the directory to switch to the correct version.
+**Requires Node 12** - higher versions not yet supported. If you are using `nvm`, simply run `nvm use` inside the directory to switch to the correct version.
 
 1. Clone this repo.
 2. Run `npm ci`.
+3. Get Argo Tunnel: `brew install cloudflare/cloudflare/cloudflared`
 
 ### Create a local config
 
@@ -55,16 +56,16 @@ Copy this config into the file created at `server/config.json` and modify the fo
 ## Running in production mode
 
 1. Build the client: `npm run build`.
-2. Ensure `ngrok` is installed globally (`npm i -g ngrok`).
-3. Start a local ngrok server on port 3000 (`ngrok http 3000`).
-4. Open `server/config.json` and enter the HTTPS ngrok URL into the `WT_URL` and `PUBLIC_WT_URL` options.
-5. Start the server in production mode with `npm run serve:prod`.
+2. Start an Argo proxy via: `cloudflared --url http://localhost:3000`
+3. Open `server/config.json` and enter the URL provided by Argo Tunnel into the `WT_URL` and `PUBLIC_WT_URL` options.
+4. In another terminal, start the server in production mode with `npm run serve:prod`.
 
-You can then open the ngrok URL to use the extension.
+You can then open the URL provided by Argo Tunnel to use the extension.
 
 ## Running in development mode
 
-Run `npm run serve:dev`. Please note that the development mode works only in Chrome.
+1. Start an Argo proxy via: `cloudflared --url http://localhost:3001`
+2. In another terminal, run `WT_URL=https://<PROVIDED_BY_CLOUDFLARE>.trycloudflare.com npm run serve:dev`. Replace the URL with the one provided in the previous step. Please note that the development mode works only in Chrome.
 
 ## Running tests
 

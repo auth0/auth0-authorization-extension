@@ -3,11 +3,10 @@ require('@babel/register')();
 const gulp = require('gulp');
 const log = require('fancy-log');
 const open = require('open');
-const ngrok = require('ngrok');
 const nodemon = require('gulp-nodemon');
 
 gulp.task('run', async () => {
-  const url = await ngrok.connect(3001);
+  const url = process.env.WT_URL;
 
   nodemon({
     script: './build/webpack/server.js',
