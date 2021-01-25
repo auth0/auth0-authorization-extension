@@ -9,9 +9,9 @@ describe('configuration-route', () => {
   const rules = [
     { name: 'auth0-authorization-extension', enabled: true, id: 'ruleId' }
   ];
-  const resourceServers = [
+  const resourceServer =
     { identifier: 'urn:auth0-authz-api', token_lifetime: 10, id: 'rsid' }
-  ];
+  ;
   let storageData = null;
 
   before((done) => {
@@ -148,7 +148,7 @@ describe('configuration-route', () => {
 
     it('should return resource-server data', (cb) => {
       const token = getToken('read:resource-server');
-      auth0.get('/api/v2/resource-servers', resourceServers);
+      auth0.get('/api/v2/resource-servers/urn:auth0-authz-api', resourceServer);
       const options = {
         method: 'GET',
         url: '/api/configuration/resource-server',
@@ -160,6 +160,23 @@ describe('configuration-route', () => {
       server.inject(options, (response) => {
         expect(response.result.apiAccess).to.equal(true);
         expect(response.result.token_lifetime).to.equal(10);
+        cb();
+      });
+    });
+
+    it('should return resource-server empty when resource server not found', (cb) => {
+      const token = getToken('read:resource-server');
+      auth0.get('/api/v2/resource-servers/urn:auth0-authz-api', {});
+      const options = {
+        method: 'GET',
+        url: '/api/configuration/resource-server',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+
+      server.inject(options, (response) => {
+        expect(response.result.apiAccess).to.equal(false);
         cb();
       });
     });
@@ -243,8 +260,8 @@ describe('configuration-route', () => {
 
     it('should update resource-server', (cb) => {
       const token = getToken('update:resource-server');
-      auth0.get('/api/v2/resource-servers', resourceServers);
-      auth0.get('/api/v2/resource-servers', resourceServers);
+      auth0.get('/api/v2/resource-servers/urn:auth0-authz-api', resourceServer);
+      auth0.get('/api/v2/resource-servers/urn:auth0-authz-api', resourceServer);
       auth0.patch('/api/v2/resource-servers/rsid');
       const options = {
         method: 'PATCH',
@@ -365,7 +382,7 @@ describe('configuration-route', () => {
 
     it('should delete resource-server', (cb) => {
       const token = getToken('delete:resource-server');
-      auth0.get('/api/v2/resource-servers', resourceServers);
+      auth0.get('/api/v2/resource-servers/urn:auth0-authz-api', resourceServer);
       auth0.delete('/api/v2/resource-servers/rsid');
       const options = {
         method: 'DELETE',
