@@ -173,7 +173,6 @@
     "json-loader": "^0.5.4",
     "jwt-decode": "^2.0.1",
     "mocha": "3.3.0",
-    "ngrok": "^3.2.7",
     "nock": "9.0.13",
     "nodemon": "^2.0.2",
     "npm-run": "^4.1.2",
