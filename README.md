@@ -12,7 +12,7 @@ We provide documentation on how to install and use the Authorization Extension o
 
 #### How does this compare to the core Authorization features in Auth0?
 
-We have RBAC available in Auth0 as a core feature of the platform, rather than requiring the use of this extension. We plan on supporting user groups in the near future as well.
+We have RBAC available in Auth0 as a core feature of the platform, rather than requiring the use of this extension.
 
 For a detailed summary of the differences between this extension and the core features of the platform, [check this document](https://auth0.com/docs/authorization/concepts/core-vs-extension).
 
