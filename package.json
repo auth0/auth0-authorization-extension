@@ -95,7 +95,7 @@
     "joi": "9.0.4",
     "json-loader": "^0.5.4",
     "jsonwebtoken": "^7.0.0",
-    "jwks-rsa": "^1.1.1",
+    "jwks-rsa": "^1.12.3",
     "lodash": "^3.10.1",
     "lru-memoizer": "1.10.0",
     "moment": "^2.13.0",
