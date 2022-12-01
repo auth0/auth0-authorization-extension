@@ -169,7 +169,7 @@
     "history": "3.2.1",
     "immutable": "^3.8.1",
     "imports-loader": "0.7.1",
-    "jsdom": "^12.0.0",
+    "jsdom": "^16.5.0",
     "json-loader": "^0.5.4",
     "jwt-decode": "^2.0.1",
     "mocha": "3.3.0",
