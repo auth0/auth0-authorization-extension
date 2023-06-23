@@ -107,7 +107,7 @@
     "request": "^2.72.0",
     "request-promise": "^2.0.1",
     "sandboxjs": "^3.4.2",
-    "semver": "^5.1.0",
+    "semver": "^7.5.2",
     "superagent": "^2.3.0",
     "webtask-tools": "^3.0.0",
     "winston": "^2.2.0"
