@@ -24,10 +24,15 @@ workflows:
   build_and_test:
     jobs:
     - build-lint-test:
-        name: "build_lint_test_10"
-        version: "10"
-    - build-lint-test:
         name: "build_lint_test_12"
         version: "12"
+    - build-lint-test:
+        name: "build_lint_test_16"
+        version: "16"
         requires:
-          - build_lint_test_10
+          - build_lint_test_12
+    - build-lint-test:
+        name: "build_lint_test_18"
+        version: "18"
+        requires:
+          - build_lint_test_16
