@@ -53,7 +53,7 @@ const deleteGroupById = (groupId) =>
     json: true
   });
 
-describe.only('groups', () => {
+describe('groups', () => {
   before(() =>
     getAccessToken().then((response) => {
       accessToken = response;
@@ -109,7 +109,7 @@ describe.only('groups', () => {
       })
       .then((data) => {
         const exportedDataKeys = Object.keys(data);
-        expect(exportedDataKeys).toEqual([ 'groups', 'roles' ]);
+        expect(exportedDataKeys).toEqual([ 'groups', 'roles', 'permissions' ]);
       }));
 
   it('should create a new group', () =>
