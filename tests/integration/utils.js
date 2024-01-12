@@ -14,15 +14,30 @@ export const credentials = {
 /*
  * Get an access token for the Authorization Extension API.
  */
-export const getAccessToken = () => request.post({
-  uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
-  form: credentials,
-  json: true
-})
-  .then(res => res.access_token).then((token) => {
+export const getAccessToken = () => {
+  const uri = `https://${config('AUTH0_DOMAIN')}/oauth/token`;
+  const postOptions = {
+    uri,
+    form: credentials,
+    json: true
+  }
+  
+  console.log(`getAccessToken start, calling ${uri}`)
+  return request.post(postOptions)
+  .then(res => {
+    console.log('getAccessToken after first promise')
+    const accessToken = res.access_token;
+    return accessToken
+}).then((token) => {
+  console.log('getAccessToken after second promise')
     accessToken = token;
     return token;
-  });
+  })
+  .catch(err => {
+    console.error(err)
+    throw err
+  })
+};
 
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);

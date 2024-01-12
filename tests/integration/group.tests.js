@@ -54,17 +54,22 @@ const deleteGroupById = (groupId) =>
   });
 
 describe('groups', () => {
-  before(() =>
+  before(() => {
+    console.log('Before all start');
     getAccessToken().then((response) => {
+      console.log('Before all after promise')
       accessToken = response;
-      return request.post({
+      const foo = request.post({
         url: authzApi('/configuration/import'),
         form: {},
         headers: token(),
         resolveWithFullResponse: true
       });
+
+      console.log('Before all after second promise')
+      return foo;
     })
-  );
+});
 
   let testGroup;
   let testRole;
