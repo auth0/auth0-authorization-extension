@@ -26,8 +26,8 @@ export const getAccessToken = () => {
   return request.post(postOptions)
   .then(res => {
     console.log('getAccessToken after first promise');
-    const accessToken = res.access_token;
-    return accessToken;
+    const newAccessToken = res.access_token;
+    return newAccessToken;
   }).then((token) => {
     console.log('getAccessToken after second promise');
     accessToken = token;
