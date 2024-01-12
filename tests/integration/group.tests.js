@@ -57,7 +57,7 @@ describe('groups', () => {
   before(() => {
     console.log('Before all start');
     getAccessToken().then((response) => {
-      console.log('Before all after promise')
+      console.log('Before all after promise');
       accessToken = response;
       const foo = request.post({
         url: authzApi('/configuration/import'),
@@ -66,10 +66,10 @@ describe('groups', () => {
         resolveWithFullResponse: true
       });
 
-      console.log('Before all after second promise')
+      console.log('Before all after second promise');
       return foo;
-    })
-});
+    });
+  });
 
   let testGroup;
   let testRole;

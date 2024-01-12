@@ -20,23 +20,23 @@ export const getAccessToken = () => {
     uri,
     form: credentials,
     json: true
-  }
-  
-  console.log(`getAccessToken start, calling ${uri}`)
+  };
+
+  console.log(`getAccessToken start, calling ${uri}`);
   return request.post(postOptions)
   .then(res => {
-    console.log('getAccessToken after first promise')
+    console.log('getAccessToken after first promise');
     const accessToken = res.access_token;
-    return accessToken
-}).then((token) => {
-  console.log('getAccessToken after second promise')
+    return accessToken;
+  }).then((token) => {
+    console.log('getAccessToken after second promise');
     accessToken = token;
     return token;
   })
   .catch(err => {
-    console.error(err)
-    throw err
-  })
+    console.error(err);
+    throw err;
+  });
 };
 
 
