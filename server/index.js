@@ -1,4 +1,4 @@
-import Hapi from '@auth0/hapi';
+import Hapi from "@hapi/hapi";
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
