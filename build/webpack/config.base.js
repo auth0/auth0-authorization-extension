@@ -24,7 +24,6 @@ module.exports = {
       'react',
       'react-bootstrap',
       'react-dom',
-      'react-loader-advanced',
       'react-router',
       'react-redux',
       'redux',
