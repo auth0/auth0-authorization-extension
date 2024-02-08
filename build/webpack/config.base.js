@@ -10,30 +10,7 @@ module.exports = {
 
   // The application and the vendor libraries.
   entry: {
-    app: path.resolve(__dirname, '../../client/app.jsx'),
-    vendors: [
-      '@babel/polyfill',
-      'axios',
-      'bluebird',
-      'classnames',
-      'history',
-      'immutable',
-      'jwt-decode',
-      'lodash',
-      'moment',
-      'react',
-      'react-bootstrap',
-      'react-dom',
-      'react-loader-advanced',
-      'react-router',
-      'react-redux',
-      'redux',
-      'redux-form',
-      'redux-thunk',
-      'redux-logger',
-      'redux-promise-middleware',
-      'redux-simple-router'
-    ]
+    app: path.resolve(__dirname, '../../client/app.jsx')
   },
 
   // Output directory.
@@ -79,37 +56,37 @@ module.exports = {
     ]
   },
 
-  // Default plugins.
-  plugins: [
-    new webpack.NoEmitOnErrorsPlugin(),
-    new webpack.ProvidePlugin({
-      React: 'react',
-      Promise: 'imports-loader?this=>global!exports-loader?global.Promise!bluebird'
-    }),
-    new webpack.DefinePlugin({
-      __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
-      'process.env': {
-        BROWSER: JSON.stringify(true),
-        NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
-        WARN_DB_SIZE: 409600,
-        MAX_MULTISELECT_USERS: 5,
-        MULTISELECT_DEBOUNCE_MS: 250,
-        PER_PAGE: 10
-      },
-      __CLIENT__: JSON.stringify(true),
-      __SERVER__: JSON.stringify(false)
-    }),
-    new webpack.LoaderOptionsPlugin({
-      options: {
-        stylus: {
-          use: [
-            poststylus([
-              autoprefixer({ browsers: [ 'last 2 versions', 'IE > 8' ] }),
-              postcssReporter({ clearMessages: true })
-            ])
-          ]
-        }
-      }
-    })
-  ]
+  // // Default plugins.
+  // plugins: [
+  //   new webpack.NoEmitOnErrorsPlugin(),
+  //   new webpack.ProvidePlugin({
+  //     React: 'react',
+  //     Promise: 'imports-loader?this=>global!exports-loader?global.Promise!bluebird'
+  //   }),
+  //   new webpack.DefinePlugin({
+  //     __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+  //     'process.env': {
+  //       BROWSER: JSON.stringify(true),
+  //       NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+  //       WARN_DB_SIZE: 409600,
+  //       MAX_MULTISELECT_USERS: 5,
+  //       MULTISELECT_DEBOUNCE_MS: 250,
+  //       PER_PAGE: 10
+  //     },
+  //     __CLIENT__: JSON.stringify(true),
+  //     __SERVER__: JSON.stringify(false)
+  //   }),
+  //   new webpack.LoaderOptionsPlugin({
+  //     options: {
+  //       stylus: {
+  //         use: [
+  //           poststylus([
+  //             autoprefixer({ browsers: [ 'last 2 versions', 'IE > 8' ] }),
+  //             postcssReporter({ clearMessages: true })
+  //           ])
+  //         ]
+  //       }
+  //     }
+  //   })
+  // ]
 };
