@@ -1,12 +1,16 @@
 const path = require('path');
-console.log('dirname', __dirname)
+const project = require("../../package.json");
+
+const version = process.env.EXTENSION_VERSION || project.version;
+
+// Build output, which includes the hash.
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'client/app.jsx')
+    app: path.resolve(__dirname, '../../client/app.jsx')
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, '../../dist'),
+    filename : `auth0-authz.ui.${version}.js`,
   },
   module: {
     rules: [
@@ -41,7 +45,7 @@ module.exports = {
   },
   devServer: {
     static: {
-      directory: path.join(__dirname, 'dist'),
+      directory: path.join(__dirname, '../../dist'),
     },
     compress: true,
     port: 9000,

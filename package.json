@@ -9,7 +9,7 @@
   "scripts": {
     "clean": "rimraf ./dist",
     "build": "npm run clean && npm run client:build",
-    "client:build": "cross-env NODE_ENV=production webpack --config config.prod.js",
+    "client:build": "cross-env NODE_ENV=production webpack --config ./build/webpack/config.prod.js",
     "extension:build": "a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-authz.extension.$npm_package_version.js ./build/bundle.js",
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
