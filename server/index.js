@@ -1,10 +1,10 @@
-import Hapi from '@auth0/hapi';
-import Good from 'good';
+import Hapi from '@hapi/hapi';
+import Good from '@hapi/good';
 import Inert from 'inert';
 import Relish from 'relish';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
-import GoodConsole from 'good-console';
+import GoodConsole from '@hapi/good-console';
 import HapiSwagger from 'hapi-swagger';
 
 import config from './lib/config';

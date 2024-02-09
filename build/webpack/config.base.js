@@ -60,6 +60,11 @@ module.exports = {
         use: [ { loader: 'babel-loader' } ],
         exclude: path.join(__dirname, '../../node_modules/')
       },
+      // {
+      //   test: /\.jsx?$/,
+      //   use: [ { loader: 'babel-loader' } ],
+      //   exclude: filename => /node_modules/.test(filename) && !/@hapi\//.test(filename)
+      // },
       {
         test: /\.(png|ttf|svg|jpg|gif)/,
         loader: 'url-loader?limit=8192'
