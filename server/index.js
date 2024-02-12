@@ -1,4 +1,4 @@
-import Hapi from '@auth0/hapi';
+import Hapi from '@hapi/hapi';
 import Good from 'good';
 import Inert from 'inert';
 import Relish from 'relish';
@@ -43,8 +43,7 @@ export default (cb) => {
 
   const relishPlugin = Relish({ });
 
-  const server = new Hapi.Server();
-  server.connection({
+  const server = new Hapi.Server({
     host: 'localhost',
     port: 3000,
     routes: {
@@ -54,24 +53,25 @@ export default (cb) => {
       }
     }
   });
-  server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
-    if (err) {
-      return cb(err, null);
-    }
+  
+  // server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
+  //   if (err) {
+  //     return cb(err, null);
+  //   }
 
-    // Use the server logger.
-    logger.debug = (...args) => {
-      server.log([ 'debug' ], args.join(' '));
-    };
-    logger.info = (...args) => {
-      server.log([ 'info' ], args.join(' '));
-    };
-    logger.error = (...args) => {
-      server.log([ 'error' ], args.join(' '));
-    };
+  //   // Use the server logger.
+  //   logger.debug = (...args) => {
+  //     server.log([ 'debug' ], args.join(' '));
+  //   };
+  //   logger.info = (...args) => {
+  //     server.log([ 'info' ], args.join(' '));
+  //   };
+  //   logger.error = (...args) => {
+  //     server.log([ 'error' ], args.join(' '));
+  //   };
 
-    return cb(null, server);
-  });
+  //   return cb(null, server);
+  // });
 
   server.ext('onPreResponse', (request, reply) => {
     if (request.response && request.response.isBoom && request.response.output) {
