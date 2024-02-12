@@ -40,7 +40,9 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx'], // Add '.jsx' to the list of extensions to resolve
     fallback: {
-    "crypto": false // Tells webpack not to polyfill the 'crypto' module
+    "crypto": require.resolve('crypto-browserify'),
+    "stream": require.resolve('stream-browserify'),
+    // "stream": false
     },
   },
   devServer: {
