@@ -14,10 +14,10 @@ export default () => ({
       "Execute the authorization policy for a user in the context of a client. This will return the user's groups but also roles and permissions that apply to the current client.",
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         userId: Joi.string().required(),
         clientId: Joi.string().required()
-      },
+      }),
       payload: schema
     }
   },

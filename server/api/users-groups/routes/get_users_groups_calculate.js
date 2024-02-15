@@ -14,9 +14,9 @@ export default () => ({
     description: 'Calculate the group memberships for a user (including nested groups).',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      }
+      })
     }
   },
   handler: (req, reply) =>

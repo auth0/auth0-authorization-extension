@@ -12,9 +12,9 @@ export default () => ({
     description: 'Get the nested groups for a group.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
   handler: (req, reply) =>

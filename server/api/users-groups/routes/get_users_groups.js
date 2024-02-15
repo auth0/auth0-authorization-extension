@@ -14,9 +14,9 @@ export default () => ({
     description: 'Get the groups for a user. Add "?expand" to also load all roles and permissions for these groups.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      }
+      })
     }
   },
   handler: (req, reply) => {

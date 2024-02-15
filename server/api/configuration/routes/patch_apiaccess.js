@@ -10,10 +10,10 @@ export default () => ({
       scope: [ 'update:resource-server' ]
     },
     validate: {
-      payload: {
+      payload: Joi.object({
         apiAccess: Joi.boolean().required(),
         token_lifetime: Joi.number().integer()
-      }
+      })
     }
   },
   handler: (req, reply) => {

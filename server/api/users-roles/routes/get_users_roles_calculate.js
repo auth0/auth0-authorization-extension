@@ -13,9 +13,9 @@ export default () => ({
     description: 'Calculate the roles assigned to the user (including through group memberships).',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      }
+      })
     }
   },
   handler: (req, reply) =>

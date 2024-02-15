@@ -18,13 +18,13 @@ export default (server) => ({
       server.handlers.managementClient
     ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
-      query: {
+      }),
+      query: Joi.object({
         per_page: Joi.number().integer().min(1).max(25).default(25), // eslint-disable-line newline-per-chained-call
         page: Joi.number().integer().min(0).default(0)
-      }
+      })
     }
   },
   handler: (req, reply) =>
