@@ -10,9 +10,9 @@ export default (server) => ({
     },
     description: 'Get a single application based on its Client ID.',
     validate: {
-      params: {
+      params: Joi.object({
         clientId: Joi.string().required()
-      }
+      })
     },
     pre: [
       server.handlers.managementClient

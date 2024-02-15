@@ -13,12 +13,12 @@ export default () => ({
     description: 'Get a single group based on its unique identifier. Add "?expand" to also load all roles and permissions for this group.',
     tags: [ 'api' ],
     validate: {
-      query: {
+      query: Joi.object({
         expand: Joi.boolean()
-      },
-      params: {
+      }),
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
   handler: (req, reply) => {

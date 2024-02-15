@@ -12,10 +12,10 @@ export default () => ({
     description: 'Get all permissions in the system.',
     tags: [ 'api' ],
     validate: {
-      query: {
+      query: Joi.object({
         q: Joi.string().max(1000).allow('').default(''),
         field: Joi.string().max(1000).allow('').default('')
-      }
+      })
     }
   },
   handler: (req, reply) =>

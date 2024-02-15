@@ -13,9 +13,9 @@ export default () => ({
     description: 'Add a single user to groups.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      },
+      }),
       payload: Joi.array().items(Joi.string()).required().min(1)
     }
   },
