@@ -18,9 +18,7 @@ logger.error = function error(...args) {
 };
 
 const options = {
-  publicPath: 'http://localhost:3001/app/',
   hot: true,
-  inline: true,
   historyApiFallback: true,
   proxy: [
     {
@@ -30,17 +28,12 @@ const options = {
       }
     }
   ],
-
-  quiet: false,
-  noInfo: false,
-  watchOptions: {
-    aggregateTimeout: 300,
-    poll: 1000
-  },
-
-  stats: { colors: true },
   headers: {
     'Access-Control-Allow-Origin': '*'
+  },
+  devMiddleware: {
+    publicPath: 'http://localhost:3001/app/',
+    stats: { colors: true }
   }
 };
 

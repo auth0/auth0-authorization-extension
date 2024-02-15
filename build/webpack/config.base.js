@@ -67,11 +67,25 @@ module.exports = {
       // },
       {
         test: /\.(png|ttf|svg|jpg|gif)/,
-        loader: 'url-loader?limit=8192'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192
+            }
+          }
+        ]
       },
       {
         test: /\.(woff|woff2|eot)/,
-        loader: 'url-loader?limit=100000'
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 100000
+            }
+          }
+        ]
       },
       {
         test: /\.css$/,
