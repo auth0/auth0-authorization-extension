@@ -62,7 +62,7 @@ const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   };
 };
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   server.decorate('server', 'handlers', {
     managementClient: handlers.managementApiClient({
       domain: config('AUTH0_DOMAIN'),
@@ -76,10 +76,10 @@ export const register = (server, options, next) => {
       config('EXTENSION_SECRET')
     )
   });
-
-  next();
 };
 
-register.attributes = {
+
+export const handlersPlugin = {
+  register,
   name: 'handlers'
 };

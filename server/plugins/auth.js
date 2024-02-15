@@ -11,7 +11,7 @@ const hashApiKey = (key) => crypto.createHmac('sha256', `${key} + ${config('AUTH
   .update(config('EXTENSION_SECRET'))
   .digest('hex');
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   server.auth.scheme('extension-secret', () =>
     ({
       authenticate: (request, reply) => {
@@ -61,7 +61,7 @@ export const register = (server, options, next) => {
     // Get the complete decoded token, because we need info from the header (the kid)
     complete: true,
 
-    verifyFunc: (decoded, req, callback) => {
+    verify: (decoded, req, callback) => {
       if (!decoded) {
         return callback(null, false);
       }
@@ -116,7 +116,7 @@ export const register = (server, options, next) => {
   });
   server.auth.default('jwt');
   const session = {
-    register: tools.plugins.dashboardAdminSession,
+    ...tools.plugins.dashboardAdminSession.plugin,
     options: {
       stateKey: 'authz-state',
       nonceKey: 'authz-nonce',
@@ -138,15 +138,22 @@ export const register = (server, options, next) => {
       }
     }
   };
-  server.register(session, (err) => {
-    if (err) {
-      next(err);
-    }
+  server.register(session);
 
-    next();
-  });
+// (err) => {
+//     if (err) {
+//       next(err);
+//     }
+
+//     next();
+//   }
 };
 
-register.attributes = {
+// register.attributes = {
+//   name: 'auth'
+// };
+
+export const authPlugin = {
+  register,
   name: 'auth'
 };

@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import Good from '@hapi/good';
+// import Good from '@hapi/good';
 import Inert from 'inert';
 import Relish from 'relish';
 import Blipp from 'blipp';
@@ -8,12 +8,13 @@ import GoodConsole from '@hapi/good-console';
 import HapiSwagger from 'hapi-swagger';
 
 import config from './lib/config';
-import logger from './lib/logger';
+// import logger from './lib/logger';
 import plugins from './plugins';
 
-export default (cb) => {
+export default async () => {
   const goodPlugin = {
-    register: Good,
+    // register: Good,
+    plugin: require('@hapi/good'),
     options: {
       ops: {
         interval: 30000
@@ -27,7 +28,8 @@ export default (cb) => {
   };
 
   const hapiSwaggerPlugin = {
-    register: HapiSwagger,
+    // register: HapiSwagger,
+    plugin: HapiSwagger,
     options: {
       documentationPage: false,
       swaggerUI: false
@@ -43,8 +45,7 @@ export default (cb) => {
 
   const relishPlugin = Relish({ });
 
-  const server = new Hapi.Server();
-  server.connection({
+  const server = new Hapi.Server({
     host: 'localhost',
     port: 3000,
     routes: {
@@ -54,24 +55,29 @@ export default (cb) => {
       }
     }
   });
-  server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
-    if (err) {
-      return cb(err, null);
-    }
 
-    // Use the server logger.
-    logger.debug = (...args) => {
-      server.log([ 'debug' ], args.join(' '));
-    };
-    logger.info = (...args) => {
-      server.log([ 'info' ], args.join(' '));
-    };
-    logger.error = (...args) => {
-      server.log([ 'error' ], args.join(' '));
-    };
+  await server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ]);
 
-    return cb(null, server);
-  });
+
+// (err) => {
+//     if (err) {
+//       return cb(err, null);
+//     }
+
+//     // Use the server logger.
+//     logger.debug = (...args) => {
+//       server.log([ 'debug' ], args.join(' '));
+//     };
+//     logger.info = (...args) => {
+//       server.log([ 'info' ], args.join(' '));
+//     };
+//     logger.error = (...args) => {
+//       server.log([ 'error' ], args.join(' '));
+//     };
+
+//     return cb(null, server);
+//   }
+
 
   server.ext('onPreResponse', (request, reply) => {
     if (request.response && request.response.isBoom && request.response.output) {
