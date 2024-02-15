@@ -93,13 +93,12 @@ const clientRoutes = [
   '/import-export'
 ];
 
-export const register = (server, options, next) => {
+export const register = async (server) => {
   clientRoutes.map(link => server.route(assembleHtmlRoute(link)));
-
-  next();
 };
 
-register.attributes = {
+export const htmlPlugin = {
+  register,
   name: 'html'
 };
 
