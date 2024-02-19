@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz-extension",
-  "version": "2.11.0",
+  "version": "2.13.0",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": ">=12"
@@ -13,7 +13,7 @@
     "extension:build": "a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-authz.extension.$npm_package_version.js ./build/bundle.js",
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
-    "test-frontend": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/client/**/*.tests.js",
+    "test-frontend": "cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/client/reducers/role.tests.js",
     "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js",
     "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js --watch",
     "test:pre": "npm run test:clean",
@@ -102,6 +102,8 @@
     "jsonwebtoken": "^7.0.0",
     "jwks-rsa": "^1.1.1",
     "lodash": "^3.10.1",
+    "lru-memoizer": "^2.2.0",
+    "mini-css-extract-plugin": "^2.8.0",
     "moment": "^2.13.0",
     "ms": "^0.7.1",
     "nconf": "^0.8.4",
@@ -213,6 +215,7 @@
     "style-loader": "0.17.0",
     "stylus": "^0.54.8",
     "stylus-loader": "^8.1.0",
+    "terser-webpack-plugin": "^5.3.10",
     "url-loader": "0.5.8",
     "webpack": "^5.90.1",
     "webpack-cli": "^5.1.4",
