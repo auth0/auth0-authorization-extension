@@ -1,6 +1,6 @@
 import config from '../lib/config';
 
-export const register = (server, options, next) => {
+const register = (server) => {
   server.route(require('../api/policy/routes/post_user').default(server));
   server.route(require('../api/applications/routes/get_application').default(server));
   server.route(require('../api/applications/routes/get_applications').default(server));
@@ -61,13 +61,11 @@ export const register = (server, options, next) => {
     method: 'GET',
     path: '/admins/login',
     config: { auth: false },
-    handler: (request, reply) => reply('Redirecting to login page...').redirect(`${config('PUBLIC_WT_URL')}/login`)
+    handler: (request, h) => h.response('Redirecting to login page...').redirect(`${config('PUBLIC_WT_URL')}/login`)
   });
-  next();
 };
 
-register.attributes = {
+export const routesPlugin = {
+  register,
   name: 'routes'
 };
-
-export default register;

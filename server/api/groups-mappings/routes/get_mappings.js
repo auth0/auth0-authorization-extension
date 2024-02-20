@@ -15,9 +15,9 @@ export default (server) => ({
       server.handlers.managementClient
     ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
   handler: (req, reply) =>

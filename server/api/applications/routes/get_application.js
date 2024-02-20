@@ -10,16 +10,16 @@ export default (server) => ({
     },
     description: 'Get a single application based on its Client ID.',
     validate: {
-      params: {
+      params: Joi.object({
         clientId: Joi.string().required()
-      }
+      })
     },
     pre: [
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) =>
-    req.pre.auth0.clients.get({ client_id: req.params.clientId })
-      .then(client => reply(client))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const result = await req.pre.auth0.clients.get({ client_id: req.params.clientId });
+    return h.response(result);
+  }
 });

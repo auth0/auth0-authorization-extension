@@ -15,16 +15,15 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const group = req.payload;
-    return req.storage.updateGroup(req.params.id, group)
-      .then((updated) => reply(updated))
-      .catch(err => reply.error(err));
+    const updated = await req.storage.updateGroup(req.params.id, group);
+    return h.response(updated);
   }
 });

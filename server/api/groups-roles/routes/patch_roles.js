@@ -14,9 +14,9 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
     }
   },

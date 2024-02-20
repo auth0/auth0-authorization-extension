@@ -22,29 +22,26 @@ export default (server) => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const config = req.payload;
 
-    compileRule(req.storage, req.pre.auth0, config, req.auth.credentials.email || 'unknown')
-      .then((script) => {
-        multipartRequest(req.pre.auth0, 'rules', { fields: 'name,id' })
-          .then(rules => {
-            const payload = {
-              name: 'auth0-authorization-extension',
-              enabled: true,
-              script
-            };
+    const script = compileRule(req.storage, req.pre.auth0, config, req.auth.credentials.email || 'unknown');
+    const rules = await multipartRequest(req.pre.auth0, 'rules', { fields: 'name,id' });
 
-            const rule = _.find(rules, { name: payload.name });
-            if (!rule) {
-              return req.pre.auth0.rules.create({ stage: 'login_success', ...payload });
-            }
+    const payload = {
+      name: 'auth0-authorization-extension',
+      enabled: true,
+      script
+    };
 
-            return req.pre.auth0.rules.update({ id: rule.id }, payload);
-          });
-      })
-      .then(() => req.storage.updateConfiguration(config))
-      .then((updated) => reply(updated))
-      .catch(err => reply.error(err));
+    const rule = _.find(rules, { name: payload.name });
+    if (!rule) {
+      await req.pre.auth0.rules.create({ stage: 'login_success', ...payload });
+    }
+
+    await req.pre.auth0.rules.update({ id: rule.id }, payload);
+
+    const updated = await req.storage.updateConfiguration(config);
+    return h.response(updated);
   }
 });

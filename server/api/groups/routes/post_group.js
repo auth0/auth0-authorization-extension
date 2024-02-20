@@ -17,10 +17,9 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const group = req.payload;
-    return req.storage.createGroup(group)
-      .then((created) => reply(created))
-      .catch(err => reply.error(err));
+    const created = await req.storage.createGroup(group);
+    return h.response(created);
   }
 });

@@ -1,6 +1,6 @@
 import { handlers } from 'auth0-extension-hapi-tools';
 import * as tools from 'auth0-extension-tools';
-import * as Boom from 'boom';
+import * as Boom from '@hapi/boom';
 
 import config from '../lib/config';
 import logger from '../lib/logger';
@@ -51,7 +51,7 @@ const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
             }
           } catch (e) {
             logger.error('Invalid token:', token);
-            return res(Boom.wrap(e, 401, e.message));
+            return res(Boom.Boom(e, { statusCode: 401, message: e.message }));
           }
         }
 
@@ -62,7 +62,7 @@ const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   };
 };
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   server.decorate('server', 'handlers', {
     managementClient: handlers.managementApiClient({
       domain: config('AUTH0_DOMAIN'),
@@ -76,10 +76,10 @@ export const register = (server, options, next) => {
       config('EXTENSION_SECRET')
     )
   });
-
-  next();
 };
 
-register.attributes = {
+
+export const handlersPlugin = {
+  register,
   name: 'handlers'
 };
