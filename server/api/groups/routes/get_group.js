@@ -21,15 +21,13 @@ export default () => ({
       })
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     if (req.query.expand) {
-      return getGroupExpanded(req.storage, req.params.id)
-        .then(group => reply(group))
-        .catch(err => reply.error(err));
+      const groupExpanded = await getGroupExpanded(req.storage, req.params.id);
+      return h.response(groupExpanded);
     }
 
-    return req.storage.getGroup(req.params.id)
-      .then(group => reply({ _id: group._id, name: group.name, description: group.description }))
-      .catch(err => reply.error(err));
+    const group = await req.storage.getGroup(req.params.id);
+    return h.response({ _id: group._id, name: group.name, description: group.description });
   }
 });

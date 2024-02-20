@@ -21,10 +21,9 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const group = req.payload;
-    return req.storage.updateGroup(req.params.id, group)
-      .then((updated) => reply(updated))
-      .catch(err => reply.error(err));
+    const updated = await req.storage.updateGroup(req.params.id, group);
+    return h.response(updated);
   }
 });

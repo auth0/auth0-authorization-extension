@@ -19,11 +19,7 @@ export default (server) => ({
     ]
   },
   handler: async (req, h) => {
-    try {
-      const result = await req.pre.auth0.clients.get({ client_id: req.params.clientId });
-      return h.response(result);
-    } catch (error) {
-      return h.response(error);
-    }
+    const result = await req.pre.auth0.clients.get({ client_id: req.params.clientId });
+    return h.response(result);
   }
 });
