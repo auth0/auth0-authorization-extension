@@ -13,7 +13,7 @@ const assembleHtmlRoute = (link) => ({
     description: 'Render HTML',
     auth: false
   },
-  handler: (req, reply) => {
+  handler: (req, h) => {
     const cfg = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
@@ -25,7 +25,7 @@ const assembleHtmlRoute = (link) => ({
 
     // Development.
     if (process.env.NODE_ENV === 'development') {
-      return reply(ejs.render(template, {
+      return h.response(ejs.render(template, {
         config: {
           ...cfg,
           API_BASE: 'http://localhost:3000/'
@@ -39,7 +39,7 @@ const assembleHtmlRoute = (link) => ({
     // Render from CDN.
     const clientVersion = config('CLIENT_VERSION');
     if (clientVersion) {
-      return reply(ejs.render(template, {
+      return h.response(ejs.render(template, {
         config: cfg,
         assets: { version: clientVersion }
       }));
@@ -71,7 +71,7 @@ const assembleHtmlRoute = (link) => ({
       }
 
       // Render the HTML page.
-      reply(ejs.render(template, locals));
+      return h.response(ejs.render(template, locals));
     });
   }
 });

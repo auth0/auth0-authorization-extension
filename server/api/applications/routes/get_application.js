@@ -18,8 +18,12 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) =>
-    req.pre.auth0.clients.get({ client_id: req.params.clientId })
-      .then(client => reply(client))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    try {
+      const result = await req.pre.auth0.clients.get({ client_id: req.params.clientId });
+      return h.response(result);
+    } catch (error) {
+      return h.response(error);
+    }
+  }
 });

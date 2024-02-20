@@ -13,12 +13,13 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) =>
+  handler: (req, h) => {
     multipartRequest(req.pre.auth0, 'clients', { is_global: false, fields: 'client_id,name,callbacks,app_type' })
-      .then(clients => _.chain(clients)
-        .filter(client => client.app_type === 'spa' || client.app_type === 'native' || client.app_type === 'regular_web')
-        .sortBy((client) => client.name.toLowerCase())
-        .value())
-      .then(applications => reply(applications))
-      .catch(err => reply.error(err))
+    .then(clients => _.chain(clients)
+    .filter(client => client.app_type === 'spa' || client.app_type === 'native' || client.app_type === 'regular_web')
+    .sortBy((client) => client.name.toLowerCase())
+    .value())
+    .then(applications => h.response(applications))
+      .catch(err => { throw new Error(err); });
+  }
 });

@@ -1,5 +1,4 @@
 import Hapi from '@hapi/hapi';
-// import Good from '@hapi/good';
 import Inert from 'inert';
 import Relish from 'relish';
 import Blipp from 'blipp';
@@ -8,12 +7,11 @@ import GoodConsole from '@hapi/good-console';
 import HapiSwagger from 'hapi-swagger';
 
 import config from './lib/config';
-// import logger from './lib/logger';
+import logger from './lib/logger';
 import plugins from './plugins';
 
 export default async () => {
   const goodPlugin = {
-    // register: Good,
     plugin: require('@hapi/good'),
     options: {
       ops: {
@@ -28,7 +26,6 @@ export default async () => {
   };
 
   const hapiSwaggerPlugin = {
-    // register: HapiSwagger,
     plugin: HapiSwagger,
     options: {
       documentationPage: false,
@@ -56,37 +53,35 @@ export default async () => {
     }
   });
 
-  await server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ]);
+  try {
+    await server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ]);
+  } catch (error) {
+    logger.error('Error during plugin registration');
+    logger.error(error);
+    if (error.stack) {
+      logger.error(error.stack);
+    }
+  }
 
-
-// (err) => {
-//     if (err) {
-//       return cb(err, null);
-//     }
-
-//     // Use the server logger.
-//     logger.debug = (...args) => {
-//       server.log([ 'debug' ], args.join(' '));
-//     };
-//     logger.info = (...args) => {
-//       server.log([ 'info' ], args.join(' '));
-//     };
-//     logger.error = (...args) => {
-//       server.log([ 'error' ], args.join(' '));
-//     };
-
-//     return cb(null, server);
-//   }
-
-
-  server.ext('onPreResponse', (request, reply) => {
+  server.ext('onPreResponse', (request, h) => {
     if (request.response && request.response.isBoom && request.response.output) {
       server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.url.path}`);
       server.log([ 'error' ], `Response: ${JSON.stringify(request.response, null, 2)}`);
     }
 
-    return reply.continue();
+    return h.continue;
   });
+
+  // Use the server logger.
+  logger.debug = (...args) => {
+    server.log([ 'debug' ], args.join(' '));
+  };
+  logger.info = (...args) => {
+    server.log([ 'info' ], args.join(' '));
+  };
+  logger.error = (...args) => {
+    server.log([ 'error' ], args.join(' '));
+  };
 
   return server;
 };
