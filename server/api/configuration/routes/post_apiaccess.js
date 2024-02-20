@@ -9,7 +9,8 @@ export default () => ({
       scope: [ 'create:resource-server' ]
     }
   },
-  handler: (req, reply) => createApi(req)
-    .then(api => reply(api))
-    .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const api = await createApi(req);
+    return h.response(api);
+  }
 });

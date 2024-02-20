@@ -7,17 +7,16 @@ export default () => ({
       scope: [ 'read:configuration' ]
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     if (
       !req.storage.provider ||
       !req.storage.provider.storageContext ||
       typeof req.storage.provider.storageContext.read !== 'function'
     ) {
-      return reply.error(new Error('Unable to use "export" without proper storage'));
+      throw new Error('Unable to use "export" without proper storage');
     }
 
-    return req.storage.provider.storageContext.read()
-      .then(result => reply(result))
-      .catch(err => reply.error(err));
+    const result = await req.storage.provider.storageContext.read();
+    return h.response(result);
   }
 });
