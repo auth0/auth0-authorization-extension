@@ -33,4 +33,8 @@ config.plugins = config.plugins.concat([
   new webpack.HotModuleReplacementPlugin()
 ]);
 
+
+config.mode = 'development';
+
+
 module.exports = config;

@@ -61,12 +61,8 @@ const register = (server) => {
     method: 'GET',
     path: '/admins/login',
     config: { auth: false },
-    handler: (request, reply) => reply('Redirecting to login page...').redirect(`${config('PUBLIC_WT_URL')}/login`)
+    handler: (request, h) => h.response('Redirecting to login page...').redirect(`${config('PUBLIC_WT_URL')}/login`)
   });
-};
-
-register.attributes = {
-  name: 'routes'
 };
 
 export const routesPlugin = {
