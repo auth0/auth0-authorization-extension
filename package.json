@@ -13,7 +13,7 @@
     "extension:build": "a0-ext build:server ./webtask.js ./dist && cp ./dist/auth0-authz.extension.$npm_package_version.js ./build/bundle.js",
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
-    "test-frontend": "cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/client/reducers/role.tests.js",
+    "test-frontend": "cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/client/**/*.tests.js",
     "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js",
     "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha tests/unit/mocha.js ./tests/unit/**/*.tests.js --watch",
     "test:pre": "npm run test:clean",
