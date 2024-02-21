@@ -13,7 +13,7 @@ config.profile = false;
 const version = process.env.EXTENSION_VERSION || project.version;
 
 // Update build output to include the hash.
-config.output.filename = '[name].[contenthash].js';
+config.output.filename = `auth0-authz.ui.${version}.js`;
 
 config.resolve = {
   extensions: ['.js', '.jsx'], // Add '.jsx' to the list of extensions to resolve
@@ -27,7 +27,7 @@ config.module.rules = ([
   {
     test: /\.jsx?$/,
     use: [ { loader: 'babel-loader' } ],
-    exclude: path.join(__dirname, '../../node_modules/')
+    exclude: path.join(__dirname, '../../node_modules/'),
   },
   {
     test: /\.css$/,
@@ -74,27 +74,27 @@ config.plugins = [
 
 config.optimization = {
   minimize: true,
-  // minimizer: [
-  //   new TerserPlugin({
-  //     terserOptions: {
-  //       sourceMap: true,
-  //       mangle: true,
-  //       output: {
-  //         comments: false,
-  //       },
-  //       compress: {
-  //         sequences: true,
-  //         dead_code: true,
-  //         conditionals: true,
-  //         booleans: true,
-  //         unused: true,
-  //         if_return: true,
-  //         join_vars: true,
-  //         drop_console: true,
-  //       },
-  //     },
-  //   }),
-  // ]
+  minimizer: [
+    new TerserPlugin({
+      terserOptions: {
+        sourceMap: true,
+        mangle: true,
+        output: {
+          comments: false,
+        },
+        compress: {
+          sequences: true,
+          dead_code: true,
+          conditionals: true,
+          booleans: true,
+          unused: true,
+          if_return: true,
+          join_vars: true,
+          drop_console: true,
+        },
+      },
+    }),
+  ],
   splitChunks: {
     cacheGroups: {
       defaultVendors: false, // Disable the default vendor splitting
@@ -123,9 +123,9 @@ config.optimization = {
           'redux-promise-middleware',
           'redux-simple-router',
         ].join('|')})[\\/]`),
-        name: 'vendors',
-        chunks: 'all', // Apply this group only to initial chunks
+        chunks: 'all',
         enforce: true, // Ensure this chunk is created
+        filename: `auth0-authz.ui.vendors.${version}.js`
       },
     },
   },
