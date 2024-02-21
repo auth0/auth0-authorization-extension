@@ -9,6 +9,8 @@ module.exports = {
     app: path.resolve(__dirname, '../../client/app.jsx')
   },
 
+  target:'web',
+
   // Output directory.
   output: {
     path: path.join(__dirname, '../../dist'),
