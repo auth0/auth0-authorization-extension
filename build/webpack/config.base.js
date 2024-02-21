@@ -1,7 +1,7 @@
 const path = require('path');
 
 module.exports = {
-  devtool: 'cheap-module-source-map',
+  devtool: 'source-map',
   stats: true,
 
   // The application and the vendor libraries.
