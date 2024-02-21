@@ -74,27 +74,27 @@ config.plugins = [
 
 config.optimization = {
   minimize: true,
-  minimizer: [
-    new TerserPlugin({
-      terserOptions: {
-        sourceMap: true,
-        mangle: true,
-        output: {
-          comments: false,
-        },
-        compress: {
-          sequences: true,
-          dead_code: true,
-          conditionals: true,
-          booleans: true,
-          unused: true,
-          if_return: true,
-          join_vars: true,
-          drop_console: true,
-        },
-      },
-    }),
-  ],
+  // minimizer: [
+  //   new TerserPlugin({
+  //     terserOptions: {
+  //       sourceMap: true,
+  //       mangle: true,
+  //       output: {
+  //         comments: false,
+  //       },
+  //       compress: {
+  //         sequences: true,
+  //         dead_code: true,
+  //         conditionals: true,
+  //         booleans: true,
+  //         unused: true,
+  //         if_return: true,
+  //         join_vars: true,
+  //         drop_console: true,
+  //       },
+  //     },
+  //   }),
+  // ]
   splitChunks: {
     cacheGroups: {
       defaultVendors: false, // Disable the default vendor splitting
