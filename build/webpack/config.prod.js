@@ -65,7 +65,10 @@ config.plugins = [
     },
     __CLIENT__: JSON.stringify(true),
     __SERVER__: JSON.stringify(false)
-  })
+  }),
+  new webpack.ProvidePlugin({
+    process: 'process/browser',
+  }),
 ];
 
 
