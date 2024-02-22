@@ -2,10 +2,12 @@ import Boom from '@hapi/boom';
 import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
-import * as tools from 'auth0-extension-hapi-tools';
+// import * as tools from 'auth0-extension-hapi-tools';
 
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
+import { plugin } from './session';
+
 
 const hashApiKey = (key) => crypto.createHmac('sha256', `${key} + ${config('AUTH0_CLIENT_SECRET')}`)
   .update(config('EXTENSION_SECRET'))
@@ -116,7 +118,8 @@ const register = async (server) => {
   });
   server.auth.default('jwt');
   const session = {
-    plugin: tools.plugins.dashboardAdminSession.plugin,
+    // plugin: tools.plugins.dashboardAdminSession.plugin,
+    plugin,
     options: {
       stateKey: 'authz-state',
       nonceKey: 'authz-nonce',
