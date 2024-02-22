@@ -12,9 +12,9 @@ export default () => ({
     description: 'Remove a single user from roles.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      },
+      }),
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
     }
   },

@@ -11,9 +11,9 @@ export default () => ({
     description: 'Get a single role based on its unique identifier.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
   handler: (req, reply) =>

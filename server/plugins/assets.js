@@ -1,6 +1,6 @@
 import path from 'path';
 
-export const register = (server, options, next) => {
+export const register = async (server) => {
   server.route({
     method: 'GET',
     path: '/app/{param*}',
@@ -14,10 +14,10 @@ export const register = (server, options, next) => {
       }
     }
   });
-
-  next();
 };
 
-register.attributes = {
+
+export const assetsPlugin = {
+  register,
   name: 'assets'
 };

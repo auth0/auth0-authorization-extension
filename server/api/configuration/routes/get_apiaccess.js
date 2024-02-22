@@ -9,7 +9,8 @@ export default () => ({
       scope: [ 'read:resource-server' ]
     }
   },
-  handler: (req, reply) => getApi(req)
-    .then((api) => reply({ apiAccess: !!api.identifier, token_lifetime: api.token_lifetime }))
-    .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const api = await getApi(req);
+    return h.response({ apiAccess: !!api.identifier, token_lifetime: api.token_lifetime });
+  }
 });

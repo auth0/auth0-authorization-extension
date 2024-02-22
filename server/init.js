@@ -6,7 +6,7 @@ import { createProvider } from './lib/storage/providers';
 import createServer from './';
 import logger from './lib/logger';
 
-export default (cfg, storageContext, cb) => {
+export default async (cfg, storageContext, cb) => {
   if (cb == null) {
     cb = err => {
       if (err) {
@@ -28,5 +28,9 @@ export default (cfg, storageContext, cb) => {
   );
 
   // Start the server.
-  return createServer(cb);
+  const server = await createServer();
+
+  cb(null, server);
+
+  return server;
 };

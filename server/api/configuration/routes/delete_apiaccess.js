@@ -9,7 +9,8 @@ export default () => ({
       scope: [ 'delete:resource-server' ]
     }
   },
-  handler: (req, reply) => deleteApi(req)
-    .then(() => reply().code(204))
-    .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    await deleteApi(req);
+    return h.response.code(204);
+  }
 });

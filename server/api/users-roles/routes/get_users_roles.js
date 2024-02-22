@@ -12,9 +12,9 @@ export default () => ({
     description: 'Get the roles for a user.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      }
+      })
     }
   },
   handler: (req, reply) =>

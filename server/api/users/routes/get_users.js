@@ -11,12 +11,12 @@ export default (server) => ({
     },
     description: 'Get all users.',
     validate: {
-      query: {
+      query: Joi.object({
         q: Joi.string().max(1000).allow('').default(''),
         field: Joi.string().max(1000).allow('').default(''),
         per_page: Joi.number().integer().min(1).max(100).default(100), // eslint-disable-line newline-per-chained-call
         page: Joi.number().integer().min(0).default(0)
-      }
+      })
     },
     pre: [
       server.handlers.managementClient

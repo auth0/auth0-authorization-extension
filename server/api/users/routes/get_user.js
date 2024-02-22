@@ -10,9 +10,9 @@ export default (server) => ({
     },
     description: 'Get a single user based on its unique identifier.',
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      }
+      })
     },
     pre: [
       server.handlers.managementClient
