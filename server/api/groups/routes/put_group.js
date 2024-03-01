@@ -4,7 +4,7 @@ import schema from '../schemas/group';
 export default () => ({
   method: 'PUT',
   path: '/api/groups/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]

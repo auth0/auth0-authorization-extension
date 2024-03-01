@@ -4,7 +4,7 @@ import { getApi, createApi, updateApi, deleteApi } from '../../../lib/apiaccess'
 export default () => ({
   method: 'PATCH',
   path: '/api/configuration/resource-server',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:resource-server' ]

@@ -6,7 +6,7 @@ import multipartRequest from '../../../lib/multipartRequest';
 export default (server) => ({
   method: 'DELETE',
   path: '/.extensions/on-uninstall',
-  config: {
+  options: {
     auth: false,
     pre: [
       server.handlers.validateHookToken('/.extensions/on-uninstall'),

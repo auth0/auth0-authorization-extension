@@ -5,7 +5,7 @@ import { getRolesForUser } from '../../../lib/queries';
 export default () => ({
   method: 'GET',
   path: '/api/users/{id}/roles/calculate',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:roles' ]

@@ -5,7 +5,7 @@ import Joi from 'joi';
 export default () => ({
   method: 'PATCH',
   path: '/api/users/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:roles' ]

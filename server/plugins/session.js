@@ -3,8 +3,9 @@ const path = require('path');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const tools = require('auth0-extension-tools');
+const hapiTools = require('auth0-extension-hapi-tools');
 
-const urlHelpers = tools.urlHelpers;
+const urlHelpers = hapiTools.urlHelpers;
 
 const buildUrl = function(paths) {
   return path.join.apply(null, paths)
@@ -90,7 +91,7 @@ const register = async function(server, options) {
   server.route({
     method: 'GET',
     path: urlPrefix + '/login',
-    config: {
+    options: {
       auth: false
     },
     handler: function(req, h) {
@@ -116,15 +117,20 @@ const register = async function(server, options) {
   server.route({
     method: 'POST',
     path: urlPrefix + '/login/callback',
-    config: {
+    options: {
       auth: false
     },
     handler: async function(req, h) {
       var decoded;
 
       try {
+        console.log({ fn: 'POST /login/callback handler' }, req.payload);
+
         decoded = jwt.decode(req.payload.id_token);
+
+        console.log({ decoded });
       } catch (e) {
+        console.log('decoding failed', e);
         decoded = null;
       }
 
@@ -148,8 +154,8 @@ const register = async function(server, options) {
           audience: options.audience
         });
       } catch (error) {
-        server.log([ 'error' ], 'Login callback failed', err);
-        return Boom.wrap(err);
+        server.log([ 'error' ], 'Login callback failed', error);
+        return Boom.wrap(error);
       }
 
       return h.response('<html>' +
@@ -170,7 +176,7 @@ const register = async function(server, options) {
   server.route({
     method: 'GET',
     path: urlPrefix + '/logout',
-    config: {
+    options: {
       auth: false
     },
     handler: function(req, h) {
@@ -193,7 +199,7 @@ const register = async function(server, options) {
   server.route({
     method: 'GET',
     path: '/.well-known/oauth2-client-configuration',
-    config: {
+    options: {
       auth: false
     },
     handler: function(req, h) {

@@ -4,7 +4,7 @@ import schema from '../schemas/mappings';
 export default () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/mappings',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]

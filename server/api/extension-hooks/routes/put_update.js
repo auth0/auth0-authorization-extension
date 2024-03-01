@@ -1,7 +1,7 @@
 export default (server) => ({
   method: 'PUT',
   path: '/.extensions/on-update',
-  config: {
+  options: {
     auth: false,
     pre: [
       server.handlers.validateHookToken('/.extensions/on-update'),

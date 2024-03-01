@@ -4,7 +4,7 @@ import config from '../../../lib/config';
 export default (server) => ({
   method: 'GET',
   path: '/api/users',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:users' ]

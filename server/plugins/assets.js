@@ -4,7 +4,7 @@ export const register = async (server) => {
   server.route({
     method: 'GET',
     path: '/app/{param*}',
-    config: {
+    options: {
       auth: false
     },
     handler: {

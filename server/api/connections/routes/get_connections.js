@@ -4,7 +4,7 @@ import multipartRequest from '../../../lib/multipartRequest';
 export default (server) => ({
   method: 'GET',
   path: '/api/connections',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:connections' ]

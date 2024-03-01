@@ -5,7 +5,7 @@ import { getGroupExpanded } from '../../../lib/queries';
 export default () => ({
   method: 'GET',
   path: '/api/groups/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]

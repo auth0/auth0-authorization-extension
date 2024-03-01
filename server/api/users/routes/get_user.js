@@ -3,7 +3,7 @@ import Joi from 'joi';
 export default (server) => ({
   method: 'GET',
   path: '/api/users/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:users' ]

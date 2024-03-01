@@ -7,7 +7,7 @@ import { getChildGroups, getMembers } from '../../../lib/queries';
 export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/members/nested',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]

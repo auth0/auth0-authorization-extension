@@ -3,7 +3,7 @@ import Joi from 'joi';
 export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]

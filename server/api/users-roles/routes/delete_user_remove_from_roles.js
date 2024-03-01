@@ -4,7 +4,7 @@ import Joi from 'joi';
 export default () => ({
   method: 'DELETE',
   path: '/api/users/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:roles' ]

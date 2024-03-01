@@ -7,7 +7,7 @@ import multipartRequest from '../../../lib/multipartRequest';
 export default (server) => ({
   method: 'PATCH',
   path: '/api/configuration',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:configuration' ]

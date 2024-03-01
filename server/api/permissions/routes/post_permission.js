@@ -3,7 +3,7 @@ import schema from '../schemas/permission';
 export default () => ({
   method: 'POST',
   path: '/api/permissions',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'create:permissions' ]

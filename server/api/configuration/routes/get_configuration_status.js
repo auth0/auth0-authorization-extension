@@ -4,7 +4,7 @@ import multipartRequest from '../../../lib/multipartRequest';
 export default (server) => ({
   method: 'GET',
   path: '/api/configuration/status',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:configuration' ]
@@ -14,14 +14,25 @@ export default (server) => ({
     ]
   },
   handler: async (req, h) => {
+    console.log({ fn: 'GET /api/configuration/status handler' });
+
     const rules = await multipartRequest(req.pre.auth0, 'rules', { fields: 'name,enabled' });
     const ruleRecord = _.find(rules, { name: 'auth0-authorization-extension' });
     const rule = {
       exists: !!ruleRecord,
       enabled: ruleRecord ? ruleRecord.enabled : false
     };
+
     try {
       const database = req.storage.getStatus();
+
+      console.log({
+        rules,
+        ruleRecord,
+        rule,
+        database
+      });
+
       return h.response({ rule, database });
     } catch (dbError) {
       return h.response({ rule, database: { size: 0, type: 'unknown' } });

@@ -1,149 +1,135 @@
 'use strict';
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const webpack = require('webpack');
 
-// const StatsWriterPlugin = require("webpack-stats-plugin").StatsWriterPlugin;
-// const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const webpack = require('webpack');
+const path = require('path');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 const project = require('../../package.json');
-// const config = require('./config.base.js');
+const config = require('./config.base.js');
 
-// config.profile = false;
+config.profile = false;
 
 const version = process.env.EXTENSION_VERSION || project.version;
 
-// // Build output, which includes the hash.
-// config.output.filename = `auth0-authz.ui.${version}.js`;
+// Update build output to include the hash.
+config.output.filename = `auth0-authz.ui.${version}.js`;
 
-// // Development modules.
-// config.module.rules.push({
-//   test: /\.css$/,
-//   use: ExtractTextPlugin.extract({
-//     fallback: 'style-loader',
-//     use: [ 'css-loader', 'postcss-loader' ]
-//   })
-// });
-// config.module.rules.push({
-//   test: /\.styl/,
-//   use: ExtractTextPlugin.extract({
-//     fallback: 'style-loader',
-//     use: [ 'css-loader', 'stylus-loader' ]
-//   })
-// });
-
-// // Webpack plugins.
-// config.plugins = config.plugins.concat([
-//   // Extract CSS to a different file, will require additional configuration.
-//   new ExtractTextPlugin({
-//     filename: `auth0-authz.ui.${version}.css`,
-//     allChunks: true
-  //   }),
-  // new MiniCssExtractPlugin({
-  //   filename: `auth0-authz.ui.${version}.css`
-  // })
-
-//   // Separate the vendor in a different file.
-  // new webpack.optimize.CommonsChunkPlugin({
-  //   name: 'vendors',
-  //   filename: `auth0-authz.ui.vendors.${version}.js`
-  // })
-
-//   // Compress and uglify the output.
-//   new webpack.optimize.UglifyJsPlugin({
-//     sourceMap: true,
-//     mangle: true,
-//     output: {
-//       comments: false
-//     },
-//     compress: {
-//       sequences: true,
-//       dead_code: true,
-//       conditionals: true,
-//       booleans: true,
-//       unused: true,
-//       if_return: true,
-//       join_vars: true,
-//       drop_console: true
-//     }
-//   }),
-
-//   // Alternative to StatsWriterPlugin.
-//   new StatsWriterPlugin({
-//     filename: "manifest.json",
-//     transform: function transformData(data) {
-//       const chunks = {
-//         app: data.assetsByChunkName.app[0],
-//         style: data.assetsByChunkName.app[1],
-//         vendors: data.assetsByChunkName.vendors[0]
-//       };
-//       return JSON.stringify(chunks);
-//     }
-//   })
-// ]);
-
-// module.exports = config;
-
-const path = require('path');
-// const project = require('../../package.json');
-
-// const version = process.env.EXTENSION_VERSION || project.version;
-
-// Build output, which includes the hash.
-module.exports = {
-  entry: {
-    app: path.resolve(__dirname, '../../client/app.jsx')
-  },
-  output: {
-    path: path.resolve(__dirname, '../../dist'),
-    filename: `auth0-authz.ui.${version}.js`
-  },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: `auth0-authz.ui.${version}.css`
-    })
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.(js|jsx)$/, // Ensure we're transpiling both JS and JSX files
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader'
-        }
-      },
-      {
-        test: /\.styl$/,
-        use: [
-          {
-            loader: 'style-loader'
-          },
-          {
-            loader: 'css-loader'
-          },
-          {
-            loader: 'stylus-loader'
-          }
-        ]
-      },
-      {
-        test: /\.css$/i,
-        use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
-      }
-    ]
-  },
-  resolve: {
-    extensions: [ '.js', '.jsx' ], // Add '.jsx' to the list of extensions to resolve
-    fallback: {
-      crypto: require.resolve('crypto-browserify'),
-      stream: require.resolve('stream-browserify')
-    // "stream": false
-    }
-  },
-  devServer: {
-    static: {
-      directory: path.join(__dirname, '../../dist')
-    },
-    compress: true,
-    port: 9000
+config.resolve = {
+  extensions: [ '.js', '.jsx' ], // Add '.jsx' to the list of extensions to resolve
+  fallback: {
+    crypto: require.resolve('crypto-browserify'),
+    stream: require.resolve('stream-browserify')
   }
 };
+config.module = {};
+config.module.rules = ([
+  {
+    test: /\.jsx?$/,
+    use: [ { loader: 'babel-loader' } ],
+    exclude: path.join(__dirname, '../../node_modules/')
+  },
+  {
+    test: /\.css$/,
+    use: [
+      MiniCssExtractPlugin.loader,
+      'css-loader',
+      'postcss-loader'
+    ]
+  },
+  {
+    test: /\.styl$/,
+    use: [
+      MiniCssExtractPlugin.loader,
+      'css-loader',
+      'stylus-loader'
+    ]
+  }
+]);
+
+
+// Update plugins for Webpack 5.90.
+config.plugins = [
+  new MiniCssExtractPlugin({
+    filename: `auth0-authz.ui.${version}.css`
+  }),
+  new webpack.DefinePlugin({
+    __DEV__: JSON.stringify(process.env.NODE_ENV !== 'production'),
+    'process.env': {
+      BROWSER: JSON.stringify(true),
+      NODE_ENV: JSON.stringify(process.env.NODE_ENV || 'development'),
+      WARN_DB_SIZE: 409600,
+      MAX_MULTISELECT_USERS: 5,
+      MULTISELECT_DEBOUNCE_MS: 250,
+      PER_PAGE: 10
+    },
+    __CLIENT__: JSON.stringify(true),
+    __SERVER__: JSON.stringify(false)
+  }),
+  new webpack.ProvidePlugin({
+    process: 'process/browser'
+  })
+];
+
+
+config.optimization = {
+  minimize: true,
+  minimizer: [
+    new TerserPlugin({
+      terserOptions: {
+        sourceMap: true,
+        mangle: true,
+        output: {
+          comments: false
+        },
+        compress: {
+          sequences: true,
+          dead_code: true,
+          conditionals: true,
+          booleans: true,
+          unused: true,
+          if_return: true,
+          join_vars: true,
+          drop_console: true
+        }
+      }
+    })
+  ],
+  splitChunks: {
+    cacheGroups: {
+      defaultVendors: false, // Disable the default vendor splitting
+      // Explicitly define a cache group for the manually specified vendor libs
+      manualVendors: {
+        test: new RegExp(`[\\/]node_modules[\\/](${[
+          '@babel/polyfill',
+          'axios',
+          'bluebird',
+          'classnames',
+          'history',
+          'immutable',
+          'jwt-decode',
+          'lodash',
+          'moment',
+          'react',
+          'react-bootstrap',
+          'react-dom',
+          'react-loader-advanced',
+          'react-router',
+          'react-redux',
+          'redux',
+          'redux-form',
+          'redux-thunk',
+          'redux-logger',
+          'redux-promise-middleware',
+          'redux-simple-router'
+        ].join('|')})[\\/]`),
+        chunks: 'all',
+        enforce: true, // Ensure this chunk is created
+        filename: `auth0-authz.ui.vendors.${version}.js`
+      }
+    }
+  }
+};
+
+console.log('config', config);
+module.exports = config;

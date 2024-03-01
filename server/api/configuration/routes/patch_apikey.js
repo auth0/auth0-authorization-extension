@@ -3,7 +3,7 @@ import generateApiKey from '../../../lib/generateApiKey';
 export default (server) => ({
   method: 'PATCH',
   path: '/api/configuration/rotate-apikey',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:configuration' ]

@@ -5,7 +5,7 @@ import schema from '../schemas/group_ids';
 export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/nested',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]

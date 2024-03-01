@@ -3,7 +3,7 @@ import { deleteApi } from '../../../lib/apiaccess';
 export default () => ({
   method: 'DELETE',
   path: '/api/configuration/resource-server',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'delete:resource-server' ]

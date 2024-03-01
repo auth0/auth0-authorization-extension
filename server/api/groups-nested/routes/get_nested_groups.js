@@ -4,7 +4,7 @@ import _ from 'lodash';
 export default () => ({
   method: 'GET',
   path: '/api/groups/{id}/nested',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]

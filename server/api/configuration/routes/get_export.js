@@ -1,7 +1,7 @@
 export default () => ({
   method: 'GET',
   path: '/api/configuration/export',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:configuration' ]
