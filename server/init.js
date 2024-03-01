@@ -6,11 +6,13 @@ import { createProvider } from './lib/storage/providers';
 import createServer from './';
 import logger from './lib/logger';
 
-export default async (cfg, storageContext, cb) => {
+export default (cfg, storageContext, cb) => {
   if (cb == null) {
     cb = err => {
       if (err) {
         logger.error('Hapi initialization failed.');
+        const { stack, details, message } = err;
+        logger.error({ stack, details, message });
         logger.error(err);
       } else {
         logger.info('Hapi initialization completed.');
@@ -20,6 +22,7 @@ export default async (cfg, storageContext, cb) => {
 
   // Set configuration provider.
   config.setProvider(key => cfg(key) || process.env[key]);
+
   // Initialize the storage layer.
   initDb(
     new Database({
@@ -28,9 +31,5 @@ export default async (cfg, storageContext, cb) => {
   );
 
   // Start the server.
-  const server = await createServer();
-
-  cb(null, server);
-
-  return server;
+  return createServer(cb);
 };

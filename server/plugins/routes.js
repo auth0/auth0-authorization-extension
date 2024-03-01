@@ -1,6 +1,9 @@
 import config from '../lib/config';
 
 const register = (server) => {
+  console.log({ fn: 'routesPlugin > register()' });
+
+
   server.route(require('../api/policy/routes/post_user').default(server));
   server.route(require('../api/applications/routes/get_application').default(server));
   server.route(require('../api/applications/routes/get_applications').default(server));
@@ -60,7 +63,7 @@ const register = (server) => {
   server.route({
     method: 'GET',
     path: '/admins/login',
-    config: { auth: false },
+    options: { auth: false },
     handler: (request, h) => h.response('Redirecting to login page...').redirect(`${config('PUBLIC_WT_URL')}/login`)
   });
 };

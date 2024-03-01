@@ -9,7 +9,7 @@ import template from '../views/index';
 const assembleHtmlRoute = (link) => ({
   method: 'GET',
   path: link,
-  config: {
+  options: {
     description: 'Render HTML',
     auth: false
   },

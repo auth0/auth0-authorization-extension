@@ -6,7 +6,7 @@ import { getUserData } from '../../../lib/queries';
 export default () => ({
   method: 'POST',
   path: '/api/users/{userId}/policy/{clientId}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt', 'extension-secret' ]
     },

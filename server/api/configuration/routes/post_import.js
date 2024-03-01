@@ -3,7 +3,7 @@ import schema from '../schemas/storage';
 export default () => ({
   method: 'POST',
   path: '/api/configuration/import',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:configuration' ]

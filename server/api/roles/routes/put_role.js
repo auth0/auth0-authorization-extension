@@ -5,7 +5,7 @@ import schema from '../schemas/role';
 export default () => ({
   method: 'PUT',
   path: '/api/roles/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:roles' ]

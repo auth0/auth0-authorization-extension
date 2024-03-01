@@ -4,7 +4,7 @@ import schema from '../schemas/permission';
 export default () => ({
   method: 'PUT',
   path: '/api/permissions/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:permissions' ]

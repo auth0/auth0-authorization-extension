@@ -3,7 +3,7 @@ import { createApi } from '../../../lib/apiaccess';
 export default () => ({
   method: 'POST',
   path: '/api/configuration/resource-server',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'create:resource-server' ]

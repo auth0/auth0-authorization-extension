@@ -6,7 +6,7 @@ import schema from '../schemas/mapping_ids';
 export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/mappings',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]

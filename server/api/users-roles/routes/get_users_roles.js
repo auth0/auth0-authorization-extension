@@ -4,7 +4,7 @@ import _ from 'lodash';
 export default () => ({
   method: 'GET',
   path: '/api/users/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:roles' ]

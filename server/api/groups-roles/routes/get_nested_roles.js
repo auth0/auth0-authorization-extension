@@ -6,7 +6,7 @@ import { getParentGroups, getRolesForGroups } from '../../../lib/queries';
 export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/roles/nested',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]

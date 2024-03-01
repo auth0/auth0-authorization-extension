@@ -4,7 +4,7 @@ import Joi from 'joi';
 export default () => ({
   method: 'GET',
   path: '/api/permissions',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:permissions' ]

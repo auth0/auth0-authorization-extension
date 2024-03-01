@@ -3,7 +3,7 @@ import schema from '../schemas/group';
 export default () => ({
   method: 'POST',
   path: '/api/groups',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'create:groups' ]

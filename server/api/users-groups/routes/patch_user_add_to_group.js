@@ -5,7 +5,7 @@ import _ from 'lodash';
 export default () => ({
   method: 'PATCH',
   path: '/api/users/{id}/groups',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]

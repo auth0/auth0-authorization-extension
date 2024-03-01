@@ -5,7 +5,7 @@ import { getUsersById } from '../../../lib/users';
 export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/members',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]

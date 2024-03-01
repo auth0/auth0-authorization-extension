@@ -5,7 +5,7 @@ import schema from '../schemas/user_ids';
 export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/members',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]

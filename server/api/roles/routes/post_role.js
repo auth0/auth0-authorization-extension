@@ -4,7 +4,7 @@ import schema from '../schemas/role';
 export default () => ({
   method: 'POST',
   path: '/api/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'create:roles' ]
