@@ -124,13 +124,8 @@ const register = async function(server, options) {
       var decoded;
 
       try {
-        console.log({ fn: 'POST /login/callback handler' }, req.payload);
-
         decoded = jwt.decode(req.payload.id_token);
-
-        console.log({ decoded });
       } catch (e) {
-        console.log('decoding failed', e);
         decoded = null;
       }
 
@@ -222,7 +217,7 @@ const register = async function(server, options) {
   });
 };
 
-module.exports.plugin = {
+export const plugin = {
   register,
   name: 'dashboard-admin-session'
 };

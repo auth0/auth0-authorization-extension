@@ -22,21 +22,20 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const nested = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        nested.forEach(nestedGroupId => {
-          const index = group.nested.indexOf(nestedGroupId);
-          if (index > -1) {
-            group.nested.splice(index, 1);
-          }
-        });
+    const group = await req.storage.getGroup(req.params.id);
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    nested.forEach(nestedGroupId => {
+      const index = group.nested.indexOf(nestedGroupId);
+      if (index > -1) {
+        group.nested.splice(index, 1);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response.code(204);
   }
 });

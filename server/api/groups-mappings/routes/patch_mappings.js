@@ -18,26 +18,25 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const mappings = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        if (!group.mappings) {
-          group.mappings = [];
-        }
+    const group = await req.storage.getGroup(req.params.id);
 
-        mappings.forEach(mapping => {
-          group.mappings.push({
-            _id: uuid.v4(),
-            groupName: mapping.groupName,
-            connectionName: mapping.connectionName
-          });
-        });
+    if (!group.mappings) {
+      group.mappings = [];
+    }
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    mappings.forEach(mapping => {
+      group.mappings.push({
+        _id: uuid.v4(),
+        groupName: mapping.groupName,
+        connectionName: mapping.connectionName
+      });
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response.code(204);
   }
 });

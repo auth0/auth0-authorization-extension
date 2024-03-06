@@ -22,21 +22,20 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const members = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        members.forEach(userId => {
-          const index = group.members.indexOf(userId);
-          if (index > -1) {
-            group.members.splice(index, 1);
-          }
-        });
+    const group = await req.storage.getGroup(req.params.id);
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    members.forEach(userId => {
+      const index = group.members.indexOf(userId);
+      if (index > -1) {
+        group.members.splice(index, 1);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response.code(204);
   }
 });

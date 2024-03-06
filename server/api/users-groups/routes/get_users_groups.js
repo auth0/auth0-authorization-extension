@@ -19,24 +19,23 @@ export default () => ({
       })
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     if (req.query.expand) {
-      return req.storage.getGroups()
-        .then(groups => _.filter(groups, (group) => _.includes(group.members, req.params.id)))
-        .then(groups => getGroupsExpanded(req.storage, groups))
-        .then(groups => reply(groups))
-        .catch(err => reply.error(err));
+      const groups = await req.storage.getGroups();
+      const groupsFiltered = _.filter(groups, (group) => _.includes(group.members, req.params.id));
+      const groupsExpanded = await getGroupsExpanded(req.storage, groupsFiltered);
+
+      return h.response(groupsExpanded);
     }
 
-    return req.storage.getGroups()
-      .then(groups => _.filter(groups, (group) => _.includes(group.members, req.params.id)))
-      .then(groups => groups.map((group) => ({
-        _id: group._id,
-        name: group.name,
-        description: group.description
-      })))
-      .then(groups => reply(groups))
-      .catch(err => reply.error(err));
-  }
+    const groups = await req.storage.getGroups();
+    const groupsFiltered = _.filter(groups, (group) => _.includes(group.members, req.params.id));
+    const groupsMapped = groupsFiltered.map((group) => ({
+      _id: group._id,
+      name: group.name,
+      description: group.description
+    }));
 
+    return h.response(groupsMapped);
+  }
 });

@@ -17,6 +17,8 @@ module.exports = {
     publicPath: '/app/'
   },
 
+  plugins: [],
+
   // Module configuration.
   resolve: {
     alias: {

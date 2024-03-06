@@ -18,14 +18,15 @@ export default () => ({
       })
     }
   },
-  handler: (req, reply) =>
-    getRolesForUser(req.storage, req.params.id)
-      .then(roles => roles.map((role) => ({
-        _id: role._id,
-        name: role.name,
-        applicationId: role.applicationId,
-        description: role.description
-      })))
-      .then(roles => reply(roles))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const roles = await getRolesForUser(req.storage, req.params.id);
+    const rolesMapped = roles.map((role) => ({
+      _id: role._id,
+      name: role.name,
+      applicationId: role.applicationId,
+      description: role.description
+    }));
+
+    return h.response(rolesMapped);
+  }
 });

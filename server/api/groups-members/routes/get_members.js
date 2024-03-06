@@ -25,9 +25,9 @@ export default (server) => ({
       })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getGroup(req.params.id)
-      .then(group => getUsersById(req.pre.auth0, group.members || [], req.query.page, req.query.per_page))
-      .then(users => reply(users))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const group = await req.storage.getGroup(req.params.id);
+    const users = await getUsersById(req.pre.auth0, group.members || [], req.query.page, req.query.per_page);
+    return h.response(users);
+  }
 });

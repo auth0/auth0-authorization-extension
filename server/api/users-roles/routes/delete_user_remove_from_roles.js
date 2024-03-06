@@ -18,23 +18,23 @@ export default () => ({
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const roleIds = req.payload;
 
-    return Promise.each(roleIds, (id) =>
-      req.storage.getRole(id).then((role) => {
-        if (!role.users) {
-          role.users = []; // eslint-disable-line no-param-reassign
-        }
-        const index = role.users.indexOf(req.params.id);
-        if (index > -1) {
-          role.users.splice(index, 1);
-        }
+    await Promise.each(roleIds, async (id) => {
+      const role = await req.storage.getRole(id);
 
-        return req.storage.updateRole(id, role);
-      })
-    )
-      .then(() => reply().code(204))
-      .catch((err) => reply.error(err));
+      if (!role.users) {
+        role.users = []; // eslint-disable-line no-param-reassign
+      }
+      const index = role.users.indexOf(req.params.id);
+      if (index > -1) {
+        role.users.splice(index, 1);
+      }
+
+      await req.storage.updateRole(id, role);
+    });
+
+    return h.response(204);
   }
 });

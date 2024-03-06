@@ -27,39 +27,34 @@ export default (server) => ({
       })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getGroups()
-      .then((groups) => {
-        const group = _.find(groups, { _id: req.params.id });
-        const currentAndChildGroups = getChildGroups(groups, [ group ]);
-        return getMembers(currentAndChildGroups);
-      })
-      .then(members => {
-        const userIds = (members) ? members.map(member => member.userId) : [];
+  handler: async (req, h) => {
+    const groups = await req.storage.getGroups();
 
-        return getUsersById(req.pre.auth0, userIds, req.query.page, req.query.per_page)
-          .then(data => {
-            const total = members.length;
-            const users = data.users.map(u => {
-              let userGroup = _.find(members, { userId: u.user_id });
-              if (userGroup) {
-                userGroup = { _id: userGroup.group._id, name: userGroup.group.name, description: userGroup.group.description };
-              }
+    const group = _.find(groups, { _id: req.params.id });
+    const currentAndChildGroups = getChildGroups(groups, [ group ]);
+    const members = await getMembers(currentAndChildGroups);
+    const userIds = (members) ? members.map(member => member.userId) : [];
+    const data = await getUsersById(req.pre.auth0, userIds, req.query.page, req.query.per_page);
+    const total = members.length;
 
-              return {
-                user: {
-                  user_id: u.user_id,
-                  name: u.name,
-                  nickname: u.nickname,
-                  email: u.email
-                },
-                group: userGroup
-              };
-            });
+    const users = data.users.map(u => {
+      let userGroup = _.find(members, { userId: u.user_id });
+      if (userGroup) {
+        userGroup = { _id: userGroup.group._id, name: userGroup.group.name, description: userGroup.group.description };
+      }
+      return {
+        user: {
+          user_id: u.user_id,
+          name: u.name,
+          nickname: u.nickname,
+          email: u.email
+        },
+        group: userGroup
+      };
+    });
 
-            return { total, nested: _.sortByOrder(users, [ 'user.name' ], [ true ]) };
-          });
-      })
-      .then(users => reply(users))
-      .catch(err => reply.error(err))
+    const result = { total, nested: _.sortByOrder(users, [ 'user.name' ], [ true ]) };
+
+    return h.response(result);
+  }
 });

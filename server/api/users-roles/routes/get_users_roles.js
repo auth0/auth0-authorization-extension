@@ -17,15 +17,17 @@ export default () => ({
       })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getRoles()
-      .then(roles => _.filter(roles, (role) => _.includes(role.users, req.params.id)))
-      .then(roles => roles.map((role) => ({
-        _id: role._id,
-        name: role.name,
-        applicationId: role.applicationId,
-        description: role.description
-      })))
-      .then(roles => reply(roles))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const roles = await req.storage.getRoles();
+    const rolesFiltered = _.filter(roles, (role) => _.includes(role.users, req.params.id));
+
+    const rolesMapped = rolesFiltered.map((role) => ({
+      _id: role._id,
+      name: role.name,
+      applicationId: role.applicationId,
+      description: role.description
+    }));
+
+    return h.response(rolesMapped);
+  }
 });

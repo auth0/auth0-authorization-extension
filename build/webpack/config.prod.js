@@ -2,6 +2,7 @@
 
 const webpack = require('webpack');
 const path = require('path');
+const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
@@ -68,9 +69,19 @@ config.plugins = [
   }),
   new webpack.ProvidePlugin({
     process: 'process/browser'
+  }),
+  new StatsWriterPlugin({
+    filename: 'manifest.json',
+    transform: function transformData(data) {
+      const chunks = {
+        app: data.assetsByChunkName.app[1],
+        style: data.assetsByChunkName.app[0],
+        vendors: `auth0-authz.ui.vendors.${version}.js`
+      };
+      return JSON.stringify(chunks);
+    }
   })
 ];
-
 
 config.optimization = {
   minimize: true,
@@ -131,5 +142,4 @@ config.optimization = {
   }
 };
 
-console.log('config', config);
 module.exports = config;

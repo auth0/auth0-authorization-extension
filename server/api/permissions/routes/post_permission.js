@@ -17,10 +17,10 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const permission = req.payload;
-    return req.storage.createPermission(permission)
-      .then((created) => reply(created))
-      .catch(err => reply.error(err));
+    const created = await req.storage.createPermission(permission);
+
+    return h.response(created);
   }
 });
