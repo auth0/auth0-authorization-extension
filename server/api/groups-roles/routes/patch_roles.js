@@ -20,24 +20,23 @@ export default () => ({
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const roles = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        if (!group.roles) {
-          group.roles = [];
-        }
+    const group = await req.storage.getGroup(req.params.id);
 
-        roles.forEach(roleId => {
-          if (group.roles.indexOf(roleId) === -1) {
-            group.roles.push(roleId);
-          }
-        });
+    if (!group.roles) {
+      group.roles = [];
+    }
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    roles.forEach(roleId => {
+      if (group.roles.indexOf(roleId) === -1) {
+        group.roles.push(roleId);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response.code(204);
   }
 });

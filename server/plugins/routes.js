@@ -1,9 +1,6 @@
 import config from '../lib/config';
 
 const register = (server) => {
-  console.log({ fn: 'routesPlugin > register()' });
-
-
   server.route(require('../api/policy/routes/post_user').default(server));
   server.route(require('../api/applications/routes/get_application').default(server));
   server.route(require('../api/applications/routes/get_applications').default(server));

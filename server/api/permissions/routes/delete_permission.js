@@ -19,9 +19,8 @@ export default () => ({
       })
     }
   },
-  handler: (req, reply) => {
-    req.storage.deletePermission(req.params.id)
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+  handler: async (req, h) => {
+    await req.storage.deletePermission(req.params.id);
+    return h.response.code(204);
   }
 });

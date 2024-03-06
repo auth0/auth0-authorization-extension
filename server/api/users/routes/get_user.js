@@ -18,8 +18,9 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) =>
-    req.pre.auth0.users.get({ id: req.params.id })
-      .then(user => reply(user))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const user = await req.pre.auth0.users.get({ id: req.params.id });
+
+    return h.response(user);
+  }
 });

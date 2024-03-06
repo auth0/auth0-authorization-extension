@@ -21,7 +21,7 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const { userId, clientId } = req.params;
     const { connectionName, groups } = req.payload;
 
@@ -30,11 +30,10 @@ export default () => ({
       req.storage.provider.storageContext &&
       req.storage.provider.storageContext.read
     ) {
-      return getUserData(req.storage, userId, clientId, connectionName, groups)
-        .then((data) => reply(data))
-        .catch((err) => reply.error(err));
+      const data = await getUserData(req.storage, userId, clientId, connectionName, groups);
+      return h.response(data);
     }
 
-    return reply.error(new Error('Storage error.'));
+    return h.response(new Error('Storage error.'));
   }
 });

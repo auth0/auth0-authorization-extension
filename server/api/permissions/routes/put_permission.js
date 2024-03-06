@@ -21,10 +21,10 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const permission = req.payload;
-    return req.storage.updatePermission(req.params.id, permission)
-      .then((updated) => reply(updated))
-      .catch(err => reply.error(err));
+    const updated = await req.storage.updatePermission(req.params.id, permission);
+
+    return h.response(updated);
   }
 });

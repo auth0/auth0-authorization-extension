@@ -14,8 +14,6 @@ export default (server) => ({
     ]
   },
   handler: async (req, h) => {
-    console.log({ fn: 'GET /api/configuration/status handler' });
-
     const rules = await multipartRequest(req.pre.auth0, 'rules', { fields: 'name,enabled' });
     const ruleRecord = _.find(rules, { name: 'auth0-authorization-extension' });
     const rule = {
@@ -24,15 +22,7 @@ export default (server) => ({
     };
 
     try {
-      const database = req.storage.getStatus();
-
-      console.log({
-        rules,
-        ruleRecord,
-        rule,
-        database
-      });
-
+      const database = await req.storage.getStatus();
       return h.response({ rule, database });
     } catch (dbError) {
       return h.response({ rule, database: { size: 0, type: 'unknown' } });

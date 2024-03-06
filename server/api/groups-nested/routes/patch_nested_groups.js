@@ -22,24 +22,23 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const nested = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        if (!group.nested) {
-          group.nested = [];
-        }
+    const group = await req.storage.getGroup(req.params.id);
 
-        nested.forEach(nestedGroupId => {
-          if (group.nested.indexOf(nestedGroupId) === -1 && nestedGroupId !== req.params.id) {
-            group.nested.push(nestedGroupId);
-          }
-        });
+    if (!group.nested) {
+      group.nested = [];
+    }
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    nested.forEach(nestedGroupId => {
+      if (group.nested.indexOf(nestedGroupId) === -1 && nestedGroupId !== req.params.id) {
+        group.nested.push(nestedGroupId);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response.code(204);
   }
 });

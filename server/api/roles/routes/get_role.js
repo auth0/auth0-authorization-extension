@@ -16,12 +16,13 @@ export default () => ({
       })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getRole(req.params.id)
-      .then(role => reply({
-        _id: role._id,
-        name: role.name,
-        description: role.description
-      }))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const role = await req.storage.getRole(req.params.id);
+
+    return h.response({
+      _id: role._id,
+      name: role.name,
+      description: role.description
+    });
+  }
 });

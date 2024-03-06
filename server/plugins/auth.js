@@ -2,7 +2,6 @@ import Boom from '@hapi/boom';
 import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
-// import * as tools from 'auth0-extension-hapi-tools';
 
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
@@ -64,82 +63,62 @@ const register = async (server) => {
     complete: true,
 
     verify: (decoded, req) => {
-      console.log({ fn: 'verify', stage: 1 });
       if (!decoded) {
         throw Boom.unauthorized('Invalid token', 'Token');
       }
 
       const header = req.headers.authorization;
       if (header && header.indexOf('Bearer ') === 0) {
-        console.log({ fn: 'verify', stage: 2 });
-
         const token = header.split(' ')[1];
         if (decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_DOMAIN')}/`) {
-          console.log({ fn: 'verify', stage: 3 });
           return jwtOptions.resourceServer.key(decoded, (keyErr, key) => {
-            console.log({ fn: 'verify', stage: 4 });
             if (keyErr) {
-              console.log({ fn: 'verify', stage: 5 });
               throw Boom.wrap(keyErr);
             }
 
-            console.log({ fn: 'verify', stage: 6 });
-
             return jwt.verify(token, key, jwtOptions.resourceServer.verifyOptions, (err) => {
               if (err) {
-                console.log({ fn: 'verify', stage: 7 });
                 throw Boom.unauthorized('Invalid token', 'Token');
               }
 
 
               if (decoded.payload.gty && decoded.payload.gty !== 'client-credentials') {
-                console.log({ fn: 'verify', stage: 8 });
                 throw Boom.unauthorized('Invalid token', 'Token');
               }
 
               if (!decoded.payload.sub.endsWith('@clients')) {
-                console.log({ fn: 'verify', stage: 9 });
                 throw Boom.unauthorized('Invalid token', 'Token');
               }
 
               if (decoded.payload.scope && typeof decoded.payload.scope === 'string') {
-                console.log({ fn: 'verify', stage: 10 });
                 decoded.payload.scope = decoded.payload.scope.split(' '); // eslint-disable-line no-param-reassign
               }
 
-              console.log({ fn: 'verify', stage: 11 });
-              return decoded.payload;
+              return { credentials: decoded.payload, isValid: true };
             });
           });
         } else if (decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL')) {
-          console.log({ fn: 'verify', stage: 12 });
           return jwt.verify(token, jwtOptions.dashboardAdmin.key, jwtOptions.dashboardAdmin.verifyOptions, (err) => {
             if (err) {
-              console.log({ fn: 'verify', stage: 13 });
               throw Boom.unauthorized('Invalid token', 'Token');
             }
 
             if (!decoded.payload.access_token || !decoded.payload.access_token.length) {
-              console.log({ fn: 'verify', stage: 14 });
               throw Boom.unauthorized('Invalid token', 'Token');
             }
 
-            console.log({ fn: 'verify', stage: 15 });
             decoded.payload.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
 
-            console.log(JSON.stringify(decoded));
-            return decoded.payload;
+            return { credentials: decoded.payload, isValid: true };
           });
         }
       }
 
-      console.log({ fn: 'verify', stage: 16 });
       throw Boom.unauthorized('Invalid token', 'Token');
     }
   });
   server.auth.default('jwt');
   const session = {
-    // plugin: tools.plugins.dashboardAdminSession.plugin,
     plugin,
     options: {
       stateKey: 'authz-state',
@@ -147,38 +126,24 @@ const register = async (server) => {
       sessionStorageKey: 'authz:apiToken',
       rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
-      scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users',
+      // scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users',
+      scopes: 'read:configuration read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users',
       baseUrl: config('PUBLIC_WT_URL'),
       audience: 'urn:api-authz',
       secret: config('EXTENSION_SECRET'),
       clientName: 'Authorization Extension',
       onLoginSuccess: (decoded, req) => {
-        console.log({ fn: 'onLoginSuccess', stage: 1 });
         if (decoded) {
-          console.log({ fn: 'onLoginSuccess', stage: 2 });
           decoded.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
           return decoded;
         }
 
-        console.log({ fn: 'onLoginSuccess', stage: 3 });
         throw Boom.unauthorized('Invalid token', 'Token');
       }
     }
   };
   server.register(session);
-
-// (err) => {
-//     if (err) {
-//       next(err);
-//     }
-
-//     next();
-//   }
 };
-
-// register.attributes = {
-//   name: 'auth'
-// };
 
 export const authPlugin = {
   register,

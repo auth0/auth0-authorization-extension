@@ -20,10 +20,10 @@ export default (server) => ({
       })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getGroup(req.params.id)
-      .then(group => group.mappings || [])
-      .then(mappings => getMappingsWithNames(req.pre.auth0, mappings))
-      .then(mappings => reply(mappings))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const group = await req.storage.getGroup(req.params.id);
+    const mappings = group.mappings || [];
+    const mappingsWithNames = await getMappingsWithNames(req.pre.auth0, mappings);
+    return h.response(mappingsWithNames);
+  }
 });

@@ -22,7 +22,7 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const page = (req.query.page - 1 < 0) ? 0 : req.query.page - 1;
     const options = {
       sort: 'last_login:-1',
@@ -34,8 +34,8 @@ export default (server) => ({
       search_engine: config('USER_SEARCH_ENGINE') || 'v3'
     };
 
-    req.pre.auth0.users.getAll(options)
-      .then(users => reply(users))
-      .catch(err => reply.error(err));
+    const users = await req.pre.auth0.users.getAll(options);
+
+    return h.response(users);
   }
 });

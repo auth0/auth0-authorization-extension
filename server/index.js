@@ -45,29 +45,6 @@ export default (cb) => {
     }
   });
 
-  server.route({
-    method: 'GET',
-    path: '/test',
-    options: { auth: false },
-    handler: (request, h) => {
-      console.log({ fn: 'GET /test route handler' });
-      return h.response({ route: 'GET /test', status: 'awesome' });
-    }
-  });
-
-  server.events.on('start', () => {
-    console.log('Server started');
-  });
-
-  // server.ext('onRequest', function(hapiRequest, h) {
-  //   console.log({ fn: 'server.ext(onRequest)' });
-  //   return h.continue;
-  // });
-
-  // server.events.on('route', (route) => {
-  //   console.log(`New route added: ${route.path}`);
-  // });
-
   const externalPlugins = [
     goodPlugin,
     {
@@ -88,24 +65,7 @@ export default (cb) => {
     }
   ];
 
-  // server.start()
-  //   .then(() => {
-  //     // Use the server logger.
-  //     logger.debug = (...args) => {
-  //       server.log([ 'debug' ], args.join(' '));
-  //     };
-  //     logger.info = (...args) => {
-  //       server.log([ 'info' ], args.join(' '));
-  //     };
-  //     logger.error = (...args) => {
-  //       server.log([ 'error' ], args.join(' '));
-  //     };
-
-  //     cb(null, server);
-  //   }).catch(err => cb(err, null));
-
   server.register([ ...externalPlugins, ...plugins ])
-    // .then(() => server.start())
     .then(() => {
       // Use the server logger.
       logger.debug = (...args) => {
