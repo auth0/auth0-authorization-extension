@@ -1,4 +1,6 @@
-import { config } from 'auth0-extension-tools';
+const tools = require('auth0-extension-tools');
 
-export default config();
+const config = tools.config();
+
+module.exports = config;
 

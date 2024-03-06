@@ -1,13 +1,12 @@
 import { getDb } from '../lib/storage/getdb';
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   const db = getDb();
   server.decorate('server', 'storage', db);
   server.decorate('request', 'storage', db);
-
-  next();
 };
 
-register.attributes = {
+export const storagePlugin = {
+  register,
   name: 'storage'
 };

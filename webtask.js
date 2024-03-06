@@ -1,4 +1,5 @@
 const tools = require('auth0-extension-hapi-tools');
+const localTools = require('./server/lib/tools/server');
 const config = require('./server/lib/config');
 const logger = require('./server/lib/logger');
 
@@ -29,7 +30,7 @@ let createServer = (context, req, res) => {
     }
     // After the application has been initialized we remove the
     // artificial delay in processing
-    createServer = tools.createServer(factory);
+    createServer = localTools.createServer(factory);
     createServer(context, req, res);
   });
 };

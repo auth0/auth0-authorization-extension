@@ -1,4 +1,4 @@
-import Boom from 'boom';
+import Boom from '@hapi/boom';
 import logger from '../lib/logger';
 
 function notFound(message) {
@@ -20,15 +20,13 @@ function unauthorized(message) {
   return this.response(Boom.unauthorized(message));
 }
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   server.decorate('reply', 'notFound', notFound);
   server.decorate('reply', 'error', error);
   server.decorate('reply', 'unauthorized', unauthorized);
-
-  next();
 };
 
-register.attributes = {
+export const replyDecoratorsPlugin = {
+  register,
   name: 'reply-decorators'
 };
-

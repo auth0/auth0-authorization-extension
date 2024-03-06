@@ -1,9 +1,17 @@
+const { authPlugin } = require('./auth');
+const { assetsPlugin } = require('./assets');
+const { handlersPlugin } = require('./handlers');
+const { htmlPlugin } = require('./html');
+const { routesPlugin } = require('./routes');
+// const { replyDecoratorsPlugin } = require('./reply-decorators');
+const { storagePlugin } = require('./storage');
+
 module.exports = [
-  { register: require('./auth') },
-  { register: require('./assets') },
-  { register: require('./handlers') },
-  { register: require('./html') },
-  { register: require('./routes') },
-  { register: require('./reply-decorators') },
-  { register: require('./storage') }
+  authPlugin,
+  assetsPlugin,
+  handlersPlugin,
+  htmlPlugin,
+  routesPlugin,
+  // replyDecoratorsPlugin,
+  storagePlugin
 ];

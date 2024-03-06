@@ -11,6 +11,8 @@ export default (cfg, storageContext, cb) => {
     cb = err => {
       if (err) {
         logger.error('Hapi initialization failed.');
+        const { stack, details, message } = err;
+        logger.error({ stack, details, message });
         logger.error(err);
       } else {
         logger.info('Hapi initialization completed.');
@@ -20,6 +22,7 @@ export default (cfg, storageContext, cb) => {
 
   // Set configuration provider.
   config.setProvider(key => cfg(key) || process.env[key]);
+
   // Initialize the storage layer.
   initDb(
     new Database({

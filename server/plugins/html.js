@@ -1,4 +1,6 @@
 import fs from 'fs';
+import util from 'util';
+
 import ejs from 'ejs';
 import path from 'path';
 import { urlHelpers } from 'auth0-extension-hapi-tools';
@@ -6,14 +8,16 @@ import { urlHelpers } from 'auth0-extension-hapi-tools';
 import config from '../lib/config';
 import template from '../views/index';
 
+const readFile = util.promisify(fs.readFile);
+
 const assembleHtmlRoute = (link) => ({
   method: 'GET',
   path: link,
-  config: {
+  options: {
     description: 'Render HTML',
     auth: false
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const cfg = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
@@ -25,13 +29,14 @@ const assembleHtmlRoute = (link) => ({
 
     // Development.
     if (process.env.NODE_ENV === 'development') {
-      return reply(ejs.render(template, {
+      return h.response(ejs.render(template, {
         config: {
           ...cfg,
           API_BASE: 'http://localhost:3000/'
         },
         assets: {
           app: '/app/bundle.js'
+          // app: '/app/auth0-authz.ui.2.12.0.js'
         }
       }));
     }
@@ -39,40 +44,40 @@ const assembleHtmlRoute = (link) => ({
     // Render from CDN.
     const clientVersion = config('CLIENT_VERSION');
     if (clientVersion) {
-      return reply(ejs.render(template, {
+      return h.response(ejs.render(template, {
         config: cfg,
         assets: { version: clientVersion }
       }));
     }
 
     // Render locally.
-    return fs.readFile(path.join(__dirname, '../../dist/manifest.json'), 'utf8', (err, data) => {
-      const locals = {
-        config: cfg,
-        assets: {
-          app: '/app/bundle.js'
-        }
-      };
+    const data = await readFile(path.join(__dirname, '../../dist/manifest.json'), 'utf8');
+    const locals = {
+      config: cfg,
+      assets: {
+        app: '/app/bundle.js'
+      }
+    };
 
-      if (!err && data) {
-        locals.assets = JSON.parse(data);
 
-        if (locals.assets.app) {
-          locals.assets.app = `/app/${locals.assets.app}`;
-        }
+    if (data) {
+      locals.assets = JSON.parse(data);
 
-        if (locals.assets.vendors) {
-          locals.assets.vendors = `/app/${locals.assets.vendors}`;
-        }
-
-        if (locals.assets.style) {
-          locals.assets.style = `/app/${locals.assets.style}`;
-        }
+      if (locals.assets.app) {
+        locals.assets.app = `/app/${locals.assets.app}`;
       }
 
-      // Render the HTML page.
-      reply(ejs.render(template, locals));
-    });
+      if (locals.assets.vendors) {
+        locals.assets.vendors = `/app/${locals.assets.vendors}`;
+      }
+
+      if (locals.assets.style) {
+        locals.assets.style = `/app/${locals.assets.style}`;
+      }
+    }
+
+    // Render the HTML page.
+    return h.response(ejs.render(template, locals));
   }
 });
 
@@ -93,13 +98,12 @@ const clientRoutes = [
   '/import-export'
 ];
 
-export const register = (server, options, next) => {
+export const register = async (server) => {
   clientRoutes.map(link => server.route(assembleHtmlRoute(link)));
-
-  next();
 };
 
-register.attributes = {
+export const htmlPlugin = {
+  register,
   name: 'html'
 };
 

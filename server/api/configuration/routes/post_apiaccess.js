@@ -3,13 +3,14 @@ import { createApi } from '../../../lib/apiaccess';
 export default () => ({
   method: 'POST',
   path: '/api/configuration/resource-server',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'create:resource-server' ]
     }
   },
-  handler: (req, reply) => createApi(req)
-    .then(api => reply(api))
-    .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const api = await createApi(req);
+    return h.response(api);
+  }
 });

@@ -4,7 +4,7 @@ import multipartRequest from '../../../lib/multipartRequest';
 export default (server) => ({
   method: 'GET',
   path: '/api/connections',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:connections' ]
@@ -13,11 +13,13 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) =>
-    multipartRequest(req.pre.auth0, 'connections', { fields: 'id,name,strategy' })
-      .then(connections => _.chain(connections)
-        .sortBy((conn) => conn.name.toLowerCase())
-        .value())
-      .then(connections => reply(connections))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const connections = await multipartRequest(req.pre.auth0, 'connections', { fields: 'id,name,strategy' });
+
+    const sortedConnections = _.chain(connections)
+      .sortBy((conn) => conn.name.toLowerCase())
+      .value();
+
+    return h.response(sortedConnections);
+  }
 });

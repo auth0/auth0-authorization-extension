@@ -3,7 +3,7 @@ import metadata from '../../../../webtask.json';
 export default () => ({
   method: 'GET',
   path: '/meta',
-  config: {
+  options: {
     auth: false
   },
   handler: (request, reply) => reply(metadata)

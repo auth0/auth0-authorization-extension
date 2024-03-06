@@ -4,7 +4,7 @@ import multipartRequest from '../../../lib/multipartRequest';
 export default (server) => ({
   method: 'GET',
   path: '/api/configuration/status',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:configuration' ]
@@ -13,19 +13,19 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) =>
-      multipartRequest(req.pre.auth0, 'rules', { fields: 'name,enabled' })
-      .then(rules => {
-        const rule = _.find(rules, { name: 'auth0-authorization-extension' });
-        return {
-          exists: !!rule,
-          enabled: rule ? rule.enabled : false
-        };
-      })
-      .then(rule => {
-        req.storage.getStatus()
-          .then(database => reply({ rule, database }))
-          .catch(() => reply({ rule, database: { size: 0, type: 'unknown' } }));
-      })
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const rules = await multipartRequest(req.pre.auth0, 'rules', { fields: 'name,enabled' });
+    const ruleRecord = _.find(rules, { name: 'auth0-authorization-extension' });
+    const rule = {
+      exists: !!ruleRecord,
+      enabled: ruleRecord ? ruleRecord.enabled : false
+    };
+
+    try {
+      const database = await req.storage.getStatus();
+      return h.response({ rule, database });
+    } catch (dbError) {
+      return h.response({ rule, database: { size: 0, type: 'unknown' } });
+    }
+  }
 });
