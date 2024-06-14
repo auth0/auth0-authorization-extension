@@ -1,0 +1,158 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+ignore: {}
+# patches apply the minimum changes required to fix a vulnerability
+patch:
+  'npm:extend:20180424':
+    - npm > request > extend:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > extend:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > extend:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > webtask-tools > superagent > extend:
+        patched: '2022-10-07T18:17:30.839Z'
+  'npm:hoek:20180212':
+    - hapi-auth-jwt2 > jsonwebtoken > joi > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > jsonwebtoken > joi > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - hapi-auth-jwt2 > jsonwebtoken > joi > topo > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > jsonwebtoken > joi > topo > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > hapi-auth-jwt2 > jsonwebtoken > joi > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > jsonwebtoken > joi > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > webtask-tools > boom > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > hawk > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > hawk > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > hapi-auth-jwt2 > jsonwebtoken > joi > topo > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > jsonwebtoken > joi > topo > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > hawk > boom > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > hawk > boom > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > hawk > sntp > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > hawk > sntp > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > hawk > cryptiles > boom > hoek:
+        patched: '2022-10-07T18:17:30.839Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - sandboxjs > webtask-log-stream > proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - sandboxjs > webtask-log-stream > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0 > rest-facade > superagent-proxy > proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0 > rest-facade > superagent-proxy > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > auth0 > rest-facade > superagent-proxy > proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > auth0 > rest-facade > superagent-proxy > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > auth0 > rest-facade > superagent-proxy > proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > auth0 > rest-facade > superagent-proxy > proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > auth0 > rest-facade > superagent-proxy > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > auth0 > rest-facade > superagent-proxy > proxy-agent > pac-proxy-agent > https-proxy-agent:
+        patched: '2022-10-07T18:17:30.839Z'
+  SNYK-JS-LODASH-567746:
+    - auth0 > lru-memoizer > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > auth0 > lru-memoizer > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - async > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - request-promise > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > async > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > async > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > auth0 > lru-memoizer > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > auth0 > lru-memoizer > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - webtask-tools > pug > pug-code-gen > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - webtask-tools > pug > pug-filters > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - webtask-tools > pug > pug-code-gen > pug-attrs > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > webtask-tools > pug > pug-code-gen > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > webtask-tools > pug > pug-code-gen > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > webtask-tools > pug > pug-filters > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > webtask-tools > pug > pug-filters > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > webtask-tools > pug > pug-code-gen > pug-attrs > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > webtask-tools > pug > pug-code-gen > pug-attrs > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > webtask-tools > pug > pug-code-gen > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > webtask-tools > pug > pug-filters > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > webtask-tools > pug > pug-code-gen > pug-attrs > constantinople > babel-types > lodash:
+        patched: '2022-10-07T18:17:30.839Z'
+  'npm:mime:20170907':
+    - auth0-extension-s3-tools > auth0-extension-tools > webtask-tools > superagent > mime:
+        patched: '2022-10-07T18:17:30.839Z'
+  'npm:moment:20161019':
+    - '@auth0/hapi > joi > moment':
+        patched: '2022-10-07T18:17:30.839Z'
+    - '@auth0/hapi > catbox > joi > moment':
+        patched: '2022-10-07T18:17:30.839Z'
+    - '@auth0/hapi > heavy > joi > moment':
+        patched: '2022-10-07T18:17:30.839Z'
+  'npm:ms:20170412':
+    - webtask-tools > jsonwebtoken > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > jsonwebtoken > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-tools > webtask-tools > jsonwebtoken > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > webtask-tools > jsonwebtoken > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-hapi-tools > auth0-extension-tools > webtask-tools > jsonwebtoken > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+    - auth0-extension-s3-tools > auth0-extension-tools > webtask-tools > jsonwebtoken > ms:
+        patched: '2022-10-07T18:17:30.839Z'
+  'npm:stringstream:20180511':
+    - npm > request > stringstream:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > stringstream:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > stringstream:
+        patched: '2022-10-07T18:17:30.839Z'
+  'npm:tough-cookie:20170905':
+    - npm > request > tough-cookie:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > node-gyp > request > tough-cookie:
+        patched: '2022-10-07T18:17:30.839Z'
+    - npm > npm-registry-client > request > tough-cookie:
+        patched: '2022-10-07T18:17:30.839Z'
