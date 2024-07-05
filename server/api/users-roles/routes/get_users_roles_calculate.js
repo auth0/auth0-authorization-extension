@@ -27,6 +27,11 @@ export default () => ({
       description: role.description
     }));
 
+    console.log({
+      roles,
+      rolesMapped
+    });
+
     return h.response(rolesMapped);
   }
 });

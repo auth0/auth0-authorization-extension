@@ -21,6 +21,6 @@ export default () => ({
   },
   handler: async (req, h) => {
     await req.storage.deletePermission(req.params.id);
-    return h.response.code(204);
+    return h.response().code(204);
   }
 });

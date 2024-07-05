@@ -197,31 +197,39 @@ export const getRolesForGroups = (selectedGroups, selectedRoles) => {
 /*
  * Get all roles for a user.
  */
-export const getRolesForUser = (database, userId) =>
-  database
-    .getGroups()
-    .then((groups) => {
-      // get all groups user belong to
-      const userGroups = _.filter(groups, (group) =>
-        _.includes(group.members, userId)
-      );
-      return getParentGroups(groups, userGroups)
-        .filter((group) => group.roles && group.roles.length)
-        .map((group) => group.roles); // return roles for user's groups and their parents
-    })
-    .then((roles) => _.uniq(_.flattenDeep(roles)))
-    .then((roleIds) =>
-      database.getRoles().then((roles) => {
-        const groupRoles = _.filter(roles, (role) =>
-          _.includes(roleIds, role._id)
-        );
-        const userRoles = _.filter(
-          roles,
-          (role) => role.users && _.includes(role.users, userId)
-        );
-        return _.uniq([ ...groupRoles, ...userRoles ], '_id');
-      })
+export const getRolesForUser = async (database, userId) => {
+  const groups = await database.getGroups();
+
+    // get all groups user belong to
+  const userGroups = _.filter(groups, (group) =>
+    _.includes(group.members, userId)
     );
+  const parentGroups = getParentGroups(groups, userGroups);
+
+  const filteredGroups = parentGroups.filter((group) => group.roles && group.roles.length);
+
+  const roles = filteredGroups.map((group) => group.roles); // return roles for user's groups and their parents
+
+  const roleIds = _.uniq(_.flattenDeep(roles));
+
+  const rolesFromDB = await database.getRoles();
+
+  const groupRoles = _.filter(rolesFromDB, (role) =>
+    _.includes(roleIds, role._id)
+    );
+
+  const userRoles = _.filter(
+      rolesFromDB,
+      (role) => role.users && _.includes(role.users, userId)
+    );
+
+
+  const result = _.uniq([ ...groupRoles, ...userRoles ], '_id');
+
+  console.log({ groups, userGroups, parentGroups, filteredGroups, roles, roleIds, rolesFromDB, groupRoles, userRoles, result });
+
+  return result;
+};
 
 /*
  * Get all permissions for list of roles.

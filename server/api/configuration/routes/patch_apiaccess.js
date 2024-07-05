@@ -19,7 +19,7 @@ export default () => ({
   handler: async (req, h) => {
     if (!req.payload.apiAccess) {
       await deleteApi(req);
-      return h.response.code(204);
+      return h.response().code(204);
     }
 
     const resourceServer = await getApi(req);
@@ -30,6 +30,6 @@ export default () => ({
 
     await createApi(req, req.payload.token_lifetime);
 
-    return h.response.code(204);
+    return h.response().code(204);
   }
 });

@@ -11,6 +11,6 @@ export default () => ({
   },
   handler: async (req, h) => {
     await deleteApi(req);
-    return h.response.code(204);
+    return h.response().code(204);
   }
 });
