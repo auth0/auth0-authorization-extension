@@ -26,7 +26,7 @@ export default () => ({
     }
     const nested = _.filter(groups, g => group.nested.indexOf(g._id) > -1);
 
-    const sorted = _.sortByOrder(nested, [ 'name' ], [ true ]);
+    const sorted = _.sortBy(nested, [ 'name' ]);
 
     return h.response(sorted);
   }

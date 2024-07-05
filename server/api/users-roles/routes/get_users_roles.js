@@ -28,6 +28,8 @@ export default () => ({
       description: role.description
     }));
 
+    console.log({ roles, rolesFiltered, rolesMapped, id: req.params.id });
+
     return h.response(rolesMapped);
   }
 });

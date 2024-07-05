@@ -39,6 +39,6 @@ export default () => ({
       await req.storage.updateGroup(group._id, group);
     });
 
-    return h.response.code(204);
+    return h.response().code(204);
   }
 });

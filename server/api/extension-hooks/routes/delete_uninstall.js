@@ -23,6 +23,6 @@ export default (server) => ({
 
     await deleteApi(req, true);
     await req.pre.auth0.clients.delete({ client_id: config('AUTH0_CLIENT_ID') });
-    return h.response.code(204);
+    return h.response().code(204);
   }
 });

@@ -53,7 +53,7 @@ export default (server) => ({
       };
     });
 
-    const result = { total, nested: _.sortByOrder(users, [ 'user.name' ], [ true ]) };
+    const result = { total, nested: _.sortBy(users, [ 'user.name' ]) };
 
     return h.response(result);
   }
