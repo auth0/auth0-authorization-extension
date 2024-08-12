@@ -25,7 +25,7 @@ export default (server) => ({
   handler: async (req, h) => {
     const config = req.payload;
 
-    const script = compileRule(req.storage, req.pre.auth0, config, req.auth.credentials.email || 'unknown');
+    const script = await compileRule(req.storage, req.pre.auth0, config, req.auth.credentials.email || 'unknown');
     const rules = await multipartRequest(req.pre.auth0, 'rules', { fields: 'name,id' });
 
     const payload = {
@@ -37,9 +37,9 @@ export default (server) => ({
     const rule = _.find(rules, { name: payload.name });
     if (!rule) {
       await req.pre.auth0.rules.create({ stage: 'login_success', ...payload });
+    } else {
+      await req.pre.auth0.rules.update({ id: rule.id }, payload);
     }
-
-    await req.pre.auth0.rules.update({ id: rule.id }, payload);
 
     const updated = await req.storage.updateConfiguration(config);
     return h.response(updated);
