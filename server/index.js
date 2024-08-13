@@ -1,6 +1,6 @@
 import Hapi from '@hapi/hapi';
+import Joi from 'joi';
 import inertPlugin from 'inert';
-import Relish from 'relish';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
 import GoodConsole from '@hapi/good-console';
@@ -32,18 +32,16 @@ export default (cb) => {
     goodPlugin.options.reporters.console.push('stdout');
   }
 
-  const relishPlugin = Relish({});
 
   const server = new Hapi.Server({
     host: 'localhost',
     port: 3000,
     routes: {
-      cors: true,
-      validate: {
-        failAction: relishPlugin.failAction
-      }
+      cors: true
     }
   });
+
+  // server.validator(Joi);
 
   const externalPlugins = [
     goodPlugin,
