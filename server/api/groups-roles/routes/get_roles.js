@@ -3,7 +3,7 @@ import Joi from 'joi';
 export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]
@@ -14,17 +14,17 @@ export default (server) => ({
       server.handlers.managementClient
     ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getGroup(req.params.id)
-      .then(group => group.roles || [])
-      .then(roleIds => req.storage.getRoles()
-        .then(roles => roles.filter(role => roleIds.indexOf(role._id) > -1)) // eslint-disable-line no-underscore-dangle
-      )
-      .then(roles => reply(roles))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const group = await req.storage.getGroup(req.params.id);
+    const roleIds = group.roles || [];
+    const roles = await req.storage.getRoles();
+    const filteredRoles = roles.filter(role => roleIds.indexOf(role._id) > -1); // eslint-disable-line no-underscore-dangle
+
+    return h.response(filteredRoles);
+  }
 });

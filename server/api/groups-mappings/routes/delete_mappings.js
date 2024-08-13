@@ -6,7 +6,7 @@ import schema from '../schemas/mapping_ids';
 export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/mappings',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]
@@ -17,27 +17,26 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const mappings = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        mappings.forEach(mappingId => {
-          const groupMapping = _.find(group.mappings, { _id: mappingId });
-          if (groupMapping) {
-            group.mappings.splice(group.mappings.indexOf(groupMapping), 1);
-          }
-        });
+    const group = await req.storage.getGroup(req.params.id);
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    mappings.forEach(mappingId => {
+      const groupMapping = _.find(group.mappings, { _id: mappingId });
+      if (groupMapping) {
+        group.mappings.splice(group.mappings.indexOf(groupMapping), 1);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response().code(204);
   }
 });

@@ -1,10 +1,9 @@
-import Hapi from '@auth0/hapi';
-import Good from 'good';
-import Inert from 'inert';
-import Relish from 'relish';
+import Hapi from '@hapi/hapi';
+import Joi from 'joi';
+import inertPlugin from 'inert';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
-import GoodConsole from 'good-console';
+import GoodConsole from '@hapi/good-console';
 import HapiSwagger from 'hapi-swagger';
 
 import config from './lib/config';
@@ -13,7 +12,7 @@ import plugins from './plugins';
 
 export default (cb) => {
   const goodPlugin = {
-    register: Good,
+    plugin: { ...require('@hapi/good').plugin, name: '@hapi/good' },
     options: {
       ops: {
         interval: 30000
@@ -26,14 +25,6 @@ export default (cb) => {
     }
   };
 
-  const hapiSwaggerPlugin = {
-    register: HapiSwagger,
-    options: {
-      documentationPage: false,
-      swaggerUI: false
-    }
-  };
-
   if (process.env.NODE_ENV !== 'test') {
     goodPlugin.options.reporters.console.push(
       new GoodConsole({ color: !!config('LOG_COLOR') })
@@ -41,45 +32,60 @@ export default (cb) => {
     goodPlugin.options.reporters.console.push('stdout');
   }
 
-  const relishPlugin = Relish({ });
 
-  const server = new Hapi.Server();
-  server.connection({
+  const server = new Hapi.Server({
     host: 'localhost',
     port: 3000,
     routes: {
-      cors: true,
-      validate: {
-        failAction: relishPlugin.failAction
+      cors: true
+    }
+  });
+
+  // server.validator(Joi);
+
+  const externalPlugins = [
+    goodPlugin,
+    {
+      plugin: { ...HapiSwagger, name: 'hapi-swagger' },
+      options: {
+        documentationPage: false,
+        swaggerUI: false
       }
+    },
+    {
+      plugin: { ...inertPlugin, name: 'inert' }
+    },
+    {
+      plugin: { ...Blipp, name: 'blipp' }
+    },
+    {
+      plugin: { ...jwt, name: 'jwt' }
     }
-  });
-  server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
-    if (err) {
-      return cb(err, null);
-    }
+  ];
 
-    // Use the server logger.
-    logger.debug = (...args) => {
-      server.log([ 'debug' ], args.join(' '));
-    };
-    logger.info = (...args) => {
-      server.log([ 'info' ], args.join(' '));
-    };
-    logger.error = (...args) => {
-      server.log([ 'error' ], args.join(' '));
-    };
+  server.register([ ...externalPlugins, ...plugins ])
+    .then(() => {
+      // Use the server logger.
+      logger.debug = (...args) => {
+        server.log([ 'debug' ], args.join(' '));
+      };
+      logger.info = (...args) => {
+        server.log([ 'info' ], args.join(' '));
+      };
+      logger.error = (...args) => {
+        server.log([ 'error' ], args.join(' '));
+      };
 
-    return cb(null, server);
-  });
+      cb(null, server);
+    }).catch(err => cb(err, null));
 
-  server.ext('onPreResponse', (request, reply) => {
+  server.ext('onPreResponse', (request, h) => {
     if (request.response && request.response.isBoom && request.response.output) {
-      server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.url.path}`);
+      server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.path}`);
       server.log([ 'error' ], `Response: ${JSON.stringify(request.response, null, 2)}`);
     }
 
-    return reply.continue();
+    return h.continue;
   });
 
   return server;

@@ -28,8 +28,12 @@ nconf
 // Start the server.
 return require('./server/init').default((key) => nconf.get(key), null, (err, hapi) => {
   if (err) {
+    if (err.stack) {
+      logger.error(err.stack);
+    }
     return logger.error(err);
   }
+
 
   return hapi.start(() => {
     logger.info('Server running at:', hapi.info.uri);

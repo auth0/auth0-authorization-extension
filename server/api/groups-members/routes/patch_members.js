@@ -5,7 +5,7 @@ import schema from '../schemas/user_ids';
 export default () => ({
   method: 'PATCH',
   path: '/api/groups/{id}/members',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]
@@ -16,30 +16,29 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const members = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        if (!group.members) {
-          group.members = [];
-        }
+    const group = await req.storage.getGroup(req.params.id);
 
-        members.forEach(userId => {
-          if (group.members.indexOf(userId) === -1) {
-            group.members.push(userId);
-          }
-        });
+    if (!group.members) {
+      group.members = [];
+    }
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    members.forEach(userId => {
+      if (group.members.indexOf(userId) === -1) {
+        group.members.push(userId);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response().code(204);
   }
 });

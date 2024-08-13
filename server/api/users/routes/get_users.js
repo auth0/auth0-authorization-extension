@@ -4,25 +4,25 @@ import config from '../../../lib/config';
 export default (server) => ({
   method: 'GET',
   path: '/api/users',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:users' ]
     },
     description: 'Get all users.',
     validate: {
-      query: {
+      query: Joi.object({
         q: Joi.string().max(1000).allow('').default(''),
         field: Joi.string().max(1000).allow('').default(''),
         per_page: Joi.number().integer().min(1).max(100).default(100), // eslint-disable-line newline-per-chained-call
         page: Joi.number().integer().min(0).default(0)
-      }
+      })
     },
     pre: [
       server.handlers.managementClient
     ]
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const page = (req.query.page - 1 < 0) ? 0 : req.query.page - 1;
     const options = {
       sort: 'last_login:-1',
@@ -34,8 +34,8 @@ export default (server) => ({
       search_engine: config('USER_SEARCH_ENGINE') || 'v3'
     };
 
-    req.pre.auth0.users.getAll(options)
-      .then(users => reply(users))
-      .catch(err => reply.error(err));
+    const users = await req.pre.auth0.users.getAll(options);
+
+    return h.response(users);
   }
 });

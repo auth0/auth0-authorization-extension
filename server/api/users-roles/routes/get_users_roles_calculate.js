@@ -5,7 +5,7 @@ import { getRolesForUser } from '../../../lib/queries';
 export default () => ({
   method: 'GET',
   path: '/api/users/{id}/roles/calculate',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:roles' ]
@@ -13,19 +13,25 @@ export default () => ({
     description: 'Calculate the roles assigned to the user (including through group memberships).',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      }
+      })
     }
   },
-  handler: (req, reply) =>
-    getRolesForUser(req.storage, req.params.id)
-      .then(roles => roles.map((role) => ({
-        _id: role._id,
-        name: role.name,
-        applicationId: role.applicationId,
-        description: role.description
-      })))
-      .then(roles => reply(roles))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const roles = await getRolesForUser(req.storage, req.params.id);
+    const rolesMapped = roles.map((role) => ({
+      _id: role._id,
+      name: role.name,
+      applicationId: role.applicationId,
+      description: role.description
+    }));
+
+    console.log({
+      roles,
+      rolesMapped
+    });
+
+    return h.response(rolesMapped);
+  }
 });

@@ -3,7 +3,7 @@ import Joi from 'joi';
 export default () => ({
   method: 'DELETE',
   path: '/api/groups/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]
@@ -14,27 +14,26 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const members = req.payload;
 
-    req.storage.getGroup(req.params.id)
-      .then(group => {
-        members.forEach(userId => {
-          const index = group.roles.indexOf(userId);
-          if (index > -1) {
-            group.roles.splice(index, 1);
-          }
-        });
+    const group = await req.storage.getGroup(req.params.id);
 
-        return req.storage.updateGroup(req.params.id, group);
-      })
-      .then(() => reply().code(204))
-      .catch(err => reply.error(err));
+    members.forEach(userId => {
+      const index = group.roles.indexOf(userId);
+      if (index > -1) {
+        group.roles.splice(index, 1);
+      }
+    });
+
+    await req.storage.updateGroup(req.params.id, group);
+
+    return h.response().code(204);
   }
 });

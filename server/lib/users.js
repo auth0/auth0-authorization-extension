@@ -36,7 +36,7 @@ export function getUsersById(client, ids, page, limit) {
           return reject(err);
         }
 
-        const sorted = _.sortByOrder(users, 'user_id');
+        const sorted = _.sortBy(users, [ 'user_id' ]);
 
         return resolve({ total, users: sorted });
       }
