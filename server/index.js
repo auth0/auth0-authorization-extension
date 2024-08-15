@@ -1,5 +1,4 @@
 import Hapi from '@hapi/hapi';
-import Joi from 'joi';
 import inertPlugin from 'inert';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
@@ -40,8 +39,6 @@ export default (cb) => {
       cors: true
     }
   });
-
-  // server.validator(Joi);
 
   const externalPlugins = [
     goodPlugin,

@@ -102,7 +102,7 @@ function attachStorageHelpers(context) {
       qs: { path: path },
       json: true
     }, (err, res, body) => {
-      if (err) return cb(Boom.wrap(err, 502));
+      if (err) return cb(Boom.boomify(err, 502));
       if (res.statusCode === 404 && Object.hasOwnProperty.call(options, 'defaultValue')) return cb(null, options.defaultValue);
       if (res.statusCode >= 400) return cb(Boom.create(res.statusCode, body && body.message));
 
@@ -132,7 +132,7 @@ function attachStorageHelpers(context) {
       qs: { path: path },
       body: data
     }, (err, res, body) => {
-      if (err) return cb(Boom.wrap(err, 502));
+      if (err) return cb(Boom.boomify(err, 502));
       if (res.statusCode >= 400) return cb(Boom.create(res.statusCode, body && body.message));
 
       return cb(null);

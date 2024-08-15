@@ -150,7 +150,7 @@ const register = async function(server, options) {
         });
       } catch (error) {
         server.log([ 'error' ], 'Login callback failed', error);
-        return Boom.wrap(error);
+        return Boom.boomify(error);
       }
 
       return h.response('<html>' +
