@@ -27,7 +27,7 @@ const createTestGroup = async () => {
     .post(authzApi('/groups'))
     .send(group)
     .set('Authorization', `Bearer ${accessToken}`)
-    .set('Content-Type', 'application/json');
+    .accept('json');
 
   return result.body;
 };
@@ -45,7 +45,7 @@ const createTestRole = async () => {
     .post(authzApi('/roles'))
     .send(role)
     .set('Authorization', `Bearer ${accessToken}`)
-    .set('Content-Type', 'application/json');
+    .accept('json');
 
   return result.body;
 };
@@ -54,7 +54,7 @@ const deleteGroupById = async (groupId) =>
   superagent
     .delete(authzApi(`/groups/${groupId}`))
     .set('Authorization', `Bearer ${accessToken}`)
-    .set('Content-Type', 'application/json');
+    .accept('json');
 
 describe.only('groups', () => {
   before(async () => {
@@ -64,7 +64,7 @@ describe.only('groups', () => {
       .post(authzApi('/configuration/import'))
       .send({})
       .set('Authorization', `Bearer ${accessToken}`)
-      .set('Content-Type', 'application/json');
+      .accept('json');
   });
 
   let testGroup;
@@ -89,7 +89,7 @@ describe.only('groups', () => {
       .post(authzApi('/configuration/import'))
       .send({})
       .set('Authorization', `Bearer ${accessToken}`)
-      .set('Content-Type', 'application/json');
+      .accept('json');
     expect(response.statusCode).toEqual(204);
   });
 
@@ -98,7 +98,7 @@ describe.only('groups', () => {
     const response = await superagent
       .get(authzApi('/configuration/export'))
       .set('Authorization', `Bearer ${accessToken}`)
-      .set('Content-Type', 'application/json');
+      .accept('json');
 
     const exportedDataKeys = Object.keys(response.body);
     expect(exportedDataKeys).toEqual([ 'groups', 'roles' ]);
@@ -109,7 +109,7 @@ describe.only('groups', () => {
     const response = await superagent
       .get(authzApi(`/groups/${newGroup._id}`))
       .set('Authorization', `Bearer ${accessToken}`)
-      .set('Content-Type', 'application/json');
+      .accept('json');
 
 
     expect(newGroup.name).toEqual(response.body.name);
@@ -136,12 +136,10 @@ describe.only('groups', () => {
   });
 
   it('should delete group', async () => {
-    const deleteResult = await request
-      .delete({
-        url: authzApi(`/groups/${testGroup._id}`),
-        headers: token(accessToken),
-        resolveWithFullResponse: true
-      });
+    const deleteResult = await superagent
+      .delete(authzApi(`/groups/${testGroup._id}`))
+      .set(token(accessToken))
+      .accept('json');
 
     expect(deleteResult.statusCode).toEqual(204);
 
@@ -163,279 +161,238 @@ describe.only('groups', () => {
     }));
   });
 
-  it('should get all groups in the system', () =>
-    request.get({ url: authzApi('/groups'), headers: token(accessToken), json: true }).then((data) => {
-      expect(data.groups.length).toBeGreaterThan(0);
-    }));
+  it('should get all groups in the system', async () => {
+    const response = await superagent
+    .get(authzApi('/groups'))
+    .set('Authorization', `Bearer ${accessToken}`)
+    .accept('json');
 
-  it('should get a single group based on its unique identifier', () => {
-    request
-      .get({
-        url: authzApi(`/groups/${testGroup._id}`),
-        headers: token(accessToken),
-        json: true
-      })
-      .then((data) => {
-        expect(testGroup.name).toEqual(data.name);
-        expect(testGroup.description).toEqual(data.description);
-      });
+    expect(response.body.groups.length).toBeGreaterThan(0);
   });
 
-  it('should update a group', () => {
+  it('should get a single group based on its unique identifier', async () => {
+    const response = await superagent
+    .get(authzApi(`/groups/${testGroup._id}`))
+    .set(token(accessToken))
+    .accept('json');
+
+    expect(testGroup.name).toEqual(response.body.name);
+    expect(testGroup.description).toEqual(response.body.description);
+  });
+
+  it('should update a group', async () => {
     const newData = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence()
     };
 
-    return request
-      .put({
-        url: authzApi(`/groups/${testGroup._id}`),
-        form: newData,
-        headers: token(accessToken),
-        json: true
-      })
-      .then(() => {
-        // Check the group was updated in the server
-        request
-          .get({
-            url: authzApi(`/groups/${testGroup._id}`),
-            headers: token(accessToken),
-            json: true
-          })
-          .then((updatedGroup) => {
-            expect(updatedGroup.name).toEqual(newData.name);
-            expect(updatedGroup.description).toEqual(newData.description);
-          });
-      });
+    await superagent
+    .put(authzApi(`/groups/${testGroup._id}`))
+    .set(token(accessToken))
+    .send(newData)
+    .accept('json');
+
+  // Check the group was updated in the server
+    const updatedGroup = await superagent
+    .get(authzApi(`/groups/${testGroup._id}`))
+    .set(token(accessToken))
+    .accept('json');
+
+    expect(updatedGroup.body.name).toEqual(newData.name);
+    expect(updatedGroup.body.description).toEqual(newData.description);
   });
 
   describe('mappings', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const mappings = [ { groupName: 'My groupName', connectionName: 'google-oauth2' } ];
-      return request
-        .patch({
-          url: authzApi(`/groups/${testGroup._id}/mappings`),
-          body: mappings,
-          headers: token(accessToken),
-          json: true
-        })
-        .then(() => {
-          request
-            .get({
-              url: authzApi(`/groups/${testGroup._id}/mappings`),
-              headers: token(accessToken),
-              json: true
-            })
-            .then((groupMappings) => {
-              expect(groupMappings.length).toEqual(1);
-              expect(groupMappings[0].groupName).toEqual('My groupName');
-              expect(groupMappings[0].connectionName).toEqual('google-oauth2 (google-oauth2)');
-            });
-        });
+
+      await superagent
+        .patch(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .send(mappings)
+        .accept('json');
+
+      const groupMappings = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(groupMappings.body.length).toEqual(1);
+      expect(groupMappings.body[0].groupName).toEqual('My groupName');
+      expect(groupMappings.body[0].connectionName).toEqual('google-oauth2 (google-oauth2)');
     });
 
-    it('should add mappings to a group', () => {
+    it('should add mappings to a group', async () => {
       const mappings = [ { groupName: 'My groupName2', connectionName: 'google-oauth2' } ];
-      return request
-        .patch({
-          url: authzApi(`/groups/${testGroup._id}/mappings`),
-          body: mappings,
-          headers: token(accessToken),
-          json: true
-        })
-        .then(() => {
-          request
-            .get({
-              url: authzApi(`/groups/${testGroup._id}/mappings`),
-              headers: token(accessToken),
-              json: true
-            })
-            .then((groupMappings) => {
-              expect(groupMappings.length).toEqual(2);
-              expect(groupMappings[1].groupName).toEqual('My groupName2');
-              expect(groupMappings[1].connectionName).toEqual('google-oauth2 (google-oauth2)');
-            });
-        });
+
+      await superagent
+        .patch(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .send(mappings)
+        .accept('json');
+
+      const groupMappings = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(groupMappings.body.length).toEqual(2);
+      expect(groupMappings.body[1].groupName).toEqual('My groupName2');
+      expect(groupMappings.body[1].connectionName).toEqual('google-oauth2 (google-oauth2)');
     });
 
-    it('should get the mappings of a group', () =>
-      request
-        .get({
-          url: authzApi(`/groups/${testGroup._id}/mappings`),
-          headers: token(accessToken),
-          json: true
-        })
-        .then((response) => {
-          expect(response.length).toBeGreaterThan(0);
-        }));
+    it('should get the mappings of a group', async () => {
+      const response = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .accept('json');
 
-    it('should remove mappings of a group', () => {
-      let mappingCount;
-      return request
-        .get({
-          url: authzApi(`/groups/${testGroup._id}/mappings`),
-          headers: token(accessToken),
-          json: true
-        })
-        .then((mappings) => {
-          mappingCount = mappings.length;
-          return mappings[0];
-        })
-        .then((mapping) =>
-          request
-            .delete({
-              url: authzApi(`/groups/${testGroup._id}/mappings`),
-              headers: token(accessToken),
-              body: [ mapping._id ],
-              json: true,
-              resolveWithFullResponse: true
-            })
-            .then((res) => {
-              expect(res.statusCode).toEqual(204);
-              return request
-                .get({
-                  url: authzApi(`/groups/${testGroup._id}/mappings`),
-                  headers: token(accessToken),
-                  json: true
-                })
-                .then((response) => {
-                  expect(response.length).toEqual(mappingCount - 1);
-                });
-            })
-        );
+      expect(response.body.length).toBeGreaterThan(0);
+    });
+
+    it('should remove mappings of a group', async () => {
+      // Get the current mappings
+      const mappingsResponse = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .accept('json');
+
+      const mappings = mappingsResponse.body;
+      const mappingCount = mappings.length;
+      const mapping = mappings[0];
+
+      // Delete the first mapping
+      const deleteResponse = await superagent
+        .delete(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .send([ mapping._id ])
+        .accept('json');
+
+      expect(deleteResponse.status).toEqual(204);
+
+      // Verify the mapping count has decreased by 1
+      const finalMappingsResponse = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(finalMappingsResponse.body.length).toEqual(mappingCount - 1);
     });
   });
 
   describe('group members', () => {
-    beforeEach(() => request
-        .patch({
-          url: authzApi(`/groups/${testGroup._id}/members`),
-          body: [ groupMemberName1 ],
-          headers: token(accessToken),
-          json: true
-        }));
+    beforeEach(async () => {
+      await superagent
+        .patch(authzApi(`/groups/${testGroup._id}/members`))
+        .set(token(accessToken))
+        .send([ groupMemberName1 ])
+        .accept('json');
+    });
 
-    it('should add members to a group', () =>
-      request
-        .patch({
-          url: authzApi(`/groups/${testGroup._id}/members`),
-          body: [ groupMemberName2 ],
-          headers: token(accessToken),
-          json: true
-        })
-        .then(() =>
-          request
-            .get({
-              url: authzApi(`/groups/${testGroup._id}/members`),
-              headers: token(accessToken),
-              json: true
-            })
-            .then((data) => {
-              expect(data.users.find((member) => member.user_id === groupMemberName2)).toBeDefined();
-            })
-        ));
+    it('should add members to a group', async () => {
+      await superagent
+        .patch(authzApi(`/groups/${testGroup._id}/members`))
+        .set(token(accessToken))
+        .send([ groupMemberName2 ])
+        .accept('json');
 
-    it('should get the members of a group', () =>
-      request.get({
-        url: authzApi(`/groups/${testGroup._id}/members`),
-        headers: token(accessToken),
-        json: true
-      }));
+      const data = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/members`))
+        .set(token(accessToken))
+        .accept('json');
 
-    it('should remove members from a group', () =>
-      request
-        .delete({
-          url: authzApi(`/groups/${testGroup._id}/members`),
-          body: [ groupMemberName1 ],
-          headers: token(accessToken),
-          json: true
-        })
-        .then(() =>
-          request
-            .get({
-              url: authzApi(`/groups/${testGroup._id}/members`),
-              headers: token(accessToken),
-              json: true
-            })
-            .then((data) => {
-              expect(data.users.find((member) => member.user_id === groupMemberName1)).not.toBeDefined();
-            })
-        ));
+      expect(data.body.users.find((member) => member.user_id === groupMemberName2)).toBeDefined();
+    });
 
-    it('should get the nested members of a group', () =>
-      request.get({
-        url: authzApi(`/groups/${testGroup._id}/members/nested`),
-        headers: token(accessToken),
-        json: true
-      }));
+    it('should get the members of a group', async () => {
+      const response = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/members`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(response.body).toBeDefined();
+    });
+
+    it('should remove members from a group', async () => {
+      await superagent
+        .delete(authzApi(`/groups/${testGroup._id}/members`))
+        .set(token(accessToken))
+        .send([ groupMemberName1 ])
+        .accept('json');
+
+      const data = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/members`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(data.body.users.find((member) => member.user_id === groupMemberName1)).not.toBeDefined();
+    });
+
+    it('should get the nested members of a group', async () => {
+      const response = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/members/nested`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(response.body).toBeDefined();
+    });
   });
 
   describe('group roles', () => {
-    beforeEach(() => request
-      .patch({
-        url: authzApi(`/groups/${testGroup._id}/roles`),
-        body: [ testRole._id ],
-        headers: token(accessToken),
-        json: true
-      }));
+    beforeEach(async () => {
+      await superagent
+        .patch(authzApi(`/groups/${testGroup._id}/roles`))
+        .set(token(accessToken))
+        .send([ testRole._id ])
+        .accept('json');
+    });
 
-    it('should add roles to a group', () =>
-    request
-      .patch({
-        url: authzApi(`/groups/${testGroup._id}/roles`),
-        body: [ testRole._id ],
-        headers: token(accessToken),
-        json: true
-      })
-      .then(() => {
-        request
-          .get({
-            url: authzApi(`/groups/${testGroup._id}/roles`),
-            headers: token(accessToken),
-            json: true
-          })
-          .then((res) => {
-            expect(res.find((role) => role._id === testRole._id)).toBeDefined();
-          });
-      }));
+    it('should add roles to a group', async () => {
+      await superagent
+        .patch(authzApi(`/groups/${testGroup._id}/roles`))
+        .set(token(accessToken))
+        .send([ testRole._id ])
+        .accept('json');
 
-    it('should get the roles of a group', () =>
-      request
-        .get({
-          url: authzApi(`/groups/${testGroup._id}/roles`),
-          headers: token(accessToken),
-          json: true
-        })
-        .then((res) => {
-          expect(res.length).toBeGreaterThan(0);
-        }));
+      const res = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/roles`))
+        .set(token(accessToken))
+        .accept('json');
 
-    it('should delete roles from a group', () =>
-      request
-        .delete({
-          url: authzApi(`/groups/${testGroup._id}/roles`),
-          body: [ testRole._id ],
-          headers: token(accessToken),
-          json: true
-        })
-        .then(() =>
-          request
-            .get({
-              url: authzApi(`/groups/${testGroup._id}/roles`),
-              headers: token(accessToken),
-              json: true
-            })
-            .then((res) => {
-              expect(res.find((role) => role._id === testRole._id)).not.toBeDefined();
-            })
-        ));
+      expect(res.body.find((role) => role._id === testRole._id)).toBeDefined();
+    });
 
-    // TODO: What is this?
-    it('should get the nested roles of a group', () =>
-      request.get({
-        url: authzApi(`/groups/${testGroup._id}/roles/nested`),
-        headers: token(accessToken),
-        json: true
-      }));
+    it('should get the roles of a group', async () => {
+      const res = await superagent
+      .get(authzApi(`/groups/${testGroup._id}/roles`))
+      .set(token(accessToken))
+      .accept('json');
+
+      expect(res.body.length).toBeGreaterThan(0);
+    });
+
+    it('should delete roles from a group', async () => {
+      await superagent
+        .delete(authzApi(`/groups/${testGroup._id}/roles`))
+        .set(token(accessToken))
+        .send([ testRole._id ])
+        .accept('json');
+
+      const res = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/roles`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(res.body.find((role) => role._id === testRole._id)).not.toBeDefined();
+    });
+
+    it('should get the nested roles of a group', async () => {
+      const response = await superagent
+        .get(authzApi(`/groups/${testGroup._id}/roles/nested`))
+        .set(token(accessToken))
+        .accept('json');
+
+      expect(response.body).toBeDefined();
+    });
   });
 });
