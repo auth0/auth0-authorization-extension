@@ -1,0 +1,11 @@
+{
+  "AUTH0_DOMAIN": "tim.local.dev.auth0.com",
+  "AUTH0_CLIENT_ID": "bur4PSKvDXtdBW7bpof6PYftXA5uEaFY",
+  "AUTH0_CLIENT_SECRET": "mzbMnvn1orQe-tLqmZ2yF32Ufi5DsL_gD7x-bdHvl5aOweYn1sWP4Vh_27OvBjyn",
+  "EXTENSION_CLIENT_ID": "bur4PSKvDXtdBW7bpof6PYftXA5uEaFY",
+  "EXTENSION_SECRET": "mzbMnvn1orQe-tLqmZ2yF32Ufi5DsL_gD7x-bdHvl5aOweYn1sWP4Vh_27OvBjyn",
+  "WT_URL": "https://tim.local.dev.auth0.com",
+  "PUBLIC_WT_URL": "https://tim.local.dev.auth0.com",
+  "AUTH0_RTA": "https://login0.local.dev.auth0.com",
+  "AUTHZ_API_URL": "http://localhost:3000:api"
+}

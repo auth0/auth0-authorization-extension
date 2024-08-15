@@ -38,7 +38,7 @@ describe('groups-mapping-route', () => {
     });
 
     it('should return 403 if scope is missing (list of mappings)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/mappings`,
@@ -76,7 +76,7 @@ describe('groups-mapping-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete mappings)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/mappings`,
@@ -139,7 +139,7 @@ describe('groups-mapping-route', () => {
 
   describe('#patch', () => {
     it('should return 403 if scope is missing (update mappings)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/mappings`,

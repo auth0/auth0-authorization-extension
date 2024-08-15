@@ -20,7 +20,7 @@ describe('connections-route', () => {
     });
 
     it('should return 403 if scope is missing (list connections)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/connections',

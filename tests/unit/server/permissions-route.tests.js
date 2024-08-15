@@ -37,7 +37,7 @@ describe('permissions-route', () => {
     });
 
     it('should return 403 if scope is missing (list of permissions)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/permissions',
@@ -72,7 +72,7 @@ describe('permissions-route', () => {
     });
 
     it('should return 403 if scope is missing (single permission)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: `/api/permissions/${guid}`,
@@ -108,7 +108,7 @@ describe('permissions-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete permission)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'DELETE',
         url: `/api/permissions/${guid}`,
@@ -149,7 +149,7 @@ describe('permissions-route', () => {
 
   describe('#post', () => {
     it('should return 403 if scope is missing (create permission)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'POST',
         url: '/api/permissions',
@@ -213,7 +213,7 @@ describe('permissions-route', () => {
 
   describe('#put', () => {
     it('should return 403 if scope is missing (update permission)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'PUT',
         url: `/api/permissions/${guid}`,

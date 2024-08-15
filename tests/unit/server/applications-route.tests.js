@@ -44,7 +44,7 @@ describe('applications-route', () => {
     });
 
     it('should return 403 if scope is missing (list of apps)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/applications',
@@ -79,7 +79,7 @@ describe('applications-route', () => {
     });
 
     it('should return 403 if scope is missing (single app)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/applications/1',

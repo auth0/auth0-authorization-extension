@@ -35,7 +35,7 @@ describe('users-route', () => {
     });
 
     it('should return 403 if scope is missing (list of users)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/users',
@@ -72,7 +72,7 @@ describe('users-route', () => {
     });
 
     it('should return 403 if scope is missing (single user)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/users/userId',

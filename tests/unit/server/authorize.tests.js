@@ -4,7 +4,7 @@ import { getToken } from '../mocks/tokens';
 
 describe('users-route', () => {
   const { db, server } = getServerData();
-  const token = getToken();
+  const token = gettoken(accessToken);
   const clientId = 'client_id';
   const permissions = [
     {

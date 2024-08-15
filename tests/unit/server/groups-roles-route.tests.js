@@ -47,7 +47,7 @@ describe('groups-members-route', () => {
     });
 
     it('should return 403 if scope is missing (list of roles)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/roles`,
@@ -81,7 +81,7 @@ describe('groups-members-route', () => {
     });
 
     it('should return 403 if scope is missing (list of nested roles)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/roles/nested`,
@@ -117,7 +117,7 @@ describe('groups-members-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete roles)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/roles`,
@@ -173,7 +173,7 @@ describe('groups-members-route', () => {
 
   describe('#patch', () => {
     it('should return 403 if scope is missing (update roles)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/roles`,

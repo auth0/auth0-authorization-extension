@@ -1,6 +1,6 @@
 import request from 'request-promise';
 import expect from 'expect';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import Promise from 'bluebird';
 import {
   getAccessToken,
@@ -27,7 +27,7 @@ describe('policy', () => {
           .post({
             url: authzApi('/configuration/import'),
             form: {},
-            headers: token(),
+            headers: token(accessToken),
             resolveWithFullResponse: true
           })
           .then(() => {
@@ -86,7 +86,7 @@ describe('policy', () => {
                     .post({
                       url: authzApi('/configuration/import'),
                       body: importData,
-                      headers: token(),
+                      headers: token(accessToken),
                       json: true,
                       resolveWithFullResponse: true
                     })
@@ -133,7 +133,7 @@ describe('policy', () => {
     request
       .post({
         url: authzApi(`/users/${user.id}/policy/${clientId}`),
-        headers: { ...token(), 'x-api-key': extensionApiKey },
+        headers: { ...token(accessToken), 'x-api-key': extensionApiKey },
         json: true,
         body: {
           connectionName,
@@ -153,7 +153,7 @@ describe('policy', () => {
     request
       .post({
         url: authzApi(`/users/${user.id}/policy/${clientId}`),
-        headers: { ...token(), 'x-api-key': extensionApiKey },
+        headers: { ...token(accessToken), 'x-api-key': extensionApiKey },
         json: true,
         body: {
           connectionName,

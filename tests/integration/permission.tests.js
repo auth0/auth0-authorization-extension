@@ -2,7 +2,7 @@
 
 import request from 'request-promise';
 import expect from 'expect';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { getAccessToken, authzApi, token } from './utils';
 
 let accessToken;
@@ -12,12 +12,12 @@ describe('permissions', () => {
   before(() => getAccessToken()
     .then(response => {
       accessToken = response;
-      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true });
+      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(accessToken), resolveWithFullResponse: true });
     })
   );
 
   it('should have an accessToken', () => {
-    expect(accessToken).toExist();
+    expect(accessToken).toBeDefined();
   });
 
   it('should create a new permission', () => {
@@ -31,14 +31,14 @@ describe('permissions', () => {
     return request.post({
       url: authzApi('/permissions'),
       form: permission,
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
     .then((data) => {
       remotePermission = data;
       return request.get({
         url: authzApi(`/permissions/${remotePermission._id}`),
-        headers: token(),
+        headers: token(accessToken),
         json: true
       })
         .then((data) => {
@@ -51,7 +51,7 @@ describe('permissions', () => {
   it('should get all permissions in the system', () =>
     request.get({
       url: authzApi('/permissions'),
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
     .then((data) => {
@@ -62,7 +62,7 @@ describe('permissions', () => {
   it('should get a single permission based on its unique identifier', () =>
     request.get({
       url: authzApi(`/permissions/${remotePermission._id}`),
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
   );
@@ -78,7 +78,7 @@ describe('permissions', () => {
     return request.put({
       url: authzApi(`/permissions/${remotePermission._id}`),
       form: newData,
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
     .then((data) => {
@@ -87,7 +87,7 @@ describe('permissions', () => {
       // Check the permission was updated in the server
       return request.get({
         url: authzApi(`/permissions/${remotePermission._id}`),
-        headers: token(),
+        headers: token(accessToken),
         json: true
       })
       .then((data) => {
@@ -100,14 +100,14 @@ describe('permissions', () => {
   it('should delete a permission', (done) => {
     request.delete({
       url: authzApi(`/permissions/${remotePermission._id}`),
-      headers: token(),
+      headers: token(accessToken),
       resolveWithFullResponse: true
     })
     .then(() => {
       // Check the permission was deleted in the server
       request.get({
         url: authzApi(`/groups/${remotePermission._id}`),
-        headers: token(),
+        headers: token(accessToken),
         json: true
       })
       .then((data) => {

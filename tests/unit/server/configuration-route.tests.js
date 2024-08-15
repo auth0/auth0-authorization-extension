@@ -46,7 +46,7 @@ describe('configuration-route', () => {
     });
 
     it('should return 403 if scope is missing (get config)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/configuration',
@@ -99,7 +99,7 @@ describe('configuration-route', () => {
     });
 
     it('should return 403 if scope is missing (export config)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/configuration/export',
@@ -131,7 +131,7 @@ describe('configuration-route', () => {
     });
 
     it('should return 403 if scope is missing (get resource-server)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/configuration/resource-server',
@@ -184,7 +184,7 @@ describe('configuration-route', () => {
 
   describe('#patch', () => {
     it('should return 403 if scope is missing (update config)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'PATCH',
         url: '/api/configuration',
@@ -243,7 +243,7 @@ describe('configuration-route', () => {
     });
 
     it('should return 403 if scope is missing (update resource-server)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'PATCH',
         url: '/api/configuration/resource-server',
@@ -302,7 +302,7 @@ describe('configuration-route', () => {
 
   describe('#post', () => {
     it('should return 403 if scope is missing (import config)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'POST',
         url: '/api/configuration/import',
@@ -365,7 +365,7 @@ describe('configuration-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (disable resource-server)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'DELETE',
         url: '/api/configuration/resource-server',

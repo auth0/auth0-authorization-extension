@@ -2,7 +2,7 @@
 
 import request from 'request-promise';
 import expect from 'expect';
-import faker from 'faker';
+import { faker } from '@faker-js/faker';
 import { getAccessToken, authzApi, token } from './utils';
 
 let accessToken;
@@ -12,12 +12,12 @@ describe('roles', () => {
   before(() => getAccessToken()
     .then(response => {
       accessToken = response;
-      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true });
+      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(accessToken), resolveWithFullResponse: true });
     })
   );
 
   it('should have an accessToken', () => {
-    expect(accessToken).toExist();
+    expect(accessToken).toBeDefined();
   });
 
   it('should create a new role', () => {
@@ -32,7 +32,7 @@ describe('roles', () => {
     return request.post({
       url: authzApi('/roles'),
       form: role,
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
     .then((data) => {
@@ -41,7 +41,7 @@ describe('roles', () => {
       // Check the role is stored in the server
       return request.get({
         url: authzApi(`/roles/${remoteRole._id}`),
-        headers: token(),
+        headers: token(accessToken),
         json: true
       })
       .then((data) => {
@@ -54,7 +54,7 @@ describe('roles', () => {
   it('should get all roles in the system', () =>
     request.get({
       url: authzApi('/roles'),
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
     .then((data) => {
@@ -65,7 +65,7 @@ describe('roles', () => {
   it('should get a single role based on its unique identifier', () =>
     request.get({
       url: authzApi(`/roles/${remoteRole._id}`),
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
   );
@@ -81,7 +81,7 @@ describe('roles', () => {
     return request.put({
       url: authzApi(`/roles/${remoteRole._id}`),
       form: newData,
-      headers: token(),
+      headers: token(accessToken),
       json: true
     })
     .then((data) => {
@@ -90,7 +90,7 @@ describe('roles', () => {
       // Check the role was updated in the server
       return request.get({
         url: authzApi(`/roles/${remoteRole._id}`),
-        headers: token(),
+        headers: token(accessToken),
         json: true
       })
       .then((data) => {
@@ -103,14 +103,14 @@ describe('roles', () => {
   it('should delete a role', (done) => {
     request.delete({
       url: authzApi(`/roles/${remoteRole._id}`),
-      headers: token(),
+      headers: token(accessToken),
       resolveWithFullResponse: true
     })
     .then(() => {
       // Check the role was deleted in the server
       request.get({
         url: authzApi(`/roles/${remoteRole._id}`),
-        headers: token(),
+        headers: token(accessToken),
         json: true
       })
       .then((data) => {

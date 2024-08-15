@@ -2,8 +2,6 @@ import config from '../../server/lib/config';
 
 const request = require('request-promise');
 
-let accessToken;
-
 export const credentials = {
   audience: 'urn:auth0-authz-api',
   client_id: config('AUTH0_CLIENT_ID'),
@@ -14,19 +12,25 @@ export const credentials = {
 /*
  * Get an access token for the Authorization Extension API.
  */
-export const getAccessToken = () => request.post({
-  uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
-  form: credentials,
-  json: true
-})
-  .then(res => res.access_token).then((token) => {
-    accessToken = token;
-    return token;
+export const getAccessToken = async () => {
+  // console.log({ credentials, AUTH0_DOMAIN: config('AUTH0_DOMAIN') });
+
+  const result = await request.post({
+    uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
+    form: credentials,
+    json: true
   });
+
+  return result.access_token;
+};
+  // .then(res => res.access_token).then((token) => {
+  //   accessToken = token;
+  //   return token;
+  // });
 
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);
-export const token = () => ({ Authorization: `Bearer ${accessToken}` });
+export const token = (accessToken) => ({ Authorization: `Bearer ${accessToken}` });
 export const extensionApiKey = config('EXTENSION_SECRET');
 
 // Splits an array into chunked sub-arrays.

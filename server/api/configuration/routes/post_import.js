@@ -1,4 +1,5 @@
 import schema from '../schemas/storage';
+import { Promise } from 'bluebird';
 
 export default () => ({
   method: 'POST',
@@ -22,7 +23,8 @@ export default () => ({
     }
 
     if (req.storage.provider.storageContext.storage && req.storage.provider.storageContext.storage.set) {
-      await req.storage.provider.storageContext.storage.set(req.payload, { force: true });
+      const setAysnc = Promise.promisify(req.storage.provider.storageContext.storage.set);
+      await setAysnc(req.payload, { force: true });
       return h.response().code(204);
     }
 

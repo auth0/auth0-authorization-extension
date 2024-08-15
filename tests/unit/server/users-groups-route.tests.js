@@ -67,7 +67,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return 403 if scope is missing (list of groups)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/users/userId/groups',
@@ -142,7 +142,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return 403 if scope is missing (list of calculated groups)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'GET',
         url: '/api/users/userId/groups/calculate',
@@ -184,7 +184,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return 403 if scope is missing (update groups)', (cb) => {
-      const token = getToken();
+      const token = gettoken(accessToken);
       const options = {
         method: 'PATCH',
         url: '/api/users/userId/groups',
