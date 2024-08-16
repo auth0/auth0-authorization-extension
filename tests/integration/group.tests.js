@@ -56,7 +56,7 @@ const deleteGroupById = async (groupId) =>
     .set('Authorization', `Bearer ${accessToken}`)
     .accept('json');
 
-describe.only('groups', () => {
+describe('groups', () => {
   before(async () => {
     accessToken = await getAccessToken();
 
