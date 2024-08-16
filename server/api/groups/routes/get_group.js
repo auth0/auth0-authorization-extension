@@ -32,7 +32,6 @@ export default () => ({
       const group = await req.storage.getGroup(req.params.id);
       return h.response({ _id: group._id, name: group.name, description: group.description });
     } catch (error) {
-      console.log(error);
       throw Boom.badRequest(`The record ${req.params.id} in groups does not exist.`);
     }
   }
