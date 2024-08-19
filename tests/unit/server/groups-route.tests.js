@@ -5,10 +5,10 @@ import uuid from 'node-uuid';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('groups-route', () => {
+describe('groups-route', async () => {
   let newGroup = null;
   const groupName = 'developers';
-  const { db, server } = getServerData();
+  const { db, server } = await getServerData();
   const guid = 'C56a418065aa426ca9455fd21deC1112';
   const group = {
     _id: guid,
@@ -99,7 +99,7 @@ describe('groups-route', () => {
     });
 
     it('should return 403 if scope is missing (list of groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/groups',
@@ -134,7 +134,7 @@ describe('groups-route', () => {
     });
 
     it('should return 403 if scope is missing (single groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}`,
@@ -197,7 +197,7 @@ describe('groups-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete group)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}`,
@@ -257,7 +257,7 @@ describe('groups-route', () => {
 
   describe('#post', () => {
     it('should return 403 if scope is missing (create group)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'POST',
         url: '/api/groups',
@@ -321,7 +321,7 @@ describe('groups-route', () => {
 
   describe('#put', () => {
     it('should return 403 if scope is missing (update group)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PUT',
         url: `/api/groups/${guid}`,

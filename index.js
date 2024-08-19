@@ -1,3 +1,5 @@
+import { initHapiServer } from './server';
+
 const path = require('path');
 const nconf = require('nconf');
 
@@ -26,16 +28,26 @@ nconf
   });
 
 // Start the server.
-require('./server/init').default((key) => nconf.get(key), null, (err, hapi) => {
+initHapiServer.then((err, server) => {
   if (err) {
-    if (err.stack) {
-      logger.error(err.stack);
-    }
     return logger.error(err);
   }
 
-
-  return hapi.start(() => {
-    logger.info('Server running at:', hapi.info.uri);
+  return server.start(() => {
+    logger.info('Server running at:', server.info.uri);
   });
 });
+
+// require('./server/init').default((key) => nconf.get(key), null, (err, hapi) => {
+//   if (err) {
+//     if (err.stack) {
+//       logger.error(err.stack);
+//     }
+//     return logger.error(err);
+//   }
+
+
+//   return hapi.start(() => {
+//     logger.info('Server running at:', hapi.info.uri);
+//   });
+// });

@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import Boom from '@hapi/boom';
 
 export default () => ({
   method: 'GET',
@@ -17,11 +18,15 @@ export default () => ({
     }
   },
   handler: async (req, h) => {
-    const permission = await req.storage.getPermission(req.params.id);
-    return h.response({
-      _id: permission._id,
-      name: permission.name,
-      description: permission.description
-    });
+    try {
+      const permission = await req.storage.getPermission(req.params.id);
+      return h.response({
+        _id: permission._id,
+        name: permission.name,
+        description: permission.description
+      });
+    } catch (error) {
+      throw Boom.badRequest(`The record ${req.params.id} in permissions does not exist.`);
+    }
   }
 });

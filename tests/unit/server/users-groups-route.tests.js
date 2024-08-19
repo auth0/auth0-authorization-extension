@@ -3,8 +3,8 @@ import uuid from 'node-uuid';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('users-groups-route', () => {
-  const { db, server } = getServerData();
+describe('users-groups-route', async () => {
+  const { db, server } = await getServerData();
 
   let group = null;
   const groupName = 'developers';
@@ -67,7 +67,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return 403 if scope is missing (list of groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/users/userId/groups',
@@ -142,7 +142,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return 403 if scope is missing (list of calculated groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/users/userId/groups/calculate',
@@ -184,7 +184,7 @@ describe('users-groups-route', () => {
     });
 
     it('should return 403 if scope is missing (update groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PATCH',
         url: '/api/users/userId/groups',

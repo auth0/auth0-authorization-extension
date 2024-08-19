@@ -3,8 +3,8 @@ import * as auth0 from '../mocks/auth0';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('users-route', () => {
-  const { server } = getServerData();
+describe('users-route', async () => {
+  const { server } = await getServerData();
   const user = {
     email: 'user@exampple.com',
     email_verified: true,
@@ -35,7 +35,7 @@ describe('users-route', () => {
     });
 
     it('should return 403 if scope is missing (list of users)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/users',
@@ -72,7 +72,7 @@ describe('users-route', () => {
     });
 
     it('should return 403 if scope is missing (single user)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/users/userId',

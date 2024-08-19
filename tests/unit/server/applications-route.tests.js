@@ -3,8 +3,8 @@ import { getServerData } from '../server';
 import * as auth0 from '../mocks/auth0';
 import { getToken } from '../mocks/tokens';
 
-describe('applications-route', () => {
-  const { server } = getServerData();
+describe('applications-route', async () => {
+  const { server } = await getServerData();
   const applications = [
     {
       name: 'GlobalApp',
@@ -32,6 +32,8 @@ describe('applications-route', () => {
 
   describe('#get', () => {
     it('should return 401 if no token provided', (cb) => {
+      console.log('applications-route get 1');
+
       const options = {
         method: 'GET',
         url: '/api/applications'
@@ -44,7 +46,7 @@ describe('applications-route', () => {
     });
 
     it('should return 403 if scope is missing (list of apps)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/applications',
@@ -79,7 +81,7 @@ describe('applications-route', () => {
     });
 
     it('should return 403 if scope is missing (single app)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/applications/1',

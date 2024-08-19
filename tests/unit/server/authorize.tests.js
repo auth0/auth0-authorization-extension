@@ -1,10 +1,14 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
+import { Promise } from 'bluebird';
 
-describe('users-route', () => {
-  const { db, server } = getServerData();
-  const token = gettoken(accessToken);
+describe('users-route', async () => {
+  let db;
+  let server;
+
+
+  const token = getToken();
   const clientId = 'client_id';
   const permissions = [
     {
@@ -91,30 +95,31 @@ describe('users-route', () => {
     }
   ];
 
-  before((done) => {
+  before(async () => {
+    const result = await getServerData();
+    db = result.db;
+    server = result.server;
+
     db.getGroups = () => Promise.resolve(groups);
     db.getRoles = () => Promise.resolve(roles);
     db.getPermissions = () => Promise.resolve(permissions);
     db.getApiKey = () => Promise.resolve('hash');
     db.provider = { storageContext: { read: () => Promise.resolve({ groups, roles, permissions }) } };
-
-    done();
   });
 
   describe('#POST', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'POST',
         url: `/api/users/1/policy/${clientId}`
       };
 
-      server.inject(options, (response) => {
+      server.inject(options, (err, response) => {
         expect(response.result.statusCode).to.be.equal(401);
-        cb();
       });
     });
 
-    it('should return groups, roles and permissions for user', (cb) => {
+    it('should return groups, roles and permissions for user', async () => {
       const options = {
         method: 'POST',
         url: `/api/users/1/policy/${clientId}`,
@@ -127,7 +132,7 @@ describe('users-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
+      server.inject(options, (err, response) => {
         expect(response.result).to.be.a('object');
         expect(response.result.roles).to.be.a('array');
         expect(response.result.groups).to.be.a('array');
@@ -145,12 +150,10 @@ describe('users-route', () => {
         expect(response.result.permissions).to.include('comment');
         expect(response.result.roles).to.not.include('delete-role');
         expect(response.result.permissions).to.not.include('delete');
-
-        cb();
       });
     });
 
-    it('should return groups and roles if there are no permissions in the config', (cb) => {
+    it('should return groups and roles if there are no permissions in the config', async () => {
       db.provider = { storageContext: { read: () => Promise.resolve({ groups, roles }) } };
       const options = {
         method: 'POST',
@@ -164,7 +167,7 @@ describe('users-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
+      server.inject(options, (err, response) => {
         expect(response.result).to.be.a('object');
         expect(response.result.roles).to.be.a('array');
         expect(response.result.groups).to.be.a('array');
@@ -177,12 +180,10 @@ describe('users-route', () => {
         expect(response.result.groups).to.include('sub');
         expect(response.result.groups).to.include('mapped');
         expect(response.result.roles).to.not.include('delete-role');
-
-        cb();
       });
     });
 
-    it('should return groups if there are no roles in the config', (cb) => {
+    it('should return groups if there are no roles in the config', async () => {
       db.provider = { storageContext: { read: () => Promise.resolve({ groups, permissions }) } };
       const options = {
         method: 'POST',
@@ -196,7 +197,7 @@ describe('users-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
+      server.inject(options, (err, response) => {
         expect(response.result).to.be.a('object');
         expect(response.result.roles).to.be.a('array');
         expect(response.result.groups).to.be.a('array');
@@ -204,12 +205,10 @@ describe('users-route', () => {
         expect(response.result.groups).to.include('main');
         expect(response.result.groups).to.include('sub');
         expect(response.result.groups).to.include('mapped');
-
-        cb();
       });
     });
 
-    it('should return roles and permissions if there are no groups in the config', (cb) => {
+    it('should return roles and permissions if there are no groups in the config', async () => {
       db.provider = { storageContext: { read: () => Promise.resolve({ roles, permissions }) } };
 
       const options = {
@@ -224,7 +223,7 @@ describe('users-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
+      server.inject(options, (err, response) => {
         expect(response.result).to.be.a('object');
         expect(response.result.roles).to.be.a('array');
         expect(response.result.groups).to.be.a('array');
@@ -233,12 +232,10 @@ describe('users-route', () => {
         expect(response.result.permissions).to.include('create');
         expect(response.result.roles).to.not.include('delete-role');
         expect(response.result.permissions).to.not.include('delete');
-
-        cb();
       });
     });
 
-    it('should return error if unable to read from storage', (cb) => {
+    it('should return error if unable to read from storage', async () => {
       db.provider = null;
 
       const options = {
@@ -253,11 +250,9 @@ describe('users-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
+      server.inject(options, (err, response) => {
         expect(response.result.statusCode).to.be.equal(400);
         expect(response.result.message).to.be.equal('Storage error.');
-
-        cb();
       });
     });
   });

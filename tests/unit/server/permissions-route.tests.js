@@ -4,8 +4,8 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 import config from '../../../server/lib/config';
 
-describe('permissions-route', () => {
-  const { db, server } = getServerData();
+describe('permissions-route', async () => {
+  const { db, server } = await getServerData();
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const permissionName = 'test-permission';
   const permission = {
@@ -37,7 +37,7 @@ describe('permissions-route', () => {
     });
 
     it('should return 403 if scope is missing (list of permissions)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/permissions',
@@ -72,7 +72,7 @@ describe('permissions-route', () => {
     });
 
     it('should return 403 if scope is missing (single permission)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/permissions/${guid}`,
@@ -108,7 +108,7 @@ describe('permissions-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete permission)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'DELETE',
         url: `/api/permissions/${guid}`,
@@ -149,7 +149,7 @@ describe('permissions-route', () => {
 
   describe('#post', () => {
     it('should return 403 if scope is missing (create permission)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'POST',
         url: '/api/permissions',
@@ -213,7 +213,7 @@ describe('permissions-route', () => {
 
   describe('#put', () => {
     it('should return 403 if scope is missing (update permission)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PUT',
         url: `/api/permissions/${guid}`,

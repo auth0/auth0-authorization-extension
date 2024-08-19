@@ -9,7 +9,7 @@ import config from './lib/config';
 import logger from './lib/logger';
 import plugins from './plugins';
 
-export default (cb) => {
+export const initHapiServer = async () => {
   const goodPlugin = {
     plugin: { ...require('@hapi/good').plugin, name: '@hapi/good' },
     options: {
@@ -31,13 +31,10 @@ export default (cb) => {
     goodPlugin.options.reporters.console.push('stdout');
   }
 
-
   const server = new Hapi.Server({
     host: 'localhost',
     port: 3000,
-    routes: {
-      cors: true
-    }
+    routes: { cors: true }
   });
 
   const externalPlugins = [
@@ -60,21 +57,19 @@ export default (cb) => {
     }
   ];
 
-  server.register([ ...externalPlugins, ...plugins ])
-    .then(() => {
-      // Use the server logger.
-      logger.debug = (...args) => {
-        server.log([ 'debug' ], args.join(' '));
-      };
-      logger.info = (...args) => {
-        server.log([ 'info' ], args.join(' '));
-      };
-      logger.error = (...args) => {
-        server.log([ 'error' ], args.join(' '));
-      };
+  await server.register([ ...externalPlugins, ...plugins ]);
 
-      cb(null, server);
-    }).catch(err => cb(err, null));
+      // Use the server logger.
+  logger.debug = (...args) => {
+    server.log([ 'debug' ], args.join(' '));
+  };
+  logger.info = (...args) => {
+    server.log([ 'info' ], args.join(' '));
+  };
+  logger.error = (...args) => {
+    server.log([ 'error' ], args.join(' '));
+  };
+
 
   server.ext('onPreResponse', (request, h) => {
     if (request.response && request.response.isBoom && request.response.output) {

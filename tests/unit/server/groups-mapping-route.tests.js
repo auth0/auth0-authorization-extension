@@ -4,8 +4,8 @@ import * as auth0 from '../mocks/auth0';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('groups-mapping-route', () => {
-  const { db, server } = getServerData();
+describe('groups-mapping-route', async () => {
+  const { db, server } = await getServerData();
   const guid = 'C56a418065aa426ca9455fd21deC0538';
   const mid = 'A56a418065aa426ca9455fd21deC0538';
   const connectionName = 'Username-Password-Authentication';
@@ -38,7 +38,7 @@ describe('groups-mapping-route', () => {
     });
 
     it('should return 403 if scope is missing (list of mappings)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/mappings`,
@@ -76,7 +76,7 @@ describe('groups-mapping-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete mappings)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/mappings`,
@@ -139,7 +139,7 @@ describe('groups-mapping-route', () => {
 
   describe('#patch', () => {
     it('should return 403 if scope is missing (update mappings)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/mappings`,

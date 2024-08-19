@@ -1,10 +1,9 @@
 /* eslint-disable no-underscore-dangle, no-shadow */
 
 import Promise from 'bluebird';
-import request from 'request-promise';
 import expect from 'expect';
 import { faker } from '@faker-js/faker';
-import superagent from 'superagent';
+import request from 'superagent';
 import { getAccessToken, authzApi, token } from './utils';
 
 
@@ -12,7 +11,7 @@ let accessToken;
 const groupMemberName1 = 'auth0|test-user-12345-1';
 const groupMemberName2 = 'auth0|test-user-12345-2';
 
-const parallelGroups = [ ...new Array(20) ].map(() => ({
+const parallelGroups = [ ...new Array(10) ].map(() => ({
   name: faker.lorem.slug(),
   description: faker.lorem.sentence()
 }));
@@ -23,7 +22,7 @@ const createTestGroup = async () => {
     description: faker.lorem.sentence()
   };
 
-  const result = await superagent
+  const result = await request
     .post(authzApi('/groups'))
     .send(group)
     .set('Authorization', `Bearer ${accessToken}`)
@@ -41,7 +40,7 @@ const createTestRole = async () => {
     permissions: []
   };
 
-  const result = await superagent
+  const result = await request
     .post(authzApi('/roles'))
     .send(role)
     .set('Authorization', `Bearer ${accessToken}`)
@@ -50,17 +49,11 @@ const createTestRole = async () => {
   return result.body;
 };
 
-const deleteGroupById = async (groupId) =>
-  superagent
-    .delete(authzApi(`/groups/${groupId}`))
-    .set('Authorization', `Bearer ${accessToken}`)
-    .accept('json');
-
 describe('groups', () => {
   before(async () => {
     accessToken = await getAccessToken();
 
-    await superagent
+    await request
       .post(authzApi('/configuration/import'))
       .send({})
       .set('Authorization', `Bearer ${accessToken}`)
@@ -73,11 +66,14 @@ describe('groups', () => {
   beforeEach(async () => {
     testGroup = await createTestGroup();
     testRole = await createTestRole();
-    // console.log({ testGroup, testRole });
   });
 
   afterEach(async () => {
-    await deleteGroupById(testGroup._id);
+    // clear data to prevent state leaking between tests
+    await request
+      .post(authzApi('/configuration/import'))
+      .set(token(accessToken))
+      .send({});
   });
 
   it('should have an accessToken', () => {
@@ -85,7 +81,7 @@ describe('groups', () => {
   });
 
   it('should import data', async () => {
-    const response = await superagent
+    const response = await request
       .post(authzApi('/configuration/import'))
       .send({})
       .set('Authorization', `Bearer ${accessToken}`)
@@ -95,7 +91,7 @@ describe('groups', () => {
 
 
   it('should export data', async () => {
-    const response = await superagent
+    const response = await request
       .get(authzApi('/configuration/export'))
       .set('Authorization', `Bearer ${accessToken}`)
       .accept('json');
@@ -106,7 +102,7 @@ describe('groups', () => {
 
   it('should create a new group', async () => {
     const newGroup = await createTestGroup();
-    const response = await superagent
+    const response = await request
       .get(authzApi(`/groups/${newGroup._id}`))
       .set('Authorization', `Bearer ${accessToken}`)
       .accept('json');
@@ -116,27 +112,29 @@ describe('groups', () => {
     expect(newGroup.description).toEqual(response.body.description);
   });
 
-  it.skip('should create many groups in parallel', () => {
-    const creationRequests = parallelGroups.map((groupData) =>
-      request.post({
-        url: authzApi('/groups'),
-        form: groupData,
-        headers: token(accessToken),
-        json: true
-      })
-    );
+  it('should create many groups in parallel', async () => {
+    const creationRequests = parallelGroups.map(async (groupData) => {
+      await request
+        .post(authzApi('/groups'))
+        .send(groupData)
+        .set('Authorization', `Bearer ${accessToken}`)
+        .accept('json');
+    });
 
-    return Promise.all(creationRequests).then(() =>
-      request.get({ url: authzApi('/groups'), headers: token(accessToken), json: true }).then((data) => {
-        parallelGroups.forEach((group) => {
-          expect(data.groups.find((g) => g.name === group.name)).toBeDefined();
-        });
-      })
-    );
+    await Promise.all(creationRequests);
+
+    const response = await request
+      .get(authzApi('/groups'))
+      .set('Authorization', `Bearer ${accessToken}`)
+      .accept('json');
+
+    parallelGroups.forEach((group) => {
+      expect(response.body.groups.find((g) => g.name === group.name)).toBeDefined();
+    });
   });
 
   it('should delete group', async () => {
-    const deleteResult = await superagent
+    const deleteResult = await request
       .delete(authzApi(`/groups/${testGroup._id}`))
       .set(token(accessToken))
       .accept('json');
@@ -162,7 +160,7 @@ describe('groups', () => {
   });
 
   it('should get all groups in the system', async () => {
-    const response = await superagent
+    const response = await request
     .get(authzApi('/groups'))
     .set('Authorization', `Bearer ${accessToken}`)
     .accept('json');
@@ -171,7 +169,7 @@ describe('groups', () => {
   });
 
   it('should get a single group based on its unique identifier', async () => {
-    const response = await superagent
+    const response = await request
     .get(authzApi(`/groups/${testGroup._id}`))
     .set(token(accessToken))
     .accept('json');
@@ -186,14 +184,14 @@ describe('groups', () => {
       description: faker.lorem.sentence()
     };
 
-    await superagent
+    await request
     .put(authzApi(`/groups/${testGroup._id}`))
     .set(token(accessToken))
     .send(newData)
     .accept('json');
 
   // Check the group was updated in the server
-    const updatedGroup = await superagent
+    const updatedGroup = await request
     .get(authzApi(`/groups/${testGroup._id}`))
     .set(token(accessToken))
     .accept('json');
@@ -206,13 +204,13 @@ describe('groups', () => {
     beforeEach(async () => {
       const mappings = [ { groupName: 'My groupName', connectionName: 'google-oauth2' } ];
 
-      await superagent
+      await request
         .patch(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .send(mappings)
         .accept('json');
 
-      const groupMappings = await superagent
+      const groupMappings = await request
         .get(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .accept('json');
@@ -225,13 +223,13 @@ describe('groups', () => {
     it('should add mappings to a group', async () => {
       const mappings = [ { groupName: 'My groupName2', connectionName: 'google-oauth2' } ];
 
-      await superagent
+      await request
         .patch(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .send(mappings)
         .accept('json');
 
-      const groupMappings = await superagent
+      const groupMappings = await request
         .get(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .accept('json');
@@ -242,7 +240,7 @@ describe('groups', () => {
     });
 
     it('should get the mappings of a group', async () => {
-      const response = await superagent
+      const response = await request
         .get(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .accept('json');
@@ -252,7 +250,7 @@ describe('groups', () => {
 
     it('should remove mappings of a group', async () => {
       // Get the current mappings
-      const mappingsResponse = await superagent
+      const mappingsResponse = await request
         .get(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .accept('json');
@@ -262,7 +260,7 @@ describe('groups', () => {
       const mapping = mappings[0];
 
       // Delete the first mapping
-      const deleteResponse = await superagent
+      const deleteResponse = await request
         .delete(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .send([ mapping._id ])
@@ -271,7 +269,7 @@ describe('groups', () => {
       expect(deleteResponse.status).toEqual(204);
 
       // Verify the mapping count has decreased by 1
-      const finalMappingsResponse = await superagent
+      const finalMappingsResponse = await request
         .get(authzApi(`/groups/${testGroup._id}/mappings`))
         .set(token(accessToken))
         .accept('json');
@@ -282,7 +280,7 @@ describe('groups', () => {
 
   describe('group members', () => {
     beforeEach(async () => {
-      await superagent
+      await request
         .patch(authzApi(`/groups/${testGroup._id}/members`))
         .set(token(accessToken))
         .send([ groupMemberName1 ])
@@ -290,13 +288,13 @@ describe('groups', () => {
     });
 
     it('should add members to a group', async () => {
-      await superagent
+      await request
         .patch(authzApi(`/groups/${testGroup._id}/members`))
         .set(token(accessToken))
         .send([ groupMemberName2 ])
         .accept('json');
 
-      const data = await superagent
+      const data = await request
         .get(authzApi(`/groups/${testGroup._id}/members`))
         .set(token(accessToken))
         .accept('json');
@@ -305,7 +303,7 @@ describe('groups', () => {
     });
 
     it('should get the members of a group', async () => {
-      const response = await superagent
+      const response = await request
         .get(authzApi(`/groups/${testGroup._id}/members`))
         .set(token(accessToken))
         .accept('json');
@@ -314,13 +312,13 @@ describe('groups', () => {
     });
 
     it('should remove members from a group', async () => {
-      await superagent
+      await request
         .delete(authzApi(`/groups/${testGroup._id}/members`))
         .set(token(accessToken))
         .send([ groupMemberName1 ])
         .accept('json');
 
-      const data = await superagent
+      const data = await request
         .get(authzApi(`/groups/${testGroup._id}/members`))
         .set(token(accessToken))
         .accept('json');
@@ -329,7 +327,7 @@ describe('groups', () => {
     });
 
     it('should get the nested members of a group', async () => {
-      const response = await superagent
+      const response = await request
         .get(authzApi(`/groups/${testGroup._id}/members/nested`))
         .set(token(accessToken))
         .accept('json');
@@ -340,7 +338,7 @@ describe('groups', () => {
 
   describe('group roles', () => {
     beforeEach(async () => {
-      await superagent
+      await request
         .patch(authzApi(`/groups/${testGroup._id}/roles`))
         .set(token(accessToken))
         .send([ testRole._id ])
@@ -348,13 +346,13 @@ describe('groups', () => {
     });
 
     it('should add roles to a group', async () => {
-      await superagent
+      await request
         .patch(authzApi(`/groups/${testGroup._id}/roles`))
         .set(token(accessToken))
         .send([ testRole._id ])
         .accept('json');
 
-      const res = await superagent
+      const res = await request
         .get(authzApi(`/groups/${testGroup._id}/roles`))
         .set(token(accessToken))
         .accept('json');
@@ -363,7 +361,7 @@ describe('groups', () => {
     });
 
     it('should get the roles of a group', async () => {
-      const res = await superagent
+      const res = await request
       .get(authzApi(`/groups/${testGroup._id}/roles`))
       .set(token(accessToken))
       .accept('json');
@@ -372,13 +370,13 @@ describe('groups', () => {
     });
 
     it('should delete roles from a group', async () => {
-      await superagent
+      await request
         .delete(authzApi(`/groups/${testGroup._id}/roles`))
         .set(token(accessToken))
         .send([ testRole._id ])
         .accept('json');
 
-      const res = await superagent
+      const res = await request
         .get(authzApi(`/groups/${testGroup._id}/roles`))
         .set(token(accessToken))
         .accept('json');
@@ -387,7 +385,7 @@ describe('groups', () => {
     });
 
     it('should get the nested roles of a group', async () => {
-      const response = await superagent
+      const response = await request
         .get(authzApi(`/groups/${testGroup._id}/roles/nested`))
         .set(token(accessToken))
         .accept('json');

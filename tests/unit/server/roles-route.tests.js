@@ -4,8 +4,8 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 import config from '../../../server/lib/config';
 
-describe('roles-route', () => {
-  const { db, server } = getServerData();
+describe('roles-route', async () => {
+  const { db, server } = await getServerData();
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const roleName = 'test-role';
   const role = {
@@ -45,7 +45,7 @@ describe('roles-route', () => {
     });
 
     it('should return 403 if scope is missing (list of roles)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/roles',
@@ -80,7 +80,7 @@ describe('roles-route', () => {
     });
 
     it('should return 403 if scope is missing (single role)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/roles/${guid}`,
@@ -116,7 +116,7 @@ describe('roles-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete role)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'DELETE',
         url: `/api/roles/${guid}`,
@@ -158,7 +158,7 @@ describe('roles-route', () => {
 
   describe('#post', () => {
     it('should return 403 if scope is missing (create role)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'POST',
         url: '/api/roles',
@@ -222,7 +222,7 @@ describe('roles-route', () => {
 
   describe('#put', () => {
     it('should return 403 if scope is missing (update role)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PUT',
         url: `/api/roles/${guid}`,

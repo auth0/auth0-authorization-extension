@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('groups-members-route', () => {
-  const { db, server } = getServerData();
+describe('groups-members-route', async () => {
+  const { db, server } = await getServerData();
   const guid = 'C56a418065aa426ca9455fd21deC0538';
   const roleId = '38d5f9a6c0dc4f6381ac746f87663727';
   const groupName = 'test-group';
@@ -47,7 +47,7 @@ describe('groups-members-route', () => {
     });
 
     it('should return 403 if scope is missing (list of roles)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/roles`,
@@ -81,7 +81,7 @@ describe('groups-members-route', () => {
     });
 
     it('should return 403 if scope is missing (list of nested roles)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/roles/nested`,
@@ -117,7 +117,7 @@ describe('groups-members-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete roles)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/roles`,
@@ -173,7 +173,7 @@ describe('groups-members-route', () => {
 
   describe('#patch', () => {
     it('should return 403 if scope is missing (update roles)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/roles`,

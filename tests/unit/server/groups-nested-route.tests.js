@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('groups-nested-route', () => {
-  const { db, server } = getServerData();
+describe('groups-nested-route', async () => {
+  const { db, server } = await getServerData();
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const ngid = 'B56a418065aa426ca9455fd21deC0538';
   const groupName = 'test-group';
@@ -42,7 +42,7 @@ describe('groups-nested-route', () => {
     });
 
     it('should return 403 if scope is missing (list of nested groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/nested`,
@@ -78,7 +78,7 @@ describe('groups-nested-route', () => {
 
   describe('#delete', () => {
     it('should return 403 if scope is missing (delete nested groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'DELETE',
         url: `/api/groups/${guid}/nested`,
@@ -141,7 +141,7 @@ describe('groups-nested-route', () => {
 
   describe('#patch', () => {
     it('should return 403 if scope is missing (update nested groups)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'PATCH',
         url: `/api/groups/${guid}/nested`,

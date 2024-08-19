@@ -1,8 +1,8 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
 
-describe('metadata-route', () => {
-  const { server } = getServerData();
+describe('metadata-route', async () => {
+  const { server } = await getServerData();
 
   describe('#get', () => {
     it('should return the webtask.json file', (cb) => {

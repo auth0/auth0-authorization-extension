@@ -26,7 +26,7 @@ const createRole = async () => {
 };
 
 
-describe.only('roles', () => {
+describe('roles', () => {
   before(async () => {
     const response = await getAccessToken();
     accessToken = response;
@@ -47,7 +47,6 @@ describe.only('roles', () => {
       .set(token(accessToken))
       .send({});
   });
-
 
   it('should create a new role', async () => {
     const newRole = await createRole();

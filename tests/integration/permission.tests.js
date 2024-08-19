@@ -1,125 +1,132 @@
-/* eslint-disable no-underscore-dangle, no-shadow */
-
-import request from 'request-promise';
+import request from 'superagent';
 import expect from 'expect';
 import { faker } from '@faker-js/faker';
 import { getAccessToken, authzApi, token } from './utils';
 
+/* eslint-disable no-underscore-dangle, no-shadow */
+
 let accessToken;
-let remotePermission;
+
+const createPermission = async () => {
+  const permission = {
+    name: faker.lorem.slug(),
+    description: faker.lorem.sentence(),
+    applicationType: 'client',
+    applicationId: faker.lorem.slug()
+  };
+
+  const result = await request
+    .post(authzApi('/permissions'))
+    .send(permission)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .accept('json');
+
+  return result.body;
+};
+
 
 describe('permissions', () => {
-  before(() => getAccessToken()
-    .then(response => {
-      accessToken = response;
-      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(accessToken), resolveWithFullResponse: true });
-    })
-  );
+  before(async () => {
+    const response = await getAccessToken();
+    accessToken = response;
+    await request
+      .post(authzApi('/configuration/import'))
+      .set(token(accessToken))
+      .send({});
+  });
+
+  afterEach(async () => {
+    // clear data to prevent state leaking between tests
+    await request
+      .post(authzApi('/configuration/import'))
+      .set(token(accessToken))
+      .send({});
+  });
+
 
   it('should have an accessToken', () => {
     expect(accessToken).toBeDefined();
   });
 
-  it('should create a new permission', () => {
-    const permission = {
+  it('should create a new permission', async () => {
+    const newPermission = await createPermission();
+
+    const { body: permissionData } = await request
+      .get(authzApi(`/permissions/${newPermission._id}`))
+      .set(token(accessToken));
+
+    expect(newPermission.name).toEqual(permissionData.name);
+    expect(newPermission.description).toEqual(permissionData.description);
+  });
+
+
+  it('should get all permissions in the system', async () => {
+    const [ permission1, permission2, permission3 ] = await Promise.all(
+      [ createPermission(), createPermission(), createPermission() ]
+    );
+
+    const { body: data } = await request
+      .get(authzApi('/permissions'))
+      .set(token(accessToken));
+
+    expect(data.permissions.length).toEqual(3);
+    expect(data.total).toEqual(3);
+    expect(data.permissions.map(permission => permission._id)).toEqual(
+      expect.arrayContaining([ permission1._id, permission2._id, permission3._id ])
+    );
+  });
+
+  it('should get a single permission based on its unique identifier', async () => {
+    const newPermission = await createPermission();
+
+    await request
+      .get(authzApi(`/permissions/${newPermission._id}`))
+      .set(token(accessToken));
+  });
+
+  it('should update a permission', async () => {
+    const newPermission = await createPermission();
+
+    const newData = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence(),
-      applicationType: 'client',
-      applicationId: faker.lorem.slug()
+      applicationType: newPermission.applicationType,
+      applicationId: newPermission.applicationId
     };
 
-    return request.post({
-      url: authzApi('/permissions'),
-      form: permission,
-      headers: token(accessToken),
-      json: true
-    })
-    .then((data) => {
-      remotePermission = data;
-      return request.get({
-        url: authzApi(`/permissions/${remotePermission._id}`),
-        headers: token(accessToken),
-        json: true
-      })
-        .then((data) => {
-          expect(remotePermission.name).toEqual(data.name);
-          expect(remotePermission.description).toEqual(data.description);
-        });
-    });
+    const { body: updatedPermissionPut } = await request
+      .put(authzApi(`/permissions/${newPermission._id}`))
+      .set(token(accessToken))
+      .send(newData);
+
+    const { body: updatedPermissionGet } = await request
+      .get(authzApi(`/permissions/${newPermission._id}`))
+      .set(token(accessToken));
+
+    expect(updatedPermissionPut.name).toEqual(updatedPermissionGet.name);
+    expect(updatedPermissionPut.description).toEqual(updatedPermissionGet.description);
   });
 
-  it('should get all permissions in the system', () =>
-    request.get({
-      url: authzApi('/permissions'),
-      headers: token(accessToken),
-      json: true
-    })
-    .then((data) => {
-      expect(data.permissions.length).toBeGreaterThan(0);
-    })
-  );
+  it('should delete a permission', async () => {
+    const newPermission = await createPermission();
 
-  it('should get a single permission based on its unique identifier', () =>
-    request.get({
-      url: authzApi(`/permissions/${remotePermission._id}`),
-      headers: token(accessToken),
-      json: true
-    })
-  );
+    await request
+      .delete(authzApi(`/permissions/${newPermission._id}`))
+      .set(token(accessToken));
 
-  it('should update a permission', () => {
-    const newData = Object.assign({}, remotePermission, {
-      name: faker.lorem.slug(),
-      description: faker.lorem.sentence()
-    });
-
-    delete newData._id;
-
-    return request.put({
-      url: authzApi(`/permissions/${remotePermission._id}`),
-      form: newData,
-      headers: token(accessToken),
-      json: true
-    })
-    .then((data) => {
-      remotePermission = data;
-
-      // Check the permission was updated in the server
-      return request.get({
-        url: authzApi(`/permissions/${remotePermission._id}`),
-        headers: token(accessToken),
-        json: true
-      })
-      .then((data) => {
-        expect(remotePermission.name).toEqual(data.name);
-        expect(remotePermission.description).toEqual(data.description);
+    try {
+      await request
+        .get(authzApi(`/permissions/${newPermission._id}`))
+        .set(token(accessToken));
+    } catch (error) {
+      expect(error.response._body).toEqual({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: `The record ${newPermission._id} in permissions does not exist.`
       });
-    });
-  });
+      return;
+    }
 
-  it('should delete a permission', (done) => {
-    request.delete({
-      url: authzApi(`/permissions/${remotePermission._id}`),
-      headers: token(accessToken),
-      resolveWithFullResponse: true
-    })
-    .then(() => {
-      // Check the permission was deleted in the server
-      request.get({
-        url: authzApi(`/groups/${remotePermission._id}`),
-        headers: token(accessToken),
-        json: true
-      })
-      .then((data) => {
-        expect(remotePermission.name).toNotEqual(data.name);
-        expect(remotePermission.description).toNotEqual(data.description);
-      }).catch((err) => {
-        if (err.statusCode === 400) {
-          done();
-        } else {
-          done(err);
-        }
-      });
-    }).catch(done);
+    throw new Error('expected to throw an error');
   });
 });

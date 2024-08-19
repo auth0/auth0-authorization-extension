@@ -3,8 +3,8 @@ import * as auth0 from '../mocks/auth0';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
-describe('connections-route', () => {
-  const { server } = getServerData();
+describe('connections-route', async () => {
+  const { server } = await getServerData();
 
   describe('#get', () => {
     it('should return 401 if no token provided', (cb) => {
@@ -20,7 +20,7 @@ describe('connections-route', () => {
     });
 
     it('should return 403 if scope is missing (list connections)', (cb) => {
-      const token = gettoken(accessToken);
+      const token = getToken();
       const options = {
         method: 'GET',
         url: '/api/connections',
