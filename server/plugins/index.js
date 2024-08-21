@@ -6,7 +6,7 @@ const { routesPlugin } = require('./routes');
 // const { replyDecoratorsPlugin } = require('./reply-decorators');
 const { storagePlugin } = require('./storage');
 
-module.exports = [
+const plugins = [
   authPlugin,
   assetsPlugin,
   handlersPlugin,
@@ -15,3 +15,5 @@ module.exports = [
   // replyDecoratorsPlugin,
   storagePlugin
 ];
+
+module.exports = plugins;

@@ -13,8 +13,6 @@ export const credentials = {
  * Get an access token for the Authorization Extension API.
  */
 export const getAccessToken = async () => {
-  // console.log({ credentials, AUTH0_DOMAIN: config('AUTH0_DOMAIN') });
-
   const result = await request.post({
     uri: `https://${config('AUTH0_DOMAIN')}/oauth/token`,
     form: credentials,
@@ -23,11 +21,6 @@ export const getAccessToken = async () => {
 
   return result.access_token;
 };
-  // .then(res => res.access_token).then((token) => {
-  //   accessToken = token;
-  //   return token;
-  // });
-
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);
 export const token = (accessToken) => ({ Authorization: `Bearer ${accessToken}` });

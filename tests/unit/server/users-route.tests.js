@@ -22,19 +22,17 @@ describe('users-route', async () => {
   };
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: '/api/users'
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of users)', (cb) => {
+    it('should return 403 if scope is missing (list of users)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -44,13 +42,11 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return list of users', (cb) => {
+    it('should return list of users', async () => {
       const token = getToken('read:users');
       auth0.get('/api/v2/users', { start: 0, users: [ user ] });
       const options = {
@@ -61,17 +57,15 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result.users).to.be.a('array');
-        expect(response.result.start).to.be.equal(0);
-        expect(response.result.users.length).to.be.equal(1);
-        expect(response.result.users[0].name).to.be.equal(user.name);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result.users).to.be.a('array');
+      expect(response.result.start).to.be.equal(0);
+      expect(response.result.users.length).to.be.equal(1);
+      expect(response.result.users[0].name).to.be.equal(user.name);
     });
 
-    it('should return 403 if scope is missing (single user)', (cb) => {
+    it('should return 403 if scope is missing (single user)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -81,13 +75,11 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return user data', (cb) => {
+    it('should return user data', async () => {
       const token = getToken('read:users');
       auth0.get('/api/v2/users/userId', user);
       const options = {
@@ -98,15 +90,13 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result.name).to.be.equal(user.name);
-        expect(response.result.user_id).to.be.equal(user.user_id);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result.name).to.be.equal(user.name);
+      expect(response.result.user_id).to.be.equal(user.user_id);
     });
 
-    it('should return bad request error', (cb) => {
+    it('should return bad request error', async () => {
       const token = getToken('read:users');
       auth0.get('/api/v2/users/no-such-user', {}, 400);
       const options = {
@@ -117,11 +107,9 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.error).to.be.equal('Bad Request');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.error).to.be.equal('Bad Request');
     });
   });
 });

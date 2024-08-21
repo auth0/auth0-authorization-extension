@@ -9,7 +9,7 @@ import config from './lib/config';
 import logger from './lib/logger';
 import plugins from './plugins';
 
-export const initHapiServer = async () => {
+export default async () => {
   const goodPlugin = {
     plugin: { ...require('@hapi/good').plugin, name: '@hapi/good' },
     options: {
@@ -59,7 +59,7 @@ export const initHapiServer = async () => {
 
   await server.register([ ...externalPlugins, ...plugins ]);
 
-      // Use the server logger.
+  // Use the server logger.
   logger.debug = (...args) => {
     server.log([ 'debug' ], args.join(' '));
   };
@@ -70,7 +70,7 @@ export const initHapiServer = async () => {
     server.log([ 'error' ], args.join(' '));
   };
 
-
+  // TODO: REMOVE
   server.ext('onPreResponse', (request, h) => {
     if (request.response && request.response.isBoom && request.response.output) {
       server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.path}`);
@@ -80,5 +80,6 @@ export const initHapiServer = async () => {
     return h.continue;
   });
 
+  // this is used in production
   return server;
 };

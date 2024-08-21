@@ -20,7 +20,7 @@ const factory = (wtConfig, wtStorage) => {
 // Loading all modules at the beginning takes too much time
 // that causes "Blocked event loop errors"
 // This function is a helper to avoid this type of errors
-let createServer = (context, req, res) => {
+const createServer = (context, req, res) => {
   // To avoid the  "Blocked event loop" error we delay loading the application module
   setImmediate(() => {
     const publicUrl =
@@ -30,8 +30,8 @@ let createServer = (context, req, res) => {
     }
     // After the application has been initialized we remove the
     // artificial delay in processing
-    createServer = localTools.createServer(factory);
-    createServer(context, req, res);
+    const createServer2 = localTools.createServer(factory);
+    createServer2(context, req, res);
   });
 };
 

@@ -3,7 +3,9 @@ import jwt from 'jsonwebtoken';
 import certs from './certs.json';
 import config from '../../../server/lib/config';
 
-module.exports.wellKnownEndpoint = (domain, cert, kid) =>
+const cert = certs.test;
+
+module.exports.wellKnownEndpoint = (domain, kid) =>
    nock(`https://${domain}`)
     .get('/.well-known/jwks.json')
     .reply(200, {
@@ -12,19 +14,22 @@ module.exports.wellKnownEndpoint = (domain, cert, kid) =>
           alg: 'RS256',
           use: 'sig',
           kty: 'RSA',
-          x5c: [ cert.match(/-----BEGIN CERTIFICATE-----([\s\S]*)-----END CERTIFICATE-----/i)[1].replace('\n', '') ],
-          kid
+          x5c: [ cert.cert.match(/-----BEGIN CERTIFICATE-----([\s\S]*)-----END CERTIFICATE-----/i)[1].replace('\n', '') ],
+          kid,
+          n: cert.modulus,
+          e: cert.exponent,
+          x5t: cert.fingerprint
         }
       ]
     })
 ;
 
-module.exports.sign = (cert, kid, payload) =>
-   jwt.sign(payload, cert, { header: { kid }, algorithm: 'RS256' })
+module.exports.sign = (certArg, kid, payload) =>
+   jwt.sign(payload, certArg, { header: { kid }, algorithm: 'RS256' })
 ;
 
 module.exports.getToken = (scope) =>
-   module.exports.sign(certs.bar.private, 'key2', {
+   module.exports.sign(cert.privateKey, 'key2', {
      iss: `https://${config('AUTH0_DOMAIN')}/`,
      aud: 'urn:auth0-authz-api',
      sub: '123456@clients',
@@ -33,7 +38,7 @@ module.exports.getToken = (scope) =>
 ;
 
 module.exports.getUserToken = (scope) =>
-   module.exports.sign(certs.bar.private, 'key2', {
+   module.exports.sign(cert.privateKey, 'key2', {
      iss: `https://${config('AUTH0_DOMAIN')}/`,
      aud: 'urn:auth0-authz-api',
      sub: 'auth0|aaaaaaaaa',
@@ -53,7 +58,7 @@ module.exports.getAdminTokenWithoutAccessToken = (scope) =>
 ;
 
 module.exports.getApiToken = (gty, sub, scope) =>
-  module.exports.sign(certs.bar.private, 'key2', {
+  module.exports.sign(cert.privateKey, 'key2', {
     iss: `https://${config('AUTH0_DOMAIN')}/`,
     aud: 'urn:auth0-authz-api',
     sub: `auth0@${sub}`,

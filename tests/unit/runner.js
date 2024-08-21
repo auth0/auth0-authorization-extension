@@ -25,5 +25,6 @@ config.setProvider((key) => nconf.get(key));
 
 
 auth0Client();
-wellKnownEndpoint(config('AUTH0_DOMAIN'), certs.bar.cert, 'key2');
+
+wellKnownEndpoint(config('AUTH0_DOMAIN'), 'key2');
 // initServer();

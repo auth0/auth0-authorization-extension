@@ -14,11 +14,16 @@ function fromHapi(serverFactory) {
   var hapiServer;
   var webtaskContext;
 
-  return function(context, req, res) {
+  return async function(context, req, res) {
     webtaskContext = attachStorageHelpers(context);
 
     if (hapiServer == null) {
-      hapiServer = serverFactory(webtaskContext);
+      hapiServer = await serverFactory(webtaskContext);
+
+      if (!hapiServer) {
+        throw new Error('Server factory did not return a server instance');
+      }
+
       hapiServer.ext('onRequest', function(hapiRequest, h) {
         var normalizeRouteRx = createRouteNormalizationRx(hapiRequest.raw.req.x_wt);
 

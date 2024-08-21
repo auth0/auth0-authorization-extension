@@ -1,5 +1,5 @@
-import schema from '../schemas/storage';
 import { Promise } from 'bluebird';
+import schema from '../schemas/storage';
 
 export default () => ({
   method: 'POST',

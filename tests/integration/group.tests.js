@@ -11,7 +11,7 @@ let accessToken;
 const groupMemberName1 = 'auth0|test-user-12345-1';
 const groupMemberName2 = 'auth0|test-user-12345-2';
 
-const parallelGroups = [ ...new Array(10) ].map(() => ({
+const parallelGroups = [ ...new Array(20) ].map(() => ({
   name: faker.lorem.slug(),
   description: faker.lorem.sentence()
 }));
@@ -131,7 +131,7 @@ describe('groups', () => {
     parallelGroups.forEach((group) => {
       expect(response.body.groups.find((g) => g.name === group.name)).toBeDefined();
     });
-  });
+  }).timeout(30000);
 
   it('should delete group', async () => {
     const deleteResult = await request

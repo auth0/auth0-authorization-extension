@@ -2,11 +2,11 @@ import Boom from '@hapi/boom';
 import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
+import { Promise } from 'bluebird';
 
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
 import { plugin } from './session';
-import { Promise } from 'bluebird';
 
 
 const hashApiKey = (key) => crypto.createHmac('sha256', `${key} + ${config('AUTH0_CLIENT_SECRET')}`)
@@ -48,7 +48,7 @@ const register = async (server) => {
       key: jwksRsa.hapiJwt2Key({
         cache: true,
         rateLimit: true,
-        jwksRequestsPerMinute: 2,
+        jwksRequestsPerMinute: process.env.NODE_ENV === 'test' ? 10 : 2,
         jwksUri: `https://${config('AUTH0_DOMAIN')}/.well-known/jwks.json`
       }),
       verifyOptions: {
@@ -79,7 +79,6 @@ const register = async (server) => {
         const isApiRequest = decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_DOMAIN')}/`;
         const isDashboardAdminRequest = decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL');
 
-
         const getKeyAsync = Promise.promisify(jwtOptions.resourceServer.key);
         const jwtVerifyAsync = Promise.promisify(jwt.verify);
 
@@ -92,8 +91,8 @@ const register = async (server) => {
             throw Boom.unauthorized('Invalid token', 'Token');
           }
 
-
           const resourceServerKey = await getKeyAsync(decoded);
+
           if (!resourceServerKey) {
             throw Boom.unauthorized('Invalid token', 'Token');
           }
@@ -111,7 +110,7 @@ const register = async (server) => {
 
         if (isDashboardAdminRequest) {
           if (!decoded.payload.access_token || !decoded.payload.access_token.length) {
-            throw Boom.unauthorized('Invalid token :: 6', 'Token');
+            throw Boom.unauthorized('Invalid token', 'Token');
           }
 
           // this can throw if there is an error

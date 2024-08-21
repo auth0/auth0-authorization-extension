@@ -226,8 +226,6 @@ export const getRolesForUser = async (database, userId) => {
 
   const result = _.uniq([ ...groupRoles, ...userRoles ], '_id');
 
-  console.log({ groups, userGroups, parentGroups, filteredGroups, roles, roleIds, rolesFromDB, groupRoles, userRoles, result });
-
   return result;
 };
 
