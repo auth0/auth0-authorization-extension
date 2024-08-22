@@ -5,7 +5,9 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('groups-mapping-route', async () => {
-  const { db, server } = await getServerData();
+  let server = null;
+  let db = null;
+
   const guid = 'C56a418065aa426ca9455fd21deC0538';
   const mid = 'A56a418065aa426ca9455fd21deC0538';
   const connectionName = 'Username-Password-Authentication';
@@ -18,26 +20,26 @@ describe('groups-mapping-route', async () => {
     mappings: [ mapping ]
   };
 
-  before((done) => {
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+    db = result.db;
     db.getGroup = () => Promise.resolve(group);
     db.updateGroup = null;
-    done();
   });
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/mappings`
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of mappings)', (cb) => {
+    it('should return 403 if scope is missing (list of mappings)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -47,13 +49,11 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return mappings for group', (cb) => {
+    it('should return mappings for group', async () => {
       const token = getToken('read:groups');
       auth0.get('/api/v2/connections', [
         { name: connectionName, id: 'cid', strategy: 'default' }
@@ -66,16 +66,14 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result).to.be.a('array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(response.result).to.be.a('array');
     });
   });
 
   describe('#delete', () => {
-    it('should return 403 if scope is missing (delete mappings)', (cb) => {
+    it('should return 403 if scope is missing (delete mappings)', async () => {
       const token = getToken();
       const options = {
         method: 'DELETE',
@@ -85,13 +83,11 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'DELETE',
@@ -101,14 +97,12 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('"value" must be an array');
     });
 
-    it('should delete mappings', (cb) => {
+    it('should delete mappings', async () => {
       let updatedGroup = null;
       const token = getToken('update:groups');
       db.updateGroup = (id, data) => {
@@ -126,19 +120,17 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(updatedGroup._id).to.be.equal(guid);
-        expect(updatedGroup.name).to.be.equal(groupName);
-        expect(updatedGroup.mappings).to.be.a('array');
-        expect(updatedGroup.mappings.length).to.be.equal(0);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(updatedGroup._id).to.be.equal(guid);
+      expect(updatedGroup.name).to.be.equal(groupName);
+      expect(updatedGroup.mappings).to.be.a('array');
+      expect(updatedGroup.mappings.length).to.be.equal(0);
     });
   });
 
   describe('#patch', () => {
-    it('should return 403 if scope is missing (update mappings)', (cb) => {
+    it('should return 403 if scope is missing (update mappings)', async () => {
       const token = getToken();
       const options = {
         method: 'PATCH',
@@ -148,13 +140,11 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'PATCH',
@@ -164,14 +154,12 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('"value" must be an array');
     });
 
-    it('should update mappings', (cb) => {
+    it('should update mappings', async () => {
       const token = getToken('update:groups');
       let updatedGroup = null;
       db.updateGroup = (id, data) => {
@@ -190,16 +178,14 @@ describe('groups-mapping-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(updatedGroup.name).to.be.equal(groupName);
-        expect(updatedGroup._id).to.be.equal(guid);
-        expect(updatedGroup.mappings).to.be.a('array');
-        expect(updatedGroup.mappings[0].groupName).to.be.equal(
-          newMapping.groupName
-        );
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(updatedGroup.name).to.be.equal(groupName);
+      expect(updatedGroup._id).to.be.equal(guid);
+      expect(updatedGroup.mappings).to.be.a('array');
+      expect(updatedGroup.mappings[0].groupName).to.be.equal(
+        newMapping.groupName
+      );
     });
   });
 });
