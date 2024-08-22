@@ -24,11 +24,12 @@ export default () => ({
 
     const resourceServer = await getApi(req);
 
+    // update if exists, create otherwise
     if (resourceServer) {
       await updateApi(req, req.payload.token_lifetime);
+    } else {
+      await createApi(req, req.payload.token_lifetime);
     }
-
-    await createApi(req, req.payload.token_lifetime);
 
     return h.response().code(204);
   }

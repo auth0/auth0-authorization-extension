@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import Boom from '@hapi/boom';
 
 import schema from '../schemas/policy_request';
 import { getUserData } from '../../../lib/queries';
@@ -34,6 +35,7 @@ export default () => ({
       return h.response(data);
     }
 
-    return h.response(new Error('Storage error.'));
+    // if we can't read from storage
+    throw Boom.badRequest('Storage error');
   }
 });

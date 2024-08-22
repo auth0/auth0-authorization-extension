@@ -1,12 +1,11 @@
+import { Promise } from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
-import { Promise } from 'bluebird';
 
-describe('users-route', async () => {
+describe('users/:user/policy', async () => {
   let db;
   let server;
-
 
   const token = getToken();
   const clientId = 'client_id';
@@ -132,25 +131,24 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (err, response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result.roles).to.be.a('array');
-        expect(response.result.groups).to.be.a('array');
-        expect(response.result.permissions).to.be.a('array');
-        expect(response.result.roles).to.include('read-role');
-        expect(response.result.roles).to.include('update-role');
-        expect(response.result.roles).to.include('comment-role');
-        expect(response.result.roles).to.include('create-role');
-        expect(response.result.groups).to.include('main');
-        expect(response.result.groups).to.include('sub');
-        expect(response.result.groups).to.include('mapped');
-        expect(response.result.permissions).to.include('read');
-        expect(response.result.permissions).to.include('update');
-        expect(response.result.permissions).to.include('create');
-        expect(response.result.permissions).to.include('comment');
-        expect(response.result.roles).to.not.include('delete-role');
-        expect(response.result.permissions).to.not.include('delete');
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result.roles).to.be.a('array');
+      expect(response.result.groups).to.be.a('array');
+      expect(response.result.permissions).to.be.a('array');
+      expect(response.result.roles).to.include('read-role');
+      expect(response.result.roles).to.include('update-role');
+      expect(response.result.roles).to.include('comment-role');
+      expect(response.result.roles).to.include('create-role');
+      expect(response.result.groups).to.include('main');
+      expect(response.result.groups).to.include('sub');
+      expect(response.result.groups).to.include('mapped');
+      expect(response.result.permissions).to.include('read');
+      expect(response.result.permissions).to.include('update');
+      expect(response.result.permissions).to.include('create');
+      expect(response.result.permissions).to.include('comment');
+      expect(response.result.roles).to.not.include('delete-role');
+      expect(response.result.permissions).to.not.include('delete');
     });
 
     it('should return groups and roles if there are no permissions in the config', async () => {
@@ -167,20 +165,19 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (err, response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result.roles).to.be.a('array');
-        expect(response.result.groups).to.be.a('array');
-        expect(response.result.permissions).to.be.a('array');
-        expect(response.result.roles).to.include('read-role');
-        expect(response.result.roles).to.include('update-role');
-        expect(response.result.roles).to.include('comment-role');
-        expect(response.result.roles).to.include('create-role');
-        expect(response.result.groups).to.include('main');
-        expect(response.result.groups).to.include('sub');
-        expect(response.result.groups).to.include('mapped');
-        expect(response.result.roles).to.not.include('delete-role');
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result.roles).to.be.a('array');
+      expect(response.result.groups).to.be.a('array');
+      expect(response.result.permissions).to.be.a('array');
+      expect(response.result.roles).to.include('read-role');
+      expect(response.result.roles).to.include('update-role');
+      expect(response.result.roles).to.include('comment-role');
+      expect(response.result.roles).to.include('create-role');
+      expect(response.result.groups).to.include('main');
+      expect(response.result.groups).to.include('sub');
+      expect(response.result.groups).to.include('mapped');
+      expect(response.result.roles).to.not.include('delete-role');
     });
 
     it('should return groups if there are no roles in the config', async () => {
@@ -197,15 +194,14 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (err, response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result.roles).to.be.a('array');
-        expect(response.result.groups).to.be.a('array');
-        expect(response.result.permissions).to.be.a('array');
-        expect(response.result.groups).to.include('main');
-        expect(response.result.groups).to.include('sub');
-        expect(response.result.groups).to.include('mapped');
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result.roles).to.be.a('array');
+      expect(response.result.groups).to.be.a('array');
+      expect(response.result.permissions).to.be.a('array');
+      expect(response.result.groups).to.include('main');
+      expect(response.result.groups).to.include('sub');
+      expect(response.result.groups).to.include('mapped');
     });
 
     it('should return roles and permissions if there are no groups in the config', async () => {
@@ -223,16 +219,15 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (err, response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result.roles).to.be.a('array');
-        expect(response.result.groups).to.be.a('array');
-        expect(response.result.permissions).to.be.a('array');
-        expect(response.result.roles).to.include('create-role');
-        expect(response.result.permissions).to.include('create');
-        expect(response.result.roles).to.not.include('delete-role');
-        expect(response.result.permissions).to.not.include('delete');
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result.roles).to.be.a('array');
+      expect(response.result.groups).to.be.a('array');
+      expect(response.result.permissions).to.be.a('array');
+      expect(response.result.roles).to.include('create-role');
+      expect(response.result.permissions).to.include('create');
+      expect(response.result.roles).to.not.include('delete-role');
+      expect(response.result.permissions).to.not.include('delete');
     });
 
     it('should return error if unable to read from storage', async () => {
@@ -250,10 +245,9 @@ describe('users-route', async () => {
         }
       };
 
-      server.inject(options, (err, response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('Storage error.');
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('Storage error');
     });
   });
 });
