@@ -3,7 +3,9 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('users-groups-route', async () => {
-  const { db, server } = await getServerData();
+  let server = null;
+  let db = null;
+
   const group = {
     _id: 'A56a418065aa426ca9455fd21deC0538',
     name: 'test-group',
@@ -28,7 +30,11 @@ describe('users-groups-route', async () => {
     name: 'group-role'
   };
 
-  before((done) => {
+
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+    db = result.db;
     db.getGroups = () => Promise.resolve([ emptyGroup, group ]);
     db.getRoles = () => Promise.resolve([ role, emptyRole, groupRole ]);
     db.getRole = () => Promise.resolve(groupRole);
@@ -37,23 +43,20 @@ describe('users-groups-route', async () => {
       groupRole.users = data.users;
       return Promise.resolve();
     };
-    done();
   });
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: '/api/users/userId/roles'
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of roles)', (cb) => {
+    it('should return 403 if scope is missing (list of roles)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -63,13 +66,11 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return user roles', (cb) => {
+    it('should return user roles', async () => {
       const token = getToken('read:roles');
       const options = {
         method: 'GET',
@@ -79,15 +80,13 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result[0]._id).to.be.equal(role._id);
-        expect(response.result[0].name).to.be.equal(role.name);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('array');
+      expect(response.result[0]._id).to.be.equal(role._id);
+      expect(response.result[0].name).to.be.equal(role.name);
     });
 
-    it('should return 403 if scope is missing (list of nested roles)', (cb) => {
+    it('should return 403 if scope is missing (list of nested roles)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -97,13 +96,11 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return user roles of groups', (cb) => {
+    it('should return user roles of groups', async () => {
       const token = getToken('read:roles');
       const options = {
         method: 'GET',
@@ -113,17 +110,15 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result[0]._id).to.be.equal(groupRole._id);
-        expect(response.result[0].name).to.be.equal(groupRole.name);
-        expect(response.result[1]._id).to.be.equal(role._id);
-        expect(response.result[1].name).to.be.equal(role.name);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('array');
+      expect(response.result[0]._id).to.be.equal(groupRole._id);
+      expect(response.result[0].name).to.be.equal(groupRole.name);
+      expect(response.result[1]._id).to.be.equal(role._id);
+      expect(response.result[1].name).to.be.equal(role.name);
     });
 
-    it('should return empty array', (cb) => {
+    it('should return empty array', async () => {
       const token = getToken('read:roles');
       const options = {
         method: 'GET',
@@ -133,21 +128,18 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result.length).to.be.equal(0);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('array');
+      expect(response.result.length).to.be.equal(0);
     });
   });
 
   describe('#patch', () => {
-    beforeEach((done) => {
+    beforeEach(() => {
       groupRole.users = null;
-      done();
     });
 
-    it('should return 403 if scope is missing (update roles)', (cb) => {
+    it('should return 403 if scope is missing (update roles)', async () => {
       const token = getToken();
       const options = {
         method: 'PATCH',
@@ -157,13 +149,11 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should add user to role', (cb) => {
+    it('should add user to role', async () => {
       const token = getToken('update:roles');
       const options = {
         method: 'PATCH',
@@ -174,15 +164,13 @@ describe('users-groups-route', async () => {
         payload: [ groupRole._id ]
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.equal(204);
-        expect(groupRole.id).to.be.equal(groupRole._id);
-        expect(groupRole.users[0]).to.be.equal('userId');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.equal(204);
+      expect(groupRole.id).to.be.equal(groupRole._id);
+      expect(groupRole.users[0]).to.be.equal('userId');
     });
 
-    it('should add user to role by role name', (cb) => {
+    it('should add user to role by role name', async () => {
       const token = getToken('update:roles');
       const options = {
         method: 'PATCH',
@@ -193,17 +181,15 @@ describe('users-groups-route', async () => {
         payload: [ groupRole.name ]
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.equal(204);
-        expect(groupRole.id).to.be.equal(groupRole._id);
-        expect(groupRole.users[0]).to.be.equal('userId');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.equal(204);
+      expect(groupRole.id).to.be.equal(groupRole._id);
+      expect(groupRole.users[0]).to.be.equal('userId');
     });
   });
 
   describe('#delete', () => {
-    it('should return 403 if scope is missing (delete roles)', (cb) => {
+    it('should return 403 if scope is missing (delete roles)', async () => {
       const token = getToken();
       const options = {
         method: 'DELETE',
@@ -213,13 +199,11 @@ describe('users-groups-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should remove user from role', (cb) => {
+    it('should remove user from role', async () => {
       const token = getToken('update:roles');
       const options = {
         method: 'DELETE',
@@ -230,12 +214,10 @@ describe('users-groups-route', async () => {
         payload: [ groupRole._id ]
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.equal(204);
-        expect(groupRole.id).to.be.equal(groupRole._id);
-        expect(groupRole.users.length).to.be.equal(0);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.equal(204);
+      expect(groupRole.id).to.be.equal(groupRole._id);
+      expect(groupRole.users.length).to.be.equal(0);
     });
   });
 });

@@ -35,6 +35,6 @@ export default () => ({
       await req.storage.updateRole(id, role);
     });
 
-    return h.response(204);
+    return h.response().code(204);
   }
 });
