@@ -5,7 +5,9 @@ import { getToken } from '../mocks/tokens';
 import config from '../../../server/lib/config';
 
 describe('roles-route', async () => {
-  const { db, server } = await getServerData();
+  let server = null;
+  let db = null;
+
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const roleName = 'test-role';
   const role = {
@@ -23,28 +25,28 @@ describe('roles-route', async () => {
     _id: 'B56a418065aa426ca9455fd21deC0538'
   };
 
-  before((done) => {
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+    db = result.db;
     db.canChange = () => Promise.resolve();
     db.getPermissions = () => Promise.resolve([ permission ]);
     db.getRoles = () => Promise.resolve([ role ]);
     db.getRole = () => Promise.resolve(role);
-    done();
   });
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: '/api/roles'
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of roles)', (cb) => {
+    it('should return 403 if scope is missing (list of roles)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -54,13 +56,11 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return list of roles', (cb) => {
+    it('should return list of roles', async () => {
       const token = getToken('read:roles');
       const options = {
         method: 'GET',
@@ -70,16 +70,14 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.total).to.be.equal(1);
-        expect(response.result.roles).to.be.a('array');
-        expect(response.result.roles[0]._id).to.be.equal(guid);
-        expect(response.result.roles[0].name).to.be.equal(roleName);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.total).to.be.equal(1);
+      expect(response.result.roles).to.be.a('array');
+      expect(response.result.roles[0]._id).to.be.equal(guid);
+      expect(response.result.roles[0].name).to.be.equal(roleName);
     });
 
-    it('should return 403 if scope is missing (single role)', (cb) => {
+    it('should return 403 if scope is missing (single role)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -89,13 +87,11 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return role data', (cb) => {
+    it('should return role data', async () => {
       const token = getToken('read:roles');
       const options = {
         method: 'GET',
@@ -105,17 +101,15 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result._id).to.be.equal(guid);
-        expect(response.result.name).to.be.equal(roleName);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result._id).to.be.equal(guid);
+      expect(response.result.name).to.be.equal(roleName);
     });
   });
 
   describe('#delete', () => {
-    it('should return 403 if scope is missing (delete role)', (cb) => {
+    it('should return 403 if scope is missing (delete role)', async () => {
       const token = getToken();
       const options = {
         method: 'DELETE',
@@ -125,13 +119,11 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should delete role', (cb) => {
+    it('should delete role', async () => {
       const token = getToken('delete:roles');
       let deletedId = null;
 
@@ -148,16 +140,14 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(deletedId).to.be.equal(guid);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(deletedId).to.be.equal(guid);
     });
   });
 
   describe('#post', () => {
-    it('should return 403 if scope is missing (create role)', (cb) => {
+    it('should return 403 if scope is missing (create role)', async () => {
       const token = getToken();
       const options = {
         method: 'POST',
@@ -167,13 +157,11 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('create:roles');
       const options = {
         method: 'POST',
@@ -183,16 +171,14 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal(
-          '"value" must be an object'
-        );
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal(
+        '"value" must be of type object'
+      );
     });
 
-    it('should create role', (cb) => {
+    it('should create role', async () => {
       const token = getToken('create:roles');
       const payload = {
         name: 'new-role',
@@ -212,16 +198,14 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result.name).to.be.equal(payload.name);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(response.result.name).to.be.equal(payload.name);
     });
   });
 
   describe('#put', () => {
-    it('should return 403 if scope is missing (update role)', (cb) => {
+    it('should return 403 if scope is missing (update role)', async () => {
       const token = getToken();
       const options = {
         method: 'PUT',
@@ -231,13 +215,11 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:roles');
       const options = {
         method: 'PUT',
@@ -247,16 +229,14 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal(
-          '"value" must be an object'
-        );
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal(
+        '"value" must be of type object'
+      );
     });
 
-    it('should update role', (cb) => {
+    it('should update role', async () => {
       const token = getToken('update:roles');
       let updatedRole = null;
       db.updateRole = (id, data) => {
@@ -281,12 +261,10 @@ describe('roles-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(updatedRole.name).to.be.equal(payload.name);
-        expect(updatedRole._id).to.be.equal(guid);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(updatedRole.name).to.be.equal(payload.name);
+      expect(updatedRole._id).to.be.equal(guid);
     });
   });
 });

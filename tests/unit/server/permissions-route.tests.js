@@ -18,7 +18,6 @@ describe('permissions-route', async () => {
     _id: guid
   };
 
-
   before(async () => {
     const result = await getServerData();
     server = result.server;
