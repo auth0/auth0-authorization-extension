@@ -2,7 +2,7 @@ import Boom from '@hapi/boom';
 import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
-import { Promise } from 'bluebird';
+import { is, Promise } from 'bluebird';
 
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
@@ -66,12 +66,12 @@ const register = async (server) => {
     verify: async (decoded, req) => {
       try {
         if (!decoded) {
-          throw Boom.unauthorized('Invalid token', 'Token');
+          return { isValid: false };
         }
 
         const header = req.headers.authorization;
         if (!header || !header.indexOf('Bearer ') === 0) {
-          throw Boom.unauthorized('Invalid token', 'Token');
+          return { isValid: false };
         }
 
         const token = header.split(' ')[1];
@@ -84,17 +84,17 @@ const register = async (server) => {
 
         if (isApiRequest) {
           if (decoded.payload.gty && decoded.payload.gty !== 'client-credentials') {
-            throw Boom.unauthorized('Invalid token', 'Token');
+            return { isValid: false };
           }
 
           if (!decoded.payload.sub.endsWith('@clients')) {
-            throw Boom.unauthorized('Invalid token', 'Token');
+            return { isValid: false };
           }
 
           const resourceServerKey = await getKeyAsync(decoded);
 
           if (!resourceServerKey) {
-            throw Boom.unauthorized('Invalid token', 'Token');
+            return { isValid: false };
           }
 
           // this can throw if there is an error
@@ -110,7 +110,7 @@ const register = async (server) => {
 
         if (isDashboardAdminRequest) {
           if (!decoded.payload.access_token || !decoded.payload.access_token.length) {
-            throw Boom.unauthorized('Invalid token', 'Token');
+            return { isValid: false };
           }
 
           // this can throw if there is an error
@@ -120,7 +120,7 @@ const register = async (server) => {
           return { credentials: decoded.payload, isValid: true };
         }
       } catch (error) {
-        throw Boom.unauthorized('Invalid token', 'Token');
+        return { isValid: false };
       }
     }
   });
