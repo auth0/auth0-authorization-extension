@@ -2,7 +2,6 @@ import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
-import { update } from 'lodash';
 
 describe('groups-nested-route', async () => {
   let server = null;

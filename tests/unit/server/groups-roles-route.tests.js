@@ -4,7 +4,9 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('groups-members-route', async () => {
-  const { db, server } = await getServerData();
+  let server = null;
+  let db = null;
+
   const guid = 'C56a418065aa426ca9455fd21deC0538';
   const roleId = '38d5f9a6c0dc4f6381ac746f87663727';
   const groupName = 'test-group';
@@ -22,7 +24,10 @@ describe('groups-members-route', async () => {
   };
   let updatedGroup = null;
 
-  before((done) => {
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+    db = result.db;
     db.getGroup = () => Promise.resolve(group);
     db.getRoles = () => Promise.resolve([ role ]);
     db.updateGroup = (id, data) => {
@@ -30,23 +35,20 @@ describe('groups-members-route', async () => {
       updatedGroup._id = id;
       return Promise.resolve();
     };
-    done();
   });
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/roles`
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of roles)', (cb) => {
+    it('should return 403 if scope is missing (list of roles)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -56,13 +58,11 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return roles', (cb) => {
+    it('should return roles', async () => {
       const token = getToken('read:groups');
       const options = {
         method: 'GET',
@@ -72,15 +72,13 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result).to.be.a('array');
-        expect(response.result[0]._id).to.be.equal(roleId);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(response.result).to.be.a('array');
+      expect(response.result[0]._id).to.be.equal(roleId);
     });
 
-    it('should return 403 if scope is missing (list of nested roles)', (cb) => {
+    it('should return 403 if scope is missing (list of nested roles)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -90,13 +88,11 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return nested roles', (cb) => {
+    it('should return nested roles', async () => {
       const token = getToken('read:groups');
       db.getGroups = () => Promise.resolve([ group ]);
       const options = {
@@ -107,16 +103,14 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result).to.be.a('array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(response.result).to.be.a('array');
     });
   });
 
   describe('#delete', () => {
-    it('should return 403 if scope is missing (delete roles)', (cb) => {
+    it('should return 403 if scope is missing (delete roles)', async () => {
       const token = getToken();
       const options = {
         method: 'DELETE',
@@ -126,13 +120,11 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'DELETE',
@@ -142,14 +134,12 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('"value" must be an array');
     });
 
-    it('should delete roles', (cb) => {
+    it('should delete roles', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'DELETE',
@@ -160,19 +150,17 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(updatedGroup._id).to.be.equal(guid);
-        expect(updatedGroup.name).to.be.equal(groupName);
-        expect(updatedGroup.roles).to.be.a('array');
-        expect(updatedGroup.roles.length).to.be.equal(0);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(updatedGroup._id).to.be.equal(guid);
+      expect(updatedGroup.name).to.be.equal(groupName);
+      expect(updatedGroup.roles).to.be.a('array');
+      expect(updatedGroup.roles.length).to.be.equal(0);
     });
   });
 
   describe('#patch', () => {
-    it('should return 403 if scope is missing (update roles)', (cb) => {
+    it('should return 403 if scope is missing (update roles)', async () => {
       const token = getToken();
       const options = {
         method: 'PATCH',
@@ -182,13 +170,11 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'PATCH',
@@ -198,14 +184,12 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('"value" must be an array');
     });
 
-    it('should update roles', (cb) => {
+    it('should update roles', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'PATCH',
@@ -216,14 +200,12 @@ describe('groups-members-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(updatedGroup.name).to.be.equal(groupName);
-        expect(updatedGroup._id).to.be.equal(guid);
-        expect(updatedGroup.roles).to.be.a('array');
-        expect(updatedGroup.roles[0]).to.be.equal(roleId);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(updatedGroup.name).to.be.equal(groupName);
+      expect(updatedGroup._id).to.be.equal(guid);
+      expect(updatedGroup.roles).to.be.a('array');
+      expect(updatedGroup.roles[0]).to.be.equal(roleId);
     });
   });
 });

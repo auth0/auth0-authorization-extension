@@ -14,7 +14,7 @@
     "serve:dev": "gulp run",
     "serve:prod": "cross-env NODE_ENV=production node index.js",
     "test-working": "npm run test:pre && cross-env NODE_ENV=test mocha --timeout 10000 tests/unit/mocha.js ./tests/unit/server/authorize.tests.js",
-    "test-dev": "npm run test:pre && cross-env NODE_ENV=test mocha --timeout 10000 tests/unit/mocha.js tests/unit/server/groups-nested-route.tests.js",
+    "test-dev": "npm run test:pre && cross-env NODE_ENV=test mocha --timeout 10000 tests/unit/mocha.js tests/unit/server/groups-roles-route.tests.js",
     "test": "npm run test:pre && cross-env NODE_ENV=test nyc mocha --timeout 10000 tests/unit/mocha.js ./tests/unit/**/*.tests.js",
     "test:watch": "npm run test:pre && cross-env NODE_ENV=test mocha --timeout 10000 tests/unit/mocha.js ./tests/unit/**/*.tests.js --watch",
     "test:pre": "npm run test:clean",
