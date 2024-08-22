@@ -2,9 +2,12 @@ import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
+import { update } from 'lodash';
 
 describe('groups-nested-route', async () => {
-  const { db, server } = await getServerData();
+  let server = null;
+  let db = null;
+
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const ngid = 'B56a418065aa426ca9455fd21deC0538';
   const groupName = 'test-group';
@@ -21,27 +24,27 @@ describe('groups-nested-route', async () => {
     description: 'description'
   };
 
-  before((done) => {
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+    db = result.db;
     db.getGroups = () => Promise.resolve([ group, nested ]);
     db.getGroup = () => Promise.resolve(group);
     db.updateGroup = null;
-    done();
   });
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/nested`
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of nested groups)', (cb) => {
+    it('should return 403 if scope is missing (list of nested groups)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -51,13 +54,11 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return nested groups', (cb) => {
+    it('should return nested groups', async () => {
       const token = getToken('read:groups');
       const options = {
         method: 'GET',
@@ -67,17 +68,15 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result[0]._id).to.be.equal(ngid);
-        expect(response.result[0].name).to.be.equal(nestedName);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('array');
+      expect(response.result[0]._id).to.be.equal(ngid);
+      expect(response.result[0].name).to.be.equal(nestedName);
     });
   });
 
   describe('#delete', () => {
-    it('should return 403 if scope is missing (delete nested groups)', (cb) => {
+    it('should return 403 if scope is missing (delete nested groups)', async () => {
       const token = getToken();
       const options = {
         method: 'DELETE',
@@ -87,13 +86,11 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'DELETE',
@@ -103,14 +100,12 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('"value" must be an array');
     });
 
-    it('should delete nested', (cb) => {
+    it('should delete nested', async () => {
       let updatedGroup = null;
       const token = getToken('update:groups');
       db.updateGroup = (id, data) => {
@@ -128,19 +123,17 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(updatedGroup._id).to.be.equal(guid);
-        expect(updatedGroup.name).to.be.equal(groupName);
-        expect(updatedGroup.nested).to.be.a('array');
-        expect(updatedGroup.nested.length).to.be.equal(0);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(updatedGroup._id).to.be.equal(guid);
+      expect(updatedGroup.name).to.be.equal(groupName);
+      expect(updatedGroup.nested).to.be.a('array');
+      expect(updatedGroup.nested.length).to.be.equal(0);
     });
   });
 
   describe('#patch', () => {
-    it('should return 403 if scope is missing (update nested groups)', (cb) => {
+    it('should return 403 if scope is missing (update nested groups)', async () => {
       const token = getToken();
       const options = {
         method: 'PATCH',
@@ -150,13 +143,11 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:groups');
       const options = {
         method: 'PATCH',
@@ -166,14 +157,12 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal('"value" must be an array');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal('"value" must be an array');
     });
 
-    it('should update nested', (cb) => {
+    it('should update nested', async () => {
       const token = getToken('update:groups');
       let updatedGroup = null;
       db.updateGroup = (id, data) => {
@@ -191,14 +180,12 @@ describe('groups-nested-route', async () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(updatedGroup.name).to.be.equal(groupName);
-        expect(updatedGroup._id).to.be.equal(guid);
-        expect(updatedGroup.nested).to.be.a('array');
-        expect(updatedGroup.nested[0]).to.be.equal(ngid);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(updatedGroup.name).to.be.equal(groupName);
+      expect(updatedGroup._id).to.be.equal(guid);
+      expect(updatedGroup.nested).to.be.a('array');
+      expect(updatedGroup.nested[0]).to.be.equal(ngid);
     });
   });
 });
