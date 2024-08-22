@@ -1,6 +1,7 @@
-## [2.12.0] - 2024-02-01
+## [2.12.0] - 2024-09-01
 
-- testing
+- Update to run on node 18.16.0
+- Bumps hapi.js framework to 21.3.3, and many other associated version bumps 
 
 ## [2.11.0] - 2021-01-25
 
