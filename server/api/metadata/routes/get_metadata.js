@@ -6,5 +6,5 @@ export default () => ({
   options: {
     auth: false
   },
-  handler: (request, reply) => reply(metadata)
+  handler: async (req, h) => h.response(metadata)
 });
