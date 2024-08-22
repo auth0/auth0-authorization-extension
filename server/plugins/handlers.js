@@ -1,4 +1,3 @@
-// import { handlers } from 'auth0-extension-hapi-tools';
 import * as tools from 'auth0-extension-tools';
 import * as Boom from '@hapi/boom';
 

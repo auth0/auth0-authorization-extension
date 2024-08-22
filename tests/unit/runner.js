@@ -1,10 +1,8 @@
 import nconf from 'nconf';
 import config from '../../server/lib/config';
 
-import certs from './mocks/certs.json';
 import { wellKnownEndpoint } from './mocks/tokens';
 import { auth0Client } from './mocks/auth0';
-// import { initServer } from './server';
 
 nconf
   .argv()
@@ -27,4 +25,3 @@ config.setProvider((key) => nconf.get(key));
 auth0Client();
 
 wellKnownEndpoint(config('AUTH0_DOMAIN'), 'key2');
-// initServer();
