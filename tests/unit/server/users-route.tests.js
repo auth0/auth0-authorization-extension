@@ -4,7 +4,8 @@ import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('users-route', async () => {
-  const { server } = await getServerData();
+  let server = null;
+
   const user = {
     email: 'user@exampple.com',
     email_verified: true,
@@ -20,6 +21,11 @@ describe('users-route', async () => {
     ],
     name: 'user@exampple.com'
   };
+
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+  });
 
   describe('#get', () => {
     it('should return 401 if no token provided', async () => {
