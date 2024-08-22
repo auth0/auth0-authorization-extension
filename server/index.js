@@ -4,6 +4,7 @@ import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
 import GoodConsole from '@hapi/good-console';
 import HapiSwagger from 'hapi-swagger';
+import Joi from 'joi';
 
 import config from './lib/config';
 import logger from './lib/logger';
@@ -36,6 +37,8 @@ export default async () => {
     port: 3000,
     routes: { cors: true }
   });
+
+  server.validator(Joi);
 
   const externalPlugins = [
     goodPlugin,

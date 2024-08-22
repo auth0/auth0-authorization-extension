@@ -21,12 +21,12 @@ function unauthorized(message) {
 }
 
 const register = async (server) => {
-  server.decorate('reply', 'notFound', notFound);
-  server.decorate('reply', 'error', error);
-  server.decorate('reply', 'unauthorized', unauthorized);
+  server.decorate('response', 'notFound', notFound);
+  server.decorate('response', 'error', error);
+  server.decorate('response', 'unauthorized', unauthorized);
 };
 
-export const replyDecoratorsPlugin = {
+export const responseDecoratorsPlugin = {
   register,
-  name: 'reply-decorators'
+  name: 'response-decorators'
 };

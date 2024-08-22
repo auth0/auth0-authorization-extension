@@ -198,7 +198,7 @@ describe('configuration-route', async () => {
       const response = await server.inject(options);
       expect(response.result.statusCode).to.equal(400);
       expect(response.result.message).to.equal(
-        'Invalid request payload input'
+        '"groupsInToken" must be a boolean'
       );
     });
 
@@ -288,7 +288,7 @@ describe('configuration-route', async () => {
       expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it.only('should return validation error', async () => {
+    it('should return validation error', async () => {
       const token = getToken('update:configuration');
       const options = {
         method: 'POST',
