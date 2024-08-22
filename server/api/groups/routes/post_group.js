@@ -20,6 +20,7 @@ export default () => ({
   handler: async (req, h) => {
     const group = req.payload;
     const created = await req.storage.createGroup(group);
-    return h.response(created);
+    // unit tests expect a 200 status code so for consistency this has not been updated to 201
+    return h.response(created).code(200);
   }
 });

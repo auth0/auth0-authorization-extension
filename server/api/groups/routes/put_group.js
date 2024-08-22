@@ -24,6 +24,7 @@ export default () => ({
   handler: async (req, h) => {
     const group = req.payload;
     const updated = await req.storage.updateGroup(req.params.id, group);
-    return h.response(updated);
+    // unit tests expect a 200 status code so for consistency this has not been updated to 201
+    return h.response(updated).code(200);
   }
 });
