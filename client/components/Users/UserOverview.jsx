@@ -1,10 +1,7 @@
 import React from 'react';
-import { findDOMNode } from 'react-dom';
-import { Button, ButtonToolbar, Nav, NavItem, Tabs, Tab } from 'react-bootstrap';
 import { Pagination, SectionHeader, BlankState, SearchBar, Error, TableTotals, LoadingPanel } from 'auth0-extension-ui';
 
-import UserGeneral from './UserGeneral';
-import UserFederated from './UserFederated';
+import UserGeneral from './UserGeneral.jsx';
 import UsersTable from './UsersTable';
 import UserIcon from '../Icons/UsersIcon';
 
@@ -143,7 +140,8 @@ UserOverview.propTypes = {
   total: React.PropTypes.number.isRequired,
   loading: React.PropTypes.bool.isRequired,
   renderActions: React.PropTypes.func.isRequired,
-  getUsersOnPage: React.PropTypes.func.isRequired
+  getUsersOnPage: React.PropTypes.func.isRequired,
+  fetchQuery: React.PropTypes.func.isRequired
 };
 
 export default UserOverview;

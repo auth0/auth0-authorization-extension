@@ -36,6 +36,9 @@ export default (server) => ({
 
     const users = await req.pre.auth0.users.getAll(options);
 
+    console.log({ options, users });
+
+
     return h.response(users);
   }
 });
