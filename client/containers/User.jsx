@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions, applicationActions, roleActions } from '../actions';
+import { groupPickerActions, groupMemberActions, userActions, userGroupActions, applicationActions, roleActions } from '../actions';
 
 import UserGroups from '../components/Users/UserGroups';
 import UserHeader from '../components/Users/UserHeader';
@@ -176,4 +176,4 @@ UserContainer.propTypes = {
   groupMember: React.PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions, ...applicationActions, ...roleActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...userActions, ...userGroupActions, ...applicationActions, ...roleActions })(UserContainer);

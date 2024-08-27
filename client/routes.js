@@ -1,7 +1,7 @@
 import React from 'react';  // eslint-disable-line no-unused-vars
 import { Router, Route, IndexRedirect } from 'react-router';  // eslint-disable-line no-unused-vars
 
-import * as containers from './containers';
+import { containers } from './containers';
 
 export default (history) =>
   <Router history={history}>
@@ -11,17 +11,12 @@ export default (history) =>
         <Route path="rule" component={containers.ConfigurationRule} />
         <Route path="import-export" component={containers.ConfigurationRule} />
       </Route>
-      <Route path="roles" component={containers.Roles}>
-        <Route path=":id" component={containers.Role} />
-      </Route>
       <Route path="groups" component={containers.Groups}>
         <Route path=":id" component={containers.Group} />
       </Route>
       <Route path="roles" component={containers.Roles}>
-        <Route path=":id" component={containers.Role} />
       </Route>
       <Route path="permissions" component={containers.Permissions}>
-        <Route path=":id" component={containers.Permission} />
       </Route>
       <Route path="users" component={containers.Users}>
         <Route path=":id" component={containers.User} />

@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupPickerActions, groupMemberActions, logActions, userActions, userGroupActions } from '../../actions';
+import { groupPickerActions, groupMemberActions, userActions, userGroupActions } from '../../actions';
 
 import './UserContainer.css';
 import LogDialog from '../../components/Logs/LogDialog';
@@ -124,4 +124,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...logActions, ...userActions, ...userGroupActions })(UserContainer);
+export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...userActions, ...userGroupActions })(UserContainer);
