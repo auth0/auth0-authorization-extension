@@ -24,12 +24,15 @@ function fromHapi(serverFactory) {
         throw new Error('Server factory did not return a server instance');
       }
 
-      hapiServer.ext('onRequest', function(hapiRequest, h) {
-        var normalizeRouteRx = createRouteNormalizationRx(hapiRequest.raw.req.x_wt);
+      hapiServer.ext('onRequest', function (hapiRequest, h) {
+
+        const normalizeRouteRx = createRouteNormalizationRx(hapiRequest.raw.req.x_wt);
 
         if (normalizeRouteRx) {
           hapiRequest.originalUrl = hapiRequest.path;
-          hapiRequest.setUrl(hapiRequest.path.replace(normalizeRouteRx, '/'));
+          // need to remove the protocol + domain etc for the route matching to work,
+          // however, need to keep the query string for it to be passed to the route handlers
+          hapiRequest.setUrl(`${hapiRequest.path}${hapiRequest.url.search}`.replace(normalizeRouteRx, '/'));
         }
 
         /* Fix multi-proto environments, take the first */
@@ -43,10 +46,11 @@ function fromHapi(serverFactory) {
       });
     }
 
-    const { method, url } = req;
-    console.log({ method, url });
+    const { method, url, query, params, body } = req;
+    console.log({ method, url, query, params, body });
 
-    hapiServer.listener._events.request(req, res);
+    hapiServer.listener.emit('request', req, res);
+
   };
 }
 

@@ -1,13 +1,14 @@
 /* eslint-disable no-underscore-dangle, no-shadow */
 
 import Promise from 'bluebird';
-import expect from 'expect';
+import { expect } from 'expect';
 import { faker } from '@faker-js/faker';
 import request from 'superagent';
 import { getAccessToken, authzApi, token } from './utils';
 
 
 let accessToken;
+const applicationId = "fake-app-id";
 const groupMemberName1 = 'auth0|test-user-12345-1';
 const groupMemberName2 = 'auth0|test-user-12345-2';
 
@@ -16,7 +17,7 @@ const parallelGroups = [ ...new Array(20) ].map(() => ({
   description: faker.lorem.sentence()
 }));
 
-const createTestGroup = async () => {
+const createGroup = async () => {
   const group = {
     name: faker.lorem.slug(),
     description: faker.lorem.sentence()
@@ -31,18 +32,45 @@ const createTestGroup = async () => {
   return result.body;
 };
 
-const createTestRole = async () => {
+const createRole = async (permissionIds) => {
   const role = {
     name: faker.lorem.slug(),
     description: faker.lorem.sentence(),
     applicationType: 'client',
-    applicationId: faker.lorem.slug(),
-    permissions: []
+    applicationId,
+    permissions: permissionIds ?? []
   };
 
   const result = await request
     .post(authzApi('/roles'))
     .send(role)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .accept('json');
+
+  return result.body;
+};
+
+const createPermission = async () => {
+  const permission = {
+    name: faker.lorem.slug(),
+    description: faker.lorem.sentence(),
+    applicationType: 'client',
+    applicationId,
+  };
+
+  const result = await request
+    .post(authzApi('/permissions'))
+    .send(permission)
+    .set('Authorization', `Bearer ${accessToken}`)
+    .accept('json');
+
+  return result.body;
+};
+
+const addGroupRoles = async (groupId, roleIds) => {
+  const result = await request
+    .patch(authzApi(`/groups/${groupId}/roles`))
+    .send(roleIds)
     .set('Authorization', `Bearer ${accessToken}`)
     .accept('json');
 
@@ -64,8 +92,8 @@ describe('groups', () => {
   let testRole;
 
   beforeEach(async () => {
-    testGroup = await createTestGroup();
-    testRole = await createTestRole();
+    testGroup = await createGroup();
+    testRole = await createRole();
   });
 
   afterEach(async () => {
@@ -101,7 +129,7 @@ describe('groups', () => {
   });
 
   it('should create a new group', async () => {
-    const newGroup = await createTestGroup();
+    const newGroup = await createGroup();
     const response = await request
       .get(authzApi(`/groups/${newGroup._id}`))
       .set('Authorization', `Bearer ${accessToken}`)
@@ -161,22 +189,50 @@ describe('groups', () => {
 
   it('should get all groups in the system', async () => {
     const response = await request
-    .get(authzApi('/groups'))
-    .set('Authorization', `Bearer ${accessToken}`)
-    .accept('json');
+      .get(authzApi('/groups'))
+      .set('Authorization', `Bearer ${accessToken}`)
+      .accept('json');
 
     expect(response.body.groups.length).toBeGreaterThan(0);
   });
 
   it('should get a single group based on its unique identifier', async () => {
     const response = await request
-    .get(authzApi(`/groups/${testGroup._id}`))
-    .set(token(accessToken))
-    .accept('json');
+      .get(authzApi(`/groups/${testGroup._id}`))
+      .set(token(accessToken))
+      .accept('json');
 
     expect(testGroup.name).toEqual(response.body.name);
     expect(testGroup.description).toEqual(response.body.description);
   });
+
+  it('should get a single expanded group based on its unique identifier', async () => {
+    const [perm1, perm2, perm3] = await Promise.all([createPermission(), createPermission(), createPermission()]);
+    const [role1, role2] = await Promise.all([createRole([perm1._id, perm2._id]), createRole([perm3._id])]);
+    await addGroupRoles(testGroup._id, [role1._id, role2._id]);
+
+    const response = await request
+      .get(authzApi(`/groups/${testGroup._id}?expand=true`))
+      .set(token(accessToken))
+      .accept('json');
+
+    const expandedGroup = response.body;
+
+    expect(expandedGroup).toBeInstanceOf(Object);
+    expect(expandedGroup.name).toEqual(testGroup.name);
+    expect(expandedGroup.description).toEqual(testGroup.description);
+    expect(expandedGroup.roles).toBeInstanceOf(Array);
+    expect(expandedGroup.roles.length).toEqual(2);
+    expect(expandedGroup.roles[0]).toBeInstanceOf(Object);
+    expect(expandedGroup.roles[0]._id).toEqual(role1._id);
+    expect(expandedGroup.roles[1]._id).toEqual(role2._id);
+    expect(expandedGroup.roles[0].permissions).toBeInstanceOf(Array);
+    expect(expandedGroup.roles[0].permissions[0]).toBeInstanceOf(Object);
+    expect(expandedGroup.roles[0].permissions.length).toEqual(2);
+    expect(expandedGroup.roles[0].permissions.map(perm => perm._id)).toEqual(expect.arrayContaining([perm1._id, perm2._id]));
+    expect(expandedGroup.roles[1].permissions.length).toEqual(1);
+    expect(expandedGroup.roles[1].permissions[0]._id).toEqual(perm3._id);
+  }).timeout(30000);
 
   it('should update a group', async () => {
     const newData = {
@@ -185,16 +241,16 @@ describe('groups', () => {
     };
 
     await request
-    .put(authzApi(`/groups/${testGroup._id}`))
-    .set(token(accessToken))
-    .send(newData)
-    .accept('json');
+      .put(authzApi(`/groups/${testGroup._id}`))
+      .set(token(accessToken))
+      .send(newData)
+      .accept('json');
 
   // Check the group was updated in the server
     const updatedGroup = await request
-    .get(authzApi(`/groups/${testGroup._id}`))
-    .set(token(accessToken))
-    .accept('json');
+      .get(authzApi(`/groups/${testGroup._id}`))
+      .set(token(accessToken))
+      .accept('json');
 
     expect(updatedGroup.body.name).toEqual(newData.name);
     expect(updatedGroup.body.description).toEqual(newData.description);

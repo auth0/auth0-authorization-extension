@@ -18,9 +18,7 @@ export default async () => {
         interval: 30000
       },
       reporters: {
-        console: [
-
-        ]
+        console: []
       }
     }
   };
