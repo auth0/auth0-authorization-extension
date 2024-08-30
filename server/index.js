@@ -72,12 +72,16 @@ export default async () => {
   };
 
   server.ext('onPreResponse', (request, h) => {
+
+    // status prop can be either statusCode or status
+    const statusCode = request.response?.statusCode ?? request.response?.status;
+
     // translate errors to appropriate responses
     // otherwise 500s are returned regardless of the thrown error
-    if (request.response?.status >= 400) {
-      request.response.output.statusCode = request.response.status;
+    if (statusCode >= 400) {
+      request.response.output.statusCode = statusCode;
       request.response.output.payload = {
-        statusCode: request.response.status,
+        statusCode: statusCode,
         error: request.response.name,
         message: request.response.message
       };
