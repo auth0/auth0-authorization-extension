@@ -34,6 +34,9 @@ export default (server) => ({
       search_engine: config('USER_SEARCH_ENGINE') || 'v3'
     };
 
+
+    console.log({ options });
+
     const users = await req.pre.auth0.users.getAll(options);
 
     return h.response(users);

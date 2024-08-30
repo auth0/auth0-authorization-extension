@@ -43,7 +43,13 @@ class UserOverview extends React.Component {
   onKeyPress(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
-      this.props.onSearch(`${e.target.value}*`, this.state.selectedFilter.filterBy);
+
+      // don't use wildcard for connection search
+      const searchTerm = this.state.selectedFilter.filterBy === 'identities.connection'
+        ? e.target.value
+        : `${e.target.value}*`;
+
+      this.props.onSearch(searchTerm, this.state.selectedFilter.filterBy);
     }
   }
 
