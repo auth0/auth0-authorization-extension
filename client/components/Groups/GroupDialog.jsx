@@ -37,7 +37,8 @@ class GroupDialog extends Component {
 GroupDialog.propTypes = {
   onSave: React.PropTypes.func.isRequired,
   onClose: React.PropTypes.func.isRequired,
-  group: React.PropTypes.object.isRequired
+  group: React.PropTypes.object.isRequired,
+  applications: React.PropTypes.array.isRequired
 };
 
 export default GroupDialog;
