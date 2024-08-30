@@ -29,13 +29,11 @@ export default () => ({
       group.roles = [];
     }
 
-    roles.forEach(roleId => {
-      if (group.roles.indexOf(roleId) === -1) {
-        group.roles.push(roleId);
-      }
-    });
+    const rolesToAdd = group.roles
+      ? roles.filter(roleId => !group.roles.includes(roleId))
+      : roles;
 
-    await req.storage.updateGroup(req.params.id, group);
+    await req.storage.updateGroup(req.params.id, { ...group, roles: rolesToAdd });
 
     return h.response().code(204);
   }

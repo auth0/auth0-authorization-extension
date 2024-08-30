@@ -33,14 +33,6 @@ describe('groups', () => {
       .accept('json');
   });
 
-  let testGroup;
-  let testRole;
-
-  beforeEach(async () => {
-    testGroup = await createGroup();
-    testRole = await createRole();
-  });
-
   afterEach(async () => {
     // clear data to prevent state leaking between tests
     await request
@@ -64,6 +56,9 @@ describe('groups', () => {
 
 
   it('should export data', async () => {
+    await createGroup();
+    await createRole();
+
     const response = await request
       .get(authzApi('/configuration/export'))
       .set('Authorization', `Bearer ${accessToken}`)
@@ -107,8 +102,10 @@ describe('groups', () => {
   }).timeout(30000);
 
   it('should delete group', async () => {
+    const newGroup = await createGroup();
+
     const deleteResult = await request
-      .delete(authzApi(`/groups/${testGroup._id}`))
+      .delete(authzApi(`/groups/${newGroup._id}`))
       .auth(accessToken, { type: 'bearer' })
       .accept('json');
 
@@ -116,14 +113,14 @@ describe('groups', () => {
 
     try {
       await request
-      .get(authzApi(`/groups/${testGroup._id}`))
+      .get(authzApi(`/groups/${newGroup._id}`))
       .auth(accessToken, { type: 'bearer' })
       .accept('json');
     } catch (error) {
       expect(error.response._body).toEqual(expect.objectContaining({
         statusCode: 404,
         error: 'NotFoundError',
-        message: `The record ${testGroup._id} in groups does not exist.`
+        message: `The record ${newGroup._id} in groups does not exist.`
       }));
       return;
     }
@@ -158,6 +155,8 @@ describe('groups', () => {
   });
 
   it('should get all groups in the system', async () => {
+    await createGroup();
+
     const response = await request
       .get(authzApi('/groups'))
       .set('Authorization', `Bearer ${accessToken}`)
@@ -167,13 +166,15 @@ describe('groups', () => {
   });
 
   it('should get a single group based on its unique identifier', async () => {
+    const newGroup = await createGroup();
+
     const response = await request
-      .get(authzApi(`/groups/${testGroup._id}`))
+      .get(authzApi(`/groups/${newGroup._id}`))
       .auth(accessToken, { type: 'bearer' })
       .accept('json');
 
-    expect(testGroup.name).toEqual(response.body.name);
-    expect(testGroup.description).toEqual(response.body.description);
+    expect(newGroup.name).toEqual(response.body.name);
+    expect(newGroup.description).toEqual(response.body.description);
   });
 
   it('should get a single expanded group based on its unique identifier', async () => {
@@ -186,45 +187,52 @@ describe('groups', () => {
       createRole([ perm1._id, perm2._id ]),
       createRole([ perm3._id ])
     ]);
-    await addGroupRoles(testGroup._id, [ role1._id, role2._id ]);
+    const newGroup = await createGroup();
+
+    await addGroupRoles(newGroup._id, [ role1._id, role2._id ]);
 
     const response = await request
-      .get(authzApi(`/groups/${testGroup._id}?expand=true`))
+      .get(authzApi(`/groups/${newGroup._id}?expand=true`))
       .auth(accessToken, { type: 'bearer' })
       .accept('json');
 
     const expandedGroup = response.body;
 
     expect(expandedGroup).toBeInstanceOf(Object);
-    expect(expandedGroup.name).toEqual(testGroup.name);
-    expect(expandedGroup.description).toEqual(testGroup.description);
+    expect(expandedGroup.name).toEqual(newGroup.name);
+    expect(expandedGroup.description).toEqual(newGroup.description);
     expect(expandedGroup.roles).toBeInstanceOf(Array);
     expect(expandedGroup.roles.length).toEqual(2);
-    expect(expandedGroup.roles[0]).toBeInstanceOf(Object);
     expect(expandedGroup.roles.map(role => role._id)).toEqual(expect.arrayContaining([ role1._id, role2._id ]));
-    expect(expandedGroup.roles[0].permissions).toBeInstanceOf(Array);
-    expect(expandedGroup.roles[0].permissions[0]).toBeInstanceOf(Object);
-    expect(expandedGroup.roles[0].permissions.length).toEqual(2);
-    expect(expandedGroup.roles[0].permissions.map(perm => perm._id)).toEqual(expect.arrayContaining([ perm1._id, perm2._id ]));
-    expect(expandedGroup.roles[1].permissions.length).toEqual(1);
-    expect(expandedGroup.roles[1].permissions[0]._id).toEqual(perm3._id);
+
+    const addedRole1 = expandedGroup.roles.find(role => role._id === role1._id);
+    const addedRole2 = expandedGroup.roles.find(role => role._id === role2._id);
+
+    expect(addedRole1.permissions).toBeInstanceOf(Array);
+    expect(addedRole1.permissions.length).toEqual(2);
+    expect(addedRole1.permissions.map(perm => perm._id)).toEqual(expect.arrayContaining([ perm1._id, perm2._id ]));
+
+    expect(addedRole2.permissions.length).toEqual(1);
+    expect(addedRole2.permissions[0]._id).toEqual(perm3._id);
   }).timeout(30000);
 
   it('should update a group', async () => {
+    const newGroup = await createGroup();
+
     const newData = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence()
     };
 
     await request
-      .put(authzApi(`/groups/${testGroup._id}`))
+      .put(authzApi(`/groups/${newGroup._id}`))
       .auth(accessToken, { type: 'bearer' })
       .send(newData)
       .accept('json');
 
   // Check the group was updated in the server
     const updatedGroup = await request
-      .get(authzApi(`/groups/${testGroup._id}`))
+      .get(authzApi(`/groups/${newGroup._id}`))
       .auth(accessToken, { type: 'bearer' })
       .accept('json');
 
@@ -233,17 +241,21 @@ describe('groups', () => {
   });
 
   describe('mappings', () => {
+    let newGroup;
+
     beforeEach(async () => {
+      newGroup = await createGroup();
+
       const mappings = [ { groupName: 'My groupName', connectionName: 'google-oauth2' } ];
 
       await request
-        .patch(authzApi(`/groups/${testGroup._id}/mappings`))
+        .patch(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .send(mappings)
         .accept('json');
 
       const groupMappings = await request
-        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .get(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -256,13 +268,13 @@ describe('groups', () => {
       const mappings = [ { groupName: 'My groupName2', connectionName: 'google-oauth2' } ];
 
       await request
-        .patch(authzApi(`/groups/${testGroup._id}/mappings`))
+        .patch(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .send(mappings)
         .accept('json');
 
       const groupMappings = await request
-        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .get(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -273,7 +285,7 @@ describe('groups', () => {
 
     it('should get the mappings of a group', async () => {
       const response = await request
-        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .get(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -283,7 +295,7 @@ describe('groups', () => {
     it('should remove mappings of a group', async () => {
       // Get the current mappings
       const mappingsResponse = await request
-        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .get(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -293,7 +305,7 @@ describe('groups', () => {
 
       // Delete the first mapping
       const deleteResponse = await request
-        .delete(authzApi(`/groups/${testGroup._id}/mappings`))
+        .delete(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .send([ mapping._id ])
         .accept('json');
@@ -302,7 +314,7 @@ describe('groups', () => {
 
       // Verify the mapping count has decreased by 1
       const finalMappingsResponse = await request
-        .get(authzApi(`/groups/${testGroup._id}/mappings`))
+        .get(authzApi(`/groups/${newGroup._id}/mappings`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -311,9 +323,13 @@ describe('groups', () => {
   });
 
   describe('group members', () => {
+    let newGroup;
+
     beforeEach(async () => {
+      newGroup = await createGroup();
+
       await request
-        .patch(authzApi(`/groups/${testGroup._id}/members`))
+        .patch(authzApi(`/groups/${newGroup._id}/members`))
         .auth(accessToken, { type: 'bearer' })
         .send([ groupMemberName1 ])
         .accept('json');
@@ -321,13 +337,13 @@ describe('groups', () => {
 
     it('should add members to a group', async () => {
       await request
-        .patch(authzApi(`/groups/${testGroup._id}/members`))
+        .patch(authzApi(`/groups/${newGroup._id}/members`))
         .auth(accessToken, { type: 'bearer' })
         .send([ groupMemberName2 ])
         .accept('json');
 
       const data = await request
-        .get(authzApi(`/groups/${testGroup._id}/members`))
+        .get(authzApi(`/groups/${newGroup._id}/members`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -336,7 +352,7 @@ describe('groups', () => {
 
     it('should get the members of a group', async () => {
       const response = await request
-        .get(authzApi(`/groups/${testGroup._id}/members`))
+        .get(authzApi(`/groups/${newGroup._id}/members`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -345,13 +361,13 @@ describe('groups', () => {
 
     it('should remove members from a group', async () => {
       await request
-        .delete(authzApi(`/groups/${testGroup._id}/members`))
+        .delete(authzApi(`/groups/${newGroup._id}/members`))
         .auth(accessToken, { type: 'bearer' })
         .send([ groupMemberName1 ])
         .accept('json');
 
       const data = await request
-        .get(authzApi(`/groups/${testGroup._id}/members`))
+        .get(authzApi(`/groups/${newGroup._id}/members`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -360,7 +376,7 @@ describe('groups', () => {
 
     it('should get the nested members of a group', async () => {
       const response = await request
-        .get(authzApi(`/groups/${testGroup._id}/members/nested`))
+        .get(authzApi(`/groups/${newGroup._id}/members/nested`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
@@ -369,32 +385,43 @@ describe('groups', () => {
   });
 
   describe('group roles', () => {
+    let newGroup;
+    let newRole;
+
     beforeEach(async () => {
+      newGroup = await createGroup();
+      newRole = await createRole();
+
       await request
-        .patch(authzApi(`/groups/${testGroup._id}/roles`))
+        .patch(authzApi(`/groups/${newGroup._id}/roles`))
         .auth(accessToken, { type: 'bearer' })
-        .send([ testRole._id ])
+        .send([ newRole._id ])
         .accept('json');
     });
 
     it('should add roles to a group', async () => {
-      await request
-        .patch(authzApi(`/groups/${testGroup._id}/roles`))
+      const group1 = await createGroup();
+      const role1 = await createRole();
+
+      const patchResult = await request
+        .patch(authzApi(`/groups/${group1._id}/roles`))
         .auth(accessToken, { type: 'bearer' })
-        .send([ testRole._id ])
+        .send([ role1._id ])
         .accept('json');
 
-      const res = await request
-        .get(authzApi(`/groups/${testGroup._id}/roles`))
+      expect(patchResult.statusCode).toEqual(204);
+
+      const res2 = await request
+        .get(authzApi(`/groups/${group1._id}/roles`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
-      expect(res.body.find((role) => role._id === testRole._id)).toBeDefined();
+      expect(res2.body.find((role) => role._id === role1._id)).toBeDefined();
     });
 
     it('should get the roles of a group', async () => {
       const res = await request
-      .get(authzApi(`/groups/${testGroup._id}/roles`))
+      .get(authzApi(`/groups/${newGroup._id}/roles`))
       .auth(accessToken, { type: 'bearer' })
       .accept('json');
 
@@ -403,22 +430,22 @@ describe('groups', () => {
 
     it('should delete roles from a group', async () => {
       await request
-        .delete(authzApi(`/groups/${testGroup._id}/roles`))
+        .delete(authzApi(`/groups/${newGroup._id}/roles`))
         .auth(accessToken, { type: 'bearer' })
-        .send([ testRole._id ])
+        .send([ newRole._id ])
         .accept('json');
 
       const res = await request
-        .get(authzApi(`/groups/${testGroup._id}/roles`))
+        .get(authzApi(`/groups/${newGroup._id}/roles`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 
-      expect(res.body.find((role) => role._id === testRole._id)).not.toBeDefined();
+      expect(res.body.find((role) => role._id === newRole._id)).not.toBeDefined();
     });
 
     it('should get the nested roles of a group', async () => {
       const response = await request
-        .get(authzApi(`/groups/${testGroup._id}/roles/nested`))
+        .get(authzApi(`/groups/${newGroup._id}/roles/nested`))
         .auth(accessToken, { type: 'bearer' })
         .accept('json');
 

@@ -55,7 +55,7 @@ export const createGroup = async () => {
     .send(group)
     .set('Authorization', `Bearer ${accessToken}`)
     .accept('json');
-
+   
   return result.body;
 };
 

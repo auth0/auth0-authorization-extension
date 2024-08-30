@@ -71,6 +71,12 @@ export default async () => {
     server.log([ 'error' ], args.join(' '));
   };
 
+  server.ext("onRequest", (request, h) => {
+    const { method, path, query, payload } = request;
+    console.log({ method, path, query, payload })
+    return h.continue;
+   });
+
   server.ext('onPreResponse', (request, h) => {
 
     // status prop can be either statusCode or status
