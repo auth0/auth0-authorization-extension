@@ -1,5 +1,4 @@
 const tools = require('auth0-extension-tools');
-const Boom = require('@hapi/boom');
 
 export default function(handlerOptions) {
   if (!handlerOptions || typeof handlerOptions !== 'object') {

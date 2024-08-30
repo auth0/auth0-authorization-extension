@@ -402,8 +402,8 @@ export function getGroupExpanded(db, groupId) {
       }
 
       // caught in the route handler, but this makes it easier to debug
-      if(!groups || groups.length === 0) {
-        return reject(new Error("No groups found"));
+      if (!groups || groups.length === 0) {
+        return reject(new Error('No groups found'));
       }
 
       return getRolesCached(db, (err, allRoles) => {
