@@ -1,37 +1,19 @@
 import request from 'superagent';
 import expect from 'expect';
 import { faker } from '@faker-js/faker';
-import { getAccessToken, authzApi, token } from './utils';
+import { getAccessToken, authzApi, createPermission, createRole } from './utils';
 
 /* eslint-disable no-underscore-dangle, no-shadow */
 
 let accessToken;
 
-const createPermission = async () => {
-  const permission = {
-    name: faker.lorem.slug(),
-    description: faker.lorem.sentence(),
-    applicationType: 'client',
-    applicationId: faker.lorem.slug()
-  };
-
-  const result = await request
-    .post(authzApi('/permissions'))
-    .send(permission)
-    .set('Authorization', `Bearer ${accessToken}`)
-    .accept('json');
-
-  return result.body;
-};
-
-
-describe('permissions', () => {
+describe.only('permissions', () => {
   before(async () => {
     const response = await getAccessToken();
     accessToken = response;
     await request
       .post(authzApi('/configuration/import'))
-      .set(token(accessToken))
+      .auth(accessToken, { type: 'bearer' })
       .send({});
   });
 
@@ -39,7 +21,7 @@ describe('permissions', () => {
     // clear data to prevent state leaking between tests
     await request
       .post(authzApi('/configuration/import'))
-      .set(token(accessToken))
+      .auth(accessToken, { type: 'bearer' })
       .send({});
   });
 
@@ -53,7 +35,7 @@ describe('permissions', () => {
 
     const { body: permissionData } = await request
       .get(authzApi(`/permissions/${newPermission._id}`))
-      .set(token(accessToken));
+      .auth(accessToken, { type: 'bearer' });
 
     expect(newPermission.name).toEqual(permissionData.name);
     expect(newPermission.description).toEqual(permissionData.description);
@@ -67,7 +49,7 @@ describe('permissions', () => {
 
     const { body: data } = await request
       .get(authzApi('/permissions'))
-      .set(token(accessToken));
+      .auth(accessToken, { type: 'bearer' });
 
     expect(data.permissions.length).toEqual(3);
     expect(data.total).toEqual(3);
@@ -81,7 +63,7 @@ describe('permissions', () => {
 
     await request
       .get(authzApi(`/permissions/${newPermission._id}`))
-      .set(token(accessToken));
+      .auth(accessToken, { type: 'bearer' });
   });
 
   it('should update a permission', async () => {
@@ -96,12 +78,12 @@ describe('permissions', () => {
 
     const { body: updatedPermissionPut } = await request
       .put(authzApi(`/permissions/${newPermission._id}`))
-      .set(token(accessToken))
+      .auth(accessToken, { type: 'bearer' })
       .send(newData);
 
     const { body: updatedPermissionGet } = await request
       .get(authzApi(`/permissions/${newPermission._id}`))
-      .set(token(accessToken));
+      .auth(accessToken, { type: 'bearer' });
 
     expect(updatedPermissionPut.name).toEqual(updatedPermissionGet.name);
     expect(updatedPermissionPut.description).toEqual(updatedPermissionGet.description);
@@ -112,17 +94,37 @@ describe('permissions', () => {
 
     await request
       .delete(authzApi(`/permissions/${newPermission._id}`))
-      .set(token(accessToken));
+      .auth(accessToken, { type: 'bearer' });
 
     try {
       await request
         .get(authzApi(`/permissions/${newPermission._id}`))
-        .set(token(accessToken));
+        .auth(accessToken, { type: 'bearer' });
     } catch (error) {
       expect(error.response._body).toEqual({
         statusCode: 400,
         error: 'Bad Request',
         message: `The record ${newPermission._id} in permissions does not exist.`
+      });
+      return;
+    }
+
+    throw new Error('expected to throw an error');
+  });
+
+  it('should not delete a permission which is used by a role', async () => {
+    const newPermission = await createPermission();
+    const newRole = await createRole([ newPermission._id ]);
+
+    try {
+      await request
+      .delete(authzApi(`/permissions/${newPermission._id}`))
+      .auth(accessToken, { type: 'bearer' });
+    } catch (error) {
+      expect(error.response._body).toEqual({
+        statusCode: 400,
+        error: 'ValidationError',
+        message: `Unable to touch permissions while used in roles: ${newRole.name}`
       });
       return;
     }

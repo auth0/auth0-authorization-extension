@@ -24,8 +24,7 @@ function fromHapi(serverFactory) {
         throw new Error('Server factory did not return a server instance');
       }
 
-      hapiServer.ext('onRequest', function (hapiRequest, h) {
-
+      hapiServer.ext('onRequest', function(hapiRequest, h) {
         const normalizeRouteRx = createRouteNormalizationRx(hapiRequest.raw.req.x_wt);
 
         if (normalizeRouteRx) {
@@ -50,7 +49,6 @@ function fromHapi(serverFactory) {
     console.log({ method, url, query, params, body });
 
     hapiServer.listener.emit('request', req, res);
-
   };
 }
 

@@ -1,11 +1,10 @@
-import superagent from 'superagent';
+import request from 'superagent';
 import expect from 'expect';
 import { faker } from '@faker-js/faker';
 import Promise from 'bluebird';
 import {
   getAccessToken,
   authzApi,
-  token,
   extensionApiKey,
   chunks
 } from './utils';
@@ -25,12 +24,12 @@ describe('policy', () => {
     try {
       accessToken = await getAccessToken();
 
-      await superagent
+      await request
         .post(authzApi('/configuration/import'))
         .set('Authorization', `Bearer ${accessToken}`)
         .send({});
 
-      const mgmtTokenResponse = await superagent
+      const mgmtTokenResponse = await request
         .post(`https://${config('AUTH0_DOMAIN')}/oauth/token`)
         .send({
           audience: `https://${config('AUTH0_DOMAIN')}/api/v2/`,
@@ -51,7 +50,7 @@ describe('policy', () => {
 
       // Actually create the users in the server.
       const userCreationRequests = usersData.map((user) =>
-        superagent
+        request
           .post(`https://${config('AUTH0_DOMAIN')}/api/v2/users`)
           .set(mgmtHeader)
           .send(user)
@@ -74,9 +73,9 @@ describe('policy', () => {
       });
 
       // Import data to the extension
-      await superagent
-          .post(authzApi('/configuration/import'))
-          .set('Authorization', `Bearer ${accessToken}`)
+      await request
+        .post(authzApi('/configuration/import'))
+        .auth(accessToken, { type: 'bearer' })
         .send(importData);
     } catch (error) {
       throw new Error(error);
@@ -89,7 +88,7 @@ describe('policy', () => {
   after(async () => {
     try {
       const userDeletions = usersData.map((user) =>
-        superagent
+        request
           .delete(`https://${config('AUTH0_DOMAIN')}/api/v2/users/${user.user_id}`)
           .set(mgmtHeader)
       );
@@ -112,9 +111,9 @@ describe('policy', () => {
   it('should get the right mapping group/s with the connection name and the groups', async () => {
     const user = usersData[0];
 
-    const policyResponse = await superagent
+    const policyResponse = await request
       .post(authzApi(`/users/${user.id}/policy/${clientId}`))
-      .set({ ...token(accessToken), 'x-api-key': extensionApiKey })
+      .set({ 'x-api-key': extensionApiKey })
       .send({
         connectionName,
         groups: [ 'Auth0 Employees' ]
@@ -127,9 +126,9 @@ describe('policy', () => {
     // User #4 is a member of the group 'Development'
     const user = usersData[4];
 
-    const policyResponse = await superagent
+    const policyResponse = await request
       .post(authzApi(`/users/${user.id}/policy/${clientId}`))
-      .set({ ...token(accessToken), 'x-api-key': extensionApiKey })
+      .set({ 'x-api-key': extensionApiKey })
       .send({
         connectionName,
         groups: [ 'Development' ]
