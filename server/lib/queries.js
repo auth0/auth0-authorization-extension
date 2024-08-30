@@ -4,6 +4,7 @@ import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
 import Boom from '@hapi/boom';
 import multipartRequest from './multipartRequest';
+import config from './config';
 
 const avoidBlock = (action) => (...args) =>
   new Promise((resolve, reject) => {
@@ -38,7 +39,8 @@ export const getConnectionsCached = memoizer({
   },
   hash: (auth0) => auth0.hash || 'connections',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -54,7 +56,8 @@ export const getPermissionsCached = memoizer({
   },
   hash: (db) => db.hash || 'permissions',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -70,7 +73,8 @@ export const getRolesCached = memoizer({
   },
   hash: (db) => db.hash || 'roles',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -86,7 +90,8 @@ export const getGroupsCached = memoizer({
   },
   hash: (db) => db.hash || 'groups',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -419,6 +424,7 @@ export async function getGroupExpanded(db, groupId) {
     );
 
     const roles = getRolesForGroups([ currentGroup, ...parentGroups ], allRoles).map((r) => r.role);
+
     const formatRole = (r) => ({
       _id: r._id,
       name: r.name,
