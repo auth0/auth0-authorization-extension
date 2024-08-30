@@ -19,7 +19,7 @@ const clientId = config('AUTH0_CLIENT_ID');
 // Use Username-Password-Authentication by default.
 const connectionName = 'Username-Password-Authentication';
 
-describe('policy', () => {
+describe.only('policy', () => {
   before(async () => {
     try {
       accessToken = await getAccessToken();
@@ -113,7 +113,7 @@ describe('policy', () => {
 
     const policyResponse = await request
       .post(authzApi(`/users/${user.id}/policy/${clientId}`))
-      .set({ 'x-api-key': extensionApiKey })
+      .auth(accessToken, { type: 'bearer' })
       .send({
         connectionName,
         groups: [ 'Auth0 Employees' ]
@@ -128,7 +128,7 @@ describe('policy', () => {
 
     const policyResponse = await request
       .post(authzApi(`/users/${user.id}/policy/${clientId}`))
-      .set({ 'x-api-key': extensionApiKey })
+      .auth(accessToken, { type: 'bearer' })
       .send({
         connectionName,
         groups: [ 'Development' ]
