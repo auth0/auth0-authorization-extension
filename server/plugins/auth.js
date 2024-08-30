@@ -133,7 +133,6 @@ const register = async (server) => {
       sessionStorageKey: 'authz:apiToken',
       rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
-      // scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users',
       scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users read:configuration',
       baseUrl: config('PUBLIC_WT_URL'),
       audience: 'urn:api-authz',

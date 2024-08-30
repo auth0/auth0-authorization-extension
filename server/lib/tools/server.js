@@ -45,9 +45,6 @@ function fromHapi(serverFactory) {
       });
     }
 
-    const { method, url, query } = req;
-    console.log({ method, url, query });
-
     hapiServer.listener.emit('request', req, res);
   };
 }

@@ -20,20 +20,11 @@ logger.error = function error(...args) {
 const options = {
   hot: true,
   historyApiFallback: true,
-  // proxy: [
-  //   {
-  //     context: () => true,
-  //     target: {
-  //       port: 3000
-  //     }
-  //   }
-  // ],
   headers: {
     'Access-Control-Allow-Origin': '*'
   },
   devMiddleware: {
     publicPath: 'http://localhost:3001/app/',
-    // publicPath: 'http://127.0.0.1:3001/app/',
     stats: { colors: true }
   },
   port: 3001,
@@ -50,18 +41,6 @@ const options = {
 };
 
 const server = new WebpackDevServer(options, webpack(config));
-  // .listen(3001, 'localhost',
-  //   (err) => {
-  //     if (err) {
-  //       logger.error(err);
-  //     } else {
-  //       logger.info('Webpack proxy listening on: http://localhost:3001');
-
-  //       // Start the actual webserver.
-  //       require('../../index');
-  //     }
-  //   });
-
 
 (async () => {
   await server.startCallback(() => {
