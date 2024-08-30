@@ -7,7 +7,7 @@ import { getAccessToken, authzApi, createPermission, createRole } from './utils'
 
 let accessToken;
 
-describe.only('permissions', () => {
+describe('permissions', () => {
   before(async () => {
     const response = await getAccessToken();
     accessToken = response;

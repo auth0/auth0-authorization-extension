@@ -114,22 +114,47 @@ describe('groups', () => {
 
     expect(deleteResult.statusCode).toEqual(204);
 
-    await expect(request.get({
-      url: authzApi(`/groups/${testGroup._id}`),
-      headers: `Authorization: bearer ${accessToken}`,
-      json: true
-    }).catch(caughtError => {
-      // annoyingly, the error thrown by request-promise is a weird type so we have to wrap it in a new Error
-      throw new Error({
-        statusCode: caughtError.statusCode,
-        error: caughtError.error,
-        message: caughtError.message
-      });
-    })).rejects.toThrow(new Error({
-      statusCode: 400,
-      error: 'Bad Request',
-      message: `The record ${testGroup._id} in groups does not exist.`
-    }));
+    try {
+      await request
+      .get(authzApi(`/groups/${testGroup._id}`))
+      .auth(accessToken, { type: 'bearer' })
+      .accept('json');
+    } catch (error) {
+      expect(error.response._body).toEqual(expect.objectContaining({
+        statusCode: 400,
+        error: 'Bad Request',
+        message: `The record ${testGroup._id} in groups does not exist.`
+      }));
+      return;
+    }
+
+    throw new Error('Expected an error to be thrown when fetching a deleted group');
+  });
+
+  it('should not delete group with another group nested below it', async () => {
+    const [ group1, group2 ] = await Promise.all([ createGroup(), createGroup() ]);
+
+    // nest group2 under group1
+    await request
+      .patch(authzApi(`/groups/${group1._id}/nested`))
+      .auth(accessToken, { type: 'bearer' })
+      .send([ group2._id ]);
+
+    try {
+      await request
+      .delete(authzApi(`/groups/${group2._id}`))
+      .auth(accessToken, { type: 'bearer' })
+      .accept('json');
+    } catch (error) {
+      expect(error.response._body).toEqual(expect.objectContaining({
+        statusCode: 400,
+        error: 'ValidationError',
+        message: `Unable to touch nested while used in groups: ${group1.name}`
+      }));
+      return;
+    }
+
+    throw new Error('Expected an error to be thrown when deleting a group with nested groups');
   });
 
   it('should get all groups in the system', async () => {
