@@ -71,9 +71,19 @@ export default async () => {
     server.log([ 'error' ], args.join(' '));
   };
 
-  // TODO: REMOVE
   server.ext('onPreResponse', (request, h) => {
-    if (request.response && request.response.isBoom && request.response.output) {
+    // translate errors to appropriate responses
+    // otherwise 500s are returned regardless of the thrown error
+    if (request.response?.status >= 400) {
+      request.response.output.statusCode = request.response.status;
+      request.response.output.payload = {
+        statusCode: request.response.status,
+        error: request.response.name,
+        message: request.response.message
+      };
+    }
+
+    if (request.response && request.response.isBoom) {
       server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.path}`);
       server.log([ 'error' ], `Response: ${JSON.stringify(request.response, null, 2)}`);
     }
@@ -81,6 +91,5 @@ export default async () => {
     return h.continue;
   });
 
-  // this is used in production
   return server;
 };
