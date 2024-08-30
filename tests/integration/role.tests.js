@@ -102,8 +102,8 @@ describe('roles', () => {
         .auth(accessToken, { type: 'bearer' });
     } catch (error) {
       expect(error.response._body).toEqual({
-        statusCode: 400,
-        error: 'Bad Request',
+        statusCode: 404,
+        error: 'NotFoundError',
         message: `The record ${newRole._id} in roles does not exist.`
       });
       return;

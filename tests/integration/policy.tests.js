@@ -5,7 +5,6 @@ import Promise from 'bluebird';
 import {
   getAccessToken,
   authzApi,
-  extensionApiKey,
   chunks
 } from './utils';
 import importData from './test-data.json';
@@ -19,7 +18,7 @@ const clientId = config('AUTH0_CLIENT_ID');
 // Use Username-Password-Authentication by default.
 const connectionName = 'Username-Password-Authentication';
 
-describe.only('policy', () => {
+describe('policy', () => {
   before(async () => {
     try {
       accessToken = await getAccessToken();

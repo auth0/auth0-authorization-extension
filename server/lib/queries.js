@@ -2,6 +2,7 @@ import _ from 'lodash';
 import nconf from 'nconf';
 import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
+import Boom from '@hapi/boom';
 import multipartRequest from './multipartRequest';
 
 const avoidBlock = (action) => (...args) =>
@@ -394,51 +395,50 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
 /*
  * Get expanded group data
  */
-export function getGroupExpanded(db, groupId) {
-  return new Promise((resolve, reject) => {
-    getGroupsCached(db, (error, groups) => {
-      if (error) {
-        return reject(error);
-      }
+export async function getGroupExpanded(db, groupId) {
+  try {
+    const getGroupsCachedAsync = Promise.promisify(getGroupsCached);
+    const getRolesCachedAsync = Promise.promisify(getRolesCached);
 
-      // caught in the route handler, but this makes it easier to debug
-      if (!groups || groups.length === 0) {
-        return reject(new Error('No groups found'));
-      }
+    const groups = await getGroupsCachedAsync(db);
 
-      return getRolesCached(db, (err, allRoles) => {
-        if (err) {
-          return reject(err);
-        }
-        const currentGroup = _.find(groups, { _id: groupId });
-        const parentGroups = getParentGroups(groups, [ currentGroup ]).filter(
-          (g) => g._id !== currentGroup._id
-        );
+    if (!groups || groups.length === 0) {
+      throw Boom.badRequest('No groups found');
+    }
 
-        const roles = getRolesForGroups(
-          [ currentGroup, ...parentGroups ],
-          allRoles
-        ).map((r) => r.role);
-        const formatRole = (r) => ({
-          _id: r._id,
-          name: r.name,
-          description: r.description,
-          applicationId: r.applicationId,
-          applicationType: r.applicationType,
-          permissions: r.permissions && r.permissions.map(compact)
-        });
+    const allRoles = await getRolesCachedAsync(db);
 
-        return getPermissionsByRoles(db, roles).then((rolesList) =>
-          resolve({
-            _id: currentGroup._id,
-            name: currentGroup.name,
-            description: currentGroup.description,
-            roles: rolesList.map(formatRole)
-          })
-        );
-      });
+    const currentGroup = _.find(groups, { _id: groupId });
+
+    if (!currentGroup) {
+      throw Boom.badRequest('Current group not found');
+    }
+
+    const parentGroups = getParentGroups(groups, [ currentGroup ]).filter(
+      (g) => g._id !== currentGroup._id
+    );
+
+    const roles = getRolesForGroups([ currentGroup, ...parentGroups ], allRoles).map((r) => r.role);
+    const formatRole = (r) => ({
+      _id: r._id,
+      name: r.name,
+      description: r.description,
+      applicationId: r.applicationId,
+      applicationType: r.applicationType,
+      permissions: r.permissions && r.permissions.map(compact)
     });
-  });
+
+    const rolesList = await getPermissionsByRoles(db, roles);
+
+    return {
+      _id: currentGroup._id,
+      name: currentGroup.name,
+      description: currentGroup.description,
+      roles: rolesList.map(formatRole)
+    };
+  } catch (error) {
+    throw error;
+  }
 }
 
 /*

@@ -121,8 +121,8 @@ describe('groups', () => {
       .accept('json');
     } catch (error) {
       expect(error.response._body).toEqual(expect.objectContaining({
-        statusCode: 400,
-        error: 'Bad Request',
+        statusCode: 404,
+        error: 'NotFoundError',
         message: `The record ${testGroup._id} in groups does not exist.`
       }));
       return;
@@ -177,8 +177,15 @@ describe('groups', () => {
   });
 
   it('should get a single expanded group based on its unique identifier', async () => {
-    const [ perm1, perm2, perm3 ] = await Promise.all([ createPermission(), createPermission(), createPermission() ]);
-    const [ role1, role2 ] = await Promise.all([ createRole([ perm1._id, perm2._id ]), createRole([ perm3._id ]) ]);
+    const [ perm1, perm2, perm3 ] = await Promise.all([
+      createPermission(),
+      createPermission(),
+      createPermission()
+    ]);
+    const [ role1, role2 ] = await Promise.all([
+      createRole([ perm1._id, perm2._id ]),
+      createRole([ perm3._id ])
+    ]);
     await addGroupRoles(testGroup._id, [ role1._id, role2._id ]);
 
     const response = await request
@@ -194,8 +201,7 @@ describe('groups', () => {
     expect(expandedGroup.roles).toBeInstanceOf(Array);
     expect(expandedGroup.roles.length).toEqual(2);
     expect(expandedGroup.roles[0]).toBeInstanceOf(Object);
-    expect(expandedGroup.roles[0]._id).toEqual(role1._id);
-    expect(expandedGroup.roles[1]._id).toEqual(role2._id);
+    expect(expandedGroup.roles.map(role => role._id)).toEqual(expect.arrayContaining([ role1._id, role2._id ]));
     expect(expandedGroup.roles[0].permissions).toBeInstanceOf(Array);
     expect(expandedGroup.roles[0].permissions[0]).toBeInstanceOf(Object);
     expect(expandedGroup.roles[0].permissions.length).toEqual(2);

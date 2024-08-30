@@ -23,7 +23,6 @@ export const getAccessToken = async () => {
 };
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);
-export const extensionApiKey = config('EXTENSION_SECRET');
 
 // Splits an array into chunked sub-arrays.
 export const chunks = (array, size) => {

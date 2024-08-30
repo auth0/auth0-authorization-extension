@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
 
 import { getGroupExpanded } from '../../../lib/queries';
 
@@ -23,16 +22,12 @@ export default () => ({
     }
   },
   handler: async (req, h) => {
-    try {
-      if (req.query.expand) {
-        const groupExpanded = await getGroupExpanded(req.storage, req.params.id);
-        return h.response(groupExpanded);
-      }
-
-      const group = await req.storage.getGroup(req.params.id);
-      return h.response({ _id: group._id, name: group.name, description: group.description });
-    } catch (error) {
-      throw Boom.badRequest(`The record ${req.params.id} in groups does not exist.`);
+    if (req.query.expand) {
+      const groupExpanded = await getGroupExpanded(req.storage, req.params.id);
+      return h.response(groupExpanded);
     }
+
+    const group = await req.storage.getGroup(req.params.id);
+    return h.response({ _id: group._id, name: group.name, description: group.description });
   }
 });

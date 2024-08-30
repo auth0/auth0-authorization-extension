@@ -1,5 +1,4 @@
 import Joi from 'joi';
-import Boom from '@hapi/boom';
 
 export default () => ({
   method: 'GET',
@@ -18,16 +17,12 @@ export default () => ({
     }
   },
   handler: async (req, h) => {
-    try {
-      const role = await req.storage.getRole(req.params.id);
+    const role = await req.storage.getRole(req.params.id);
 
-      return h.response({
-        _id: role._id,
-        name: role.name,
-        description: role.description
-      });
-    } catch (error) {
-      throw Boom.badRequest(`The record ${req.params.id} in roles does not exist.`);
-    }
+    return h.response({
+      _id: role._id,
+      name: role.name,
+      description: role.description
+    });
   }
 });
