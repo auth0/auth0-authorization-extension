@@ -81,7 +81,7 @@
     "axios": "^0.15.0",
     "blipp": "^2.3.0",
     "bluebird": "^3.5.0",
-    "body-parser": "^1.15.1",
+    "body-parser": "^1.20.3",
     "boom": "3.2.2",
     "ejs": "^2.4.2",
     "expect": "^1.20.2",
