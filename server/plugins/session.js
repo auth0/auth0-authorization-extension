@@ -1,14 +1,18 @@
 // this file is taken from https://github.com/auth0-extensions/auth0-extension-hapi-tools/blob/master/src/plugins/session.js
 // but modified to fit the needs of the authorization extension
 
+const { promisify } = require('util');
 const Boom = require('@hapi/boom');
 const path = require('path');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const tools = require('auth0-extension-tools');
 const hapiTools = require('auth0-extension-hapi-tools');
+const jwksRsa = require('jwks-rsa');
 
 const urlHelpers = hapiTools.urlHelpers;
+
+const config = require('../lib/config');
 
 const buildUrl = function(paths) {
   return path.join.apply(null, paths)
@@ -126,8 +130,35 @@ const register = async function(server, options) {
     handler: async function(req, h) {
       var decoded;
 
+      const jwtVerifyAsync = promisify(jwt.verify);
+      const idToken = req.payload.id_token;
+
       try {
-        decoded = jwt.decode(req.payload.id_token);
+        decoded = jwt.decode(idToken, { complete: true });
+
+        const getKey = jwksRsa.hapiJwt2Key({
+          cache: true,
+          rateLimit: true,
+          jwksRequestsPerMinute: process.env.NODE_ENV === 'test' ? 10 : 2,
+          jwksUri: `${config('AUTH0_RTA')}/.well-known/jwks.json`
+        });
+
+        const getKeyAsync = promisify(getKey);
+        const key = await getKeyAsync(decoded);
+
+        if (!key) {
+          return Boom.unauthorized('Invalid token');
+        }
+
+        // this token is issued by the RTA
+        const verifyOptions = {
+          audience: config('PUBLIC_WT_URL'),
+          issuer: `${config('AUTH0_RTA')}/`,
+          algorithms: [ 'RS256' ]
+        };
+
+        // // throws on failure
+        await jwtVerifyAsync(idToken, key, verifyOptions);
       } catch (e) {
         decoded = null;
       }
@@ -135,11 +166,31 @@ const register = async function(server, options) {
       if (!decoded) {
         return Boom.unauthorized('Invalid token');
       }
+
       // handle multiple cookies with same name
-      if ((req.state && req.state[nonceKey] && findCookie(req.state[nonceKey], decoded.nonce)) || (req.state && req.state[nonceKey + '_compat'] && findCookie(req.state[nonceKey + '_compat'], decoded.nonce))) {
+      if (
+        (
+          req.state && req.state[nonceKey] &&
+          findCookie(req.state[nonceKey], decoded.payload.nonce)
+        ) ||
+        (
+          req.state && req.state[nonceKey + '_compat'] &&
+          findCookie(req.state[nonceKey + '_compat'], decoded.payload.nonce)
+        )
+      ) {
         return Boom.badRequest('Nonce mismatch');
       }
-      if ((req.state && req.state[stateKey] && findCookie(req.state[stateKey], req.payload.state)) || (req.state && req.state[stateKey + '_compat'] && findCookie(req.state[stateKey + '_compat'], req.payload.state))) {
+
+      if (
+        (
+          req.state && req.state[stateKey] &&
+          findCookie(req.state[stateKey], req.payload.state)
+        ) ||
+        (
+          req.state && req.state[stateKey + '_compat'] &&
+          findCookie(req.state[stateKey + '_compat'], req.payload.state)
+        )
+      ) {
         return Boom.badRequest('State mismatch');
       }
 
