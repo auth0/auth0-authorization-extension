@@ -1,5 +1,5 @@
 import fs from 'fs';
-import util from 'util';
+import { promisify } from 'util';
 
 import ejs from 'ejs';
 import path from 'path';
@@ -8,7 +8,7 @@ import { urlHelpers } from 'auth0-extension-hapi-tools';
 import config from '../lib/config';
 import template from '../views/index';
 
-const readFile = util.promisify(fs.readFile);
+const readFile = promisify(fs.readFile);
 
 const assembleHtmlRoute = (link) => ({
   method: 'GET',

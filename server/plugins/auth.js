@@ -1,8 +1,8 @@
+import { promisify } from 'util';
 import Boom from '@hapi/boom';
 import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
-import { is, Promise } from 'bluebird';
 
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
@@ -79,8 +79,8 @@ const register = async (server) => {
         const isApiRequest = decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_DOMAIN')}/`;
         const isDashboardAdminRequest = decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL');
 
-        const getKeyAsync = Promise.promisify(jwtOptions.resourceServer.key);
-        const jwtVerifyAsync = Promise.promisify(jwt.verify);
+        const getKeyAsync = promisify(jwtOptions.resourceServer.key);
+        const jwtVerifyAsync = promisify(jwt.verify);
 
         if (isApiRequest) {
           if (decoded.payload.gty && decoded.payload.gty !== 'client-credentials') {

@@ -1,4 +1,4 @@
-import { Promise } from 'bluebird';
+import { promisify } from 'util';
 import schema from '../schemas/storage';
 
 export default () => ({
@@ -23,7 +23,7 @@ export default () => ({
     }
 
     if (req.storage.provider.storageContext.storage && req.storage.provider.storageContext.storage.set) {
-      const setAysnc = Promise.promisify(req.storage.provider.storageContext.storage.set);
+      const setAysnc = promisify(req.storage.provider.storageContext.storage.set);
       await setAysnc(req.payload, { force: true });
       return h.response().code(204);
     }

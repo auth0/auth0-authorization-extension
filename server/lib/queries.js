@@ -1,6 +1,6 @@
+import { promisify } from 'util';
 import _ from 'lodash';
 import nconf from 'nconf';
-import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
 import Boom from '@hapi/boom';
 import multipartRequest from './multipartRequest';
@@ -401,50 +401,46 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
  * Get expanded group data
  */
 export async function getGroupExpanded(db, groupId) {
-  try {
-    const getGroupsCachedAsync = Promise.promisify(getGroupsCached);
-    const getRolesCachedAsync = Promise.promisify(getRolesCached);
+  const getGroupsCachedAsync = promisify(getGroupsCached);
+  const getRolesCachedAsync = promisify(getRolesCached);
 
-    const groups = await getGroupsCachedAsync(db);
+  const groups = await getGroupsCachedAsync(db);
 
-    if (!groups || groups.length === 0) {
-      throw Boom.badRequest('No groups found');
-    }
+  if (!groups || groups.length === 0) {
+    throw Boom.badRequest('No groups found');
+  }
 
-    const allRoles = await getRolesCachedAsync(db);
+  const allRoles = await getRolesCachedAsync(db);
 
-    const currentGroup = _.find(groups, { _id: groupId });
+  const currentGroup = _.find(groups, { _id: groupId });
 
-    if (!currentGroup) {
-      throw Boom.badRequest('Current group not found');
-    }
+  if (!currentGroup) {
+    throw Boom.badRequest('Current group not found');
+  }
 
-    const parentGroups = getParentGroups(groups, [ currentGroup ]).filter(
+  const parentGroups = getParentGroups(groups, [ currentGroup ]).filter(
       (g) => g._id !== currentGroup._id
     );
 
-    const roles = getRolesForGroups([ currentGroup, ...parentGroups ], allRoles).map((r) => r.role);
+  const roles = getRolesForGroups([ currentGroup, ...parentGroups ], allRoles).map((r) => r.role);
 
-    const formatRole = (r) => ({
-      _id: r._id,
-      name: r.name,
-      description: r.description,
-      applicationId: r.applicationId,
-      applicationType: r.applicationType,
-      permissions: r.permissions && r.permissions.map(compact)
-    });
+  const formatRole = (r) => ({
+    _id: r._id,
+    name: r.name,
+    description: r.description,
+    applicationId: r.applicationId,
+    applicationType: r.applicationType,
+    permissions: r.permissions && r.permissions.map(compact)
+  });
 
-    const rolesList = await getPermissionsByRoles(db, roles);
+  const rolesList = await getPermissionsByRoles(db, roles);
 
-    return {
-      _id: currentGroup._id,
-      name: currentGroup.name,
-      description: currentGroup.description,
-      roles: rolesList.map(formatRole)
-    };
-  } catch (error) {
-    throw error;
-  }
+  return {
+    _id: currentGroup._id,
+    name: currentGroup.name,
+    description: currentGroup.description,
+    roles: rolesList.map(formatRole)
+  };
 }
 
 /*

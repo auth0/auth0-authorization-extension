@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import async from 'async';
-import Promise from 'bluebird';
 import apiCall from './apiCall';
 
 export function getUsersById(client, ids, page, limit) {
