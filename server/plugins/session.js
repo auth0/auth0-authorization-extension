@@ -1,3 +1,6 @@
+// this file is taken from https://github.com/auth0-extensions/auth0-extension-hapi-tools/blob/master/src/plugins/session.js
+// but modified to fit the needs of the authorization extension
+
 const Boom = require('@hapi/boom');
 const path = require('path');
 const crypto = require('crypto');
