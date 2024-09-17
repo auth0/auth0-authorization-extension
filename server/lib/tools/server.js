@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 
 const Boom = require('@hapi/boom');
-const Request = require('request');
+const request = require('superagent');
 const tools = require('auth0-extension-tools');
 
 module.exports.createServer = function(cb) {
@@ -99,19 +99,20 @@ function attachStorageHelpers(context) {
       options = {};
     }
 
-    Request({
-      uri: context.secrets.EXT_STORAGE_URL,
-      method: 'GET',
-      headers: options.headers || {},
-      qs: { path: path },
-      json: true
-    }, (err, res, body) => {
-      if (err) return cb(Boom.boomify(err, 502));
-      if (res.statusCode === 404 && Object.hasOwnProperty.call(options, 'defaultValue')) return cb(null, options.defaultValue);
-      if (res.statusCode >= 400) return cb(Boom.create(res.statusCode, body && body.message));
-
-      return cb(null, body);
-    });
+    request
+      .get(context.secrets.EXT_STORAGE_URL)
+      .set(options.headers || {})
+      .query({ path: path })
+      .then((res) => {
+        if (res.statusCode === 404 && Object.hasOwnProperty.call(options, 'defaultValue')) {
+          return cb(null, options.defaultValue);
+        }
+        if (res.statusCode >= 400) {
+          return cb(Boom.create(res.statusCode, res.body && res.body.message));
+        }
+        return cb(null, res.body);
+      })
+      .catch((err) => cb(Boom.boomify(err, 502)));
   }
 
   function writeNotAvailable(path, data, options, cb) {
@@ -129,17 +130,17 @@ function attachStorageHelpers(context) {
       options = {};
     }
 
-    Request({
-      uri: context.secrets.EXT_STORAGE_URL,
-      method: 'PUT',
-      headers: options.headers || {},
-      qs: { path: path },
-      body: data
-    }, (err, res, body) => {
-      if (err) return cb(Boom.boomify(err, 502));
-      if (res.statusCode >= 400) return cb(Boom.create(res.statusCode, body && body.message));
-
-      return cb(null);
-    });
+    request
+      .put(context.secrets.EXT_STORAGE_URL)
+      .set(options.headers || {})
+      .query({ path: path })
+      .send(data)
+      .then((res) => {
+        if (res.statusCode >= 400) {
+          return cb(Boom.create(res.statusCode, res.body && res.body.message));
+        }
+        return cb(null);
+      })
+      .catch((err) => cb(Boom.boomify(err, 502)));
   }
 }
