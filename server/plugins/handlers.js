@@ -3,7 +3,7 @@ import * as Boom from '@hapi/boom';
 
 import config from '../lib/config';
 import logger from '../lib/logger';
-import mgmtCLient from './localCopy-mgmt-client';
+import mgmtCLient from './local-mgmt-client';
 
 const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   if (domain === null || domain === undefined) {
