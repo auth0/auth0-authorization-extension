@@ -1,5 +1,6 @@
-import Promise from 'bluebird';
 import { ArgumentError } from 'auth0-extension-tools';
+
+import { promiseMap } from '../lib/utils';
 
 import apiCall from './apiCall';
 
@@ -54,7 +55,7 @@ export default async function(
       pages.push(i);
     }
 
-    const getAllResult = await Promise.map(pages, getPage, { concurrency });
+    const getAllResult = await promiseMap(pages, getPage, { concurrency });
 
     return getAllResult;
   };

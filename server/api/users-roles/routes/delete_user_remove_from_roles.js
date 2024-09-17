@@ -1,5 +1,6 @@
-import Promise from 'bluebird';
 import Joi from 'joi';
+
+import { promiseEach } from '../../../lib/utils';
 
 export default () => ({
   method: 'DELETE',
@@ -21,7 +22,7 @@ export default () => ({
   handler: async (req, h) => {
     const roleIds = req.payload;
 
-    await Promise.each(roleIds, async (id) => {
+    await promiseEach(roleIds, async (id) => {
       const role = await req.storage.getRole(id);
 
       if (!role.users) {

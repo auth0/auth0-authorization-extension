@@ -1,6 +1,7 @@
-import Promise from 'bluebird';
 import Joi from 'joi';
 import _ from 'lodash';
+
+import { promiseEach } from '../../../lib/utils';
 
 export default () => ({
   method: 'PATCH',
@@ -28,7 +29,7 @@ export default () => ({
     const groupsFiltered = _.filter(groups, (group) => _.includes(groupIds, group[searchBy]));
 
 
-    await Promise.each(groupsFiltered, async (group) => {
+    await promiseEach(groupsFiltered, async (group) => {
       if (!group.members) {
         group.members = []; // eslint-disable-line no-param-reassign
       }

@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import Promise from 'bluebird';
 import Joi from 'joi';
+
+import { promiseEach } from '../../../lib/utils';
 
 export default () => ({
   method: 'PATCH',
@@ -28,7 +29,7 @@ export default () => ({
     const rolesFiltered = _.filter(roles, (role) => _.includes(roleIds, role[searchBy]));
 
 
-    await Promise.each(rolesFiltered, async (role) => {
+    await promiseEach(rolesFiltered, async (role) => {
       if (!role.users) {
         role.users = []; // eslint-disable-line no-param-reassign
       }

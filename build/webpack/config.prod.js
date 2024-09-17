@@ -114,7 +114,6 @@ config.optimization = {
         test: new RegExp(`[\\/]node_modules[\\/](${[
           '@babel/polyfill',
           'axios',
-          'bluebird',
           'classnames',
           'history',
           'immutable',
