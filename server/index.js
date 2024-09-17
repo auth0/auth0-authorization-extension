@@ -82,7 +82,7 @@ export default async () => {
       request.response.output.statusCode = statusCode;
       request.response.output.payload = {
         statusCode: statusCode,
-        error: request.response.name,
+        error: request.response.name === "APIError" ? "Bad Request" : request.response.name,
         message: request.response.message
       };
     }
