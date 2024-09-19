@@ -1,5 +1,5 @@
 import * as tools from 'auth0-extension-tools';
-import * as Boom from '@hapi/boom';
+import Boom from '@hapi/boom';
 
 import config from '../lib/config';
 import logger from '../lib/logger';
@@ -40,23 +40,23 @@ const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
     }
 
     return {
-      method(req, res) {
+      method(req, h) {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
           const token = req.headers.authorization.split(' ')[1];
 
           try {
-            logger.info(`Validating hook token with signature: ${extensionSecret.substr(0, 4)}...`);
+            logger.info(`Validating hook token with signature: ${extensionSecret.substring(0, 4)}...`);
             if (tools.validateHookToken(domain, webtaskUrl, hookPath, extensionSecret, token)) {
-              return res();
+              return h.continue;
             }
           } catch (e) {
             logger.error('Invalid token:', token);
-            return res(Boom.Boom(e, { statusCode: 401, message: e.message }));
+            throw Boom(e, { statusCode: 401, message: e.message });
           }
         }
 
         const err = new tools.HookTokenError(`Hook token missing for the call to: ${hookPath}`);
-        return res(Boom.unauthorized(err, 401, err.message));
+        throw Boom.unauthorized(err, 401, err.message);
       }
     };
   };
