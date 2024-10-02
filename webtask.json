@@ -2,7 +2,6 @@
   "title": "Auth0 Authorization",
   "name": "auth0-authz",
   "version": "2.12.0",
-  "runtime":"node18",
   "author": "auth0",
   "description": "This extension gives Auth0 customers the possibility to manage group memberships for their users.",
   "type": "application",
@@ -11,10 +10,7 @@
   "updateConfirmMessage": "Warning! Read the documentation about breaking changes (https://auth0.com/docs/extensions/authorization-extension) before updating the extension. If you are upgrading from 2.5 or older, you have to rotate your Api Key and republish the rule upon upgrade.",
   "uninstallConfirmMessage": "You are about to uninstall the \"Authorization Extension\". If you proceed all your data in this extension will be lost. Do you want to continue?",
   "repository": "https://github.com/auth0/auth0-authorization-extension",
-  "keywords": [
-    "auth0",
-    "extension"
-  ],
+  "keywords": ["auth0", "extension"],
   "auth0": {
     "createClient": true,
     "onUninstallPath": "/.extensions/on-uninstall",
