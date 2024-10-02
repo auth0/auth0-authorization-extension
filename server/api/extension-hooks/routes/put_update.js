@@ -8,5 +8,5 @@ export default (server) => ({
       server.handlers.managementClient
     ]
   },
-  handler: async (req, h) => h.response.code(204)
+  handler: async (req, h) => h.response().code(204)
 });
