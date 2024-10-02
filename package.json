@@ -251,6 +251,7 @@
     "webtask-bundle": "3.0.1"
   },
   "overrides": {
+    "auth0-extension-tools":"1.5.2",
     "react-router": "3.0.2",
     "joi": "17.12.1",
     "@hapi/hoek": "^9.3.0",
