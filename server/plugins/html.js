@@ -24,6 +24,7 @@ const assembleHtmlRoute = (link) => ({
       BASE_URL: urlHelpers.getBaseUrl(req),
       API_BASE: urlHelpers.getBaseUrl(req),
       BASE_PATH: urlHelpers.getBasePath(req),
+      EXTENSION_VERSION: '2.12.0',
       SEARCH_ENGINE: (
         (config('AUTH0_RTA').replace('https://', '') === 'auth0.auth0.com') ||
         config('IS_LAYER0_TEST_SPACE')
