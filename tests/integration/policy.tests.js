@@ -1,7 +1,6 @@
 import request from 'superagent';
 import expect from 'expect';
 import { faker } from '@faker-js/faker';
-import Promise from 'bluebird';
 import {
   getAccessToken,
   authzApi,

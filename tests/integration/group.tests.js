@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle, no-shadow */
 
-import Promise from 'bluebird';
 import { expect } from 'expect';
 import { faker } from '@faker-js/faker';
 import request from 'superagent';

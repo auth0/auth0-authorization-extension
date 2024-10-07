@@ -1,4 +1,3 @@
-import Promise from 'bluebird';
 import { expect } from 'chai';
 import * as auth0 from '../mocks/auth0';
 import { getServerData } from '../server';
