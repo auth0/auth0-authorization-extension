@@ -45,7 +45,8 @@ config.module.rules = ([
       'css-loader',
       'stylus-loader'
     ]
-  }
+  },
+  { test: /\.m?js/, resolve: { fullySpecified: false } }
 ]);
 
 

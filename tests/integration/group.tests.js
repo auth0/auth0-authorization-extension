@@ -21,7 +21,7 @@ const parallelGroups = [ ...new Array(20) ].map(() => ({
   description: faker.lorem.sentence()
 }));
 
-describe.only('groups', () => {
+describe('groups', () => {
   before(async () => {
     accessToken = await getAccessToken();
 
