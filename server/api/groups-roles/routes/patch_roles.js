@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import _ from 'lodash';
 
 export default () => ({
   method: 'PATCH',
@@ -29,11 +30,9 @@ export default () => ({
       group.roles = [];
     }
 
-    const rolesToAdd = group.roles
-      ? roles.filter(roleId => !group.roles.includes(roleId))
-      : roles;
+    const newGroupRoles = _.uniq([ ...group.roles, ...roles ]);
 
-    await req.storage.updateGroup(req.params.id, { ...group, roles: rolesToAdd });
+    await req.storage.updateGroup(req.params.id, { ...group, roles: newGroupRoles });
 
     return h.response().code(204);
   }

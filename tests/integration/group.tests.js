@@ -21,7 +21,7 @@ const parallelGroups = [ ...new Array(20) ].map(() => ({
   description: faker.lorem.sentence()
 }));
 
-describe('groups', () => {
+describe.only('groups', () => {
   before(async () => {
     accessToken = await getAccessToken();
 
@@ -416,6 +416,90 @@ describe('groups', () => {
         .accept('json');
 
       expect(res2.body.find((role) => role._id === role1._id)).toBeDefined();
+    });
+
+    it('should add a single role to a group and not replace existing roles', async () => {
+      const group1 = await createGroup();
+      const role1 = await createRole();
+      const role2 = await createRole();
+      const role3 = await createRole();
+
+      const patchResult1 = await request
+        .patch(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .send([ role1._id, role2._id ])
+        .accept('json');
+
+      expect(patchResult1.statusCode).toEqual(204);
+
+      const getResult1 = await request
+        .get(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .accept('json');
+
+      expect(getResult1.body.length).toBe(2);
+      expect(getResult1.body.find((role) => role._id === role1._id)).toBeDefined();
+      expect(getResult1.body.find((role) => role._id === role2._id)).toBeDefined();
+
+      const patchResult2 = await request
+        .patch(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .send([ role3._id ])
+        .accept('json');
+
+      expect(patchResult2.statusCode).toEqual(204);
+
+      const getResult2 = await request
+        .get(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .accept('json');
+
+      expect(getResult2.body.length).toBe(3);
+      expect(getResult2.body.find((role) => role._id === role1._id)).toBeDefined();
+      expect(getResult2.body.find((role) => role._id === role2._id)).toBeDefined();
+      expect(getResult2.body.find((role) => role._id === role3._id)).toBeDefined();
+    });
+
+    it('should add multiple roles to a group and not duplicate existing roles', async () => {
+      const group1 = await createGroup();
+      const role1 = await createRole();
+      const role2 = await createRole();
+      const role3 = await createRole();
+
+      const patchResult1 = await request
+        .patch(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .send([ role1._id, role2._id ])
+        .accept('json');
+
+      expect(patchResult1.statusCode).toEqual(204);
+
+      const getResult1 = await request
+        .get(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .accept('json');
+
+      expect(getResult1.body.length).toBe(2);
+      expect(getResult1.body.find((role) => role._id === role1._id)).toBeDefined();
+      expect(getResult1.body.find((role) => role._id === role2._id)).toBeDefined();
+
+      const patchResult2 = await request
+        .patch(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .send([ role1._id, role2._id, role3._id ])
+        .accept('json');
+
+      expect(patchResult2.statusCode).toEqual(204);
+
+      const getResult2 = await request
+        .get(authzApi(`/groups/${group1._id}/roles`))
+        .auth(accessToken, { type: 'bearer' })
+        .accept('json');
+
+      expect(getResult2.body.length).toBe(3);
+      expect(getResult2.body.find((role) => role._id === role1._id)).toBeDefined();
+      expect(getResult2.body.find((role) => role._id === role2._id)).toBeDefined();
+      expect(getResult2.body.find((role) => role._id === role3._id)).toBeDefined();
     });
 
     it('should get the roles of a group', async () => {
