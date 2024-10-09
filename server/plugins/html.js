@@ -3,7 +3,8 @@ import { promisify } from 'util';
 
 import ejs from 'ejs';
 import path from 'path';
-import { urlHelpers } from 'auth0-extension-hapi-tools';
+
+import { getBasePath, getBaseUrl } from '../lib/tools/auth0-extension-hapi-tools-url-helpers';
 
 import config from '../lib/config';
 import template from '../views/index';
@@ -21,9 +22,9 @@ const assembleHtmlRoute = (link) => ({
     const cfg = {
       AUTH0_DOMAIN: config('AUTH0_DOMAIN'),
       AUTH0_CLIENT_ID: config('AUTH0_CLIENT_ID'),
-      BASE_URL: urlHelpers.getBaseUrl(req),
-      API_BASE: urlHelpers.getBaseUrl(req),
-      BASE_PATH: urlHelpers.getBasePath(req),
+      BASE_URL: getBaseUrl(req),
+      API_BASE: getBaseUrl(req),
+      BASE_PATH: getBasePath(req),
       EXTENSION_VERSION: '2.12.0',
       SEARCH_ENGINE: (
         (config('AUTH0_RTA').replace('https://', '') === 'auth0.auth0.com') ||

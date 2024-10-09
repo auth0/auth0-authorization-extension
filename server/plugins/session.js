@@ -7,10 +7,10 @@ const path = require('path');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const tools = require('auth0-extension-tools');
-const hapiTools = require('auth0-extension-hapi-tools');
 const jwksRsa = require('jwks-rsa');
 
-const urlHelpers = hapiTools.urlHelpers;
+const { getBasePath, getBaseUrl } = require('../lib/tools/auth0-extension-hapi-tools-url-helpers');
+
 
 const config = require('../lib/config');
 
@@ -106,7 +106,7 @@ const register = async function(server, options) {
       const nonce = crypto.randomBytes(16).toString('hex');
 
       const redirectTo = sessionManager.createAuthorizeUrl({
-        redirectUri: buildUrl([ urlHelpers.getBaseUrl(req), urlPrefix, '/login/callback' ]),
+        redirectUri: buildUrl([ getBaseUrl(req), urlPrefix, '/login/callback' ]),
         scopes: options.scopes,
         expiration: options.expiration,
         nonce: nonce,
@@ -114,10 +114,10 @@ const register = async function(server, options) {
       });
 
       return h.redirect(redirectTo)
-        .state(nonceKey, nonce, { path: urlHelpers.getBasePath(req) })
-        .state(stateKey, state, { path: urlHelpers.getBasePath(req) })
-        .state(nonceKey + '_compat', nonce, { path: urlHelpers.getBasePath(req) })
-        .state(stateKey + '_compat', state, { path: urlHelpers.getBasePath(req) });
+        .state(nonceKey, nonce, { path: getBasePath(req) })
+        .state(stateKey, state, { path: getBasePath(req) })
+        .state(nonceKey + '_compat', nonce, { path: getBasePath(req) })
+        .state(stateKey + '_compat', state, { path: getBasePath(req) });
     }
   });
 
@@ -211,14 +211,14 @@ const register = async function(server, options) {
           '<head>' +
           '<script type="text/javascript">' +
           'sessionStorage.setItem("' + sessionStorageKey + '", "' + token + '");' +
-          'window.location.href = "' + buildUrl([ urlHelpers.getBaseUrl(req), '/' ]) + '";' +
+          'window.location.href = "' + buildUrl([ getBaseUrl(req), '/' ]) + '";' +
           '</script>' +
           '</head>' +
           '</html>')
-          .unstate(nonceKey, { path: urlHelpers.getBasePath(req) })
-          .unstate(stateKey, { path: urlHelpers.getBasePath(req) })
-          .unstate(nonceKey + '_compat', { path: urlHelpers.getBasePath(req) })
-          .unstate(stateKey + '_compat', { path: urlHelpers.getBasePath(req) });
+          .unstate(nonceKey, { path: getBasePath(req) })
+          .unstate(stateKey, { path: getBasePath(req) })
+          .unstate(nonceKey + '_compat', { path: getBasePath(req) })
+          .unstate(stateKey + '_compat', { path: getBasePath(req) });
     }
   });
 
@@ -229,7 +229,7 @@ const register = async function(server, options) {
       auth: false
     },
     handler: function(req, h) {
-      const encodedBaseUrl = encodeURIComponent(buildUrl([ urlHelpers.getBaseUrl(req), '/' ]));
+      const encodedBaseUrl = encodeURIComponent(buildUrl([ getBaseUrl(req), '/' ]));
       return h.response('<html>' +
         '<head>' +
         '<script type="text/javascript">' +
@@ -238,10 +238,10 @@ const register = async function(server, options) {
         '</script>' +
         '</head>' +
         '</html>')
-        .unstate(nonceKey, { path: urlHelpers.getBasePath(req) })
-        .unstate(stateKey, { path: urlHelpers.getBasePath(req) })
-        .unstate(nonceKey + '_compat', { path: urlHelpers.getBasePath(req) })
-        .unstate(stateKey + '_compat', { path: urlHelpers.getBasePath(req) });
+        .unstate(nonceKey, { path: getBasePath(req) })
+        .unstate(stateKey, { path: getBasePath(req) })
+        .unstate(nonceKey + '_compat', { path: getBasePath(req) })
+        .unstate(stateKey + '_compat', { path: getBasePath(req) });
     }
   });
 
@@ -253,9 +253,9 @@ const register = async function(server, options) {
     },
     handler: function(req, h) {
       return h.response({
-        redirect_uris: [ buildUrl([ urlHelpers.getBaseUrl(req), urlPrefix, '/login/callback' ]) ],
+        redirect_uris: [ buildUrl([ getBaseUrl(req), urlPrefix, '/login/callback' ]) ],
         client_name: options.clientName,
-        post_logout_redirect_uris: [ buildUrl([ urlHelpers.getBaseUrl(req), '/' ]) ]
+        post_logout_redirect_uris: [ buildUrl([ getBaseUrl(req), '/' ]) ]
       });
     }
   });
