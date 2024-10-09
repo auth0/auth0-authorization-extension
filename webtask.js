@@ -1,7 +1,8 @@
-const tools = require('auth0-extension-hapi-tools');
 const localTools = require('./server/lib/tools/server');
 const config = require('./server/lib/config');
 const logger = require('./server/lib/logger');
+
+const { getWebtaskUrl } = require('./server/lib/tools/auth0-extension-hapi-tools-url-helpers');
 
 const factory = (wtConfig, wtStorage) => {
   logger.info(
@@ -26,7 +27,7 @@ const createServer = (context, req, res) => {
     const publicUrl =
       (req.x_wt && req.x_wt.ectx && req.x_wt.ectx.PUBLIC_WT_URL) || false;
     if (!publicUrl) {
-      config.setValue('PUBLIC_WT_URL', tools.urlHelpers.getWebtaskUrl(req));
+      config.setValue('PUBLIC_WT_URL', getWebtaskUrl(req));
     }
     // After the application has been initialized we remove the
     // artificial delay in processing
