@@ -1,14 +1,14 @@
 export default () => ({
   method: 'GET',
   path: '/api/configuration',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:configuration' ]
     }
   },
-  handler: (req, reply) =>
-    req.storage.getConfiguration()
-      .then(config => reply(config))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const config = await req.storage.getConfiguration();
+    return h.response(config);
+  }
 });

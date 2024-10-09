@@ -1,4 +1,5 @@
 import Joi from 'joi';
+import Boom from '@hapi/boom';
 
 import schema from '../schemas/policy_request';
 import { getUserData } from '../../../lib/queries';
@@ -6,7 +7,7 @@ import { getUserData } from '../../../lib/queries';
 export default () => ({
   method: 'POST',
   path: '/api/users/{userId}/policy/{clientId}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt', 'extension-secret' ]
     },
@@ -14,14 +15,14 @@ export default () => ({
       "Execute the authorization policy for a user in the context of a client. This will return the user's groups but also roles and permissions that apply to the current client.",
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         userId: Joi.string().required(),
         clientId: Joi.string().required()
-      },
+      }),
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const { userId, clientId } = req.params;
     const { connectionName, groups } = req.payload;
 
@@ -30,11 +31,11 @@ export default () => ({
       req.storage.provider.storageContext &&
       req.storage.provider.storageContext.read
     ) {
-      return getUserData(req.storage, userId, clientId, connectionName, groups)
-        .then((data) => reply(data))
-        .catch((err) => reply.error(err));
+      const data = await getUserData(req.storage, userId, clientId, connectionName, groups);
+      return h.response(data);
     }
 
-    return reply.error(new Error('Storage error.'));
+    // if we can't read from storage
+    throw Boom.badRequest('Storage error');
   }
 });

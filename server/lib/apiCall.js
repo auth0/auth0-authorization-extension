@@ -1,5 +1,3 @@
-import Promise from 'bluebird';
-
 const idle = (timeout) =>
   new Promise((resolve) => setTimeout(() => resolve(), timeout * 1000));
 

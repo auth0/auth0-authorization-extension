@@ -1,10 +1,16 @@
 import { expect } from 'chai';
-import { getServerData } from '../server';
 import * as auth0 from '../mocks/auth0';
+import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 
 describe('applications-route', () => {
-  const { server } = getServerData();
+  let server = null;
+
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+  });
+
   const applications = [
     {
       name: 'GlobalApp',
@@ -31,20 +37,19 @@ describe('applications-route', () => {
   ];
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: '/api/applications'
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of apps)', (cb) => {
+    it('should return 403 if scope is missing (list of apps)', async () => {
       const token = getToken();
+
       const options = {
         method: 'GET',
         url: '/api/applications',
@@ -53,13 +58,11 @@ describe('applications-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return list of applications', (cb) => {
+    it('should return list of applications', async () => {
       const token = getToken('read:applications');
       auth0.get('/api/v2/clients', applications);
       const options = {
@@ -70,15 +73,13 @@ describe('applications-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('array');
-        expect(response.result.length).to.equal(1);
-        expect(response.result[0].app_type).to.equal('spa');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('array');
+      expect(response.result.length).to.equal(1);
+      expect(response.result[0].app_type).to.equal('spa');
     });
 
-    it('should return 403 if scope is missing (single app)', (cb) => {
+    it('should return 403 if scope is missing (single app)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -88,13 +89,11 @@ describe('applications-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return application data', (cb) => {
+    it('should return application data', async () => {
       const token = getToken('read:applications');
       auth0.get('/api/v2/clients/1', applications[1]);
       const options = {
@@ -105,10 +104,8 @@ describe('applications-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.client_id).to.be.equal('1');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.client_id).to.be.equal('1');
     });
   });
 });

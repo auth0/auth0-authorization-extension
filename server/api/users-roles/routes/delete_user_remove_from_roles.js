@@ -1,10 +1,11 @@
-import Promise from 'bluebird';
 import Joi from 'joi';
+
+import { promiseEach } from '../../../lib/utils';
 
 export default () => ({
   method: 'DELETE',
   path: '/api/users/{id}/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:roles' ]
@@ -12,29 +13,29 @@ export default () => ({
     description: 'Remove a single user from roles.',
     tags: [ 'api' ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().required()
-      },
+      }),
       payload: Joi.array().items(Joi.string().guid()).required().min(1)
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const roleIds = req.payload;
 
-    return Promise.each(roleIds, (id) =>
-      req.storage.getRole(id).then((role) => {
-        if (!role.users) {
-          role.users = []; // eslint-disable-line no-param-reassign
-        }
-        const index = role.users.indexOf(req.params.id);
-        if (index > -1) {
-          role.users.splice(index, 1);
-        }
+    await promiseEach(roleIds, async (id) => {
+      const role = await req.storage.getRole(id);
 
-        return req.storage.updateRole(id, role);
-      })
-    )
-      .then(() => reply().code(204))
-      .catch((err) => reply.error(err));
+      if (!role.users) {
+        role.users = []; // eslint-disable-line no-param-reassign
+      }
+      const index = role.users.indexOf(req.params.id);
+      if (index > -1) {
+        role.users.splice(index, 1);
+      }
+
+      await req.storage.updateRole(id, role);
+    });
+
+    return h.response().code(204);
   }
 });

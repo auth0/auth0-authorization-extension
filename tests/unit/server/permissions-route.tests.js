@@ -1,11 +1,12 @@
-import Promise from 'bluebird';
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
 import config from '../../../server/lib/config';
 
-describe('permissions-route', () => {
-  const { db, server } = getServerData();
+describe('permissions-route', async () => {
+  let server = null;
+  let db = null;
+
   const guid = 'A56a418065aa426ca9455fd21deC0538';
   const permissionName = 'test-permission';
   const permission = {
@@ -16,27 +17,27 @@ describe('permissions-route', () => {
     _id: guid
   };
 
-  before((done) => {
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+    db = result.db;
     db.canChange = () => Promise.resolve();
     db.getPermissions = () => Promise.resolve([ permission ]);
     db.getPermission = () => Promise.resolve(permission);
-    done();
   });
 
   describe('#get', () => {
-    it('should return 401 if no token provided', (cb) => {
+    it('should return 401 if no token provided', async () => {
       const options = {
         method: 'GET',
         url: '/api/permissions'
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(401);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(401);
     });
 
-    it('should return 403 if scope is missing (list of permissions)', (cb) => {
+    it('should return 403 if scope is missing (list of permissions)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -46,13 +47,11 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return list of permissions', (cb) => {
+    it('should return list of permissions', async () => {
       const token = getToken('read:permissions');
       const options = {
         method: 'GET',
@@ -62,16 +61,14 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.total).to.be.equal(1);
-        expect(response.result.permissions).to.be.a('array');
-        expect(response.result.permissions[0]._id).to.be.equal(guid);
-        expect(response.result.permissions[0].name).to.be.equal(permissionName);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.total).to.be.equal(1);
+      expect(response.result.permissions).to.be.a('array');
+      expect(response.result.permissions[0]._id).to.be.equal(guid);
+      expect(response.result.permissions[0].name).to.be.equal(permissionName);
     });
 
-    it('should return 403 if scope is missing (single permission)', (cb) => {
+    it('should return 403 if scope is missing (single permission)', async () => {
       const token = getToken();
       const options = {
         method: 'GET',
@@ -81,13 +78,11 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return permission data', (cb) => {
+    it('should return permission data', async () => {
       const token = getToken('read:permissions');
       const options = {
         method: 'GET',
@@ -97,17 +92,15 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result).to.be.a('object');
-        expect(response.result._id).to.be.equal(guid);
-        expect(response.result.name).to.be.equal(permissionName);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result).to.be.a('object');
+      expect(response.result._id).to.be.equal(guid);
+      expect(response.result.name).to.be.equal(permissionName);
     });
   });
 
   describe('#delete', () => {
-    it('should return 403 if scope is missing (delete permission)', (cb) => {
+    it('should return 403 if scope is missing (delete permission)', async () => {
       const token = getToken();
       const options = {
         method: 'DELETE',
@@ -117,13 +110,11 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should delete permission', (cb) => {
+    it('should delete permission', async () => {
       let deletedId = null;
       const token = getToken('delete:permissions');
       db.deletePermission = (id) => {
@@ -139,16 +130,14 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(204);
-        expect(deletedId).to.be.equal(guid);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(204);
+      expect(deletedId).to.be.equal(guid);
     });
   });
 
   describe('#post', () => {
-    it('should return 403 if scope is missing (create permission)', (cb) => {
+    it('should return 403 if scope is missing (create permission)', async () => {
       const token = getToken();
       const options = {
         method: 'POST',
@@ -158,13 +147,11 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('create:permissions');
       const options = {
         method: 'POST',
@@ -174,16 +161,14 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal(
-          '"value" must be an object'
-        );
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal(
+        '"value" must be of type object'
+      );
     });
 
-    it('should create permission', (cb) => {
+    it('should create permission', async () => {
       const token = getToken('create:permissions');
       const payload = {
         name: 'new-permission',
@@ -203,16 +188,14 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(response.result.name).to.be.equal(payload.name);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(response.result.name).to.be.equal(payload.name);
     });
   });
 
   describe('#put', () => {
-    it('should return 403 if scope is missing (update permission)', (cb) => {
+    it('should return 403 if scope is missing (update permission)', async () => {
       const token = getToken();
       const options = {
         method: 'PUT',
@@ -222,13 +205,11 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(403);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(403);
     });
 
-    it('should return validation error', (cb) => {
+    it('should return validation error', async () => {
       const token = getToken('update:permissions');
       const options = {
         method: 'PUT',
@@ -238,16 +219,14 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.statusCode).to.be.equal(400);
-        expect(response.result.message).to.be.equal(
-          '"value" must be an object'
-        );
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.statusCode).to.be.equal(400);
+      expect(response.result.message).to.be.equal(
+        '"value" must be of type object'
+      );
     });
 
-    it('should update permission', (cb) => {
+    it('should update permission', async () => {
       const token = getToken('update:permissions');
       let updatedPermission = null;
       db.updatePermission = (id, data) => {
@@ -272,12 +251,10 @@ describe('permissions-route', () => {
         }
       };
 
-      server.inject(options, (response) => {
-        expect(response.statusCode).to.be.equal(200);
-        expect(updatedPermission.name).to.be.equal(payload.name);
-        expect(updatedPermission._id).to.be.equal(guid);
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.statusCode).to.be.equal(200);
+      expect(updatedPermission.name).to.be.equal(payload.name);
+      expect(updatedPermission._id).to.be.equal(guid);
     });
   });
 });

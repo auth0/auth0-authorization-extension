@@ -4,7 +4,7 @@ import schema from '../schemas/group';
 export default () => ({
   method: 'PUT',
   path: '/api/groups/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:groups' ]
@@ -15,16 +15,16 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const group = req.payload;
-    return req.storage.updateGroup(req.params.id, group)
-      .then((updated) => reply(updated))
-      .catch(err => reply.error(err));
+    const updated = await req.storage.updateGroup(req.params.id, group);
+    // unit tests expect a 200 status code so for consistency this has not been updated to 201
+    return h.response(updated).code(200);
   }
 });

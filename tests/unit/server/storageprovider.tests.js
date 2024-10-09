@@ -1,22 +1,22 @@
+/* eslint-disable no-unused-vars */
 import { expect } from 'chai';
 import Database from '../../../server/lib/storage/database';
 
 describe('Database', () => {
   describe('#constructor', () => {
-    it('should require a provider', (done) => {
-      const run = () => {
-        const database = new Database(); // eslint-disable-line no-unused-vars
-      };
-      expect(run)
-        .to.throw('The \'provider\' has to be set when initializing the database.');
-      done();
+    it('should require a provider', () => {
+      try {
+        const database = new Database();
+        expect.fail('The \'provider\' has to be set when initializing the database.');
+      } catch (error) {
+        expect(error.message).to.equal('The \'provider\' has to be set when initializing the database.');
+      }
     });
 
-    it('should initialize correctly', (done) => {
-      const database = new Database({ // eslint-disable-line no-unused-vars
+    it('should initialize correctly', () => {
+      const database = new Database({
         provider: { }
       });
-      done();
     });
   });
 });

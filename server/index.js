@@ -1,36 +1,25 @@
-import Hapi from '@auth0/hapi';
-import Good from 'good';
-import Inert from 'inert';
-import Relish from 'relish';
+import Hapi from '@hapi/hapi';
+import inertPlugin from 'inert';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
-import GoodConsole from 'good-console';
+import GoodConsole from '@hapi/good-console';
 import HapiSwagger from 'hapi-swagger';
+import Joi from 'joi';
 
 import config from './lib/config';
 import logger from './lib/logger';
 import plugins from './plugins';
 
-export default (cb) => {
+export default async () => {
   const goodPlugin = {
-    register: Good,
+    plugin: { ...require('@hapi/good').plugin, name: '@hapi/good' },
     options: {
       ops: {
         interval: 30000
       },
       reporters: {
-        console: [
-
-        ]
+        console: []
       }
-    }
-  };
-
-  const hapiSwaggerPlugin = {
-    register: HapiSwagger,
-    options: {
-      documentationPage: false,
-      swaggerUI: false
     }
   };
 
@@ -41,45 +30,69 @@ export default (cb) => {
     goodPlugin.options.reporters.console.push('stdout');
   }
 
-  const relishPlugin = Relish({ });
-
-  const server = new Hapi.Server();
-  server.connection({
+  const server = new Hapi.Server({
     host: 'localhost',
     port: 3000,
-    routes: {
-      cors: true,
-      validate: {
-        failAction: relishPlugin.failAction
+    routes: { cors: true }
+  });
+
+  server.validator(Joi);
+
+  const externalPlugins = [
+    goodPlugin,
+    {
+      plugin: { ...HapiSwagger, name: 'hapi-swagger' },
+      options: {
+        documentationPage: false,
+        swaggerUI: false
       }
+    },
+    {
+      plugin: { ...inertPlugin, name: 'inert' }
+    },
+    {
+      plugin: { ...Blipp, name: 'blipp' }
+    },
+    {
+      plugin: { ...jwt, name: 'jwt' }
     }
-  });
-  server.register([ goodPlugin, Inert, Blipp, jwt, hapiSwaggerPlugin, ...plugins ], (err) => {
-    if (err) {
-      return cb(err, null);
+  ];
+
+  await server.register([ ...externalPlugins, ...plugins ]);
+
+  // Use the server logger.
+  logger.debug = (...args) => {
+    server.log([ 'debug' ], args.join(' '));
+  };
+  logger.info = (...args) => {
+    server.log([ 'info' ], args.join(' '));
+  };
+  logger.error = (...args) => {
+    server.log([ 'error' ], args.join(' '));
+  };
+
+  server.ext('onPreResponse', (request, h) => {
+
+    // status prop can be either statusCode or status
+    const statusCode = request.response?.statusCode ?? request.response?.status;
+
+    // translate errors to appropriate responses
+    // otherwise 500s are returned regardless of the thrown error
+    if (statusCode >= 400) {
+      request.response.output.statusCode = statusCode;
+      request.response.output.payload = {
+        statusCode: statusCode,
+        error: request.response.name === "APIError" ? "Bad Request" : request.response.name,
+        message: request.response.message
+      };
     }
 
-    // Use the server logger.
-    logger.debug = (...args) => {
-      server.log([ 'debug' ], args.join(' '));
-    };
-    logger.info = (...args) => {
-      server.log([ 'info' ], args.join(' '));
-    };
-    logger.error = (...args) => {
-      server.log([ 'error' ], args.join(' '));
-    };
-
-    return cb(null, server);
-  });
-
-  server.ext('onPreResponse', (request, reply) => {
-    if (request.response && request.response.isBoom && request.response.output) {
-      server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.url.path}`);
+    if (request.response && request.response.isBoom) {
+      server.log([ 'error' ], `Request: ${request.method.toUpperCase()} ${request.path}`);
       server.log([ 'error' ], `Response: ${JSON.stringify(request.response, null, 2)}`);
     }
 
-    return reply.continue();
+    return h.continue;
   });
 
   return server;

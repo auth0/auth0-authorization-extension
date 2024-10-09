@@ -1,20 +1,23 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
 
-describe('metadata-route', () => {
-  const { server } = getServerData();
+describe('metadata-route', async () => {
+  let server = null;
+
+  before(async () => {
+    const result = await getServerData();
+    server = result.server;
+  });
 
   describe('#get', () => {
-    it('should return the webtask.json file', (cb) => {
+    it('should return the webtask.json file', async () => {
       const options = {
         method: 'GET',
         url: '/meta'
       };
 
-      server.inject(options, (response) => {
-        expect(response.result.name).to.equal('auth0-authz');
-        cb();
-      });
+      const response = await server.inject(options);
+      expect(response.result.name).to.equal('auth0-authz');
     });
   });
 });

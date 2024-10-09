@@ -1,32 +1,34 @@
-import Boom from 'boom';
+import { promisify } from 'util';
+import Boom from '@hapi/boom';
 import crypto from 'crypto';
 import jwksRsa from 'jwks-rsa';
 import jwt from 'jsonwebtoken';
-import * as tools from 'auth0-extension-hapi-tools';
 
 import config from '../lib/config';
 import { scopes } from '../lib/apiaccess';
+import { plugin } from './session';
+
 
 const hashApiKey = (key) => crypto.createHmac('sha256', `${key} + ${config('AUTH0_CLIENT_SECRET')}`)
   .update(config('EXTENSION_SECRET'))
   .digest('hex');
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   server.auth.scheme('extension-secret', () =>
     ({
-      authenticate: (request, reply) => {
+      authenticate: (request, h) => {
         const apiKey = request.headers['x-api-key'];
         return request.storage.getApiKey()
           .then(key => {
             if (apiKey && apiKey === hashApiKey(key)) {
-              return reply.continue({
+              return h.authenticated({
                 credentials: {
                   user: 'rule'
                 }
               });
             }
 
-            return reply(Boom.unauthorized('Invalid API Key'));
+            throw Boom.unauthorized('Invalid API Key');
           });
       }
     })
@@ -46,7 +48,7 @@ export const register = (server, options, next) => {
       key: jwksRsa.hapiJwt2Key({
         cache: true,
         rateLimit: true,
-        jwksRequestsPerMinute: 2,
+        jwksRequestsPerMinute: process.env.NODE_ENV === 'test' ? 10 : 2,
         jwksUri: `https://${config('AUTH0_DOMAIN')}/.well-known/jwks.json`
       }),
       verifyOptions: {
@@ -61,92 +63,95 @@ export const register = (server, options, next) => {
     // Get the complete decoded token, because we need info from the header (the kid)
     complete: true,
 
-    verifyFunc: (decoded, req, callback) => {
-      if (!decoded) {
-        return callback(null, false);
-      }
-
-      const header = req.headers.authorization;
-      if (header && header.indexOf('Bearer ') === 0) {
-        const token = header.split(' ')[1];
-        if (decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_DOMAIN')}/`) {
-          return jwtOptions.resourceServer.key(decoded, (keyErr, key) => {
-            if (keyErr) {
-              return callback(Boom.wrap(keyErr), null, null);
-            }
-
-            return jwt.verify(token, key, jwtOptions.resourceServer.verifyOptions, (err) => {
-              if (err) {
-                return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
-              }
-
-              if (decoded.payload.gty && decoded.payload.gty !== 'client-credentials') {
-                return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
-              }
-
-              if (!decoded.payload.sub.endsWith('@clients')) {
-                return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
-              }
-
-              if (decoded.payload.scope && typeof decoded.payload.scope === 'string') {
-                decoded.payload.scope = decoded.payload.scope.split(' '); // eslint-disable-line no-param-reassign
-              }
-
-              return callback(null, true, decoded.payload);
-            });
-          });
-        } else if (decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL')) {
-          return jwt.verify(token, jwtOptions.dashboardAdmin.key, jwtOptions.dashboardAdmin.verifyOptions, (err) => {
-            if (err) {
-              return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
-            }
-
-            if (!decoded.payload.access_token || !decoded.payload.access_token.length) {
-              return callback(Boom.unauthorized('Invalid token', 'Token'), null, null);
-            }
-
-            decoded.payload.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
-            return callback(null, true, decoded.payload);
-          });
+    verify: async (decoded, req) => {
+      try {
+        if (!decoded) {
+          return { isValid: false };
         }
-      }
 
-      return callback(null, false);
+        const header = req.headers.authorization;
+        if (!header || !header.indexOf('Bearer ') === 0) {
+          return { isValid: false };
+        }
+
+        const token = header.split(' ')[1];
+
+        const isApiRequest = decoded && decoded.payload && decoded.payload.iss === `https://${config('AUTH0_DOMAIN')}/`;
+        const isDashboardAdminRequest = decoded && decoded.payload && decoded.payload.iss === config('PUBLIC_WT_URL');
+
+        const getKeyAsync = promisify(jwtOptions.resourceServer.key);
+        const jwtVerifyAsync = promisify(jwt.verify);
+
+        if (isApiRequest) {
+          if (decoded.payload.gty && decoded.payload.gty !== 'client-credentials') {
+            return { isValid: false };
+          }
+
+          if (!decoded.payload.sub.endsWith('@clients')) {
+            return { isValid: false };
+          }
+
+          const resourceServerKey = await getKeyAsync(decoded);
+
+          if (!resourceServerKey) {
+            return { isValid: false };
+          }
+
+          // this can throw if there is an error
+          await jwtVerifyAsync(token, resourceServerKey, jwtOptions.resourceServer.verifyOptions);
+
+
+          if (decoded.payload.scope && typeof decoded.payload.scope === 'string') {
+            decoded.payload.scope = decoded.payload.scope.split(' '); // eslint-disable-line no-param-reassign
+          }
+
+          return { credentials: decoded.payload, isValid: true };
+        }
+
+        if (isDashboardAdminRequest) {
+          if (!decoded.payload.access_token || !decoded.payload.access_token.length) {
+            return { isValid: false };
+          }
+
+          // this can throw if there is an error
+          await jwtVerifyAsync(token, jwtOptions.dashboardAdmin.key, jwtOptions.dashboardAdmin.verifyOptions);
+
+          decoded.payload.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
+          return { credentials: decoded.payload, isValid: true };
+        }
+      } catch (error) {
+        return { isValid: false };
+      }
     }
   });
   server.auth.default('jwt');
   const session = {
-    register: tools.plugins.dashboardAdminSession,
+    plugin,
     options: {
       stateKey: 'authz-state',
       nonceKey: 'authz-nonce',
       sessionStorageKey: 'authz:apiToken',
       rta: config('AUTH0_RTA').replace('https://', ''),
       domain: config('AUTH0_DOMAIN'),
-      scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users',
+      scopes: 'read:resource_servers create:resource_servers update:resource_servers delete:resource_servers read:clients read:connections read:rules create:rules update:rules update:rules_configs read:users read:configuration',
       baseUrl: config('PUBLIC_WT_URL'),
       audience: 'urn:api-authz',
       secret: config('EXTENSION_SECRET'),
       clientName: 'Authorization Extension',
-      onLoginSuccess: (decoded, req, callback) => {
+      onLoginSuccess: (decoded, req) => {
         if (decoded) {
           decoded.scope = scopes.map(scope => scope.value); // eslint-disable-line no-param-reassign
-          return callback(null, true, decoded);
+          return decoded;
         }
 
-        return callback(null, false);
+        throw Boom.unauthorized('Invalid token', 'Token');
       }
     }
   };
-  server.register(session, (err) => {
-    if (err) {
-      next(err);
-    }
-
-    next();
-  });
+  server.register(session);
 };
 
-register.attributes = {
+export const authPlugin = {
+  register,
   name: 'auth'
 };

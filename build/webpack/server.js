@@ -18,41 +18,33 @@ logger.error = function error(...args) {
 };
 
 const options = {
-  publicPath: 'http://localhost:3001/app/',
   hot: true,
-  inline: true,
   historyApiFallback: true,
-  proxy: [
-    {
-      context: () => true,
-      target: {
-        port: 3000
-      }
-    }
-  ],
-
-  quiet: false,
-  noInfo: false,
-  watchOptions: {
-    aggregateTimeout: 300,
-    poll: 1000
-  },
-
-  stats: { colors: true },
   headers: {
     'Access-Control-Allow-Origin': '*'
+  },
+  devMiddleware: {
+    publicPath: 'http://localhost:3001/app/',
+    stats: { colors: true }
+  },
+  port: 3001,
+  host: '0.0.0.0',
+  open: [ '/login' ],
+  onListening: function(devServer) {
+    if (!devServer) {
+      throw new Error('webpack-dev-server is not defined');
+    }
+
+    const port = devServer.server.address().port;
+    console.log('Listening on port:', port);
   }
 };
 
-new WebpackDevServer(webpack(config), options)
-  .listen(3001, 'localhost',
-    (err) => {
-      if (err) {
-        logger.error(err);
-      } else {
-        logger.info('Webpack proxy listening on: http://localhost:3001');
+const server = new WebpackDevServer(options, webpack(config));
 
-        // Start the actual webserver.
-        require('../../index');
-      }
-    });
+(async () => {
+  await server.startCallback(() => {
+    logger.info('Webpack proxy listening on: http://localhost:3001');
+    require('../../index');
+  });
+})();

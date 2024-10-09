@@ -4,7 +4,7 @@ import schema from '../schemas/role';
 export default () => ({
   method: 'POST',
   path: '/api/roles',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'create:roles' ]
@@ -18,20 +18,18 @@ export default () => ({
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const role = req.payload;
-    return req.storage.getPermissions()
-      .then(permissions => {
-        role.permissions.forEach(permissionId => {
-          const permission = _.find(permissions, { _id: permissionId });
-          if (permission && permission.applicationId !== role.applicationId) {
-            throw new Error(`The permission '${permission.name}' is linked to a different application.`);
-          }
-        });
+    const permissions = await req.storage.getPermissions();
 
-        return req.storage.createRole(role)
-          .then((created) => reply(created));
-      })
-      .catch(err => reply.error(err));
+    role.permissions.forEach(permissionId => {
+      const permission = _.find(permissions, { _id: permissionId });
+      if (permission && permission.applicationId !== role.applicationId) {
+        throw new Error(`The permission '${permission.name}' is linked to a different application.`);
+      }
+    });
+
+    const created = await req.storage.createRole(role);
+    return h.response(created);
   }
 });

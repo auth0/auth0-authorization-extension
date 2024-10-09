@@ -1,8 +1,10 @@
+import { promisify } from 'util';
 import _ from 'lodash';
 import nconf from 'nconf';
-import Promise from 'bluebird';
 import memoizer from 'lru-memoizer';
+import Boom from '@hapi/boom';
 import multipartRequest from './multipartRequest';
+import config from './config';
 
 const avoidBlock = (action) => (...args) =>
   new Promise((resolve, reject) => {
@@ -37,7 +39,8 @@ export const getConnectionsCached = memoizer({
   },
   hash: (auth0) => auth0.hash || 'connections',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -53,7 +56,8 @@ export const getPermissionsCached = memoizer({
   },
   hash: (db) => db.hash || 'permissions',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -69,7 +73,8 @@ export const getRolesCached = memoizer({
   },
   hash: (db) => db.hash || 'roles',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -85,7 +90,8 @@ export const getGroupsCached = memoizer({
   },
   hash: (db) => db.hash || 'groups',
   max: 100,
-  maxAge: nconf.get('DATA_CACHE_MAX_AGE')
+  maxAge: nconf.get('DATA_CACHE_MAX_AGE'),
+  disable: config('IS_LAYER0_TEST_SPACE')
 });
 
 /*
@@ -197,31 +203,37 @@ export const getRolesForGroups = (selectedGroups, selectedRoles) => {
 /*
  * Get all roles for a user.
  */
-export const getRolesForUser = (database, userId) =>
-  database
-    .getGroups()
-    .then((groups) => {
-      // get all groups user belong to
-      const userGroups = _.filter(groups, (group) =>
-        _.includes(group.members, userId)
-      );
-      return getParentGroups(groups, userGroups)
-        .filter((group) => group.roles && group.roles.length)
-        .map((group) => group.roles); // return roles for user's groups and their parents
-    })
-    .then((roles) => _.uniq(_.flattenDeep(roles)))
-    .then((roleIds) =>
-      database.getRoles().then((roles) => {
-        const groupRoles = _.filter(roles, (role) =>
-          _.includes(roleIds, role._id)
-        );
-        const userRoles = _.filter(
-          roles,
-          (role) => role.users && _.includes(role.users, userId)
-        );
-        return _.uniq([ ...groupRoles, ...userRoles ], '_id');
-      })
+export const getRolesForUser = async (database, userId) => {
+  const groups = await database.getGroups();
+
+    // get all groups user belong to
+  const userGroups = _.filter(groups, (group) =>
+    _.includes(group.members, userId)
     );
+  const parentGroups = getParentGroups(groups, userGroups);
+
+  const filteredGroups = parentGroups.filter((group) => group.roles && group.roles.length);
+
+  const roles = filteredGroups.map((group) => group.roles); // return roles for user's groups and their parents
+
+  const roleIds = _.uniq(_.flattenDeep(roles));
+
+  const rolesFromDB = await database.getRoles();
+
+  const groupRoles = _.filter(rolesFromDB, (role) =>
+    _.includes(roleIds, role._id)
+    );
+
+  const userRoles = _.filter(
+      rolesFromDB,
+      (role) => role.users && _.includes(role.users, userId)
+    );
+
+
+  const result = _.uniq([ ...groupRoles, ...userRoles ], '_id');
+
+  return result;
+};
 
 /*
  * Get all permissions for list of roles.
@@ -388,46 +400,47 @@ export function getUserGroups(db, userId, connectionName, groupMemberships) {
 /*
  * Get expanded group data
  */
-export function getGroupExpanded(db, groupId) {
-  return new Promise((resolve, reject) => {
-    getGroupsCached(db, (error, groups) => {
-      if (error) {
-        return reject(error);
-      }
+export async function getGroupExpanded(db, groupId) {
+  const getGroupsCachedAsync = promisify(getGroupsCached);
+  const getRolesCachedAsync = promisify(getRolesCached);
 
-      return getRolesCached(db, (err, allRoles) => {
-        if (err) {
-          return reject(err);
-        }
-        const currentGroup = _.find(groups, { _id: groupId });
-        const parentGroups = getParentGroups(groups, [ currentGroup ]).filter(
-          (g) => g._id !== currentGroup._id
-        );
+  const groups = await getGroupsCachedAsync(db);
 
-        const roles = getRolesForGroups(
-          [ currentGroup, ...parentGroups ],
-          allRoles
-        ).map((r) => r.role);
-        const formatRole = (r) => ({
-          _id: r._id,
-          name: r.name,
-          description: r.description,
-          applicationId: r.applicationId,
-          applicationType: r.applicationType,
-          permissions: r.permissions && r.permissions.map(compact)
-        });
+  if (!groups || groups.length === 0) {
+    throw Boom.badRequest('No groups found');
+  }
 
-        return getPermissionsByRoles(db, roles).then((rolesList) =>
-          resolve({
-            _id: currentGroup._id,
-            name: currentGroup.name,
-            description: currentGroup.description,
-            roles: rolesList.map(formatRole)
-          })
-        );
-      });
-    });
+  const allRoles = await getRolesCachedAsync(db);
+
+  const currentGroup = _.find(groups, { _id: groupId });
+
+  if (!currentGroup) {
+    throw Boom.badRequest('Current group not found');
+  }
+
+  const parentGroups = getParentGroups(groups, [ currentGroup ]).filter(
+      (g) => g._id !== currentGroup._id
+    );
+
+  const roles = getRolesForGroups([ currentGroup, ...parentGroups ], allRoles).map((r) => r.role);
+
+  const formatRole = (r) => ({
+    _id: r._id,
+    name: r.name,
+    description: r.description,
+    applicationId: r.applicationId,
+    applicationType: r.applicationType,
+    permissions: r.permissions && r.permissions.map(compact)
   });
+
+  const rolesList = await getPermissionsByRoles(db, roles);
+
+  return {
+    _id: currentGroup._id,
+    name: currentGroup.name,
+    description: currentGroup.description,
+    roles: rolesList.map(formatRole)
+  };
 }
 
 /*

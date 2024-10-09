@@ -4,7 +4,7 @@ import { getMappingsWithNames } from '../../../lib/queries';
 export default (server) => ({
   method: 'GET',
   path: '/api/groups/{id}/mappings',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]
@@ -15,15 +15,15 @@ export default (server) => ({
       server.handlers.managementClient
     ],
     validate: {
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
-  handler: (req, reply) =>
-    req.storage.getGroup(req.params.id)
-      .then(group => group.mappings || [])
-      .then(mappings => getMappingsWithNames(req.pre.auth0, mappings))
-      .then(mappings => reply(mappings))
-      .catch(err => reply.error(err))
+  handler: async (req, h) => {
+    const group = await req.storage.getGroup(req.params.id);
+    const mappings = group.mappings || [];
+    const mappingsWithNames = await getMappingsWithNames(req.pre.auth0, mappings);
+    return h.response(mappingsWithNames);
+  }
 });

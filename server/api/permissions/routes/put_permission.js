@@ -4,7 +4,7 @@ import schema from '../schemas/permission';
 export default () => ({
   method: 'PUT',
   path: '/api/permissions/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'update:permissions' ]
@@ -15,16 +15,16 @@ export default () => ({
       options: {
         allowUnknown: false
       },
-      params: {
+      params: Joi.object({
         id: Joi.string().guid().required()
-      },
+      }),
       payload: schema
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     const permission = req.payload;
-    return req.storage.updatePermission(req.params.id, permission)
-      .then((updated) => reply(updated))
-      .catch(err => reply.error(err));
+    const updated = await req.storage.updatePermission(req.params.id, permission);
+
+    return h.response(updated);
   }
 });

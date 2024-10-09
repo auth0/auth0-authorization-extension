@@ -1,19 +1,16 @@
-import createServer from '../../server';
+import initHapiServer from '../../server';
 import { init as initDb } from '../../server/lib/storage/getdb';
 
 
 let server = null;
 const db = {};
 
-export const initServer = () => {
+export const getServerData = async() => {
   initDb(db);
 
-  createServer((err, s) => {
-    server = s;
-  });
-};
+  if (!server) {
+    server = await initHapiServer();
+  }
 
-export const getServerData = () => {
-  if (!server) throw new Error('No server created');
   return { server, db };
 };

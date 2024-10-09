@@ -1,4 +1,3 @@
-import Promise from 'bluebird';
 import request from 'superagent';
 import { managementApi } from 'auth0-extension-tools';
 import config from './config';

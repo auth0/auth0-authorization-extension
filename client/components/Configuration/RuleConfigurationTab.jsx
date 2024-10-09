@@ -117,8 +117,8 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
             <div className="explainer-text">
               <span className="explainer-text-content">
                 Authorization data like groups, roles and permissions can be added to the user object in the rules execution context.
-                Rules can then consume this information and use it to add custom claims to tokens or make authorization decisions. 
-                See <a target="_blank" href="https://auth0.com/docs/extensions/authorization-extension/v2/rules">Using rules with the Authorization Extension</a> for more information.
+                Rules can then consume this information and use it to add custom claims to tokens or make authorization decisions.
+                See <a target="_blank" href="https://auth0.com/docs/customize/extensions/authorization-extension/use-rules-with-the-authorization-extension">Using rules with the Authorization Extension</a> for more information.
               </span>
             </div>
           </div>

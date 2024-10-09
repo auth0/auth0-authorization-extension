@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import Promise from 'bluebird';
 import { ArgumentError, ValidationError } from 'auth0-extension-tools';
 import config from '../config';
 

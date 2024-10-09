@@ -1,9 +1,9 @@
-import { handlers } from 'auth0-extension-hapi-tools';
 import * as tools from 'auth0-extension-tools';
-import * as Boom from 'boom';
+import Boom from '@hapi/boom';
 
 import config from '../lib/config';
 import logger from '../lib/logger';
+import mgmtCLient from './local-mgmt-client';
 
 const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
   if (domain === null || domain === undefined) {
@@ -40,31 +40,31 @@ const validateHookToken = (domain, webtaskUrl, extensionSecret) => {
     }
 
     return {
-      method(req, res) {
+      method(req, h) {
         if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
           const token = req.headers.authorization.split(' ')[1];
 
           try {
-            logger.info(`Validating hook token with signature: ${extensionSecret.substr(0, 4)}...`);
+            logger.info(`Validating hook token with signature: ${extensionSecret.substring(0, 4)}...`);
             if (tools.validateHookToken(domain, webtaskUrl, hookPath, extensionSecret, token)) {
-              return res();
+              return h.continue;
             }
           } catch (e) {
             logger.error('Invalid token:', token);
-            return res(Boom.wrap(e, 401, e.message));
+            throw Boom(e, { statusCode: 401, message: e.message });
           }
         }
 
         const err = new tools.HookTokenError(`Hook token missing for the call to: ${hookPath}`);
-        return res(Boom.unauthorized(err, 401, err.message));
+        throw Boom.unauthorized(err, 401, err.message);
       }
     };
   };
 };
 
-export const register = (server, options, next) => {
+const register = async (server) => {
   server.decorate('server', 'handlers', {
-    managementClient: handlers.managementApiClient({
+    managementClient: mgmtCLient({
       domain: config('AUTH0_DOMAIN'),
       clientId: config('AUTH0_CLIENT_ID'),
       clientSecret: config('AUTH0_CLIENT_SECRET'),
@@ -76,10 +76,10 @@ export const register = (server, options, next) => {
       config('EXTENSION_SECRET')
     )
   });
-
-  next();
 };
 
-register.attributes = {
+
+export const handlersPlugin = {
+  register,
   name: 'handlers'
 };

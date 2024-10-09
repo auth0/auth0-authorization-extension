@@ -1,12 +1,12 @@
 {
-  "extends": ["auth0-base", "plugin:import/errors", "plugin:import/warnings"],
+  "extends": ["auth0-base", "plugin:import/errors", "plugin:import/warnings", "plugin:react/recommended"],
   "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true,
       "modules": true
     },
-    "ecmaVersion": 4,
+    "ecmaVersion": 8,
     "sourceType": "module"
   },
   "env": {
@@ -16,6 +16,9 @@
   "globals": {
     "Auth0Lock": false,
     "window": false
+  },
+  "settings": {
+    "import/resolver": { "node": { "extensions": [".js",".jsx"] } }
   },
   "rules": {
     "max-len": 0,
@@ -31,7 +34,8 @@
         "SwitchCase": 1
       }
     ],
-    "import/no-extraneous-dependencies": [error, { "devDependencies": true }],
+    
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "import/namespace": 0,
     "import/named": 0,
     "import/prefer-default-export": 0,

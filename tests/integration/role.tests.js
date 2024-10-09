@@ -1,129 +1,135 @@
+import request from 'superagent';
+import expect from 'expect';
+import { faker } from '@faker-js/faker';
+import { getAccessToken, authzApi, createRole, createGroup, addGroupRoles } from './utils';
+
 /* eslint-disable no-underscore-dangle, no-shadow */
 
-import request from 'request-promise';
-import expect from 'expect';
-import faker from 'faker';
-import { getAccessToken, authzApi, token } from './utils';
-
 let accessToken;
-let remoteRole;
 
 describe('roles', () => {
-  before(() => getAccessToken()
-    .then(response => {
-      accessToken = response;
-      return request.post({ url: authzApi('/configuration/import'), form: {}, headers: token(), resolveWithFullResponse: true });
-    })
-  );
+  before(async () => {
+    const response = await getAccessToken();
+    accessToken = response;
+
+    await request
+      .post(authzApi('/configuration/import'))
+      .auth(accessToken, { type: 'bearer' })
+      .send({});
+  });
 
   it('should have an accessToken', () => {
-    expect(accessToken).toExist();
+    expect(accessToken).toBeDefined();
   });
 
-  it('should create a new role', () => {
-    const role = {
+  afterEach(async () => {
+    // clear data to prevent state leaking between tests
+    await request
+      .post(authzApi('/configuration/import'))
+      .auth(accessToken, { type: 'bearer' })
+      .send({});
+  });
+
+  it('should create a new role', async () => {
+    const newRole = await createRole();
+
+    const { body: storedRole } = await request
+      .get(authzApi(`/roles/${newRole._id}`))
+      .auth(accessToken, { type: 'bearer' });
+
+    expect(newRole.name).toEqual(storedRole.name);
+    expect(newRole.description).toEqual(storedRole.description);
+  });
+
+  it('should get all roles in the system', async () => {
+    const [ role1, role2, role3 ] = await Promise.all([ createRole(), createRole(), createRole() ]);
+
+    const { body: data } = await request
+      .get(authzApi('/roles'))
+      .auth(accessToken, { type: 'bearer' });
+
+    expect(data.roles.length).toEqual(3);
+    expect(data.total).toEqual(3);
+    expect(data.roles.map(role => role._id)).toEqual(
+      expect.arrayContaining([ role1._id, role2._id, role3._id ])
+    );
+  });
+
+  it('should get a single role based on its unique identifier', async () => {
+    const newRoleCreate = await createRole();
+
+    const newRoleGet = await request
+      .get(authzApi(`/roles/${newRoleCreate._id}`))
+      .auth(accessToken, { type: 'bearer' });
+
+    expect(newRoleGet.body._id).toEqual(newRoleCreate._id);
+  });
+
+  it('should update a role', async () => {
+    const newRole = await createRole();
+
+    const newData = {
       name: faker.lorem.slug(),
       description: faker.lorem.sentence(),
-      applicationType: 'client',
-      applicationId: faker.lorem.slug(),
-      permissions: []
+      applicationType: newRole.applicationType,
+      applicationId: newRole.applicationId
     };
 
-    return request.post({
-      url: authzApi('/roles'),
-      form: role,
-      headers: token(),
-      json: true
-    })
-    .then((data) => {
-      remoteRole = data;
+    const { body: updatedRolePut } = await request
+      .put(authzApi(`/roles/${newRole._id}`))
+      .auth(accessToken, { type: 'bearer' })
+      .send(newData);
 
-      // Check the role is stored in the server
-      return request.get({
-        url: authzApi(`/roles/${remoteRole._id}`),
-        headers: token(),
-        json: true
-      })
-      .then((data) => {
-        expect(remoteRole.name).toEqual(data.name);
-        expect(remoteRole.description).toEqual(data.description);
-      });
-    });
+
+    const { body: updatedRoleGet } = await request
+      .get(authzApi(`/roles/${newRole._id}`))
+      .auth(accessToken, { type: 'bearer' });
+
+    expect(updatedRolePut.name).toEqual(updatedRoleGet.name);
+    expect(updatedRolePut.description).toEqual(updatedRoleGet.description);
   });
 
-  it('should get all roles in the system', () =>
-    request.get({
-      url: authzApi('/roles'),
-      headers: token(),
-      json: true
-    })
-    .then((data) => {
-      expect(data.roles.length).toBeGreaterThan(0);
-    })
-  );
+  it('should delete a role', async () => {
+    const newRole = await createRole();
 
-  it('should get a single role based on its unique identifier', () =>
-    request.get({
-      url: authzApi(`/roles/${remoteRole._id}`),
-      headers: token(),
-      json: true
-    })
-  );
+    await request
+      .delete(authzApi(`/roles/${newRole._id}`))
+      .auth(accessToken, { type: 'bearer' });
 
-  it('should update a role', () => {
-    const newData = Object.assign({}, remoteRole, {
-      name: faker.lorem.slug(),
-      description: faker.lorem.sentence()
-    });
-
-    delete newData._id;
-
-    return request.put({
-      url: authzApi(`/roles/${remoteRole._id}`),
-      form: newData,
-      headers: token(),
-      json: true
-    })
-    .then((data) => {
-      remoteRole = data;
-
-      // Check the role was updated in the server
-      return request.get({
-        url: authzApi(`/roles/${remoteRole._id}`),
-        headers: token(),
-        json: true
-      })
-      .then((data) => {
-        expect(remoteRole.name).toEqual(data.name);
-        expect(remoteRole.description).toEqual(data.description);
+    try {
+      await request
+        .get(authzApi(`/roles/${newRole._id}`))
+        .auth(accessToken, { type: 'bearer' });
+    } catch (error) {
+      expect(error.response._body).toEqual({
+        statusCode: 404,
+        error: 'NotFoundError',
+        message: `The record ${newRole._id} in roles does not exist.`
       });
-    });
+      return;
+    }
+
+    throw new Error('expected to throw an error');
   });
 
-  it('should delete a role', (done) => {
-    request.delete({
-      url: authzApi(`/roles/${remoteRole._id}`),
-      headers: token(),
-      resolveWithFullResponse: true
-    })
-    .then(() => {
-      // Check the role was deleted in the server
-      request.get({
-        url: authzApi(`/roles/${remoteRole._id}`),
-        headers: token(),
-        json: true
-      })
-      .then((data) => {
-        expect(remoteRole.name).toNotEqual(data.name);
-        expect(remoteRole.description).toNotEqual(data.description);
-        done();
-      }).catch((err) => {
-        if (err.statusCode === 400) {
-          done();
-        } else {
-          done(err);
-        }
+  it('should not delete a role which is used by a group', async () => {
+    const newRole = await createRole();
+    const newGroup = await createGroup();
+    await addGroupRoles(newGroup._id, [ newRole._id ]);
+
+    try {
+      await request
+      .delete(authzApi(`/roles/${newRole._id}`))
+      .auth(accessToken, { type: 'bearer' });
+    } catch (error) {
+      expect(error.response._body).toEqual({
+        statusCode: 400,
+        error: 'ValidationError',
+        message: `Unable to touch roles while used in groups: ${newGroup.name}`
       });
-    }).catch(done);
+      return;
+    }
+
+    throw new Error('expected to throw an error');
   });
 });

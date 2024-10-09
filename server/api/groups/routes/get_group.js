@@ -5,7 +5,7 @@ import { getGroupExpanded } from '../../../lib/queries';
 export default () => ({
   method: 'GET',
   path: '/api/groups/{id}',
-  config: {
+  options: {
     auth: {
       strategies: [ 'jwt' ],
       scope: [ 'read:groups' ]
@@ -13,23 +13,21 @@ export default () => ({
     description: 'Get a single group based on its unique identifier. Add "?expand" to also load all roles and permissions for this group.',
     tags: [ 'api' ],
     validate: {
-      query: {
+      query: Joi.object({
         expand: Joi.boolean()
-      },
-      params: {
+      }),
+      params: Joi.object({
         id: Joi.string().guid().required()
-      }
+      })
     }
   },
-  handler: (req, reply) => {
+  handler: async (req, h) => {
     if (req.query.expand) {
-      return getGroupExpanded(req.storage, req.params.id)
-        .then(group => reply(group))
-        .catch(err => reply.error(err));
+      const groupExpanded = await getGroupExpanded(req.storage, req.params.id);
+      return h.response(groupExpanded);
     }
 
-    return req.storage.getGroup(req.params.id)
-      .then(group => reply({ _id: group._id, name: group.name, description: group.description }))
-      .catch(err => reply.error(err));
+    const group = await req.storage.getGroup(req.params.id);
+    return h.response({ _id: group._id, name: group.name, description: group.description });
   }
 });

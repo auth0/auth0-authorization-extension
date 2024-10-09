@@ -8,7 +8,8 @@ const initialState = {
   record: { },
   resourceserver: { },
   explorer: { },
-  activeTab: 1
+  activeTab: 1,
+  hash: null
 };
 
 describe('configuration reducer', () => {
@@ -32,7 +33,8 @@ describe('configuration reducer', () => {
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -47,11 +49,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while loading the configuration: ERROR',
+        error: 'An error occurred while loading the configuration: ERROR',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -77,7 +80,8 @@ describe('configuration reducer', () => {
         },
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -94,7 +98,8 @@ describe('configuration reducer', () => {
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -109,11 +114,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the configuration: ERROR',
+        error: 'An error occurred while saving the configuration: ERROR',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -127,11 +133,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the configuration: Validation Error',
+        error: 'An error occurred while saving the configuration: Validation Error',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -149,11 +156,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the configuration: FORBIDDEN',
+        error: 'An error occurred while saving the configuration: FORBIDDEN',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -191,7 +199,8 @@ describe('configuration reducer', () => {
         ],
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -208,7 +217,8 @@ describe('configuration reducer', () => {
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -223,11 +233,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while loading the resource server configuration: ERROR',
+        error: 'An error occurred while loading the resource server configuration: ERROR',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -253,7 +264,8 @@ describe('configuration reducer', () => {
           name: 'my-custom-db'
         },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -270,7 +282,8 @@ describe('configuration reducer', () => {
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -285,11 +298,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while saving the resource server configuration: ERROR',
+        error: 'An error occurred while saving the resource server configuration: ERROR',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -312,7 +326,8 @@ describe('configuration reducer', () => {
         record: { },
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -332,7 +347,8 @@ describe('configuration reducer', () => {
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 2
+        activeTab: 2,
+        hash: null
       }
     );
   });
@@ -349,7 +365,8 @@ describe('configuration reducer', () => {
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -364,11 +381,12 @@ describe('configuration reducer', () => {
     ).toEqual(
       {
         loading: false,
-        error: 'An error occured while loading the api explorer configuration: ERROR',
+        error: 'An error occurred while loading the api explorer configuration: ERROR',
         record: {},
         resourceserver: { },
         explorer: { },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
@@ -394,7 +412,8 @@ describe('configuration reducer', () => {
           id: '/api',
           name: 'my-test-api'
         },
-        activeTab: 1
+        activeTab: 1,
+        hash: null
       }
     );
   });
