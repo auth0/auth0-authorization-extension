@@ -1,5 +1,5 @@
 import Hapi from '@hapi/hapi';
-import inertPlugin from 'inert';
+import inertPlugin from '@hapi/inert';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
 import GoodConsole from '@hapi/good-console';
