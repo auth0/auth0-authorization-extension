@@ -1,3 +1,6 @@
+// This file is taken from https://github.com/auth0-extensions/auth0-extension-hapi-tools/blob/master/src/urlHelpers.js
+// but moved into this repo as the original repo (sub)depends on an incompatible version of joi
+
 const url = require('url');
 
 const getBasePath = function(originalUrl, path) {
