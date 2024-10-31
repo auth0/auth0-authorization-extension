@@ -75,7 +75,7 @@
     "axios": "1.7.4",
     "blipp": "^4.0.2",
     "ejs": "^3.1.9",
-    "hapi-auth-jwt2": "10.5.1",
+    "hapi-auth-jwt2": "10.7.0",
     "hapi-swagger": "17.2.1",
     "joi": "17.12.2",
     "jose": "4.15.5",
