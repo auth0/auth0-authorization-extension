@@ -174,17 +174,3 @@ export function removeConfigurationResourceServer() {
     }
   };
 }
-
-/*
- * Load explorer configuration.
- */
-export function fetchConfigurationExplorer() {
-  return {
-    type: constants.FETCH_CONFIGURATION_EXPLORER,
-    payload: {
-      promise: axios.get('/swagger.json', {
-        responseType: 'json'
-      })
-    }
-  };
-}
