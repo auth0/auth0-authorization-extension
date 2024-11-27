@@ -1,7 +1,7 @@
 {
   "basePath": "/",
   "swagger": "2.0",
-  "host": "tim-test.wt.iam-authz-extensionupgrade2.auth0c.com",
+  "host": "",
   "schemes": ["https"],
   "info": {
     "title": "API documentation",
