@@ -119,21 +119,5 @@ export const configuration = createReducer(fromJS(initialState), {
   [constants.SET_CONFIGURATION_TAB]: (state, action) =>
     state.merge({
       activeTab: action.meta.activeTab
-    }),
-  [constants.FETCH_CONFIGURATION_EXPLORER_PENDING]: (state) =>
-    state.merge({
-      error: null,
-      loading: true,
-      explorer: { }
-    }),
-  [constants.FETCH_CONFIGURATION_EXPLORER_REJECTED]: (state, action) =>
-    state.merge({
-      loading: false,
-      error: `An error occurred while loading the api explorer configuration: ${action.errorMessage}`
-    }),
-  [constants.FETCH_CONFIGURATION_EXPLORER_FULFILLED]: (state, action) =>
-    state.merge({
-      loading: false,
-      explorer: fromJS(action.payload.data)
     })
 });

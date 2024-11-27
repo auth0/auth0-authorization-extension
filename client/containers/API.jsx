@@ -15,13 +15,11 @@ export default connectContainer(class API extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
     fetchConfigurationResourceServer: PropTypes.func.isRequired,
-    saveConfigurationResourceServer: PropTypes.func.isRequired,
-    fetchConfigurationExplorer: PropTypes.func.isRequired
+    saveConfigurationResourceServer: PropTypes.func.isRequired
   }
 
   componentWillMount() {
     this.props.fetchConfigurationResourceServer();
-    this.props.fetchConfigurationExplorer();
   }
 
   render() {

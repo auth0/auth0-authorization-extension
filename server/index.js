@@ -3,7 +3,6 @@ import inertPlugin from '@hapi/inert';
 import Blipp from 'blipp';
 import jwt from 'hapi-auth-jwt2';
 import GoodConsole from '@hapi/good-console';
-import HapiSwagger from 'hapi-swagger';
 import Joi from 'joi';
 
 import config from './lib/config';
@@ -40,13 +39,6 @@ export default async () => {
 
   const externalPlugins = [
     goodPlugin,
-    {
-      plugin: { ...HapiSwagger, name: 'hapi-swagger' },
-      options: {
-        documentationPage: false,
-        swaggerUI: false
-      }
-    },
     {
       plugin: { ...inertPlugin, name: 'inert' }
     },

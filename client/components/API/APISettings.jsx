@@ -5,6 +5,8 @@ import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
 import APIAccessTab from './APIAccessTab';
 import APIExplorerTab from './APIExplorerTab';
 
+import apiExplorer from './apiExplorer.json';
+
 export default class RuleSettings extends Component {
   static propTypes = {
     configuration: PropTypes.object.isRequired,
@@ -16,8 +18,13 @@ export default class RuleSettings extends Component {
   }
 
   render() {
-    const { loading, error, resourceserver, explorer } = this.props.configuration.toJS();
-    const initialValues = { token_lifetime: 86400, ...(resourceserver || { }) };
+    const { loading, error, resourceserver } =
+      this.props.configuration.toJS();
+    const initialValues = { token_lifetime: 86400, ...(resourceserver || {}) };
+
+    // no longer generated from hapi-swagger, now static json
+    const explorer = apiExplorer;
+
     return (
       <div>
         <SectionHeader
@@ -31,7 +38,10 @@ export default class RuleSettings extends Component {
               <div>
                 <Tabs animation={false}>
                   <Tab eventKey={1} title="Settings">
-                    <APIAccessTab initialValues={initialValues} onSubmit={this.props.saveConfigurationResourceServer} />
+                    <APIAccessTab
+                      initialValues={initialValues}
+                      onSubmit={this.props.saveConfigurationResourceServer}
+                    />
                   </Tab>
                   <Tab eventKey={2} title="Explorer">
                     <APIExplorerTab explorer={explorer} />
