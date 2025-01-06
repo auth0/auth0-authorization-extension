@@ -19,11 +19,7 @@ config.output.filename = `auth0-authz.ui.${version}.js`;
 
 config.resolve = {
   extensions: [ '.js', '.jsx' ], // Add '.jsx' to the list of extensions to resolve
-  fallback: {
-    // vm: require.resolve('vm-browserify'),
-    // crypto: require.resolve('crypto-browserify'),
-    // stream: require.resolve('stream-browserify')
-  }
+  fallback: {}
 };
 config.module = {};
 config.module.rules = ([
