@@ -5,6 +5,7 @@ const path = require('path');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const project = require('../../package.json');
 const config = require('./config.base.js');
@@ -19,8 +20,9 @@ config.output.filename = `auth0-authz.ui.${version}.js`;
 config.resolve = {
   extensions: [ '.js', '.jsx' ], // Add '.jsx' to the list of extensions to resolve
   fallback: {
-    crypto: require.resolve('crypto-browserify'),
-    stream: require.resolve('stream-browserify')
+    // vm: require.resolve('vm-browserify'),
+    // crypto: require.resolve('crypto-browserify'),
+    // stream: require.resolve('stream-browserify')
   }
 };
 config.module = {};
@@ -81,7 +83,8 @@ config.plugins = [
       };
       return JSON.stringify(chunks);
     }
-  })
+  }),
+  new NodePolyfillPlugin()
 ];
 
 config.optimization = {
