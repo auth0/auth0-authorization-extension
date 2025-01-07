@@ -134,7 +134,7 @@
     "jsdom": "25.0.1",
     "jwt-decode": "^2.0.1",
     "mini-css-extract-plugin": "^2.8.0",
-    "mocha": "3.3.0",
+    "mocha": "11.0.1",
     "nock": "13.5.4",
     "node-polyfill-webpack-plugin": "^4.1.0",
     "nodemon": "^2.0.2",
@@ -202,6 +202,7 @@
       "dom-helpers": {
         "@babel/runtime": "npm:@babel/runtime-corejs3@7.26.0"
       }
-    }
+    },
+    "cheerio": "1.0.0-rc.3"
   }
 }
