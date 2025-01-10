@@ -11,20 +11,23 @@ export const credentials = {
 };
 
 /*
+Things to check if integration tests are failing:
+- update the client_id and client_secret in the config.json file, for the env you're testing against
+- ensure the api is enabled in the extension and a client grant between the authz api and the client exists
+- ensure there is a client grant between the management api and the authz client as a couple of scopes are required to add and delete some stuff during the tests
+*/
+
+
+/*
  * Get an access token for the Authorization Extension API.
  */
 export const getAccessToken = async () => {
-  try {
-      const result = await request
+  const result = await request
     .post(`https://${config('AUTH0_DOMAIN')}/oauth/token`)
     .send(credentials)
     .set('Content-Type', 'application/json');
   
     return result.body.access_token;
-  } catch (error) {
-    console.log(error);
-  }
-
 };
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);
