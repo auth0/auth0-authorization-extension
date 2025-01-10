@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz",
-  "version": "2.12.1",
+  "version": "2.12.2",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "18.16.0"
@@ -203,6 +203,7 @@
         "@babel/runtime": "npm:@babel/runtime-corejs3@7.26.0"
       }
     },
-    "cheerio": "1.0.0-rc.3"
+    "cheerio": "1.0.0-rc.3",
+    "fsevents": "2.3.3"
   }
 }
