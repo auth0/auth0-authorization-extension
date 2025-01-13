@@ -27,7 +27,7 @@ export const getAccessToken = async () => {
     .send(credentials)
     .set('Content-Type', 'application/json');
   
-    return result.body.access_token;
+  return result.body.access_token;
 };
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);

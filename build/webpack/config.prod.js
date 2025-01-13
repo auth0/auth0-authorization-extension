@@ -84,7 +84,8 @@ config.plugins = [
   new BundleAnalyzerPlugin({
     reportFilename: 'report.html',
     statsFilename: 'stats.json',
-    analyzerMode: 'static',
+    // switch analyzerMode to 'static' to generate a static report
+    analyzerMode: 'disabled',
     generateStatsFile: true,
     statsOptions: { source: false }
   })
