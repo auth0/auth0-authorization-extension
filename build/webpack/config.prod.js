@@ -5,6 +5,7 @@ const path = require('path');
 const StatsWriterPlugin = require('webpack-stats-plugin').StatsWriterPlugin;
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
 
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -81,6 +82,7 @@ config.plugins = [
       return JSON.stringify(chunks);
     }
   }),
+  new NodePolyfillPlugin(),
   new BundleAnalyzerPlugin({
     reportFilename: 'report.html',
     statsFilename: 'stats.json',
