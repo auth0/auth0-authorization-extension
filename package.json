@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz",
-  "version": "2.12.2",
+  "version": "2.12.3",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "18.16.0"
@@ -136,6 +136,7 @@
     "mini-css-extract-plugin": "^2.8.0",
     "mocha": "11.0.1",
     "nock": "13.5.4",
+    "node-polyfill-webpack-plugin": "^4.1.0",
     "nodemon": "^2.0.2",
     "npm-run": "^4.1.2",
     "nyc": "17.1.0",
