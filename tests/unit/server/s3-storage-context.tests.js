@@ -9,7 +9,7 @@ import { ArgumentError } from 'auth0-extension-tools';
 
 import { S3StorageContext } from '../../../server/lib/tools/s3-storage-context';
 
-describe.only('S3 Storage Context', () => {
+describe('S3 Storage Context', () => {
   const redirectErrorCodes = [
     'AuthorizationHeaderMalformed',
     'BadRequest',
