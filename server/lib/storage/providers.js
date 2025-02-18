@@ -1,6 +1,6 @@
 import path from 'path';
-import { S3StorageContext } from 'auth0-extension-s3-tools';
 import { FileStorageContext, WebtaskStorageContext, BlobRecordProvider } from 'auth0-extension-tools';
+import { S3StorageContext } from '../tools/s3-storage-context';
 
 import config from '../config';
 import logger from '../logger';

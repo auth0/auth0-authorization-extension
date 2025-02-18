@@ -1,3 +1,9 @@
+## [2.13.0] - 2025-02-18
+
+- Update to run on node 22.13.1
+- Replace aws-sdk with aws-sdk/client-s3, add s3 client wrapper.
+- Removed npm dependency
+
 ## [2.12.0] - 2024-09-01
 
 - Update to run on node 18.16.0

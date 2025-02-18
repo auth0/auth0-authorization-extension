@@ -1,9 +1,9 @@
 {
   "name": "auth0-authz",
-  "version": "2.12.3",
+  "version": "2.13.0",
   "description": "Auth0 Authorization Extension",
   "engines": {
-    "node": "18.16.0"
+    "node": "22.13.1"
   },
   "main": "server.js",
   "scripts": {
@@ -34,9 +34,7 @@
       "@hapi/good-console@9.0.1",
       "@hapi/hapi@21.3.3",
       "async@2.6.3",
-      "auth0-extension-s3-tools@1.1.1",
       "auth0-extension-tools@1.5.2",
-      "aws-sdk@2.1416.0",
       "axios@1.6.5",
       "blipp@4.0.2",
       "ejs@3.1.9",
@@ -49,7 +47,8 @@
       "nconf@0.12.0",
       "node-uuid@1.4.8",
       "superagent@8.0.9",
-      "winston@3.10.0"
+      "winston@3.10.0",
+      "@aws-sdk/client-s3@3.738.0"
     ],
     "settings": {
       "WARN_DB_SIZE": 409600,
@@ -59,6 +58,7 @@
     }
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "3.738.0",
     "@hapi/boom": "10.0.1",
     "@hapi/good": "9.0.1",
     "@hapi/good-console": "9.0.1",
@@ -66,11 +66,9 @@
     "@hapi/inert": "7.1.0",
     "async": "2.6.3",
     "auth0": "3.5.0",
-    "auth0-extension-s3-tools": "1.1.1",
     "auth0-extension-tools": "1.5.2",
     "auth0-extension-ui": "1.1.7",
     "auth0-extension-ui-redux": "git+https://github.com/auth0-extensions/auth0-extension-ui-redux",
-    "aws-sdk": "2.1416.0",
     "axios": "1.7.4",
     "blipp": "^4.0.2",
     "ejs": "^3.1.9",
@@ -84,7 +82,6 @@
     "moment": "^2.29.4",
     "nconf": "^0.12.0",
     "node-uuid": "^1.4.8",
-    "npm": "10.4.0",
     "superagent": "^8.0.9",
     "winston": "^3.10.0"
   },
@@ -101,6 +98,7 @@
     "auth0-js": "^9.7.3",
     "auth0-styleguide": "auth0/styleguide#4.8.33",
     "autoprefixer": "6.7.7",
+    "aws-sdk-client-mock": "^4.1.0",
     "babel-eslint": "^9.0.0",
     "babel-loader": "^8.0.0",
     "babel-plugin-source-map-support": "^2.2.0",
