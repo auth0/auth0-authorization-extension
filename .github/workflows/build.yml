@@ -3,7 +3,7 @@ name: Build
 on:
   pull_request:
     types:
-      - opened
+      - labeled
 
 permissions:
   id-token: write
