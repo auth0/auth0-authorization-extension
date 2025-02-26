@@ -1,0 +1,55 @@
+name: Build
+
+on:
+  pull_request:
+    types:
+      - opened
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  AWS_ROLE: ${{ secrets.awsIAMS3UploadRole }}
+
+jobs:
+  build-and-deploy:
+    if: github.event.label.name == 'dev-deploy'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout auth0-extensions-cli
+        uses: actions/checkout@v4
+        with:
+          repository: auth0-extensions/auth0-extensions-cli
+          path: auth0-extensions-cli
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Link auth0-extensions-cli
+        run: |
+          cd auth0-extensions-cli
+          npm link
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build extension
+        run: |
+          npm link auth0-extensions-cli
+          npm run build
+
+#      - name: Configure AWS Credentials using OIDC
+#        uses: aws-actions/configure-aws-credentials@e3dd6a429d7300a6a4c196c26e071d42e0343502 # v4 on 2025-01-06
+#        with:
+#          role-to-assume: ${{ env.AWS_ROLE }}
+#          role-session-name: github-action-account-link-extension-publish
+#          aws-region: us-west-1
+#
+#      - name: Run Deploy
+#        run: sh tools/cdn.sh
