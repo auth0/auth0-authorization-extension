@@ -5,6 +5,7 @@ const logger = require('./server/lib/logger');
 const { getWebtaskUrl } = require('./server/lib/tools/auth0-extension-hapi-tools-url-helpers');
 
 const factory = (wtConfig, wtStorage) => {
+  logger.info('!!!Custom version from Nikolai Kavtur!!!');
   logger.info(
     'Starting Authorization Extension - Version:',
     process.env.CLIENT_VERSION
