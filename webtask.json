@@ -1,7 +1,7 @@
 {
   "title": "Auth0 Authorization",
   "name": "auth0-authz",
-  "codeUrl": "https://gist.githubusercontent.com/nkavtur/2568c1412b21f011a0c876037fe9805e/raw/5c5547e734760cec786ebbb65a3766be9c4b184a/bundle.js",
+  "codeUrl": "https://gist.githubusercontent.com/nkavtur/2568c1412b21f011a0c876037fe9805e/raw/60ef7d3e0b5fd89926ab2472dca84192360dedb4/bundle.js",
   "runtime": "node22",
   "version": "2.13.0",
   "author": "auth0",
