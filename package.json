@@ -33,7 +33,7 @@
       "@hapi/good@9.0.1",
       "@hapi/good-console@9.0.1",
       "@hapi/hapi@21.3.3",
-      "async@2.6.3",
+      "async@2.6.4",
       "auth0-extension-tools@1.5.2",
       "axios@1.6.5",
       "blipp@4.0.2",
@@ -64,7 +64,7 @@
     "@hapi/good-console": "9.0.1",
     "@hapi/hapi": "21.3.3",
     "@hapi/inert": "7.1.0",
-    "async": "2.6.3",
+    "async": "2.6.4",
     "auth0": "3.5.0",
     "auth0-extension-tools": "1.5.2",
     "auth0-extension-ui": "1.1.7",
@@ -183,7 +183,9 @@
     "webtask-bundle": "3.0.1"
   },
   "overrides": {
-    "auth0-extension-tools": "1.5.2",
+    "auth0-extension-tools": {
+      "async": "2.6.4"
+    },
     "react-router": "3.0.2",
     "@hapi/hoek": "^9.3.0",
     "@hapi/validate": "1.1.3",
