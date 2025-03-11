@@ -31,7 +31,7 @@ export default async function(
     ]);
 
     total = response.total || 0;
-    pageCount = Math.ceil(total / perPage);
+    pageCount = Math.ceil(total / perPage) - 1;
     const data = response[entity] || response || [];
     data.forEach((item) => result.push(item));
     return null;
@@ -55,9 +55,9 @@ export default async function(
       pages.push(i);
     }
 
-    const getAllResult = await promiseMap(pages, getPage, { concurrency });
+    await promiseMap(pages, getPage, { concurrency });
 
-    return getAllResult;
+    return result;
   };
 
   return getAll();

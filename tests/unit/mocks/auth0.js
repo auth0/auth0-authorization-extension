@@ -1,9 +1,17 @@
 import nock from 'nock';
 
-module.exports.get = (route, data, code = 200, times = 1) =>
+module.exports.get = (route, data, code = 200, times = 1, query = {}) =>
    nock('https://foo.auth0.local')
     .get(route)
-    .query(() => true)
+    .query((actualQuery) => {
+      // don't care about the query -> accept any
+      if (Object.keys(query).length === 0) {
+        return true;
+      }
+
+      // do care about the query -> check if it matches
+      return Object.keys(query).every((key) => actualQuery[key] === query[key]);
+    })
     .times(times)
     .reply(code, data);
 
