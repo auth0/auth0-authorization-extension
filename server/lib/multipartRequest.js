@@ -31,7 +31,7 @@ export default async function(
     ]);
 
     total = response.total || 0;
-    pageCount = Math.ceil(total / perPage) - 1;
+    pageCount = Math.ceil(total / perPage);
     const data = response[entity] || response || [];
     data.forEach((item) => result.push(item));
     return null;
@@ -51,7 +51,7 @@ export default async function(
     }
 
     const pages = [];
-    for (let i = 1; i <= pageCount; i++) {
+    for (let i = 1; i < pageCount; i++) {
       pages.push(i);
     }
 
