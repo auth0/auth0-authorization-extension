@@ -51,13 +51,13 @@ export default async function(
     }
 
     const pages = [];
-    for (let i = 1; i <= pageCount; i++) {
+    for (let i = 1; i < pageCount; i++) {
       pages.push(i);
     }
 
-    const getAllResult = await promiseMap(pages, getPage, { concurrency });
+    await promiseMap(pages, getPage, { concurrency });
 
-    return getAllResult;
+    return result;
   };
 
   return getAll();
