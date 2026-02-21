@@ -58,7 +58,7 @@
     }
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.738.0",
+    "@aws-sdk/client-s3": "3.894.0",
     "@hapi/boom": "10.0.1",
     "@hapi/good": "9.0.1",
     "@hapi/good-console": "9.0.1",
