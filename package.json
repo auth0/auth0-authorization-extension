@@ -64,7 +64,7 @@
     "@hapi/good-console": "9.0.1",
     "@hapi/hapi": "21.3.3",
     "@hapi/inert": "7.1.0",
-    "async": "2.6.4",
+    "async": "3.0.0",
     "auth0": "4.9.0",
     "auth0-extension-tools": "1.5.2",
     "auth0-extension-ui": "1.1.7",
