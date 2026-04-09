@@ -1,44 +1,32 @@
-import _ from 'lodash';
-import async from 'async';
-import apiCall from './apiCall';
+  import _ from 'lodash';                                                                                                                                                                                    
+  import apiCall from './apiCall';
+                                                                                                                                                                                                             
+  const CONCURRENCY = 10;
 
-export function getUsersById(client, ids, page, limit) {
-  return new Promise((resolve, reject) => {
-    const users = [];
+  async function fetchUser(client, userId) {
+    try {
+      return await apiCall(client.users, client.users.get, [{ id: userId }]);
+    } catch (err) {
+      return {
+        user_id: userId,
+        name: `<Error: ${err?.name || err?.statusCode}>`,
+        email: userId,
+        identities: [{ connection: 'N/A' }]
+      };
+    }
+  }
+
+  export async function getUsersById(client, ids, page, limit) {
     const total = ids.length;
+    const start = Math.max(page - 1, 0) * limit;
+    const pageIds = ids.slice(start, start + limit);
 
-    page = page - 1 < 0 ? 0 : page - 1; // eslint-disable-line no-param-reassign
-    ids = ids.splice(page * limit, limit); // eslint-disable-line no-param-reassign
+    const users = [];
+    for (let i = 0; i < pageIds.length; i += CONCURRENCY) {
+      const batch = pageIds.slice(i, i + CONCURRENCY);
+      const results = await Promise.all(batch.map((userId) => fetchUser(client, userId)));
+      users.push(...results);
+    }
 
-    async.eachLimit(
-      ids,
-      10,
-      (userId, cb) => {
-        apiCall(client, client.users.get, [ { id: userId } ])
-          .then((user) => {
-            users.push(user);
-            cb();
-          })
-          .catch((err) => {
-            const errDescription = err && (err.name || err.statusCode);
-            users.push({
-              user_id: userId,
-              name: `<Error: ${errDescription}>`,
-              email: userId,
-              identities: [ { connection: 'N/A' } ]
-            });
-            return cb();
-          });
-      },
-      (err) => {
-        if (err) {
-          return reject(err);
-        }
-
-        const sorted = _.sortBy(users, [ 'user_id' ]);
-
-        return resolve({ total, users: sorted });
-      }
-    );
-  });
-}
+    return { total, users: _.sortBy(users, ['user_id']) };
+  }

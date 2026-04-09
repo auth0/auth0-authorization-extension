@@ -41,6 +41,11 @@ describe('groups-members-route', async () => {
     db.updateGroup = null;
   });
 
+  beforeEach(() => {
+    db.getGroup = () =>
+      Promise.resolve({ ...group, members: [...group.members] });
+  });
+
   describe('#get', () => {
     it('should return 401 if no token provided', async () => {
       const options = {
@@ -156,7 +161,8 @@ describe('groups-members-route', async () => {
       expect(updatedGroup._id).to.be.equal(guid);
       expect(updatedGroup.name).to.be.equal(groupName);
       expect(updatedGroup.members).to.be.a('array');
-      expect(updatedGroup.members.length).to.be.equal(0);
+      // start with 2, remove 1, end with 1
+      expect(updatedGroup.members.length).to.be.equal(1);
     });
   });
 
@@ -214,7 +220,7 @@ describe('groups-members-route', async () => {
       expect(updatedGroup.name).to.be.equal(groupName);
       expect(updatedGroup._id).to.be.equal(guid);
       expect(updatedGroup.members).to.be.a('array');
-      expect(updatedGroup.members[0]).to.be.equal(newMember);
+      expect(updatedGroup.members[2]).to.be.equal(newMember);
     });
   });
 });

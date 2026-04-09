@@ -19,7 +19,7 @@ export default (server) => ({
     ]
   },
   handler: async (req, h) => {
-    const user = await req.pre.auth0.users.get({ id: req.params.id });
+    const { data: user } = await req.pre.auth0.users.get({ id: req.params.id });
     return h.response(user);
   }
 });

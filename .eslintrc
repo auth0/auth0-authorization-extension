@@ -6,7 +6,7 @@
       "jsx": true,
       "modules": true
     },
-    "ecmaVersion": 8,
+    "ecmaVersion": "latest",
     "sourceType": "module"
   },
   "env": {

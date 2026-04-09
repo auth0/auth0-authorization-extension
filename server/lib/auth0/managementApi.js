@@ -35,18 +35,6 @@ const getAccessToken = function(domain, clientId, clientSecret) {
   });
 };
 
-// Promisify the memoizer using standard Promise
-const getAccessTokenCached = function(domain, clientId, clientSecret) {
-  return new Promise(function(resolve, reject) {
-    memoizedGetToken(domain, clientId, clientSecret, function(err, token) {
-      if (err) {
-        return reject(err);
-      }
-      return resolve(token);
-    });
-  });
-};
-
 const memoizedGetToken = memoizer({
   load: function(domain, clientId, clientSecret, callback) {
     getAccessToken(domain, clientId, clientSecret)
@@ -75,53 +63,17 @@ const memoizedGetToken = memoizer({
   maxAge: 3600000 // 1 hour in milliseconds
 });
 
-// Helper function to wrap all methods in a resource using Proxy
-function wrapResource(resource) {
-  return new Proxy(resource, {
-    get(target, prop) {
-      const value = target[prop];
-
-      // If it's a function, wrap it to unwrap JSONApiResponse
-      if (typeof value === 'function') {
-        return function(...args) {
-          const result = value.apply(target, args);
-
-          // If the result is a promise, unwrap the .data property
-          if (result && typeof result.then === 'function') {
-            return result.then(function(response) {
-              // auth0 SDK v4 returns JSONApiResponse with .data property
-              // Unwrap it to maintain compatibility with v3 SDK behavior
-              if (response && response.data !== undefined) {
-                return response.data;
-              }
-              return response;
-            });
-          }
-
-          return result;
-        };
+// Promisify the memoizer using standard Promise
+const getAccessTokenCached = function(domain, clientId, clientSecret) {
+  return new Promise(function(resolve, reject) {
+    memoizedGetToken(domain, clientId, clientSecret, function(err, token) {
+      if (err) {
+        return reject(err);
       }
-
-      return value;
-    }
+      return resolve(token);
+    });
   });
-}
-
-// Helper function to wrap all resources in the management client using Proxy
-function wrapManagementClient(client) {
-  return new Proxy(client, {
-    get(target, prop) {
-      const value = target[prop];
-
-      // If it's an object (likely a resource like clients, users, etc.), wrap it
-      if (value && typeof value === 'object' && prop !== 'options') {
-        return wrapResource(value);
-      }
-
-      return value;
-    }
-  });
-}
+};
 
 const getClient = function(options) {
   if (options === null || options === undefined) {
@@ -142,7 +94,7 @@ const getClient = function(options) {
     }
 
     const client = new auth0.ManagementClient({ domain: options.domain, token: options.accessToken, headers: options.headers });
-    return Promise.resolve(wrapManagementClient(client));
+    return Promise.resolve(client);
   }
 
   if (options.clientId === null || options.clientId === undefined) {
@@ -163,8 +115,8 @@ const getClient = function(options) {
 
   return getAccessTokenCached(options.domain, options.clientId, options.clientSecret)
     .then(function(token) {
-      const client = new auth0.ManagementClient({ domain: options.domain, token: token, headers: options.headers });
-      return wrapManagementClient(client);
+      const clientTwo = new auth0.ManagementClient({ domain: options.domain, token: token, headers: options.headers });
+      return clientTwo;
     });
 };
 

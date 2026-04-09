@@ -1,40 +1,27 @@
-const idle = (timeout) =>
-  new Promise((resolve) => setTimeout(() => resolve(), timeout * 1000));
+const MAX_RETRY_TIMEOUT = 10;
 
-export default (context, promise, args, retry = 2) => {
-  let retriesLeft = retry;
+const sleep = (seconds) =>
+  new Promise((resolve) => setTimeout(resolve, seconds * 1000));
 
-  const tryRequest = () =>
-    promise
-      .apply(context, args)
-      .then((data) => Promise.resolve(data))
-      .catch((err) => {
-        const originalError = err.originalError || {};
-        const ratelimitReset =
-          (originalError.response &&
-            originalError.response.header &&
-            originalError.response.header['x-ratelimit-reset']) ||
-          0;
-        const currentTime = Math.round(new Date().getTime() / 1000);
-        const maxTimeout = 10; // wait for 10 seconds max
-        let timeout = parseInt(ratelimitReset, 10) - currentTime;
+export default async (client, method, args, retry = 2) => {
+  for (let attempt = 0; attempt <= retry; attempt++) {
+    try {
+      return await method.call(client, ...args);
+    } catch (err) {
+      const originalError = err.originalError || {};
+      const ratelimitReset =
+        originalError.response?.header?.["x-ratelimit-reset"] || 0;
+      const currentTime = Math.round(Date.now() / 1000);
+      const timeout = Math.max(parseInt(ratelimitReset, 10) - currentTime, 1);
+      const shouldRetry =
+        originalError.status === 429 &&
+        attempt < retry &&
+        ratelimitReset &&
+        timeout <= MAX_RETRY_TIMEOUT;
 
-        if (
-          originalError.status === 429 &&
-          retriesLeft > 0 &&
-          ratelimitReset &&
-          timeout <= maxTimeout
-        ) {
-          retriesLeft--;
-          if (timeout <= 0) {
-            timeout = 1;
-          }
+      if (!shouldRetry) throw err;
 
-          return idle(timeout).then(tryRequest);
-        }
-
-        return Promise.reject(err);
-      });
-
-  return tryRequest();
+      await sleep(timeout);
+    }
+  }
 };
