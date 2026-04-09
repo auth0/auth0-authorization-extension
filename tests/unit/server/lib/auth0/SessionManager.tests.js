@@ -22,7 +22,7 @@ describe('SessionManager', () => {
       });
 
       const expectedUrl = 'https://auth0.auth0.com/authorize?client_id=http%3A%2F%2Ffoo.bar.com&' +
-        'response_type=token id_token&response_mode=form_post&scope=' +
+        'response_type=token%20id_token&response_mode=form_post&scope=' +
         'openid%20name%20email&expiration=36000&redirect_uri=http%3A%2F%2Ffoo.bar.com' +
         '%2Flogin%2Fcallback&audience=https%3A%2F%2Fme.auth0.local%2Fapi%2Fv2%2F&nonce=nonce';
       expect(url).to.equal(expectedUrl);
@@ -37,7 +37,7 @@ describe('SessionManager', () => {
       });
 
       const expectedUrl = 'https://auth0.auth0.com/authorize?client_id=' +
-        'http%3A%2F%2Ffoo.bar.com&response_type=token id_token' +
+        'http%3A%2F%2Ffoo.bar.com&response_type=token%20id_token' +
         '&response_mode=form_post&scope=' +
         'openid%20name%20email%20read%3Aclients%20read%3Aconnections' +
         '&expiration=36000&redirect_uri=http%3A%2F%2Ffoo.bar.com%2Flogin%2Fcallback' +
@@ -55,7 +55,7 @@ describe('SessionManager', () => {
       });
 
       const expectedUrl = 'https://auth0.auth0.com/authorize?client_id=' +
-        'http%3A%2F%2Ffoo.bar.com&response_type=token id_token' +
+        'http%3A%2F%2Ffoo.bar.com&response_type=token%20id_token' +
         '&response_mode=form_post&scope=' +
         'openid%20name%20email%20read%3Aclients%20read%3Aconnections' +
         '&expiration=36000&redirect_uri=http%3A%2F%2Ffoo.bar.com%2Flogin%2Fcallback' +
@@ -95,7 +95,7 @@ describe('SessionManager', () => {
       });
 
       const expectedUrl = 'https://auth0.auth0.com/authorize?client_id=' +
-        'http%3A%2F%2Ffoo.bar.com&response_type=token id_token' +
+        'http%3A%2F%2Ffoo.bar.com&response_type=token%20id_token' +
         '&response_mode=form_post&scope=' +
         'openid%20name%20email%20read%3Aclients%20read%3Aconnections' +
         '&expiration=1&redirect_uri=http%3A%2F%2Ffoo.bar.com%2Flogin%2Fcallback' +

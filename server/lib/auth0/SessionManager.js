@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const jwksClient = require('jwks-rsa');
 const crypto = require('crypto');
+const { URLSearchParams } = require('url');
 
 const ArgumentError = require('../errors').ArgumentError;
 const UnauthorizedError = require('../errors').UnauthorizedError;
@@ -74,24 +75,26 @@ SessionManager.prototype.createAuthorizeUrl = function(options) {
     throw new ArgumentError('The provided state is invalid: ' + options.state);
   }
 
-  var scopes = 'openid name email';
+  let scopes = 'openid name email';
   if (options.scopes && options.scopes.length) {
     scopes += ' ' + options.scopes;
   }
 
-  var urlOptions = [
-    'https://' + this.options.rta + '/authorize',
-    '?client_id=' + encodeURIComponent(this.options.clientId),
-    '&response_type=token id_token',
-    '&response_mode=form_post',
-    '&scope=' + encodeURIComponent(scopes),
-    '&expiration=' + (options.expiration || 36000),
-    '&redirect_uri=' + encodeURIComponent(options.redirectUri),
-    '&audience=' + encodeURIComponent(this.managementApiAudience),
-    '&nonce=' + encodeURIComponent(options.nonce)
-  ];
-  if (options.state) urlOptions.push('&state=' + encodeURIComponent(options.state));
-  return urlOptions.join('');
+  const params = new URLSearchParams({
+    client_id: this.options.clientId,
+    response_type: 'token id_token',
+    response_mode: 'form_post',
+    scope: scopes,
+    expiration: options.expiration || 36000,
+    redirect_uri: options.redirectUri,
+    audience: this.managementApiAudience,
+    nonce: options.nonce,
+    ...(options.state && { state: options.state })
+  });
+
+  return `https://${this.options.rta}/authorize?${params}`
+    .toString()
+    .replaceAll('+', '%20');
 };
 
 SessionManager.prototype.validateToken = function(client, audience, token) {
@@ -108,7 +111,7 @@ SessionManager.prototype.validateToken = function(client, audience, token) {
       }
 
       const signingKey = key.publicKey || key.rsaPublicKey;
-      return jwt.verify(token, signingKey, { algorithms: ['RS256'] }, function(err, payload) {
+      return jwt.verify(token, signingKey, { algorithms: [ 'RS256' ] }, function(err, payload) {
         if (err) {
           return reject(err);
         }
