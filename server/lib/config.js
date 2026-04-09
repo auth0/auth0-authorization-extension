@@ -1,5 +1,5 @@
 // Simple configuration factory - replaces auth0-extension-tools config
-module.exports = function() {
+module.exports = (function() {
   const settings = {};
   let currentProvider = null;
 
@@ -24,4 +24,4 @@ module.exports = function() {
   };
 
   return config;
-}();
+}());
