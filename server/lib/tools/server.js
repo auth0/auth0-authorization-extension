@@ -9,13 +9,10 @@ module.exports.createServer = function(cb) {
 
 // Create a server factory function
 function createServerFactory(cb) {
-  return function(ctx) {
-    return cb(
-      function getConfig(key) {
-        return ctx && ctx.secrets ? ctx.secrets[key] : null;
-      },
-      ctx && ctx.storage ? ctx.storage : null
-    );
+  return (ctx) => {
+    const getConfig = (key) => ctx?.secrets?.[key] ?? null;
+    const storage = ctx?.storage ?? null;
+    return cb(getConfig, storage);
   };
 }
 
