@@ -30,7 +30,6 @@ export default async function (
       Object.assign({}, options, { include_totals: true, page: 0 }),
     ]);
 
-    // auth0 SDK v4 returns JSONApiResponse with .data property
     total = response.total || 0;
     pageCount = Math.ceil(total / perPage);
     const data = response[entity] || response || [];
@@ -42,8 +41,7 @@ export default async function (
     const response = await apiCall(client[entity], getter, [
       Object.assign({}, options, { page: page }),
     ]);
-    // auth0 SDK v4 returns JSONApiResponse with .data property
-    const data = response.data || response || [];
+    const data = response || [];
     data.forEach((item) => result.push(item));
     return null;
   };

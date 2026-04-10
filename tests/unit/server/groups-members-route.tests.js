@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
+import * as auth0 from '../mocks/auth0';
 
 describe('groups-members-route', async () => {
   let server = null;
@@ -73,6 +74,15 @@ describe('groups-members-route', async () => {
 
     it('should return members', async () => {
       const token = getToken('read:groups');
+      auth0.get(`/api/v2/users/${encodeURIComponent(uid)}`, {
+        user_id: uid,
+        name: 'Test User',
+        email: 'test@example.com',
+        picture: 'https://example.com/pic.jpg',
+        identities: [ { connection: 'Username-Password-Authentication', provider: 'auth0', user_id: 'some_user_id', isSocial: false } ],
+        last_login: new Date().toISOString(),
+        logins_count: 5
+      });
       const options = {
         method: 'GET',
         url: `/api/groups/${guid}/members`,
@@ -85,8 +95,10 @@ describe('groups-members-route', async () => {
       expect(response.statusCode).to.be.equal(200);
       expect(response.result.users).to.be.a('array');
       expect(response.result.users[0].user_id).to.be.equal(uid);
-      expect(response.result.users[1].user_id).to.be.equal('undefined');
+      expect(response.result.users[0].identities).to.be.an('array');
+      expect(response.result.users[0].identities[0].connection).to.be.a('string');
       // auth0 SDK v4 throws FetchError instead of APIError when user not found
+      expect(response.result.users[1].user_id).to.be.equal('undefined');
       expect(response.result.users[1].name).to.be.equal('<Error: FetchError>');
       expect(response.result.total).to.be.equal(2);
     });
