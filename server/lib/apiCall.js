@@ -6,7 +6,8 @@ const sleep = (seconds) =>
 export default async (client, method, args, retry = 2) => {
   for (let attempt = 0; attempt <= retry; attempt++) {
     try {
-      return await method.call(client, ...args);
+      const { data: result } = await method.call(client, ...args);
+      return result;
     } catch (err) {
       const originalError = err.originalError || {};
       const ratelimitReset =
