@@ -66,7 +66,7 @@ function (user, context, callback) {
         connectionName: context.connection || user.identities[0].connection,
         groups: parseGroups(user.groups)
       },
-      timeout: 5000
+      timeout: 10000
     }, cb);
   }<% if (config.persistGroups || config.persistRoles || config.persistPermissions) { %>
 
