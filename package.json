@@ -68,7 +68,7 @@
     "auth0-extension-ui-redux": "git+https://github.com/auth0-extensions/auth0-extension-ui-redux",
     "axios": "1.16.1",
     "blipp": "^4.0.2",
-    "ejs": "^3.1.9",
+    "ejs": "^5.0.1",
     "hapi-auth-jwt2": "10.5.1",
     "joi": "17.12.2",
     "jose": "4.15.5",
