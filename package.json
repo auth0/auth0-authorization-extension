@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz",
-  "version": "2.13.4",
+  "version": "2.13.5",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "22.13.1"
@@ -32,7 +32,7 @@
       "@hapi/boom@10.0.1",
       "@hapi/good@9.0.1",
       "@hapi/good-console@9.0.1",
-      "@hapi/hapi@21.3.3",
+      "@hapi/hapi@21.4.9",
       "async@2.6.4",
       "blipp@4.0.2",
       "ejs@3.1.9",
@@ -46,7 +46,7 @@
       "node-uuid@1.4.8",
       "superagent@10.2.3",
       "winston@3.10.0",
-      "@aws-sdk/client-s3@3.738.0"
+      "@aws-sdk/client-s3@3.1064.0"
     ],
     "settings": {
       "WARN_DB_SIZE": 409600,
@@ -56,11 +56,11 @@
     }
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "3.738.0",
+    "@aws-sdk/client-s3": "3.1064.0",
     "@hapi/boom": "10.0.1",
     "@hapi/good": "9.0.1",
     "@hapi/good-console": "9.0.1",
-    "@hapi/hapi": "21.3.3",
+    "@hapi/hapi": "21.4.9",
     "@hapi/inert": "7.1.0",
     "async": "2.6.4",
     "auth0": "4.9.0",

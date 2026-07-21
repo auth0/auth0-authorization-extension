@@ -1,3 +1,9 @@
+## [2.13.5] - 2026-07-21
+
+- Repin `@hapi/hapi` to 21.4.9 and `@aws-sdk/client-s3` to 3.1064.0 to pick up
+  patched transitive deps (`@hapi/content`, `fast-xml-parser`), clearing
+  SEC-29155 and SEC-9999.
+
 ## [2.13.0] - 2025-02-18
 
 - Update to run on node 22.13.1
