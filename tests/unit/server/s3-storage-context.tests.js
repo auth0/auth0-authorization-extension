@@ -1,7 +1,7 @@
 import { GetObjectCommand, PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 import { mockClient } from 'aws-sdk-client-mock';
-import { sdkStreamMixin } from '@smithy/util-stream';
+import { sdkStreamMixin } from '@smithy/core/serde';
 import { Readable } from 'stream';
 
 import { expect } from 'chai';
