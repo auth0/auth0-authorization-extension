@@ -24,7 +24,7 @@ Due to the SameSite cookie changes in browsers, we needed a version of Hapi that
 
 ## Development Setup
 
-**Requires Node 12** - higher versions not yet supported. If you are using `nvm`, simply run `nvm use` inside the directory to switch to the correct version.
+**Requires Node 22** (see `.nvmrc` / the `engines` field in `package.json` for the exact version). If you are using `nvm`, simply run `nvm use` inside the directory to switch to the correct version.
 
 1. Clone this repo.
 2. Run `npm ci`.
