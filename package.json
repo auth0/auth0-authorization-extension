@@ -63,7 +63,7 @@
     "@hapi/hapi": "21.3.3",
     "@hapi/inert": "7.1.0",
     "async": "2.6.4",
-    "auth0": "4.9.0",
+    "auth0": "5.0.0",
     "auth0-extension-ui": "1.1.7",
     "auth0-extension-ui-redux": "git+https://github.com/auth0-extensions/auth0-extension-ui-redux",
     "axios": "1.16.1",
