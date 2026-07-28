@@ -1,29 +1,21 @@
 import axios from 'axios';
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { RouterProvider } from 'react-router-dom';
 import './app.styl';
 
 import * as constants from './constants';
-import { useRouterHistory } from 'react-router';
-import { createHistory } from 'history';
-import { routerMiddleware, syncHistoryWithStore } from 'react-router-redux';
+import { router } from './router';
 
 import { loadCredentials } from './actions/auth';
 import { fetchRuleStatus } from './actions/configuration';
-import routes from './routes';
 import configureStore from './store/configureStore';
 
 // Make axios aware of the base path.
 axios.defaults.baseURL = window.config.API_BASE;
 
-// Make history aware of the base path.
-const history = useRouterHistory(createHistory)({
-  basename: window.config.BASE_PATH || ''
-});
-
-const store = configureStore([ routerMiddleware(history) ], { });
-const reduxHistory = syncHistoryWithStore(history, store);
+const store = configureStore([], { });
 
 // Check if the rule is enabled.
 store.subscribe(() => {
@@ -40,15 +32,9 @@ store.subscribe(() => {
 store.dispatch(loadCredentials());
 
 // Render application.
-ReactDOM.render(
+const root = createRoot(document.getElementById('app'));
+root.render(
   <Provider store={store}>
-    {routes(reduxHistory)}
-  </Provider>,
-  document.getElementById('app')
+    <RouterProvider router={router} />
+  </Provider>
 );
-
-// Show the developer tools.
-if (process.env.NODE_ENV !== 'production') {
-  const showDevTools = require('./showDevTools');
-  showDevTools(store);
-}

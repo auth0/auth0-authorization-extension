@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Error, LoadingPanel } from 'auth0-extension-ui';
+import { Error, LoadingPanel } from '@a0/auth0-extension-ui';
 
 import ItemRolesDialog from '../UserGroupRoles/ItemRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
@@ -37,7 +38,7 @@ class GroupRoles extends React.Component {
             </p>
           </div>
           <div className="col-xs-4">
-            <Button className="pull-right" bsStyle="success" onClick={this.props.openAddRoles}>
+            <Button className="pull-right" variant="success" onClick={this.props.openAddRoles}>
               <i className="icon icon-budicon-473" /> Add role
             </Button>
           </div>
@@ -60,19 +61,19 @@ class GroupRoles extends React.Component {
 }
 
 GroupRoles.propTypes = {
-  groupId: React.PropTypes.string,
-  roles: React.PropTypes.object,
-  group: React.PropTypes.object,
-  groupRoles: React.PropTypes.object,
-  applications: React.PropTypes.object,
-  saveGroupRoles: React.PropTypes.func,
-  fetchRolesForGroup: React.PropTypes.func,
-  addRoles: React.PropTypes.func,
-  openAddRoles: React.PropTypes.func,
-  closeAddRoles: React.PropTypes.func,
-  deleteRole: React.PropTypes.func,
-  cancelDeleteRole: React.PropTypes.func,
-  requestDeleteRole: React.PropTypes.func
+  groupId: PropTypes.string,
+  roles: PropTypes.object,
+  group: PropTypes.object,
+  groupRoles: PropTypes.object,
+  applications: PropTypes.object,
+  saveGroupRoles: PropTypes.func,
+  fetchRolesForGroup: PropTypes.func,
+  addRoles: PropTypes.func,
+  openAddRoles: PropTypes.func,
+  closeAddRoles: PropTypes.func,
+  deleteRole: PropTypes.func,
+  cancelDeleteRole: PropTypes.func,
+  requestDeleteRole: PropTypes.func
 };
 
 export default GroupRoles;

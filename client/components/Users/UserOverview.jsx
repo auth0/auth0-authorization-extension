@@ -1,5 +1,6 @@
 import React from 'react';
-import { Pagination, SectionHeader, BlankState, SearchBar, Error, TableTotals, LoadingPanel } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Pagination, SectionHeader, BlankState, SearchBar, Error, TableTotals, LoadingPanel } from '@a0/auth0-extension-ui';
 
 import UserGeneral from './UserGeneral.jsx';
 import UsersTable from './UsersTable';
@@ -139,15 +140,15 @@ class UserOverview extends React.Component {
 }
 
 UserOverview.propTypes = {
-  onReset: React.PropTypes.func.isRequired,
-  onSearch: React.PropTypes.func.isRequired,
-  error: React.PropTypes.object,
-  users: React.PropTypes.array.isRequired,
-  total: React.PropTypes.number.isRequired,
-  loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired,
-  getUsersOnPage: React.PropTypes.func.isRequired,
-  fetchQuery: React.PropTypes.func.isRequired
+  onReset: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  error: PropTypes.object,
+  users: PropTypes.array.isRequired,
+  total: PropTypes.number.isRequired,
+  loading: PropTypes.bool.isRequired,
+  renderActions: PropTypes.func.isRequired,
+  getUsersOnPage: PropTypes.func.isRequired,
+  fetchQuery: PropTypes.func.isRequired
 };
 
 export default UserOverview;

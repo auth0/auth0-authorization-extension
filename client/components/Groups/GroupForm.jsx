@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
-import { InputText, LoadingPanel } from 'auth0-extension-ui';
+import { InputText, LoadingPanel } from '@a0/auth0-extension-ui';
 
 import createForm from '../../utils/createForm';
 
 export default createForm('group', class GroupForm extends Component {
   static propTypes = {
-    validationErrors: React.PropTypes.object,
-    loading: React.PropTypes.bool.isRequired,
-    submitting: React.PropTypes.bool,
-    handleSubmit: React.PropTypes.func.isRequired,
-    onClose: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node
+    validationErrors: PropTypes.object,
+    loading: PropTypes.bool.isRequired,
+    submitting: PropTypes.bool,
+    handleSubmit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    children: PropTypes.node
   };
 
   render() {
@@ -39,10 +40,10 @@ export default createForm('group', class GroupForm extends Component {
         </LoadingPanel>
       </Modal.Body>
       <Modal.Footer>
-        <Button bsSize="large" bsStyle="transparent" disabled={loading || submitting} onClick={this.props.onClose}>
+        <Button size="lg" variant="transparent" disabled={loading || submitting} onClick={this.props.onClose}>
           Cancel
         </Button>
-        <Button bsSize="large" bsStyle="primary" disabled={loading || submitting} onClick={handleSubmit}>
+        <Button size="lg" variant="primary" disabled={loading || submitting} onClick={handleSubmit}>
           { isNew ? 'Create' : 'Save' }
         </Button>
       </Modal.Footer>

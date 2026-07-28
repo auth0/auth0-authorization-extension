@@ -1,16 +1,15 @@
 import classNames from 'classnames';
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { useMatch } from 'react-router-dom';
 
-export default class RuleStatus extends Component {
+class RuleStatus extends Component {
   static propTypes = {
     ruleStatus: PropTypes.object.isRequired,
+    isConfigurationRuleActive: PropTypes.bool,
     goToRules: PropTypes.func,
     goToConfiguration: PropTypes.func,
     goToImportExport: PropTypes.func
-  };
-
-  static contextTypes = {
-    router: React.PropTypes.object.isRequired
   };
 
   renderWarning(warning) {
@@ -43,7 +42,7 @@ export default class RuleStatus extends Component {
         btn: true,
         'btn-sm': true,
         'btn-warning': true,
-        hidden: this.context.router.isActive('configuration/rule')
+        hidden: this.props.isConfigurationRuleActive
       });
       return this.renderWarning({
         message:
@@ -93,4 +92,9 @@ export default class RuleStatus extends Component {
 
     return null;
   }
+}
+
+export default function RuleStatusWithRouter(props) {
+  const isConfigurationRuleActive = !!useMatch('/configuration/rule');
+  return <RuleStatus {...props} isConfigurationRuleActive={isConfigurationRuleActive} />;
 }

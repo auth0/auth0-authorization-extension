@@ -1,8 +1,9 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
 import UserGroupRemoveAction from './UserGroupRemoveAction';
-import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
+import { Error, LoadingPanel, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '@a0/auth0-extension-ui';
 
 class UserGroups extends Component {
   constructor() {
@@ -99,7 +100,7 @@ class UserGroups extends Component {
             <p>{this.getHelpText(groups.records)}</p>
           </div>
           <div className="col-xs-4">
-            <Button className="pull-right" bsStyle="success" onClick={this.addToGroup} disabled={groups.loading}>
+            <Button className="pull-right" variant="success" onClick={this.addToGroup} disabled={groups.loading}>
               <i className="icon icon-budicon-473" /> Add user to groups
             </Button>
           </div>

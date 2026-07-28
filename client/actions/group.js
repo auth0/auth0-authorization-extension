@@ -1,6 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
-import { push } from 'react-router-redux';
+import { navigateTo } from '../router';
 import * as constants from '../constants';
 import { fetchGroupMembers } from './groupMember';
 import { fetchGroupMappings } from './groupMapping';
@@ -191,8 +191,8 @@ export function deleteGroup(group, onSuccess) {
  * @returns {function(*)}
  */
 export function goToGroups() {
-  return (dispatch) => {
-    dispatch(push('/groups'));
+  return () => {
+    navigateTo('/groups');
   };
 }
 

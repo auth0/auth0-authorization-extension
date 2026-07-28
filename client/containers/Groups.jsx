@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { connectionActions, groupMemberActions, userActions } from '../actions';
@@ -19,7 +20,7 @@ class GroupsContainer extends Component {
     this.cancelDelete = this.cancelDelete.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchGroups();
     this.props.fetchConnections();
   }
@@ -80,9 +81,9 @@ class GroupsContainer extends Component {
 }
 
 GroupsContainer.propTypes = {
-  children: React.PropTypes.object,
-  group: React.PropTypes.object.isRequired,
-  groups: React.PropTypes.object.isRequired,
+  children: PropTypes.object,
+  group: PropTypes.object.isRequired,
+  groups: PropTypes.object.isRequired,
   fetchConnections: PropTypes.func.isRequired,
   fetchGroups: PropTypes.func.isRequired,
   saveGroup: PropTypes.func.isRequired,

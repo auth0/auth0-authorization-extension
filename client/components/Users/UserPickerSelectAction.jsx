@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { TableAction } from 'auth0-extension-ui';
+import { TableAction } from '@a0/auth0-extension-ui';
 
 class UserPickerSelectAction extends Component {
   constructor() {

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { EntityHeader } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { EntityHeader } from '@a0/auth0-extension-ui';
 
 class UserHeader extends Component {
   shouldComponentUpdate(nextProps) {
@@ -22,7 +23,7 @@ class UserHeader extends Component {
 }
 
 UserHeader.propTypes = {
-  user: React.PropTypes.object.isRequired
+  user: PropTypes.object.isRequired
 };
 
 export default UserHeader;

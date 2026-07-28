@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Error, TableAction, SectionHeader, BlankState, SearchBar, LoadingPanel } from 'auth0-extension-ui';
+import { Error, TableAction, SectionHeader, BlankState, SearchBar, LoadingPanel } from '@a0/auth0-extension-ui';
 
 import { PermissionDeleteDialog, PermissionDialog, PermissionsTable } from './';
 import PermissionsIcon from '../Icons/PermissionsIcon';
@@ -8,8 +9,8 @@ import PermissionsIcon from '../Icons/PermissionsIcon';
 export default class PermissionsOverview extends Component {
 
   static propTypes = {
-    onReset: React.PropTypes.func.isRequired,
-    onSearch: React.PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
     permission: PropTypes.object.isRequired,
     permissions: PropTypes.object.isRequired,
     applications: PropTypes.object.isRequired,
@@ -117,7 +118,7 @@ export default class PermissionsOverview extends Component {
         <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
           Read more
         </a>
-        <Button bsStyle="success" onClick={this.props.createPermission} disabled={this.props.permissions.loading}>
+        <Button variant="success" onClick={this.props.createPermission} disabled={this.props.permissions.loading}>
           <i className="icon icon-budicon-473" /> Create your first permission
         </Button>
       </BlankState>
@@ -138,7 +139,7 @@ export default class PermissionsOverview extends Component {
               title="Permissions"
               description="Define permissions for your applications. These can be grouped together using roles."
             >
-              <Button bsStyle="success" onClick={this.props.createPermission} disabled={loading}>
+              <Button variant="success" onClick={this.props.createPermission} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Create Permission
               </Button>
             </SectionHeader>

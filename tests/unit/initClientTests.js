@@ -1,5 +1,3 @@
-import { configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-15';
 import { JSDOM } from 'jsdom';
 import auth0 from 'auth0-js';
 import chai from 'chai';
@@ -7,7 +5,7 @@ import chaiMatch from 'chai-match';
 
 chai.use(chaiMatch);
 
-const jsdom = new JSDOM('<!doctype html><html><body></body></html>');
+const jsdom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'http://localhost/' });
 const { window } = jsdom;
 
 function copyProps(src, target) {
@@ -29,8 +27,7 @@ window.config = {
 global.auth0 = auth0;
 global.window = window;
 global.document = window.document;
-global.self = { navigator: global.navigator };
+global.self = window;
+global.IS_REACT_ACT_ENVIRONMENT = true;
 
 copyProps(window, global);
-
-configure({ adapter: new Adapter() });

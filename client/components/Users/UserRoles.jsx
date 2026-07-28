@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Error, LoadingPanel } from 'auth0-extension-ui';
+import { Error, LoadingPanel } from '@a0/auth0-extension-ui';
 
 import ItemRolesDialog from '../UserGroupRoles/ItemRolesDialog';
 import ItemRolesOverview from '../UserGroupRoles/ItemRolesOverview';
@@ -52,7 +53,7 @@ class UserRoles extends Component {
             <p>These are the roles that have been directly assigned to the user.</p>
           </div>
           <div className="col-xs-4">
-            <Button className="pull-right" bsStyle="success" onClick={this.props.openAddRoles}>
+            <Button className="pull-right" variant="success" onClick={this.props.openAddRoles}>
               <i className="icon icon-budicon-473" /> Add role to user
             </Button>
           </div>
@@ -128,20 +129,20 @@ class UserRoles extends Component {
 }
 
 UserRoles.propTypes = {
-  userId: React.PropTypes.string,
-  roles: React.PropTypes.object,
-  userRoles: React.PropTypes.object,
-  applications: React.PropTypes.object,
-  user: React.PropTypes.object,
-  saveUserRoles: React.PropTypes.func,
-  fetchRolesForUser: React.PropTypes.func,
-  fetchAllRolesForUser: React.PropTypes.func,
-  addRoles: React.PropTypes.func,
-  openAddRoles: React.PropTypes.func,
-  closeAddRoles: React.PropTypes.func,
-  deleteRole: React.PropTypes.func,
-  cancelDeleteRole: React.PropTypes.func,
-  requestDeleteRole: React.PropTypes.func
+  userId: PropTypes.string,
+  roles: PropTypes.object,
+  userRoles: PropTypes.object,
+  applications: PropTypes.object,
+  user: PropTypes.object,
+  saveUserRoles: PropTypes.func,
+  fetchRolesForUser: PropTypes.func,
+  fetchAllRolesForUser: PropTypes.func,
+  addRoles: PropTypes.func,
+  openAddRoles: PropTypes.func,
+  closeAddRoles: PropTypes.func,
+  deleteRole: PropTypes.func,
+  cancelDeleteRole: PropTypes.func,
+  requestDeleteRole: PropTypes.func
 };
 
 export default UserRoles;

@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import GroupRow from './GroupRow';
-import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
+import { Table, TableBody, TableHeader, TableColumn } from '@a0/auth0-extension-ui';
 
 class GroupsTable extends Component {
   shouldComponentUpdate(nextProps) {
@@ -33,10 +34,10 @@ class GroupsTable extends Component {
 }
 
 GroupsTable.propTypes = {
-  groups: React.PropTypes.object.isRequired,
-  canOpenGroup: React.PropTypes.bool,
-  loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired
+  groups: PropTypes.object.isRequired,
+  canOpenGroup: PropTypes.bool,
+  loading: PropTypes.bool.isRequired,
+  renderActions: PropTypes.func.isRequired
 };
 
 export default GroupsTable;

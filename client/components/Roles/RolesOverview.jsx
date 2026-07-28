@@ -1,6 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
+import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from '@a0/auth0-extension-ui';
 
 import { RoleDeleteDialog, RoleDialog, RolesTable } from './';
 import RolesIcon from '../Icons/RolesIcon';
@@ -8,8 +9,8 @@ import RolesIcon from '../Icons/RolesIcon';
 export default class RolesOverview extends Component {
 
   static propTypes = {
-    onReset: React.PropTypes.func.isRequired,
-    onSearch: React.PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
     role: PropTypes.object.isRequired,
     roles: PropTypes.object.isRequired,
     applications: PropTypes.object.isRequired,
@@ -103,7 +104,7 @@ export default class RolesOverview extends Component {
         <a href="https://auth0.com/docs/extensions/authorization-extension" target="_blank" rel="noopener noreferrer" className="btn btn-transparent btn-md">
           Read more
         </a>
-        <Button bsStyle="success" onClick={this.props.createRole} disabled={this.props.roles.loading}>
+        <Button variant="success" onClick={this.props.createRole} disabled={this.props.roles.loading}>
           <i className="icon icon-budicon-473" /> Create your first role
         </Button>
       </BlankState>
@@ -121,7 +122,7 @@ export default class RolesOverview extends Component {
         { !error && !records.length && !loading && (!fetchQuery || !fetchQuery.length) ? this.renderEmptyState() : (
           <div>
             <SectionHeader title="Roles" description="Create and manage roles (collection of permissions) for your applications. These can then be assigned to users and groups.">
-              <Button bsStyle="success" onClick={this.props.createRole} disabled={loading}>
+              <Button variant="success" onClick={this.props.createRole} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Create Role
               </Button>
             </SectionHeader>

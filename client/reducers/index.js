@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
-import { routerReducer } from 'react-router-redux';
 
 import { auth } from './auth';
 import { applications } from './applications';
@@ -29,7 +28,6 @@ function lastAction(state = null, action) {
 }
 
 export default combineReducers({
-  routing: routerReducer,
   applications,
   connections,
   configuration,

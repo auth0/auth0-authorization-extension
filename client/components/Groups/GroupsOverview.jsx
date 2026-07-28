@@ -1,6 +1,7 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
-import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from 'auth0-extension-ui';
+import { Error, LoadingPanel, TableAction, SectionHeader, BlankState, SearchBar } from '@a0/auth0-extension-ui';
 
 import { GroupDeleteDialog, GroupDialog, GroupsTable } from './';
 import GroupMembersDialog from './GroupMembersDialog';
@@ -23,6 +24,7 @@ class GroupsOverview extends React.Component {
     };
 
     this.renderGroupActions = this.renderGroupActions.bind(this);
+    this.fetchPickerUsers = this.fetchPickerUsers.bind(this);
 
     // Searchbar.
     this.onKeyPress = this.onKeyPress.bind(this);
@@ -85,7 +87,7 @@ class GroupsOverview extends React.Component {
         <a href="https://auth0.com/docs/extensions/authorization-extension" rel="noopener noreferrer" target="_blank" className="btn btn-transparent btn-md">
           Read more
         </a>
-        <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+        <Button variant="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
           <i className="icon icon-budicon-473" /> Create your first group
         </Button>
       </BlankState>
@@ -96,7 +98,7 @@ class GroupsOverview extends React.Component {
     return (
       <div>
         <SectionHeader title="Groups" description="Create and manage groups in which you can add users, roles and nested groups.">
-          <Button bsStyle="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
+          <Button variant="success" onClick={this.props.createGroup} disabled={this.props.groups.loading}>
             <i className="icon icon-budicon-473" /> Create Group
           </Button>
         </SectionHeader>
@@ -145,6 +147,13 @@ class GroupsOverview extends React.Component {
     return users;
   }
 
+  fetchPickerUsers(q, field, reset, perPage, page, onSuccess) {
+    this.props.fetchUsers(q, field, reset, perPage, page, (payload) => {
+      const records = payload && payload.data ? payload.data.users : [];
+      onSuccess(this.getUserPickerDialogUsers(records));
+    });
+  }
+
   render() {
     const { error, loading, records, fetchQuery } = this.props.groups;
     const users = this.props.users;
@@ -159,7 +168,7 @@ class GroupsOverview extends React.Component {
           onSubmit={this.addGroupMembers.bind(this)}
           totalUsers={users.get('total')}
           users={this.getUserPickerDialogUsers(users.get('records').toJS())}
-          fetchUsers={this.props.fetchUsers}
+          fetchUsers={this.fetchPickerUsers}
           resetFetchUsers={this.props.resetFetchUsers}
         />
 
@@ -171,10 +180,10 @@ class GroupsOverview extends React.Component {
 
 
 GroupsOverview.propTypes = {
-  onReset: React.PropTypes.func.isRequired,
-  onSearch: React.PropTypes.func.isRequired,
-  group: React.PropTypes.object.isRequired,
-  groups: React.PropTypes.object.isRequired,
+  onReset: PropTypes.func.isRequired,
+  onSearch: PropTypes.func.isRequired,
+  group: PropTypes.object.isRequired,
+  groups: PropTypes.object.isRequired,
   createGroup: PropTypes.func.isRequired,
   editGroup: PropTypes.func.isRequired,
   editGroupUsers: PropTypes.func.isRequired,

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import connectContainer from 'redux-static';
 import { configurationActions, importExportActions } from '../actions';
 import RuleSettings from '../components/Configuration/RuleSettings';
@@ -22,7 +23,7 @@ export default connectContainer(class extends Component {
     exportConfig: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     setTimeout(() => {
       this.props.fetchConfiguration();
       this.props.exportConfig();

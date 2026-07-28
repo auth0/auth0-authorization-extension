@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import './Users.styl';
 
@@ -17,7 +18,7 @@ class Users extends React.Component {
     this.getUsersOnPage = this.getUsersOnPage.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchUsers('', '', false, process.env.PER_PAGE);
   }
 

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import './GroupPickerDialog.styl';
 import GroupsTablePicker from './GroupsTablePicker';
-import { Error, Confirm, TableAction, LoadingPanel } from 'auth0-extension-ui';
+import { Error, Confirm, TableAction, LoadingPanel } from '@a0/auth0-extension-ui';
 
 class GroupPickerDialog extends Component {
   constructor() {
@@ -65,10 +66,10 @@ class GroupPickerDialog extends Component {
 }
 
 GroupPickerDialog.propTypes = {
-  excludedGroups: React.PropTypes.object.isRequired,
-  groupPicker: React.PropTypes.object.isRequired,
-  onConfirm: React.PropTypes.func.isRequired,
-  onCancel: React.PropTypes.func.isRequired
+  excludedGroups: PropTypes.object.isRequired,
+  groupPicker: PropTypes.object.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired
 };
 
 export default GroupPickerDialog;

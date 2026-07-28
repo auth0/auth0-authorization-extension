@@ -1,10 +1,11 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import { Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
 
 import createForm from '../../utils/createForm';
-import { InputText, InputCombo, LoadingPanel, ScopeGroup } from 'auth0-extension-ui';
+import { InputText, InputCombo, LoadingPanel, ScopeGroup } from '@a0/auth0-extension-ui';
 
 const roleForm = createForm('role', class extends Component {
   static propTypes = {
@@ -20,23 +21,18 @@ const roleForm = createForm('role', class extends Component {
     applicationId: PropTypes.string
   };
 
-  state = {
-    isNew: false,
-    mode: 'edit-role',
-    applications: [],
-    permissions: []
-  }
-
   constructor(props) {
     super(props);
 
-    this.state = {
-      applicationId: props.applicationId
-    };
+    this.state = this.computeStateValues(
+      props.applicationId || props.initialValues.applicationId,
+      props.applications,
+      props.permissions
+    );
   }
 
-  initStateValues(applicationId, applications, permissions) {
-    this.setState({
+  computeStateValues(applicationId, applications, permissions) {
+    return {
       applicationId,
       applications: applications.map(app => ({
         value: app.client_id,
@@ -48,15 +44,15 @@ const roleForm = createForm('role', class extends Component {
           value: perm._id,
           text: perm.name
         }))
-    });
+    };
   }
 
-  componentWillMount() {
-    this.initStateValues(this.props.applicationId || this.props.initialValues.applicationId, this.props.applications, this.props.permissions);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.initStateValues(nextProps.applicationId || nextProps.initialValues.applicationId, nextProps.applications, nextProps.permissions);
+  componentDidUpdate(prevProps) {
+    if (prevProps.applicationId !== this.props.applicationId ||
+        prevProps.applications !== this.props.applications ||
+        prevProps.permissions !== this.props.permissions) {
+      this.setState(this.computeStateValues(this.props.applicationId || this.props.initialValues.applicationId, this.props.applications, this.props.permissions));
+    }
   }
 
   onBack = () => {
@@ -145,26 +141,26 @@ const roleForm = createForm('role', class extends Component {
   getCancelButton(loading, submitting) {
     if (this.props.isNew && this.props.page === 'editRole') {
       return (
-        <Button bsSize="large" disabled={loading || submitting} onClick={this.onBack}>Back</Button>
+        <Button size="lg" variant="transparent" disabled={loading || submitting} onClick={this.onBack}>Back</Button>
       );
     }
 
     return (
-      <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}>Cancel</Button>
+      <Button size="lg" variant="transparent" disabled={loading || submitting} onClick={this.props.onClose}>Cancel</Button>
     );
   }
 
   getActionButton(loading, submitting, handleSubmit) {
     if (this.props.page === 'editRole') {
       return (
-        <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}>
+        <Button variant="primary" size="lg" disabled={loading || submitting} onClick={handleSubmit}>
           Save
         </Button>
       );
     }
 
     return (
-      <Button bsStyle="primary" bsSize="large" disabled={!this.state.applicationId || this.state.applicationId === ''} onClick={this.onNext}>
+      <Button variant="primary" size="lg" disabled={!this.state.applicationId || this.state.applicationId === ''} onClick={this.onNext}>
         Next
       </Button>
     );

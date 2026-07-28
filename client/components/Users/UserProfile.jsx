@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Error, Json, LoadingPanel } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Error, Json, LoadingPanel } from '@a0/auth0-extension-ui';
 
 class UserProfile extends Component {
   shouldComponentUpdate(nextProps) {
@@ -19,9 +20,9 @@ class UserProfile extends Component {
 }
 
 UserProfile.propTypes = {
-  error: React.PropTypes.string,
-  loading: React.PropTypes.bool.isRequired,
-  user: React.PropTypes.object.isRequired
+  error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  user: PropTypes.object.isRequired
 };
 
 export default UserProfile;

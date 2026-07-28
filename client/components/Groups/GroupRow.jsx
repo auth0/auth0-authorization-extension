@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
+import { TableCell, TableIconCell, TableRouteCell, TableTextCell, TableRow } from '@a0/auth0-extension-ui';
 
 class GroupRow extends Component {
   shouldComponentUpdate(nextProps) {
@@ -35,11 +36,11 @@ class GroupRow extends Component {
 }
 
 GroupRow.propTypes = {
-  loading: React.PropTypes.bool,
-  index: React.PropTypes.number.isRequired,
-  canOpenGroup: React.PropTypes.bool,
-  group: React.PropTypes.object.isRequired,
-  renderActions: React.PropTypes.func.isRequired
+  loading: PropTypes.bool,
+  index: PropTypes.number.isRequired,
+  canOpenGroup: PropTypes.bool,
+  group: PropTypes.object.isRequired,
+  renderActions: PropTypes.func.isRequired
 };
 
 export default GroupRow;

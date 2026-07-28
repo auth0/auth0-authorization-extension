@@ -1,6 +1,8 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
-import { Error, Confirm, Multiselect } from 'auth0-extension-ui';
+import { Error, Confirm, Multiselect } from '@a0/auth0-extension-ui';
 
 import createForm from '../../utils/createForm';
 import UserPickerSelectAction from './UserPickerSelectAction';
@@ -16,18 +18,18 @@ export default createForm('userPicker', class UserPickerDialog extends Component
   }
 
   static propTypes = {
-    userPicker: React.PropTypes.object.isRequired,
-    onConfirm: React.PropTypes.func.isRequired,
-    onCancel: React.PropTypes.func.isRequired,
-    onReset: React.PropTypes.func.isRequired,
-    onSearch: React.PropTypes.func.isRequired,
-    onSelectUser: React.PropTypes.func.isRequired,
-    onUnselectUser: React.PropTypes.func.isRequired,
-    fetchUsers: React.PropTypes.func.isRequired,
-    resetFetchUsers: React.PropTypes.func.isRequired,
-    totalUsers: React.PropTypes.number,
-    users: React.PropTypes.array,
-    reset: React.PropTypes.func.isRequired
+    userPicker: PropTypes.object.isRequired,
+    onConfirm: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onReset: PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
+    onSelectUser: PropTypes.func.isRequired,
+    onUnselectUser: PropTypes.func.isRequired,
+    fetchUsers: PropTypes.func.isRequired,
+    resetFetchUsers: PropTypes.func.isRequired,
+    totalUsers: PropTypes.number,
+    users: PropTypes.array,
+    reset: PropTypes.func.isRequired
   };
 
   getOptions(input, callback) {
@@ -35,12 +37,7 @@ export default createForm('userPicker', class UserPickerDialog extends Component
     const query = useSEv3
       ? `name:${input}* OR email:${input}*`
       : `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
-    this.props.fetchUsers(query, null, true, null, null, () => {
-      callback(null, {
-        options: this.props.users,
-        complete: false
-      });
-    });
+    this.props.fetchUsers(query, null, true, null, null, callback);
   }
 
   shouldComponentUpdate(nextProps) {

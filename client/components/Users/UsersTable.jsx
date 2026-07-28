@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '@a0/auth0-extension-ui';
 
 class UsersTable extends Component {
 
@@ -41,9 +42,9 @@ class UsersTable extends Component {
 }
 
 UsersTable.propTypes = {
-  users: React.PropTypes.array.isRequired,
-  loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func.isRequired
+  users: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired,
+  renderActions: PropTypes.func.isRequired
 };
 
 export default UsersTable;

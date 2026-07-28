@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
 
-import { InputText, InputCombo, LoadingPanel } from 'auth0-extension-ui';
+import { InputText, InputCombo, LoadingPanel } from '@a0/auth0-extension-ui';
 import createForm from '../../utils/createForm';
 
 export default createForm('groupMapping', class GroupMappingForm extends Component {
   propTypes = {
-    children: React.PropTypes.object,
-    fields: React.PropTypes.object,
-    connections: React.PropTypes.array,
-    validationErrors: React.PropTypes.object,
-    loading: React.PropTypes.bool.isRequired,
-    submitting: React.PropTypes.bool,
-    handleSubmit: React.PropTypes.func.isRequired,
-    onClose: React.PropTypes.func.isRequired
+    children: PropTypes.object,
+    fields: PropTypes.object,
+    connections: PropTypes.array,
+    validationErrors: PropTypes.object,
+    loading: PropTypes.bool.isRequired,
+    submitting: PropTypes.bool,
+    handleSubmit: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired
   };
 
   render() {
@@ -52,7 +53,7 @@ export default createForm('groupMapping', class GroupMappingForm extends Compone
           <Button disabled={loading || submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsStyle="primary" disabled={loading || submitting} onClick={handleSubmit}>
+          <Button variant="primary" disabled={loading || submitting} onClick={handleSubmit}>
             Create
           </Button>
         </Modal.Footer>

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonToolbar, Modal } from 'react-bootstrap';
 
-import { Error, Json, LoadingPanel } from 'auth0-extension-ui';
+import { Error, Json, LoadingPanel } from '@a0/auth0-extension-ui';
 
 class LogDialog extends Component {
   render() {
@@ -27,7 +28,7 @@ class LogDialog extends Component {
       </Modal.Body>
       <Modal.Footer>
         <ButtonToolbar>
-          <Button bsSize="small" disabled={loading} onClick={onClose}>
+          <Button size="sm" disabled={loading} onClick={onClose}>
             <i className="icon icon-budicon-501" /> Cancel
           </Button>
         </ButtonToolbar>
@@ -37,11 +38,11 @@ class LogDialog extends Component {
 }
 
 LogDialog.propTypes = {
-  onClose: React.PropTypes.func.isRequired,
-  log: React.PropTypes.object.isRequired,
-  error: React.PropTypes.string,
-  loading: React.PropTypes.bool.isRequired,
-  logId: React.PropTypes.string
+  onClose: PropTypes.func.isRequired,
+  log: PropTypes.object.isRequired,
+  error: PropTypes.string,
+  loading: PropTypes.bool.isRequired,
+  logId: PropTypes.string
 };
 
 export default LogDialog;

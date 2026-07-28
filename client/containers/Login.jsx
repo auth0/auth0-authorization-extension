@@ -1,14 +1,13 @@
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { push } from 'react-router-redux';
-import { LoadingPanel } from 'auth0-extension-ui';
+import { LoadingPanel } from '@a0/auth0-extension-ui';
 
 import { login } from '../actions/auth';
 
 class LoginContainer extends Component {
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.auth.isAuthenticated) {
-      this.props.push(`/groups`);
+      this.props.navigate('/groups');
     } else if (!this.props.auth.isAuthenticating) {
       this.props.login(this.props.location.query.returnUrl);
     }
@@ -33,4 +32,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { login, push })(LoginContainer);
+export default connect(mapStateToProps, { login })(LoginContainer);

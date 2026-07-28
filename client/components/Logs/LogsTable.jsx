@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Table, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Table, TableIconCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow } from '@a0/auth0-extension-ui';
 
 class LogsTable extends Component {
   shouldComponentUpdate(nextProps) {
@@ -38,9 +39,9 @@ class LogsTable extends Component {
 }
 
 LogsTable.propTypes = {
-  onOpen: React.PropTypes.func.isRequired,
-  logs: React.PropTypes.object.isRequired,
-  loading: React.PropTypes.bool.isRequired
+  onOpen: PropTypes.func.isRequired,
+  logs: PropTypes.object.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default LogsTable;

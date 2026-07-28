@@ -1,5 +1,6 @@
-import React, { PropTypes, Component } from 'react';
-import { Error, Confirm, LoadingPanel } from 'auth0-extension-ui';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Error, Confirm, LoadingPanel } from '@a0/auth0-extension-ui';
 
 export default class RoleDeleteDialog extends Component {
   static propTypes = {

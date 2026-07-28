@@ -1,11 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Sidebar, SidebarItem } from 'auth0-extension-ui';
+import { Outlet } from 'react-router-dom';
+import { Sidebar } from '@a0/auth0-extension-ui';
 
 import { logout } from '../actions/auth';
 import { configurationActions } from '../actions';
 
 import Header from '../components/Header';
+import SidebarNavItem from '../components/SidebarNavItem';
 import RuleStatus from '../components/Configuration/RuleStatus';
 
 import UsersIcon from '../components/Icons/UsersIcon';
@@ -38,10 +41,10 @@ class App extends Component {
         <div className="container">
           <div className="row">
             <Sidebar>
-              <SidebarItem icon={<UsersIcon className="item-image"/>} title="Users" route="/users" />
-              <SidebarItem icon={<GroupsIcon className="item-image"/>} title="Groups" route="/groups" />
-              <SidebarItem icon={<RolesIcon className="item-image"/>} title="Roles" route="/roles" />
-              <SidebarItem icon={<PermissionsIcon className="item-image"/>} title="Permissions" route="/permissions" />
+              <SidebarNavItem icon={<UsersIcon className="item-image"/>} title="Users" route="/users" />
+              <SidebarNavItem icon={<GroupsIcon className="item-image"/>} title="Groups" route="/groups" />
+              <SidebarNavItem icon={<RolesIcon className="item-image"/>} title="Roles" route="/roles" />
+              <SidebarNavItem icon={<PermissionsIcon className="item-image"/>} title="Permissions" route="/permissions" />
             </Sidebar>
             <div id="content" className="col-xs-10">
               <RuleStatus ruleStatus={this.props.ruleStatus}
@@ -49,7 +52,7 @@ class App extends Component {
                 goToRules={this.props.goToRules}
                 goToImportExport={this.props.goToImportExport}
               />
-              { this.props.children }
+              <Outlet />
             </div>
           </div>
         </div>

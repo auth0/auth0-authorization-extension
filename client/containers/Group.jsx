@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
-import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions, applicationActions, roleActions } from '../actions';
+import { groupActions, groupNestedActions, groupMemberActions, groupMappingActions, userPickerActions, groupPickerActions, userActions, applicationActions, roleActions, connectionActions } from '../actions';
 
 import UserPickerDialog from '../components/Users/UserPickerDialog';
 import GroupRoles from '../components/Groups/GroupRoles';
@@ -21,6 +22,7 @@ export class GroupContainer extends Component {
     this.saveGroupMapping = this.saveGroupMapping.bind(this);
     this.getGroupMembersOnPage = this.getGroupMembersOnPage.bind(this);
     this.getAllNestedMembersOnPage = this.getAllNestedMembersOnPage.bind(this);
+    this.fetchPickerUsers = this.fetchPickerUsers.bind(this);
 
     // Nested groups.
     this.requestAddNestedGroup = this.requestAddNestedGroup.bind(this);
@@ -29,18 +31,19 @@ export class GroupContainer extends Component {
     this.removeNestedGroup = this.removeNestedGroup.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchRoles();
     this.props.fetchRolesForGroup(this.props.params.id);
     this.props.fetchGroup(this.props.params.id);
     this.props.fetchApplications();
+    this.props.fetchConnections();
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps && nextProps.params && nextProps.params.id) {
-      if (this.props.params.id !== nextProps.params.id) {
-        this.props.fetchRolesForGroup(nextProps.params.id);
-        this.props.fetchGroup(nextProps.params.id);
+  componentDidUpdate(prevProps) {
+    if (this.props.params && this.props.params.id) {
+      if (prevProps.params.id !== this.props.params.id) {
+        this.props.fetchRolesForGroup(this.props.params.id);
+        this.props.fetchGroup(this.props.params.id);
       }
     }
   }
@@ -57,6 +60,13 @@ export class GroupContainer extends Component {
       });
     }
     return users;
+  }
+
+  fetchPickerUsers(q, field, reset, perPage, page, onSuccess) {
+    this.props.fetchUsers(q, field, reset, perPage, page, (payload) => {
+      const records = payload && payload.data ? payload.data.users : [];
+      onSuccess(this.getUserPickerDialogUsers(records));
+    });
   }
 
   getGroupMembersOnPage(groupId, page) {
@@ -148,7 +158,7 @@ export class GroupContainer extends Component {
             onSearch={this.props.searchUserPicker}
             totalUsers={users.get('total')}
             users={this.getUserPickerDialogUsers(users.get('records').toJS())}
-            fetchUsers={this.props.fetchUsers}
+            fetchUsers={this.fetchPickerUsers}
             resetFetchUsers={this.props.resetFetchUsers}
           />
           <GroupPickerDialog groupPicker={groupPicker} excludedGroups={excludedGroups} onConfirm={this.addNestedGroup} onCancel={this.props.cancelGroupPicker} />
@@ -177,7 +187,7 @@ export class GroupContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs defaultActiveKey={1} animation={false} style={{ marginTop: '20px' }} id="group-tabs">
+            <Tabs defaultActiveKey={1} style={{ marginTop: '20px' }} id="group-tabs">
               <Tab eventKey={1} title="Members">
                 <GroupMembers
                   groupId={group.get('groupId')} members={group.get('members')} nestedMembers={group.get('nestedMembers')} addMember={this.addMember} removeMember={this.requestRemoveMember}
@@ -246,6 +256,7 @@ GroupContainer.propTypes = {
   clearGroupMapping: PropTypes.func.isRequired,
   fetchRoles: PropTypes.func.isRequired,
   fetchApplications: PropTypes.func.isRequired,
+  fetchConnections: PropTypes.func.isRequired,
   openUserPicker: PropTypes.func.isRequired,
   requestRemoveGroupMember: PropTypes.func.isRequired,
   cancelRemoveGroupMember: PropTypes.func.isRequired,
@@ -274,7 +285,7 @@ GroupContainer.propTypes = {
   selectUser: PropTypes.func.isRequired,
   searchUserPicker: PropTypes.func.isRequired,
   fetchUsers: PropTypes.func.isRequired,
-  resetFetchUsers: React.PropTypes.func.isRequired
+  resetFetchUsers: PropTypes.func.isRequired
 };
 
 function mapStateToProps(state) {
@@ -294,4 +305,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions, ...applicationActions, ...roleActions })(GroupContainer);
+export default connect(mapStateToProps, { ...groupActions, ...groupMemberActions, ...groupNestedActions, ...groupPickerActions, ...groupMappingActions, ...userPickerActions, ...userActions, ...applicationActions, ...roleActions, ...connectionActions })(GroupContainer);

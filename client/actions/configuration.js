@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import axios from 'axios';
-import { push } from 'react-router-redux';
+import { navigateTo } from '../router';
 
 import * as constants from '../constants';
 
@@ -10,7 +10,7 @@ import * as constants from '../constants';
 export function goToConfiguration() {
   return (dispatch) => {
     dispatch(setActiveTab(1));
-    dispatch(push('/configuration/rule'));
+    navigateTo('/configuration/rule');
   };
 }
 
@@ -18,8 +18,8 @@ export function goToConfiguration() {
  * Open the API tab.
  */
 export function goToAPI() {
-  return (dispatch) => {
-    dispatch(push('/configuration/api'));
+  return () => {
+    navigateTo('/configuration/api');
   };
 }
 
@@ -38,7 +38,7 @@ export function goToRules() {
 export function goToImportExport() {
   return (dispatch) => {
     dispatch(setActiveTab(3));
-    dispatch(push('/configuration/import-export'));
+    navigateTo('/configuration/import-export');
   };
 }
 

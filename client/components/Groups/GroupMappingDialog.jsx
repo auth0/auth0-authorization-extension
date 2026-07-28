@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 
-import { Error } from 'auth0-extension-ui';
+import { Error } from '@a0/auth0-extension-ui';
 import GroupMappingForm from './GroupMappingForm';
 
 class GroupMappingDialog extends Component {
@@ -48,11 +49,11 @@ class GroupMappingDialog extends Component {
 }
 
 GroupMappingDialog.propTypes = {
-  onSave: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  group: React.PropTypes.object.isRequired,
-  groupMapping: React.PropTypes.object.isRequired,
-  connections: React.PropTypes.object.isRequired
+  onSave: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  group: PropTypes.object.isRequired,
+  groupMapping: PropTypes.object.isRequired,
+  connections: PropTypes.object.isRequired
 };
 
 export default GroupMappingDialog;

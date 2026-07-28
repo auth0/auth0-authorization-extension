@@ -1,7 +1,8 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { Field } from 'redux-form';
-import { InputSwitchItem, InputText } from 'auth0-extension-ui';
+import { InputSwitchItem, InputText } from '@a0/auth0-extension-ui';
 import createForm from '../../utils/createForm';
 import './RuleConfigurationTab.styl';
 
@@ -84,7 +85,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
         </div>
         <div className="col-xs-2">
           <div className="pull-right">
-            <Button bsStyle="primary" disabled={submitting} onClick={this.props.rotateApiKey}>
+            <Button variant="primary" disabled={submitting} onClick={this.props.rotateApiKey}>
               <i className="icon-budicon-171"></i>
               Rotate
             </Button>
@@ -106,7 +107,7 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
           </div>
           <div className="col-xs-2">
             <div className="pull-right">
-              <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
+              <Button variant="primary" disabled={submitting} onClick={handleSubmit}>
                 Publish Rule
               </Button>
             </div>
@@ -166,5 +167,8 @@ export default createForm('ruleConfigurationForm', class RuleConfigurationForm e
     );
   }
 }, {
-  enableReinitialize: true
+  // See APIAccessTab: keyed remount seeds values via the constructor;
+  // destroyOnUnmount:false stops the outgoing instance wiping that state.
+  enableReinitialize: true,
+  destroyOnUnmount: false
 });

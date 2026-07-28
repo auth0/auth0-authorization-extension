@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import connectContainer from 'redux-static';
-import { Table, TableHeader, TableRow, TableColumn, TableBody, TableTextCell, TableCell } from 'auth0-extension-ui';
+import { Table, TableHeader, TableRow, TableColumn, TableBody, TableTextCell, TableCell } from '@a0/auth0-extension-ui';
 
 export default class ItemRolesDialog extends React.Component {
 
@@ -105,10 +106,10 @@ export default class ItemRolesDialog extends React.Component {
         </Modal.Header>
         {this.renderBody(this.props.allRoles, this.props.selectedRoles)}
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={item.loading || item.submitting} onClick={this.props.onClose}>
+          <Button size="lg" variant="transparent" disabled={item.loading || item.submitting} onClick={this.props.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={item.loading || item.submitting} onClick={this.handleSubmit} >
+          <Button size="lg" variant="primary" disabled={item.loading || item.submitting} onClick={this.handleSubmit} >
             Save
           </Button>
         </Modal.Footer>

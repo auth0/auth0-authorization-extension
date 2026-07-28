@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
 class UserFederated extends React.Component {
@@ -16,7 +17,7 @@ class UserFederated extends React.Component {
               first time, they will receive the groups and roles configured here and the pending
               user will become an actual user.
             </p>
-            <Button className="user-section-btn pull-right" bsStyle="success" disabled={loading}>
+            <Button className="user-section-btn pull-right" variant="success" disabled={loading}>
               <i className="icon icon-budicon-473" /> Create user
             </Button>
           </div>
@@ -27,7 +28,7 @@ class UserFederated extends React.Component {
 }
 
 UserFederated.propTypes = {
-  loading: React.PropTypes.bool.isRequired
+  loading: PropTypes.bool.isRequired
 };
 
 

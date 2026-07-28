@@ -1,6 +1,7 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'react-bootstrap';
-import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
+import { Error, LoadingPanel, SectionHeader } from '@a0/auth0-extension-ui';
 
 import APIAccessTab from './APIAccessTab';
 import APIExplorerTab from './APIExplorerTab';
@@ -21,6 +22,10 @@ export default class RuleSettings extends Component {
     const { loading, error, resourceserver } =
       this.props.configuration.toJS();
     const initialValues = { token_lifetime: 86400, ...(resourceserver || {}) };
+    // redux-form's mid-render reinitialize is dropped under React 18, so keying
+    // the form on the fetched payload remounts it to seed values via the
+    // constructor. See APIAccessTab for the paired destroyOnUnmount:false.
+    const formKey = JSON.stringify(resourceserver || {});
 
     // no longer generated from hapi-swagger, now static json
     const explorer = apiExplorer;
@@ -36,9 +41,10 @@ export default class RuleSettings extends Component {
             <Error message={error} />
             <LoadingPanel show={loading}>
               <div>
-                <Tabs animation={false}>
+                <Tabs>
                   <Tab eventKey={1} title="Settings">
                     <APIAccessTab
+                      key={formKey}
                       initialValues={initialValues}
                       onSubmit={this.props.saveConfigurationResourceServer}
                     />
