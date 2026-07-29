@@ -79,7 +79,7 @@ upload_assets() {
         exit 1
     fi
 
-    upload_to_s3 "$asset_local_path" "$asset_s3_path" "max-age=86400" "$web_path"
+    upload_to_s3 "$asset_local_path" "$asset_s3_path" "60" "$web_path"
   done
 }
 
