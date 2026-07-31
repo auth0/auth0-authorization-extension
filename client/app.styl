@@ -44,7 +44,13 @@
   outline 0
   border-color transparent
   box-shadow none
-  color inherit
+
+#sidebar .sidebar-item.active a,
+#sidebar .sidebar-item.active a:focus
+  color $color-red
+
+  .item-image
+    color $color-red
 
 // react-bootstrap v2 closeButtons (Modal.Header, dismissible Alert) render
 // `<button class="btn-close">` (Bootstrap 5), which shows its X via a
