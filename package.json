@@ -28,7 +28,6 @@
   "author": "Sandrino Di Mattia",
   "license": "MIT",
   "auth0-extension": {
-    "nodeTarget": "22",
     "externals": [
       "@hapi/boom@10.0.1",
       "@hapi/good@9.0.1",
