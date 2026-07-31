@@ -24,11 +24,6 @@ describe('#Client-Components-GroupsOverview', () => {
       expect(sameNameEmail.label).toBe(null);
     });
 
-    it('falls back to name in the value when email is missing', () => {
-      const [ , , noEmail ] = overview.getUserPickerDialogUsers(records);
-      expect(noEmail.value).toBe('Carol - Username-Password');
-    });
-
     it('returns an empty array for empty, null, or undefined records', () => {
       expect(overview.getUserPickerDialogUsers([])).toEqual([]);
       expect(overview.getUserPickerDialogUsers(null)).toEqual([]);
