@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 import PermissionRow from './PermissionRow';
-import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
+import { Table, TableBody, TableHeader, TableColumn } from '@a0/auth0-extension-ui';
 
 export default class PermissionTable extends Component {
   static propTypes = {

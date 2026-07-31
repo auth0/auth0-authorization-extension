@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import connectContainer from 'redux-static';
 import { configurationActions } from '../actions';
 import APISettings from '../components/API/APISettings';
@@ -18,7 +19,7 @@ export default connectContainer(class API extends Component {
     saveConfigurationResourceServer: PropTypes.func.isRequired
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchConfigurationResourceServer();
   }
 

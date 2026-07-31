@@ -1,9 +1,10 @@
 import path from 'path';
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 import { Field, formValueSelector } from 'redux-form';
 import { connect } from 'react-redux';
-import { InputText, InputSwitchItem } from 'auth0-extension-ui';
+import { InputText, InputSwitchItem } from '@a0/auth0-extension-ui';
 import createForm from '../../utils/createForm';
 
 const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Component {
@@ -59,7 +60,7 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
         <div className="row">
           <div className="col-xs-12">
             <div className="pull-right">
-              <Button bsStyle="primary" disabled={submitting} onClick={handleSubmit}>
+              <Button variant="primary" disabled={submitting} onClick={handleSubmit}>
                 Save
               </Button>
             </div>
@@ -68,7 +69,10 @@ const apiAccessForm = createForm('apiAccessForm', class ApiAccessForm extends Co
       </div>
     );
   }
-}, { enableReinitialize: true });
+// destroyOnUnmount:false: APISettings remounts this form (via key) to seed
+// values in the new instance's constructor; without this the outgoing
+// same-named instance fires DESTROY and wipes the freshly-initialized state.
+}, { enableReinitialize: true, destroyOnUnmount: false });
 
 // Decorate with connect to read form values
 const selector = formValueSelector('apiAccessForm');

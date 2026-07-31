@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import React, { PropTypes, Component } from 'react';
-import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Table, TableBody, TableHeader, TableColumn } from '@a0/auth0-extension-ui';
 
 import RoleRow from './RoleRow';
 

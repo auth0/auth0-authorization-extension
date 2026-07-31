@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button } from 'react-bootstrap';
 
 import UsersTable from '../Users/UsersTable';
 import GroupMemberRemoveAction from './GroupMemberRemoveAction';
-import { Pagination, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from 'auth0-extension-ui';
+import { Pagination, Table, TableCell, TableRouteCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow, LoadingPanel, Error } from '@a0/auth0-extension-ui';
 
 class GroupMembers extends Component {
   constructor() {
@@ -19,8 +20,8 @@ class GroupMembers extends Component {
       nextState.showGroupMembers !== this.state.showGroupMembers;
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (this.state.showGroupMembers && !nextState.showGroupMembers) {
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.showGroupMembers && !this.state.showGroupMembers) {
       this.props.getAllNestedMembersOnPage(this.props.groupId, 1);
     }
   }
@@ -118,7 +119,7 @@ class GroupMembers extends Component {
               <p>Add members to or remove them from the group.</p>
             </div>
             <div className="col-xs-4">
-              <Button className="pull-right" bsStyle="success" onClick={this.props.addMember} disabled={loading}>
+              <Button className="pull-right" variant="success" onClick={this.props.addMember} disabled={loading}>
                 <i className="icon icon-budicon-292" /> Add members
               </Button>
             </div>
@@ -165,13 +166,13 @@ class GroupMembers extends Component {
 }
 
 GroupMembers.propTypes = {
-  addMember: React.PropTypes.func.isRequired,
-  removeMember: React.PropTypes.func.isRequired,
-  members: React.PropTypes.object.isRequired,
-  nestedMembers: React.PropTypes.object.isRequired,
-  getGroupMembersOnPage: React.PropTypes.func.isRequired,
-  getAllNestedMembersOnPage: React.PropTypes.func.isRequired,
-  groupId: React.PropTypes.string.isRequired
+  addMember: PropTypes.func.isRequired,
+  removeMember: PropTypes.func.isRequired,
+  members: PropTypes.object.isRequired,
+  nestedMembers: PropTypes.object.isRequired,
+  getGroupMembersOnPage: PropTypes.func.isRequired,
+  getAllNestedMembersOnPage: PropTypes.func.isRequired,
+  groupId: PropTypes.string.isRequired
 };
 
 export default GroupMembers;

@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import connectContainer from 'redux-static';
 
 import * as actions from '../actions';
@@ -40,7 +41,7 @@ export default connectContainer(class extends Component {
     this.onSearch = this.onSearch.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchApplications();
     this.props.fetchPermissions();
   }

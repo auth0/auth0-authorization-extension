@@ -1,6 +1,7 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { TableCell, TableIconCell, TableTextCell, TableRow } from 'auth0-extension-ui';
+import { TableCell, TableIconCell, TableTextCell, TableRow } from '@a0/auth0-extension-ui';
 
 export default class PermissionRow extends Component {
   static propTypes = {

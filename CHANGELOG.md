@@ -1,3 +1,7 @@
+## [2.13.5] - 2026-07-28
+
+- Upgrade React and the dependent frontend stack.
+
 ## [2.13.0] - 2025-02-18
 
 - Update to run on node 22.13.1

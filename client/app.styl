@@ -1,5 +1,122 @@
 @import "../node_modules/auth0-styleguide/lib/vars";
 
+// react-bootstrap v2 emits Bootstrap-5 class names (it reveals faded elements by
+// toggling `.show`), but the page loads the legacy Auth0 styleguide (Bootstrap-3)
+// CSS, which only reveals `.fade` elements via `.in`. Without this shim modals,
+// backdrops and tab panes mount but stay at opacity:0 / translated off-screen,
+// so dialogs never appear and tabbed pages show only their tab headers.
+//
+// The legacy `manage` stylesheet gates the reveal on `.modal.in`
+// (`.modal.in`, `.modal.in .modal-dialog`), which react-bootstrap never sets, and
+// it holds the dialog at `opacity:0; transform:translateY(80%) scale(.8)`. These
+// rules re-point every one of those reveals at `.show` at matching-or-higher
+// specificity. !important guards against the styleguide's transition shorthands.
+.fade.show
+  opacity 1
+
+.modal.show
+  opacity 1
+  pointer-events auto
+
+.modal.show .modal-dialog
+  transform translate(0, 0) !important
+  opacity 1
+
+.modal-backdrop.fade.show
+  opacity 0.5
+
+// The `manage` stylesheet globally forces `.tab-content` to
+// `position:absolute; opacity:0; pointer-events:none` (leftover from a pricing
+// widget). react-bootstrap Tabs render their panes inside a `.tab-content`
+// wrapper, so that rule makes every tabbed page's body invisible and unclickable
+// — leaving only the tab headers. Restore the container to normal flow.
+.tab-content
+  position static
+  opacity 1
+  pointer-events auto
+
+// The styleguide's generic `:focus` rule (intended for form inputs) paints a
+// blue border + glow and `a:focus` recolors the text. Under react-router 6 the
+// sidebar <Link> anchor keeps :focus after a click (the old RR2/3 SidebarItem
+// did not), so the selected nav item gets an errant blue box. Suppress it just
+// for sidebar links.
+#sidebar .sidebar-item a:focus
+  outline 0
+  border-color transparent
+  box-shadow none
+
+#sidebar .sidebar-item.active a,
+#sidebar .sidebar-item.active a:focus
+  color $color-red
+
+  .item-image
+    color $color-red
+
+// react-bootstrap v2 closeButtons (Modal.Header, dismissible Alert) render
+// `<button class="btn-close">` (Bootstrap 5), which shows its X via a
+// background-image. The legacy styleguide has no `.btn-close` rule at all, so it
+// renders as a tiny empty box. Draw the X with a glyph like the old `.close`.
+.btn-close
+  width 24px
+  height 24px
+  padding 0
+  border 0
+  background transparent
+  opacity 0.4
+  font-size 0
+  cursor pointer
+
+  &:before
+    content "\00d7"
+    font-size 24px
+    line-height 24px
+    color $color-text
+
+  &:hover
+    opacity 0.8
+
+// Position each context like the old `.close` sat.
+.modal-header .btn-close
+  position absolute
+  top 15px
+  right 15px
+
+// The dismissible Alert's close button is absolutely positioned; anchor it to
+// the alert box and keep the message text clear of the glyph.
+.alert-dismissible
+  position relative
+  padding-right 36px
+
+.alert .btn-close
+  position absolute
+  top 8px
+  right 12px
+
+// react-bootstrap v2 Tabs render `<ul class="nav nav-tabs"><li class="nav-item">
+// <button class="nav-link">`, but the legacy styleguide only styles
+// `.nav-tabs > li > a`. The tab controls are now <button class="nav-link">, so
+// without this they show as default button boxes instead of underlined tabs
+// (User detail, Configuration, API pages). Restyle nav-link buttons as tabs.
+.nav-tabs
+  .nav-link
+    background transparent
+    border 0
+    border-radius 0
+    padding 6px 0
+    margin-right 28px
+    color $color-text-light
+    box-shadow none
+    outline 0
+
+    &:hover
+      color $color-text
+
+    &.active
+      color #44c7f4
+      background transparent
+      border 0
+      border-bottom 1px solid #44c7f4
+
 // Overwrite manage styles default button margin
 .alert .btn
   padding-top 5px

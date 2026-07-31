@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import { Error, LoadingPanel, Json, Confirm } from 'auth0-extension-ui';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { Error, LoadingPanel, Json, Confirm } from '@a0/auth0-extension-ui';
 import './ImportExport.styl';
 
 export default class ImportExportTab extends Component {
@@ -29,12 +30,16 @@ export default class ImportExportTab extends Component {
     document.body.removeChild(element);
   }
 
+  setFileRef = (node) => {
+    this.fileInput = node;
+  }
+
   importConfigOpen = () => {
-    this.refs.file.click();
+    this.fileInput.click();
   }
 
   importConfig = (e) => {
-    const file = this.refs.file.files[0];
+    const file = this.fileInput.files[0];
     if (file) {
       this.props.importConfigPrepare(file);
     }
@@ -46,7 +51,7 @@ export default class ImportExportTab extends Component {
   }
 
   closeImport = () => {
-    this.refs.file.value = '';
+    this.fileInput.value = '';
     this.props.closePreview();
   }
 
@@ -71,8 +76,8 @@ export default class ImportExportTab extends Component {
           <button className="btn btn-transparent btn-md" onClick={this.exportConfig}>Export</button>
           <button style={{ float: 'right' }} className="btn btn-success" onClick={this.importConfigOpen}>Import</button>
           <input
-            ref="file" type="file" id="fileLoader" name="files" title="Load File"
-            style={{ display: 'none' }} onChange={this.importConfig.bind(this)}
+            ref={this.setFileRef} type="file" id="fileLoader" name="files" title="Load File"
+            style={{ display: 'none' }} onChange={this.importConfig}
           />
         </LoadingPanel>
       </div>

@@ -20,6 +20,7 @@ const version = process.env.EXTENSION_VERSION || project.version;
 config.output.filename = `auth0-authz.ui.${version}.js`;
 
 config.resolve = {
+  alias: config.resolve.alias, // preserve base aliases (barrel dep stubs)
   extensions: [ '.js', '.jsx' ], // Add '.jsx' to the list of extensions to resolve
   fallback: {}
 };
@@ -35,7 +36,7 @@ config.module.rules = ([
     use: [
       MiniCssExtractPlugin.loader,
       'css-loader',
-      'postcss-loader'
+      path.resolve(__dirname, './fix-extension-ui-css-loader.js')
     ]
   },
   {
@@ -123,25 +124,26 @@ config.optimization = {
       manualVendors: {
         test: new RegExp(`[\\/]node_modules[\\/](${[
           '@babel/polyfill',
+          '@remix-run',
           'axios',
           'classnames',
-          'history',
           'immutable',
           'jwt-decode',
           'lodash',
           'moment',
+          'prop-types',
           'react',
           'react-bootstrap',
           'react-dom',
-          'react-loader-advanced',
           'react-router',
+          'react-router-dom',
+          'react-select',
           'react-redux',
           'redux',
           'redux-form',
           'redux-thunk',
           'redux-logger',
-          'redux-promise-middleware',
-          'redux-simple-router'
+          'redux-promise-middleware'
         ].join('|')})[\\/]`),
         chunks: 'all',
         enforce: true, // Ensure this chunk is created

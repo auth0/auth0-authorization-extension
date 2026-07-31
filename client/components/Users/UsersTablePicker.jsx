@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { ButtonToolbar } from 'react-bootstrap';
 
-import { TableActionCell, Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow, TableAction } from 'auth0-extension-ui';
+import { TableActionCell, Table, TableCell, TableRouteCell, TableBody, TableTextCell, TableHeader, TableColumn, TableRow, TableAction } from '@a0/auth0-extension-ui';
 
 class UsersTablePicker extends Component {
 
@@ -25,8 +26,8 @@ class UsersTablePicker extends Component {
 }
 
 UsersTablePicker.propTypes = {
-  users: React.PropTypes.array.isRequired,
-  loading: React.PropTypes.bool.isRequired
+  users: PropTypes.array.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default UsersTablePicker;

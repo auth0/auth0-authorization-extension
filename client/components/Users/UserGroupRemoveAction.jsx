@@ -1,5 +1,6 @@
-import React, { Component, PropTypes } from 'react';
-import { TableAction } from 'auth0-extension-ui';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { TableAction } from '@a0/auth0-extension-ui';
 
 class UserGroupRemoveAction extends Component {
   constructor() {

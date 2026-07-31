@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { EntityHeader } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { EntityHeader } from '@a0/auth0-extension-ui';
 import { GroupDeleteDialog, GroupDialog } from './';
 import { Button, ButtonToolbar, OverlayTrigger, Tooltip } from 'react-bootstrap';
 
@@ -69,13 +70,13 @@ class GroupHeader extends Component {
           secondaryText={this.getDescription(group)}
         >
           <OverlayTrigger placement="top" overlay={<Tooltip id="edit-group">Edit group</Tooltip>}>
-            <Button onClick={this.editGroup} className="table-action" bsSize="small">
+            <Button onClick={this.editGroup} className="table-action" variant="secondary" size="sm">
               <i className="icon icon-budicon-272" style={{ marginRight: 0 }} />
             </Button>
           </OverlayTrigger>
           <OverlayTrigger placement="top" overlay={<Tooltip id="delete-group">Delete group</Tooltip>}>
             <Button
-              onClick={this.requestDeleteGroup} className="table-action" bsSize="small"
+              onClick={this.requestDeleteGroup} className="table-action" variant="secondary" size="sm"
               style={{ marginLeft: '10px' }}
             >
               <i className="icon icon-budicon-471" style={{ marginRight: 0 }} />
@@ -88,18 +89,18 @@ class GroupHeader extends Component {
 }
 
 GroupHeader.propTypes = {
-  group: React.PropTypes.object.isRequired,
-  members: React.PropTypes.object.isRequired,
-  groupJSON: React.PropTypes.object.isRequired,
-  editGroup: React.PropTypes.func.isRequired,
-  updateGroup: React.PropTypes.func.isRequired,
-  closeUpdate: React.PropTypes.func.isRequired,
-  requestDeleteGroup: React.PropTypes.func.isRequired,
-  deleteGroup: React.PropTypes.func.isRequired,
-  closeDelete: React.PropTypes.func.isRequired,
-  fetchGroup: React.PropTypes.func.isRequired,
-  id: React.PropTypes.string.isRequired,
-  goToGroups: React.PropTypes.func.isRequired
+  group: PropTypes.object.isRequired,
+  members: PropTypes.object.isRequired,
+  groupJSON: PropTypes.object.isRequired,
+  editGroup: PropTypes.func.isRequired,
+  updateGroup: PropTypes.func.isRequired,
+  closeUpdate: PropTypes.func.isRequired,
+  requestDeleteGroup: PropTypes.func.isRequired,
+  deleteGroup: PropTypes.func.isRequired,
+  closeDelete: PropTypes.func.isRequired,
+  fetchGroup: PropTypes.func.isRequired,
+  id: PropTypes.string.isRequired,
+  goToGroups: PropTypes.func.isRequired
 };
 
 export default GroupHeader;

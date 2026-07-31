@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonToolbar } from 'react-bootstrap';
-import { Error, LoadingPanel, Table, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from 'auth0-extension-ui';
+import { Error, LoadingPanel, Table, TableCell, TableBody, TableIconCell, TableTextCell, TableHeader, TableColumn, TableRow } from '@a0/auth0-extension-ui';
 
 import { GroupMappingRemoveAction } from './';
 
@@ -28,7 +29,7 @@ class GroupMappings extends Component {
               </p>
             </div>
             <div className="col-xs-4">
-              <Button className="pull-right" bsStyle="success" onClick={this.props.createMapping} disabled={loading}>
+              <Button className="pull-right" variant="success" onClick={this.props.createMapping} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Create group mapping
               </Button>
             </div>
@@ -66,9 +67,9 @@ class GroupMappings extends Component {
 }
 
 GroupMappings.propTypes = {
-  createMapping: React.PropTypes.func.isRequired,
-  removeMapping: React.PropTypes.func.isRequired,
-  mappings: React.PropTypes.object.isRequired
+  createMapping: PropTypes.func.isRequired,
+  removeMapping: PropTypes.func.isRequired,
+  mappings: PropTypes.object.isRequired
 };
 
 export default GroupMappings;

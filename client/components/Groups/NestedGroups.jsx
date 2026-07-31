@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, ButtonToolbar } from 'react-bootstrap';
 
-import { LoadingPanel, Error } from 'auth0-extension-ui';
+import { LoadingPanel, Error } from '@a0/auth0-extension-ui';
 import GroupsTable from './GroupsTable';
 import NestedGroupRemoveAction from './NestedGroupRemoveAction';
 
@@ -38,7 +39,7 @@ class NestedGroups extends Component {
               </p>
             </div>
             <div className="col-xs-4">
-              <Button className="pull-right" bsStyle="success" onClick={this.props.addNestedGroup} disabled={loading}>
+              <Button className="pull-right" variant="success" onClick={this.props.addNestedGroup} disabled={loading}>
                 <i className="icon icon-budicon-473" /> Add nested group
               </Button>
             </div>
@@ -58,9 +59,9 @@ class NestedGroups extends Component {
 }
 
 NestedGroups.propTypes = {
-  addNestedGroup: React.PropTypes.func.isRequired,
-  removeNestedGroup: React.PropTypes.func.isRequired,
-  nested: React.PropTypes.object.isRequired
+  addNestedGroup: PropTypes.func.isRequired,
+  removeNestedGroup: PropTypes.func.isRequired,
+  nested: PropTypes.object.isRequired
 };
 
 export default NestedGroups;

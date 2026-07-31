@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
-import { Table, TableBody, TableHeader, TableColumn } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Table, TableBody, TableHeader, TableColumn } from '@a0/auth0-extension-ui';
 
 import GroupRowPicker from './GroupRowPicker';
 
@@ -61,12 +62,12 @@ class GroupsTablePicker extends Component {
 }
 
 GroupsTablePicker.propTypes = {
-  groups: React.PropTypes.object.isRequired,
-  excludedGroups: React.PropTypes.object.isRequired,
-  canOpenGroup: React.PropTypes.bool,
-  loading: React.PropTypes.bool.isRequired,
-  renderActions: React.PropTypes.func,
-  setNested: React.PropTypes.func.isRequired
+  groups: PropTypes.object.isRequired,
+  excludedGroups: PropTypes.object.isRequired,
+  canOpenGroup: PropTypes.bool,
+  loading: PropTypes.bool.isRequired,
+  renderActions: PropTypes.func,
+  setNested: PropTypes.func.isRequired
 };
 
 export default GroupsTablePicker;

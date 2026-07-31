@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Field } from 'redux-form';
 import { Button, Modal } from 'react-bootstrap';
-import { Multiselect } from 'auth0-extension-ui';
+import { Multiselect } from '@a0/auth0-extension-ui';
 
 import createForm from '../../utils/createForm';
 
@@ -11,14 +12,14 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
   static propTypes = {
     group: PropTypes.object.isRequired,
     onClose: PropTypes.func,
-    fetchUsers: React.PropTypes.func.isRequired,
-    resetFetchUsers: React.PropTypes.func.isRequired,
-    totalUsers: React.PropTypes.number,
-    users: React.PropTypes.array,
-    loading: React.PropTypes.bool.isRequired,
-    submitting: React.PropTypes.bool,
-    handleSubmit: React.PropTypes.func.isRequired,
-    reset: React.PropTypes.func.isRequired
+    fetchUsers: PropTypes.func.isRequired,
+    resetFetchUsers: PropTypes.func.isRequired,
+    totalUsers: PropTypes.number,
+    users: PropTypes.array,
+    loading: PropTypes.bool.isRequired,
+    submitting: PropTypes.bool,
+    handleSubmit: PropTypes.func.isRequired,
+    reset: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -32,12 +33,7 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
     const query = useSEv3
       ? `name:${input}* OR email:${input}*`
       : `name:${input}* OR email.raw:${input}* OR user_metadata.name:${input}*`;
-    this.props.fetchUsers(query, null, true, null, null, () => {
-      callback(null, {
-        options: this.props.users,
-        complete: false
-      });
-    });
+    this.props.fetchUsers(query, null, true, null, null, callback);
   }
 
   onClose() {
@@ -77,10 +73,10 @@ export default createForm('groupMembers', class GroupMembersDialog extends React
           </form>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="large" bsStyle="transparent" disabled={group.loading || group.submitting} onClick={this.onClose}>
+          <Button size="lg" variant="transparent" disabled={group.loading || group.submitting} onClick={this.onClose}>
             Cancel
           </Button>
-          <Button bsSize="large" bsStyle="primary" disabled={group.loading || group.submitting} onClick={this.handleSubmit}>
+          <Button size="lg" variant="primary" disabled={group.loading || group.submitting} onClick={this.handleSubmit}>
             Save
           </Button>
         </Modal.Footer>

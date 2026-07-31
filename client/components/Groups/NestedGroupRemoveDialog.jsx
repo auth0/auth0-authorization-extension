@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Error, Confirm, LoadingPanel } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Error, Confirm, LoadingPanel } from '@a0/auth0-extension-ui';
 
 class NestedGroupRemoveDialog extends Component {
   constructor() {
@@ -38,9 +39,9 @@ class NestedGroupRemoveDialog extends Component {
 }
 
 NestedGroupRemoveDialog.propTypes = {
-  groupNested: React.PropTypes.object.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
-  onConfirm: React.PropTypes.func.isRequired
+  groupNested: PropTypes.object.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired
 };
 
 export default NestedGroupRemoveDialog;

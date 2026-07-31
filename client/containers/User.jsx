@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Tabs, Tab } from 'react-bootstrap';
 
@@ -25,7 +26,7 @@ export class UserContainer extends Component {
     this.requestRemoveMember = this.requestRemoveMember.bind(this);
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchRoles();
     this.props.fetchUser(this.props.params.id);
     this.props.fetchRolesForUser(this.props.params.id);
@@ -89,7 +90,7 @@ export class UserContainer extends Component {
         </div>
         <div className="row">
           <div className="col-xs-12">
-            <Tabs onSelect={this.onTabChanged} defaultActiveKey={this.state.selectedTab} animation={false} style={{ marginTop: '20px' }} id="user-tabs">
+            <Tabs onSelect={this.onTabChanged} defaultActiveKey={this.state.selectedTab} style={{ marginTop: '20px' }} id="user-tabs">
               <Tab eventKey={1} title="Profile">
                 <UserProfile loading={user.loading} user={user.record} error={user.error} />
               </Tab>
@@ -144,36 +145,36 @@ function mapStateToProps(state) {
 }
 
 UserContainer.propTypes = {
-  group: React.PropTypes.object,
-  fetchGroup: React.PropTypes.func,
-  fetchRoles: React.PropTypes.func.isRequired,
-  fetchUser: React.PropTypes.func.isRequired,
-  fetchAllRolesForUser: React.PropTypes.func.isRequired,
-  fetchApplications: React.PropTypes.func.isRequired,
-  openGroupPicker: React.PropTypes.func.isRequired,
-  addUserToGroups: React.PropTypes.func.isRequired,
-  fetchUserGroups: React.PropTypes.func.isRequired,
-  cancelRemoveGroupMember: React.PropTypes.func.isRequired,
-  removeGroupMember: React.PropTypes.func.isRequired,
-  requestRemoveGroupMember: React.PropTypes.func.isRequired,
-  addRoles: React.PropTypes.func.isRequired,
-  openAddRoles: React.PropTypes.func.isRequired,
-  closeAddRoles: React.PropTypes.func.isRequired,
-  saveUserRoles: React.PropTypes.func.isRequired,
-  requestDeleteUserRole: React.PropTypes.func.isRequired,
-  cancelDeleteUserRole: React.PropTypes.func.isRequired,
-  deleteUserRole: React.PropTypes.func.isRequired,
-  fetchRolesForUser: React.PropTypes.func.isRequired,
-  cancelGroupPicker: React.PropTypes.func.isRequired,
-  roles: React.PropTypes.object.isRequired,
-  userRoles: React.PropTypes.object.isRequired,
-  applications: React.PropTypes.object.isRequired,
-  params: React.PropTypes.object.isRequired,
-  user: React.PropTypes.object.isRequired,
-  groups: React.PropTypes.object.isRequired,
-  allGroups: React.PropTypes.object.isRequired,
-  groupPicker: React.PropTypes.object.isRequired,
-  groupMember: React.PropTypes.object.isRequired
+  group: PropTypes.object,
+  fetchGroup: PropTypes.func,
+  fetchRoles: PropTypes.func.isRequired,
+  fetchUser: PropTypes.func.isRequired,
+  fetchAllRolesForUser: PropTypes.func.isRequired,
+  fetchApplications: PropTypes.func.isRequired,
+  openGroupPicker: PropTypes.func.isRequired,
+  addUserToGroups: PropTypes.func.isRequired,
+  fetchUserGroups: PropTypes.func.isRequired,
+  cancelRemoveGroupMember: PropTypes.func.isRequired,
+  removeGroupMember: PropTypes.func.isRequired,
+  requestRemoveGroupMember: PropTypes.func.isRequired,
+  addRoles: PropTypes.func.isRequired,
+  openAddRoles: PropTypes.func.isRequired,
+  closeAddRoles: PropTypes.func.isRequired,
+  saveUserRoles: PropTypes.func.isRequired,
+  requestDeleteUserRole: PropTypes.func.isRequired,
+  cancelDeleteUserRole: PropTypes.func.isRequired,
+  deleteUserRole: PropTypes.func.isRequired,
+  fetchRolesForUser: PropTypes.func.isRequired,
+  cancelGroupPicker: PropTypes.func.isRequired,
+  roles: PropTypes.object.isRequired,
+  userRoles: PropTypes.object.isRequired,
+  applications: PropTypes.object.isRequired,
+  params: PropTypes.object.isRequired,
+  user: PropTypes.object.isRequired,
+  groups: PropTypes.object.isRequired,
+  allGroups: PropTypes.object.isRequired,
+  groupPicker: PropTypes.object.isRequired,
+  groupMember: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps, { ...groupPickerActions, ...groupMemberActions, ...userActions, ...userGroupActions, ...applicationActions, ...roleActions })(UserContainer);

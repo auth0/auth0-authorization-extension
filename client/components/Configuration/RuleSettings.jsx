@@ -1,6 +1,7 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Tabs, Tab } from 'react-bootstrap';
-import { Error, LoadingPanel, SectionHeader } from 'auth0-extension-ui';
+import { Error, LoadingPanel, SectionHeader } from '@a0/auth0-extension-ui';
 
 import RuleConfigurationTab from './RuleConfigurationTab';
 import ImportExportTab from './ImportExportTab';
@@ -23,6 +24,9 @@ export default class RuleSettings extends Component {
   render() {
     const { loading, error, record, hash, activeTab } = this.props.configuration.toJS();
     const importExport = this.props.importExport;
+    // See APISettings: key the form on the fetched record to remount it so
+    // redux-form seeds the toggles via the constructor under React 18.
+    const formKey = JSON.stringify(record || {});
     return (
       <div>
         <SectionHeader
@@ -35,9 +39,9 @@ export default class RuleSettings extends Component {
             <Error message={error} />
             <LoadingPanel show={loading}>
               <div>
-                <Tabs id="tabs" defaultActiveKey={activeTab} animation={false}>
+                <Tabs id="tabs" defaultActiveKey={activeTab}>
                   <Tab eventKey={1} title="Rule Configuration">
-                    <RuleConfigurationTab initialValues={record} hash={hash} onSubmit={this.props.saveConfiguration} rotateApiKey={this.props.rotateApiKey} />
+                    <RuleConfigurationTab key={formKey} initialValues={record} hash={hash} onSubmit={this.props.saveConfiguration} rotateApiKey={this.props.rotateApiKey} />
                   </Tab>
                   <Tab eventKey={2} title="Import / Export">
                     <ImportExportTab

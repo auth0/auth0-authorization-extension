@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { TableCell, TableRouteCell, TableTextCell, TableRow } from 'auth0-extension-ui';
+import { TableCell, TableRouteCell, TableTextCell, TableRow } from '@a0/auth0-extension-ui';
 
 class GroupRowPicker extends Component {
   shouldComponentUpdate(nextProps) {
@@ -31,11 +32,11 @@ class GroupRowPicker extends Component {
 }
 
 GroupRowPicker.propTypes = {
-  loading: React.PropTypes.bool,
-  index: React.PropTypes.number.isRequired,
-  canOpenGroup: React.PropTypes.bool,
-  group: React.PropTypes.object.isRequired,
-  setNested: React.PropTypes.func.isRequired
+  loading: PropTypes.bool,
+  index: PropTypes.number.isRequired,
+  canOpenGroup: PropTypes.bool,
+  group: PropTypes.object.isRequired,
+  setNested: PropTypes.func.isRequired
 };
 
 export default GroupRowPicker;

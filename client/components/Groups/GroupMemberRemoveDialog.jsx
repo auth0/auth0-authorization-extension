@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Error, Confirm, LoadingPanel } from 'auth0-extension-ui';
+import PropTypes from 'prop-types';
+import { Error, Confirm, LoadingPanel } from '@a0/auth0-extension-ui';
 
 class GroupMemberRemoveDialog extends Component {
   constructor() {
@@ -36,9 +37,9 @@ class GroupMemberRemoveDialog extends Component {
 }
 
 GroupMemberRemoveDialog.propTypes = {
-  groupMember: React.PropTypes.object.isRequired,
-  onCancel: React.PropTypes.func.isRequired,
-  onConfirm: React.PropTypes.func.isRequired
+  groupMember: PropTypes.object.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired
 };
 
 export default GroupMemberRemoveDialog;

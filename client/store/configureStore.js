@@ -2,16 +2,16 @@ import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise-middleware';
 import { compose, createStore, applyMiddleware } from 'redux';
-import { promiseSuccessMiddleware, normalizeErrorMiddleware } from 'auth0-extension-ui-redux';
+import promiseSuccessMiddleware from './middlewares/promiseSuccessMiddleware';
+import normalizeErrorMiddleware from './middlewares/normalizeErrorMiddleware';
 
 import rootReducer from '../reducers';
-import DevTools from '../containers/DevTools.jsx';
 
 
 export default function configureStore(middlewares, initialState = { }) {
   const pipeline = [
     applyMiddleware(
-      promiseMiddleware(),
+      promiseMiddleware,
       thunkMiddleware,
       normalizeErrorMiddleware(),
       promiseSuccessMiddleware(),
@@ -22,8 +22,11 @@ export default function configureStore(middlewares, initialState = { }) {
     )
   ];
 
-  if (process.env.NODE_ENV !== 'production') {
-    pipeline.push(DevTools.instrument());
+  // Wire the Redux DevTools browser extension in development.
+  if (process.env.NODE_ENV !== 'production' &&
+      typeof window !== 'undefined' &&
+      window.__REDUX_DEVTOOLS_EXTENSION__) {
+    pipeline.push(window.__REDUX_DEVTOOLS_EXTENSION__());
   }
 
   const finalCreateStore = compose(...pipeline)(createStore);

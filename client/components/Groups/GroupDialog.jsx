@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Modal } from 'react-bootstrap';
 
-import { Error } from 'auth0-extension-ui';
+import { Error } from '@a0/auth0-extension-ui';
 import GroupForm from './GroupForm';
 
 class GroupDialog extends Component {
@@ -35,10 +36,10 @@ class GroupDialog extends Component {
 }
 
 GroupDialog.propTypes = {
-  onSave: React.PropTypes.func.isRequired,
-  onClose: React.PropTypes.func.isRequired,
-  group: React.PropTypes.object.isRequired,
-  applications: React.PropTypes.array.isRequired
+  onSave: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  group: PropTypes.object.isRequired,
+  applications: PropTypes.array.isRequired
 };
 
 export default GroupDialog;

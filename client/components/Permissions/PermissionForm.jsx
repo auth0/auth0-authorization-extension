@@ -1,9 +1,10 @@
-import React, { PropTypes, Component } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Modal } from 'react-bootstrap';
 import { Field } from 'redux-form';
 
 import createForm from '../../utils/createForm';
-import { InputText, InputCombo, LoadingPanel } from 'auth0-extension-ui';
+import { InputText, InputCombo, LoadingPanel } from '@a0/auth0-extension-ui';
 
 export default createForm('permission', class extends Component {
   static propTypes = {
@@ -49,8 +50,8 @@ export default createForm('permission', class extends Component {
           </LoadingPanel>
         </Modal.Body>
         <Modal.Footer>
-          <Button bsSize="large" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
-          <Button bsStyle="primary" bsSize="large" disabled={loading || submitting} onClick={handleSubmit}> { isNew ? 'Create' : 'Save' } </Button>
+          <Button size="lg" variant="transparent" disabled={loading || submitting} onClick={this.props.onClose}> Cancel </Button>
+          <Button variant="primary" size="lg" disabled={loading || submitting} onClick={handleSubmit}> { isNew ? 'Create' : 'Save' } </Button>
         </Modal.Footer>
       </div>
     );
