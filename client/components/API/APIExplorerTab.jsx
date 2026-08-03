@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import uuid from 'node-uuid';
+import { v4 as uuidv4 } from 'uuid';
 import './APIExplorerTab.styl';
 
 export default class APIExplorer extends Component {
@@ -34,7 +34,7 @@ export default class APIExplorer extends Component {
 
   renderType(name, type) {
     if (name === 'guid') {
-      return `"${uuid.v4()}"`;
+      return `"${uuidv4()}"`;
     } else if (type === 'string') {
       return `"My ${name}"`;
     } else if (type === 'integer') {
@@ -116,10 +116,10 @@ export default class APIExplorer extends Component {
   }
 
   renderPath(path) {
-    // replace ids by uuid.v4()
-    return path.replace('{id}', uuid.v4())
-        .replace('{clientId}', uuid.v4())
-        .replace('{userId}', uuid.v4());
+    // replace ids by uuidv4()
+    return path.replace('{id}', uuidv4())
+        .replace('{clientId}', uuidv4())
+        .replace('{userId}', uuidv4());
   }
 
   renderEndpoints(paths, definitions) {

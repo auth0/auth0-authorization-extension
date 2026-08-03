@@ -5,6 +5,10 @@ process.env.NODE_ENV = 'test';
 // before our tests run.
 require('@babel/register')();
 
+// Warm the ESM-only uuid module before babel's transpiled requires hit it
+// re-entrantly (otherwise: "Unexpected module status 0").
+require('uuid');
+
 // Stub style imports so requiring UI components under Node doesn't try to
 // parse CSS/Stylus as JavaScript (webpack handles these in real builds).
 const noop = () => ({});
