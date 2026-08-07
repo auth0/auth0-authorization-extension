@@ -1,5 +1,3 @@
-import { initHapiServer } from './server';
-
 const path = require('path');
 const nconf = require('nconf');
 
@@ -10,7 +8,9 @@ require('@babel/register')({
   ignore: [ /node_modules/ ],
   sourceMaps: !(process.env.NODE_ENV === 'production')
 });
-require('@babel/polyfill');
+
+// Require after @babel/register so the ESM/JSX server code transpiles.
+const initHapiServer = require('./server/init').default;
 
 // Initialize configuration.
 nconf
@@ -28,12 +28,8 @@ nconf
   });
 
 // Start the server.
-initHapiServer.then((err, server) => {
-  if (err) {
-    return logger.error(err);
-  }
-
-  return server.start(() => {
+initHapiServer((key) => nconf.get(key), null)
+  .then((server) => server.start().then(() => {
     logger.info('Server running at:', server.info.uri);
-  });
-});
+  }))
+  .catch((err) => logger.error(err));

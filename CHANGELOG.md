@@ -1,3 +1,11 @@
+## [2.13.7] - 2026-08-07
+
+- Replace node-uuid with uuid.
+
+## [2.13.6] - 2026-08-07
+
+- Includes internal refactoring for local-setup.
+
 ## [2.13.5] - 2026-07-28
 
 - Upgrade React and the dependent frontend stack.
