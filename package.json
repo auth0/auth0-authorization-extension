@@ -1,6 +1,6 @@
 {
   "name": "auth0-authz",
-  "version": "2.13.6",
+  "version": "2.13.7",
   "description": "Auth0 Authorization Extension",
   "engines": {
     "node": "22.13.1"
@@ -43,7 +43,7 @@
       "lru-memoizer@2.2.0",
       "moment@2.29.4",
       "nconf@0.12.0",
-      "node-uuid@1.4.8",
+      "uuid@14.0.1",
       "superagent@10.2.3",
       "winston@3.10.0",
       "@aws-sdk/client-s3@3.738.0"
@@ -77,9 +77,9 @@
     "lru-memoizer": "2.2.0",
     "moment": "^2.29.4",
     "nconf": "^0.12.0",
-    "node-uuid": "^1.4.8",
     "prop-types": "^15.8.1",
     "superagent": "^10.2.3",
+    "uuid": "14.0.1",
     "winston": "^3.10.0"
   },
   "devDependencies": {

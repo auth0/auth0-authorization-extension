@@ -1,4 +1,4 @@
-import uuid from 'node-uuid';
+import { v4 as uuidv4 } from 'uuid';
 import schema from '../schemas/mappings';
 
 export default () => ({
@@ -29,7 +29,7 @@ export default () => ({
 
     mappings.forEach(mapping => {
       group.mappings.push({
-        _id: uuid.v4(),
+        _id: uuidv4(),
         groupName: mapping.groupName,
         connectionName: mapping.connectionName
       });
