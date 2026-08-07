@@ -26,6 +26,28 @@ const findCookie = function(cookie, value) {
   return Array.isArray(cookie) ? cookie.indexOf(value) === -1 : cookie !== value;
 };
 
+const createSessionManager = function(options) {
+  if (process.env.NODE_ENV === 'development') {
+    return new SessionManager(options.rta, options.domain, config('AUTH0_CLIENT_ID'));
+  }
+
+  return new SessionManager(options.rta, options.domain, options.baseUrl);
+};
+
+const getJwtVerifyOptions = function() {
+  const verifyOptions = {
+    audience: config('PUBLIC_WT_URL'),
+    issuer: `${config('AUTH0_RTA')}/`,
+    algorithms: [ 'RS256' ]
+  };
+
+  if (process.env.NODE_ENV === 'development') {
+    verifyOptions.audience = config('AUTH0_CLIENT_ID');
+  }
+
+  return verifyOptions;
+};
+
 const register = async function(server, options) {
   if (!options || typeof options !== 'object') {
     return new ArgumentError('Must provide the options');
@@ -87,7 +109,8 @@ const register = async function(server, options) {
   const nonceKey = options.nonceKey || 'nonce';
   const urlPrefix = options.urlPrefix || '';
   const sessionStorageKey = options.sessionStorageKey || 'apiToken';
-  const sessionManager = options.sessionManager || new SessionManager(options.rta, options.domain, options.baseUrl);
+  const sessionManager = options.sessionManager || createSessionManager(options);
+
   const basicCookieAttr = {
     isHttpOnly: true
   };
@@ -152,11 +175,7 @@ const register = async function(server, options) {
         }
 
         // this token is issued by the RTA
-        const verifyOptions = {
-          audience: config('PUBLIC_WT_URL'),
-          issuer: `${config('AUTH0_RTA')}/`,
-          algorithms: [ 'RS256' ]
-        };
+        const verifyOptions = getJwtVerifyOptions();
 
         // // throws on failure
         await jwtVerifyAsync(idToken, key, verifyOptions);

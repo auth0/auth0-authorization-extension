@@ -39,11 +39,12 @@ const assembleHtmlRoute = (link) => ({
       return h.response(ejs.render(template, {
         config: {
           ...cfg,
-          API_BASE: 'http://localhost:3000/'
+          API_BASE: getBaseUrl(req),
+          EXTENSION_VERSION: config('CLIENT_VERSION') || 'dev'
         },
         assets: {
-          app: '/app/bundle.js'
-          // app: '/app/auth0-authz.ui.2.12.0.js'
+          app: `http://localhost:3001/app/bundle.js`,
+          style: `http://localhost:3001/app/bundle.css`
         }
       }));
     }

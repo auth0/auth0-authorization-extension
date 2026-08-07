@@ -23,7 +23,7 @@ module.exports.getBasePath = function(req) {
 module.exports.getBaseUrl = function(req, protocol) {
   const originalUrl = url.parse(req.originalUrl || '').pathname || '';
   return url.format({
-    protocol: protocol || 'https',
+    protocol: protocol || (process.env.NODE_ENV === 'development' ? 'http' : 'https'),
     host: req.headers.host,
     pathname: originalUrl.replace(req.path, '').replace(/\/$/g, '')
   });

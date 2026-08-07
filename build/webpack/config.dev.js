@@ -3,9 +3,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const WEBPACK_HOST = 'localhost';
-const WEBPACK_PORT = 3000;
+const WEBPACK_PORT = 3001;
 
 // Override base configuration.
 const config = require('./config.base.js');
@@ -16,13 +17,17 @@ config.entry = [
   'webpack/hot/only-dev-server',
   config.entry.app
 ];
-config.output.publicPath = `http://localhost:3000${config.output.publicPath}`;
+config.output.publicPath = `http://localhost:${WEBPACK_PORT}${config.output.publicPath}`;
 
 // Stats configuration.
 config.stats = {
   colors: true,
   reasons: true
 };
+
+// The dev HTML (server/plugins/html.js) loads /app/bundle.js, so pin the name.
+config.output.filename = 'bundle.js';
+config.resolve.extensions = [ '.js', '.jsx', '.json' ];
 
 config.resolve.fallback = {
   crypto: require.resolve('crypto-browserify'),
@@ -39,14 +44,14 @@ config.module = {
     {
       test: /\.css$/,
       use: [
-        'style-loader',
+        MiniCssExtractPlugin.loader,
         'css-loader',
         path.resolve(__dirname, './fix-extension-ui-css-loader.js')
       ]
     },
     {
       test: /\.styl$/,
-      use: [ 'style-loader', 'css-loader', 'stylus-loader' ]
+      use: [ MiniCssExtractPlugin.loader, 'css-loader', 'stylus-loader' ]
     },
     { test: /\.m?js/, resolve: { fullySpecified: false } }
   ]
@@ -71,7 +76,8 @@ config.plugins = config.plugins.concat([
   new webpack.ProvidePlugin({
     process: 'process/browser'
   }),
-  new NodePolyfillPlugin()
+  new NodePolyfillPlugin(),
+  new MiniCssExtractPlugin({ filename: 'bundle.css' })
 ]);
 
 
