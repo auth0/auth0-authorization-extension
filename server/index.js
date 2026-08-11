@@ -30,7 +30,10 @@ export default async () => {
   }
 
   const server = new Hapi.Server({
-    host: 'localhost',
+    // In dev bind all interfaces so the Vivaldi nginx container can reach the
+    // listener via host.docker.internal (a non-loopback host IP). Prod runs as
+    // a webtask and never hits this path.
+    host: process.env.NODE_ENV === 'development' ? '0.0.0.0' : 'localhost',
     port: 3000,
     routes: { cors: true }
   });

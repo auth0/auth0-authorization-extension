@@ -1,0 +1,6 @@
+{
+  "AUTH0_DOMAIN": "your-tenant.auth0.com",
+  "AUTH0_CLIENT_ID": "m2m-client-id-with-authz-api-grant",
+  "AUTH0_CLIENT_SECRET": "m2m-client-secret",
+  "AUTHZ_API_URL": "http://localhost:3000/api"
+}

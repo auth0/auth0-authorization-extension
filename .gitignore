@@ -8,8 +8,8 @@ server/db.json
 server/data.json
 server/config.json
 server/local.config.json
+tests/integration/config.json
 build/extension/bundle-size.json
-server/config.json
 scripts/script-settings.json
 coverage
 build/bundle.js
