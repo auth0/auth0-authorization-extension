@@ -29,7 +29,6 @@ const options = {
   },
   port: 3001,
   host: '0.0.0.0',
-  open: [ '/login' ],
   onListening: function(devServer) {
     if (!devServer) {
       throw new Error('webpack-dev-server is not defined');

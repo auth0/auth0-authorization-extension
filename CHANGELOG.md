@@ -1,3 +1,7 @@
+## [2.13.7] - 2026-08-15
+
+- Internal maintenance.
+
 ## [2.13.6] - 2026-08-10
 
 - Update internal dependencies.
