@@ -1,3 +1,7 @@
+## [2.13.6] - 2026-08-10
+
+- Update internal dependencies.
+
 ## [2.13.5] - 2026-07-28
 
 - Upgrade React and the dependent frontend stack.
