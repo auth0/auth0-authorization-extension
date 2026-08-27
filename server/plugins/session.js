@@ -28,7 +28,7 @@ const findCookie = function(cookie, value) {
 
 const createSessionManager = function(options) {
   if (process.env.NODE_ENV === 'development') {
-    return new SessionManager(options.rta, options.domain, config('AUTH0_CLIENT_ID'));
+    return new SessionManager(options.rta, options.domain, config('RTA_CLIENT_ID'));
   }
 
   return new SessionManager(options.rta, options.domain, options.baseUrl);
@@ -42,7 +42,7 @@ const getJwtVerifyOptions = function() {
   };
 
   if (process.env.NODE_ENV === 'development') {
-    verifyOptions.audience = config('AUTH0_CLIENT_ID');
+    verifyOptions.audience = config('RTA_CLIENT_ID');
   }
 
   return verifyOptions;

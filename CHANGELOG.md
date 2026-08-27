@@ -1,10 +1,14 @@
-## [2.13.7] - 2026-08-07
+## [2.13.8] - 2026-08-07
 
-- Replace node-uuid with uuid.
+- Dependencies update.
 
-## [2.13.6] - 2026-08-07
+## [2.13.7] - 2026-08-15
 
-- Includes internal refactoring for local-setup.
+- Internal maintenance.
+
+## [2.13.6] - 2026-08-10
+
+- Update internal dependencies.
 
 ## [2.13.5] - 2026-07-28
 

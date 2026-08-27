@@ -27,7 +27,7 @@ function createProvider(storageContext) {
 
       const context = storageContext
           ? new WebtaskStorageContext(storageContext, { force: 0 })
-          : new FileStorageContext(path.join(__dirname, '../../data.json'), { mergeWrites: true });
+          : new FileStorageContext(path.join(__dirname, '../../data.json'), { mergeWrites: false });
 
       return new BlobRecordProvider(context, { concurrentWrites: false });
     }

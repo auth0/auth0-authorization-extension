@@ -32,7 +32,7 @@
       "@hapi/boom@10.0.1",
       "@hapi/good@9.0.1",
       "@hapi/good-console@9.0.1",
-      "@hapi/hapi@21.3.3",
+      "@hapi/hapi@21.4.9",
       "async@2.6.4",
       "blipp@4.0.2",
       "ejs@3.1.9",
@@ -43,10 +43,10 @@
       "lru-memoizer@2.2.0",
       "moment@2.29.4",
       "nconf@0.12.0",
-      "uuid@14.0.1",
       "superagent@10.2.3",
       "winston@3.10.0",
-      "@aws-sdk/client-s3@3.738.0"
+      "@aws-sdk/client-s3@3.1064.0",
+      "uuid@14.0.1"
     ],
     "settings": {
       "WARN_DB_SIZE": 409600,
@@ -57,11 +57,11 @@
   },
   "dependencies": {
     "@a0/auth0-extension-ui": "1.0.1",
-    "@aws-sdk/client-s3": "3.738.0",
+    "@aws-sdk/client-s3": "3.1064.0",
     "@hapi/boom": "10.0.1",
     "@hapi/good": "9.0.1",
     "@hapi/good-console": "9.0.1",
-    "@hapi/hapi": "21.3.3",
+    "@hapi/hapi": "21.4.9",
     "@hapi/inert": "7.1.0",
     "async": "2.6.4",
     "auth0": "4.9.0",
