@@ -63,7 +63,7 @@
     "@hapi/good-console": "9.0.1",
     "@hapi/hapi": "21.4.9",
     "@hapi/inert": "7.1.0",
-    "async": "2.6.4",
+    "async": "3.0.0",
     "auth0": "4.9.0",
     "axios": "1.16.1",
     "blipp": "^4.0.2",
