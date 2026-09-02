@@ -1,4 +1,4 @@
-const uuid = require('node-uuid');
+const { v4: uuidv4 } = require('uuid');
 
 const seriesQueue = require('./seriesQueue');
 const ArgumentError = require('../../errors').ArgumentError;
@@ -155,7 +155,7 @@ BlobRecordProvider.prototype.create = function(collectionName, record) {
     return getDataForCollection(storageContext, collectionName)
       .then(function(data) {
         if (!record._id) {
-          record._id = uuid.v4();
+          record._id = uuidv4();
         }
 
         const index = data[collectionName].findIndex(function(r) { return r._id === record._id; });

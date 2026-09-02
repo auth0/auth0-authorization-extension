@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import uuid from 'node-uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 import { getServerData } from '../server';
 import { getToken } from '../mocks/tokens';
@@ -84,7 +84,7 @@ describe('groups-route', async () => {
     db.getGroups = () => Promise.resolve(groups);
     db.getRoles = () => Promise.resolve(roles);
     db.getPermissions = () => Promise.resolve(permissions);
-    db.hash = uuid.v4();
+    db.hash = uuidv4();
     db.updateGroup = null;
   });
 

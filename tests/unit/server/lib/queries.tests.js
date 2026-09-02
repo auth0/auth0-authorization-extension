@@ -1,4 +1,4 @@
-import uuid from 'node-uuid';
+import { v4 as uuidv4 } from 'uuid';
 import { expect } from 'chai';
 import {
 
@@ -8,7 +8,7 @@ getGroupExpanded
 } from '../../../../server/lib/queries';
 
 const mockDatabase = (groups, roles, permissions) => ({
-  hash: uuid.v4(),
+  hash: uuidv4(),
   getGroup: () =>
   new Promise((resolve) => {
     resolve(groups[0]);
@@ -28,7 +28,7 @@ const mockDatabase = (groups, roles, permissions) => ({
 });
 
 const mockConnections = (connections) => ({
-  hash: uuid.v4(),
+  hash: uuidv4(),
   connections: {
     getAll: () =>
     new Promise((resolve) => {
