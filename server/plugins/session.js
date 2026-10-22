@@ -187,6 +187,11 @@ const register = async function(server, options) {
         return Boom.unauthorized('Invalid token');
       }
 
+
+      if (!req.state || (!req.state[nonceKey] && !req.state[nonceKey + '_compat'])) {
+        return Boom.badRequest('Missing nonce cookie');
+      }
+
       // handle multiple cookies with same name
       if (
         (
@@ -199,6 +204,10 @@ const register = async function(server, options) {
         )
       ) {
         return Boom.badRequest('Nonce mismatch');
+      }
+
+       if (!req.state || (!req.state[stateKey] && !req.state[stateKey + '_compat'])) {
+        return Boom.badRequest('Missing state cookie');
       }
 
       if (
