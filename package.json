@@ -3,7 +3,7 @@
   "version": "2.13.8",
   "description": "Auth0 Authorization Extension",
   "engines": {
-    "node": "22.13.1"
+    "node": "22.23.4"
   },
   "main": "server.js",
   "scripts": {
