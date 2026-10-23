@@ -75,7 +75,7 @@
     "jwks-rsa": "^3.0.1",
     "lodash": "^4.17.21",
     "lru-memoizer": "2.2.0",
-    "moment": "^2.29.4",
+    "moment": "^2.31.0",
     "nconf": "^0.12.0",
     "prop-types": "^15.8.1",
     "superagent": "^10.2.3",
