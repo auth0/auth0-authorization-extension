@@ -22,12 +22,20 @@ Things to check if integration tests are failing:
  * Get an access token for the Authorization Extension API.
  */
 export const getAccessToken = async () => {
-  const result = await request
-    .post(`https://${config('AUTH0_DOMAIN')}/oauth/token`)
-    .send(credentials)
-    .set('Content-Type', 'application/json');
-  
-  return result.body.access_token;
+  try {
+    const result = await request
+      .post(`https://${config("AUTH0_DOMAIN")}/oauth/token`)
+      .send(credentials)
+      .set("Content-Type", "application/json");
+
+    return result.body.access_token;
+  } catch (error) {
+    if (error?.response?.error?.text) {
+      console.log(JSON.parse(error?.response?.error?.text));
+    } else {
+      console.log(error);
+    }
+  }
 };
 
 export const authzApi = (endpoint) => (config('AUTHZ_API_URL') + endpoint);
