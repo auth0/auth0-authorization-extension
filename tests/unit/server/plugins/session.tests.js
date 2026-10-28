@@ -4,6 +4,7 @@ import certs from '../../mocks/certs.json';
 import { wellKnownEndpoint, sign } from '../../mocks/tokens';
 import config from '../../../../server/lib/config';
 import { getServerData } from '../../server';
+import SessionManager from '../../../../server/lib/auth0/SessionManager';
 
 const RTA_DOMAIN = 'auth0.auth0.local';
 const RTA_WITH_SCHEME = `https://${RTA_DOMAIN}`;
@@ -79,5 +80,35 @@ describe('session plugin /login/callback CSRF protection', () => {
     });
     expect(res.result.statusCode).to.equal(400);
     expect(res.result.message).to.equal('State mismatch');
+  });
+
+  describe('when the cookies are valid', () => {
+    const originalCreate = SessionManager.prototype.create;
+
+    afterEach(() => {
+      SessionManager.prototype.create = originalCreate;
+    });
+
+    const loginWith = (cookie) => {
+      SessionManager.prototype.create = () => Promise.resolve('session-token');
+      return server.inject({
+        method: 'POST',
+        url: '/login/callback',
+        headers: { Cookie: cookie },
+        payload: { id_token: makeIdToken(nonce), access_token: 'access-token', state }
+      });
+    };
+
+    it('should create a session when the compat nonce and state cookies match', async () => {
+      const res = await loginWith(`authz-nonce_compat=${nonce}; authz-state_compat=${state}`);
+      expect(res.statusCode).to.equal(200);
+      expect(res.payload).to.contain('session-token');
+    });
+
+    it('should create a session when only the SameSite=None nonce and state cookies match', async () => {
+      const res = await loginWith(`authz-nonce=${nonce}; authz-state=${state}`);
+      expect(res.statusCode).to.equal(200);
+      expect(res.payload).to.contain('session-token');
+    });
   });
 });
